@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: io.vertx:vertx-web-common:4.2.4">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/vertx/vertx-web-common/4.2.4/vertx-web-common-4.2.4.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/io/vertx/vertx-web-common/4.2.4/vertx-web-common-4.2.4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/vertx/vertx-web-common/4.2.4/vertx-web-common-4.2.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

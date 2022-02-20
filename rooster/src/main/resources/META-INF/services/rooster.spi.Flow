@@ -1,3 +1,0 @@
-rooster.impl.RoosterFlow
-rooster.impl.kubectl.CheckKubctlClient
-rooster.impl.kubectl.CheckKubctlServer

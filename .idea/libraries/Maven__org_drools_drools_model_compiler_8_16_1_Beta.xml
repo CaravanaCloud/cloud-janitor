@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.drools:drools-model-compiler:8.16.1.Beta">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/drools/drools-model-compiler/8.16.1.Beta/drools-model-compiler-8.16.1.Beta.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/drools/drools-model-compiler/8.16.1.Beta/drools-model-compiler-8.16.1.Beta-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/drools/drools-model-compiler/8.16.1.Beta/drools-model-compiler-8.16.1.Beta-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
