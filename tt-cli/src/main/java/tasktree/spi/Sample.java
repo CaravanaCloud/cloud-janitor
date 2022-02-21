@@ -1,14 +1,19 @@
 package tasktree.spi;
 
-public record Sample(
+import software.amazon.awssdk.regions.Region;
+
+import java.util.stream.Stream;
+
+public record Sample<T>(
         String probe,
         Integer exitCode,
         String output,
         Boolean passed,
-        Exception exception
+        Exception exception,
+        T value
 ) {
     private Sample() {
-        this(null, null, null, null, null);
+        this(null, null, null, null, null, null);
     }
 
     private static final Sample empty = new Sample();
@@ -22,11 +27,12 @@ public record Sample(
                 exitCode,
                 output,
                 pass,
+                null,
                 null);
     }
 
     public static Sample throwing(String argsLine, Exception e) {
-        return new Sample(argsLine, null, null, null, e);
+        return new Sample(argsLine, null, null, null, e, null);
     }
 
     public static Sample withOutput(String probe, String output) {
@@ -35,9 +41,15 @@ public record Sample(
                 0,
                 output,
                 null,
+                null,
                 null
         );
     }
+
+    public static Sample success() {
+        return Sample.empty();
+    }
+
 
     private String trunc(String s) {
         if (s == null) return "";
