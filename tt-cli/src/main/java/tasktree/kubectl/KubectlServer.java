@@ -1,7 +1,7 @@
 package tasktree.kubectl;
 
-import tasktree.ProcessProbe;
-public class KubectlServer extends ProcessProbe {
+import tasktree.ProcessTask;
+public class KubectlServer extends ProcessTask {
     public KubectlServer(){
         super(x -> x.startsWith("Server Version:"),
                 "kubectl version --server");

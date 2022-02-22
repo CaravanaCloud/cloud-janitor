@@ -1,38 +1,36 @@
 package tasktree.aws.cleanup;
 
+import org.slf4j.Logger;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.model.Instance;
-import software.amazon.awssdk.services.ec2.model.InstanceState;
 import software.amazon.awssdk.services.ec2.model.TerminateInstancesRequest;
-import tasktree.BaseProbe;
-import tasktree.aws.ClientProducer;
-import tasktree.spi.Sample;
+import tasktree.Configuration;
+import tasktree.aws.AWSTask;
+import tasktree.spi.BaseResult;
 
-import static tasktree.aws.ClientProducer.*;
-import static tasktree.spi.Sample.*;
+import static tasktree.spi.BaseResult.*;
 
-public class TerminateInstance extends BaseProbe {
+public class TerminateInstance extends AWSTask {
     private final Instance instance;
-    private final Region region;
 
-    public TerminateInstance(Region region, Instance instance) {
+    public TerminateInstance(Configuration config, Instance instance) {
+        super(config);
         this.instance = instance;
-        this.region = region;
     }
 
-    @Override
-    public Sample call() {
+    public void run() {
         var state = instance.state();
         if (state.toString().equals("running")) {
             log().info("Terminating instance {}", instance);
             var terminateInstance = TerminateInstancesRequest.builder()
                     .instanceIds(instance.instanceId())
                     .build();
-            var ec2 = newEC2Client(region);
+            var ec2 = newEC2Client();
             ec2.terminateInstances(terminateInstance);
         }else {
             log().info("Not terminating instance {} {}",state ,instance);
         }
-        return success();
     }
+
+
 }

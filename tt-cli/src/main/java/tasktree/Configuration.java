@@ -10,15 +10,23 @@ import com.fasterxml.jackson.databind.ser.PropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
+import software.amazon.awssdk.regions.Region;
+import tasktree.spi.Task;
+import tasktree.spi.Tasks;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @ApplicationScoped
 public class Configuration {
     @Inject
     Logger log;
+
+    @Inject
+    Tasks tasks;
 
     @ConfigProperty(name = "tt.root", defaultValue = "help")
     String root;
@@ -26,10 +34,10 @@ public class Configuration {
     @ConfigProperty(name = "tt.dryRun", defaultValue = "true")
     boolean dryRun;
 
-    @ConfigProperty(name = "tt.aws.region")
+    @ConfigProperty(name = "tt.aws.region", defaultValue = "us-east-1")
     String awsRegion;
 
-    @ConfigProperty(name = "tt.aws.cleanup.prefix")
+    @ConfigProperty(name = "tt.aws.cleanup.prefix", defaultValue = "prefix-to-cleanup")
     String awsCleanupPrefix;
 
     public String getRoot() {
@@ -53,7 +61,13 @@ public class Configuration {
     @Override
     public String toString() {
         try {
-            return writer .writeValueAsString(this);
+            var dump = new HashMap<String,String>(){{
+                put("root", root);
+                put("dryRun", ""+dryRun);
+                put("aws.region",awsRegion);
+                put("aws.cleanup.prefix", awsCleanupPrefix);
+            }};
+            return writer .writeValueAsString(dump);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -68,6 +82,7 @@ public class Configuration {
     }
 
     public boolean isDryRun() {
+        log.debug("Dry run: {}", dryRun);
         return dryRun;
     }
 
@@ -90,4 +105,14 @@ public class Configuration {
             e.printStackTrace();
         }
     }
+
+    public Region getRegion() {
+        return Region.of(awsRegion);
+    }
+
+    public Tasks getTasks() {
+        return tasks;
+    }
+
+
 }
