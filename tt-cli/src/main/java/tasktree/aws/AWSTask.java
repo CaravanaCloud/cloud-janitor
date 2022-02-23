@@ -5,19 +5,20 @@ import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cloudtrail.CloudTrailClient;
 import software.amazon.awssdk.services.ec2.Ec2Client;
+import software.amazon.awssdk.services.elasticloadbalancingv2.ElasticLoadBalancingV2Client;
 import software.amazon.awssdk.services.s3.S3Client;
 import tasktree.BaseTask;
 import tasktree.Configuration;
 import tasktree.spi.Task;
 
-import javax.inject.Inject;
-import java.util.List;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 public abstract class AWSTask
         extends BaseTask {
     static final Region DEFAULT_REGION = Region.US_EAST_1;
     static final Logger log = LoggerFactory.getLogger(AWSTask.class);
+
     Region region;
 
     public AWSTask(){}
@@ -30,6 +31,8 @@ public abstract class AWSTask
         super(config);
         this.region = region;
     }
+
+
 
     protected S3Client newS3Client(){
         var s3 = S3Client.builder().region(getRegion()).build();
@@ -51,6 +54,14 @@ public abstract class AWSTask
         return result;
     }
 
+    public void setRegion(Region region){
+        this.region = region;
+    }
+
+    protected ElasticLoadBalancingV2Client newELBClient() {
+        return ElasticLoadBalancingV2Client.builder().region(getRegion()).build();
+    }
+
     protected Ec2Client newEC2Client(Region region) {
         return Ec2Client.builder().region(region).build();
     }
@@ -65,29 +76,36 @@ public abstract class AWSTask
         return client;
     }
 
-    protected Configuration getConfig(){
-        return config;
-    }
-
-    public void push(Task task){
-        task.setConfig(config);
-        if (task instanceof  AWSTask)
-            ((AWSTask)task).setRegion(region);
-        super.push(task);
-    }
-
-
-
-    public void pushAll(Stream<Task> tasks){
-        tasks.forEach(this::push);
-    }
-
     @Override
     public String toString() {
         return getSimpleName() + " (" + getRegion() + ")";
     }
 
-    public void setRegion(Region region){
-        this.region = region;
+    public void addTask(Task task){
+        task.setConfig(config);
+        if (task instanceof AWSTask)
+            ((AWSTask)task).setRegion(region);
+        super.addTask(task);
+    }
+
+
+    protected void dryPush(Stream<Task> tasks) {
+        if (! getConfig().isDryRun()) {
+            addAllTasks(tasks);
+        }else{
+            tasks.forEach(t -> log.info("Dry run. Would run {}", t));
+        }
+    }
+
+    public void addAllTasks(Stream<Task> tasks){
+        tasks.forEach(this::addTask);
+    }
+
+    public void addAllTasks(Task... tasks){
+        addAllTasks(Arrays.asList(tasks).stream());
+    }
+
+    protected String mark(Boolean match){
+        return match? "x" : "o";
     }
 }

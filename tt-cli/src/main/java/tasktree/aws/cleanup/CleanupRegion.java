@@ -11,7 +11,11 @@ public class CleanupRegion extends AWSTask {
 
     @Override
     public void run() {
-        push(new FilterInstances());
-        push(new FilterNATGateways());
+        addAllTasks(new FilterInstances(),
+                new FilterNATGateways(),
+                new FilterAddresses(),
+                new FilterLoadBalancers(),
+                new FilterTargetGroups(),
+                new FilterVPCs());
     }
 }

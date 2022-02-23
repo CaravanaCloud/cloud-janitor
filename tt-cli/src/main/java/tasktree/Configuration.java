@@ -22,6 +22,7 @@ import java.util.Map;
 
 @ApplicationScoped
 public class Configuration {
+    private static final int MIN_PREFIX_LENGTH = 4;
     @Inject
     Logger log;
 
@@ -61,13 +62,13 @@ public class Configuration {
     @Override
     public String toString() {
         try {
-            var dump = new HashMap<String,String>(){{
+            var dump = new HashMap<String, String>() {{
                 put("root", root);
-                put("dryRun", ""+dryRun);
-                put("aws.region",awsRegion);
+                put("dryRun", "" + dryRun);
+                put("aws.region", awsRegion);
                 put("aws.cleanup.prefix", awsCleanupPrefix);
             }};
-            return writer .writeValueAsString(dump);
+            return writer.writeValueAsString(dump);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -75,15 +76,26 @@ public class Configuration {
     }
 
     public void parse(String[] args) {
-        log.info("Args: %s".formatted(Arrays.toString(args)) );
+        log.info("Args: %s".formatted(Arrays.toString(args)));
         if (args.length > 0) {
             root = args[0];
         }
     }
 
     public boolean isDryRun() {
-        log.debug("Dry run: {}", dryRun);
-        return dryRun;
+        if (unsafeConfig()) {
+            return true;
+        }else
+            return dryRun;
+    }
+
+    private boolean unsafeConfig() {
+        boolean shortPrefix = awsCleanupPrefix == null || (awsCleanupPrefix.length() < MIN_PREFIX_LENGTH);
+        if (shortPrefix) {
+            log.debug("Enforcing dry run, prefix too short {}", awsCleanupPrefix);
+            return true;
+        }
+        return false;
     }
 
     public String getAWSRegion() {
@@ -115,4 +127,12 @@ public class Configuration {
     }
 
 
+    public void waitBeforeRun() {
+        int millis = 1000;
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

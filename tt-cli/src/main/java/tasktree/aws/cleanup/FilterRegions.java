@@ -7,11 +7,7 @@ import tasktree.Configuration;
 import tasktree.aws.AWSTask;
 import tasktree.spi.Task;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class FilterRegions extends AWSTask {
     private static Logger log = LoggerFactory.getLogger(FilterRegions.class);
@@ -36,7 +32,7 @@ public class FilterRegions extends AWSTask {
     public void run() {
         var regions = filterRegions(getConfig());
         var tasks = regions.stream().map(this::toTask);
-        pushAll(tasks);
+        addAllTasks(tasks);
     }
 
     private Task toTask(Region region) {

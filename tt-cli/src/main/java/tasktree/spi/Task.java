@@ -13,6 +13,9 @@ public interface Task
 
     void setConfig(Configuration config);
 
+    default int getRetries(){return 0;};
+    void retried();
+
     default String getSimpleName(){
         return getClass().getSimpleName().split("_")[0];
     }

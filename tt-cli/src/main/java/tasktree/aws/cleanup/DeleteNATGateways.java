@@ -12,7 +12,8 @@ public class DeleteNATGateways extends AWSTask {
     Ec2Client ec2 = newEC2Client();
     private final List<NatGateway> ns;
 
-    public DeleteNATGateways(List<NatGateway> ns) {
+    public DeleteNATGateways(Configuration config, List<NatGateway> ns) {
+        super(config);
         this.ns = ns;
     }
 

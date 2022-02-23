@@ -19,7 +19,7 @@ public class TerminateInstance extends AWSTask {
     }
 
     public void run() {
-        var state = instance.state();
+        var state = instance.state().nameAsString().toLowerCase();
         if (state.toString().equals("running")) {
             log().info("Terminating instance {}", instance);
             var terminateInstance = TerminateInstancesRequest.builder()
@@ -32,5 +32,10 @@ public class TerminateInstance extends AWSTask {
         }
     }
 
-
+    @Override
+    public String toString() {
+        return super.toString() +
+                " [instanceId=%s]".formatted(
+                        instance.instanceId());
+    }
 }

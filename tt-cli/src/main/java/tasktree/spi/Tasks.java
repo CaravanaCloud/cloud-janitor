@@ -9,7 +9,6 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -77,17 +76,28 @@ public class Tasks {
     private void runAll(List<Task> tasks) {
         queue.addAll(tasks);
         while (!queue.isEmpty()) {
-            log.debug("New round with {} tasks", queue.size());
-            //config.userWait();
-            var task = queue.poll();
+            var task = queue.pop();
+            log.debug("{} tasks queued. Running {} tasks", queue.size(), task);
+            config.waitBeforeRun();
             runTask(task);
         }
         log.info("Task queue empty! Done!");
     }
 
     private void runTask(Task task) {
-        log.info("Running {}", task);
-        task.run();
+        try {
+            task.run();
+            log.info("Task executed: {}", task);
+        }catch (Exception ex) {
+            int retries = task.getRetries();
+            if (retries > 0) {
+                log.warn("Task re-scheduled: {} \n Error {} \n Retries {}", task, ex.getMessage(), retries);
+                task.retried();
+                addTask(task);
+            }else {
+                log.error("Task failed: {} \n {} ", task, ex.getMessage());
+            }
+        }
     }
 
     private boolean filter(Task p) {
@@ -101,8 +111,8 @@ public class Tasks {
         return executor;
     }
 
-    public void push(Task task) {
-        queue.push(task);
+    public void addTask(Task task) {
+        queue.addLast(task);
     }
 
 }
