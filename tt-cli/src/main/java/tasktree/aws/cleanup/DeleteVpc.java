@@ -5,7 +5,7 @@ import software.amazon.awssdk.services.ec2.model.Vpc;
 import tasktree.Configuration;
 import tasktree.aws.AWSTask;
 
-public class DeleteVpc extends AWSTask {
+public class DeleteVpc extends AWSWrite {
     private  Vpc resource;
 
     public DeleteVpc(Configuration config, Vpc resource) {

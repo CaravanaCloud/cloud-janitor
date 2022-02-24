@@ -8,7 +8,7 @@ import tasktree.spi.Task;
 import java.security.Security;
 import java.util.List;
 
-public class DeleteSecurityGroup extends AWSTask {
+public class DeleteSecurityGroup extends AWSWrite {
     private final SecurityGroup resource;
 
     public DeleteSecurityGroup(Configuration config, SecurityGroup resource) {

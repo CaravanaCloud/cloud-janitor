@@ -10,7 +10,7 @@ import tasktree.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterAddresses extends AWSTask {
+public class    FilterAddresses extends AWSFilter<Address> {
     static final Logger log = LoggerFactory.getLogger(FilterInstances.class);
 
     private boolean match(Address addr) {
@@ -36,7 +36,7 @@ public class FilterAddresses extends AWSTask {
     @Override
     public void run() {
         var addrs = filterEIPs();
-        dryPush(releaseAddresses(addrs));
+        addAllTasks(releaseAddresses(addrs));
     }
 
     private Stream<Task> releaseAddresses(List<Address> addrs) {

@@ -1,7 +1,6 @@
 package tasktree.aws.cleanup;
 
 import software.amazon.awssdk.services.ec2.model.NetworkInterface;
-import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetGroup;
 import tasktree.Configuration;
 import tasktree.spi.Task;
 
@@ -39,7 +38,7 @@ public class FilterNetworkInterfaces extends AWSFilter<NetworkInterface> {
     @Override
     public void run() {
         var resources = filterResources();
-        dryPush(deleteTasks(resources));
+        addAllTasks(deleteTasks(resources));
     }
 
 

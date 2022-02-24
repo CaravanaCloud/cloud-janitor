@@ -9,22 +9,24 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 @ApplicationScoped
 public class Tasks {
-    static final Logger log = LoggerFactory.getLogger(Tasks.class);
     static final ServiceLoader<Task> loader = ServiceLoader.load(Task.class);
-    static final ExecutorService executor = createExecutor();
+
+    @Inject
+    Logger log;
+
     @Inject
     @Any
     Instance<Task> tasks;
+
     @Inject
     Configuration config;
-    Deque<Task> queue = new LinkedList<>();
+
+    Deque<Task> readQueue = new LinkedList<>();
+    Deque<Task> writeQueue = new LinkedList<>();
 
     public static Stream<Task> byProviders() {
         return byProviders(true).stream();
@@ -39,22 +41,6 @@ public class Tasks {
         return result;
     }
 
-    public static final ExecutorService createExecutor() {
-        //Executors.newWorkStealingPool()
-        return Executors.newSingleThreadExecutor();
-    }
-
-    public static final void waitFor(ExecutorService executor) {
-        executor.shutdown();
-        try {
-            if (!executor.awaitTermination(30, TimeUnit.SECONDS)) {
-                executor.shutdownNow();
-            }
-        } catch (InterruptedException ex) {
-            executor.shutdownNow();
-            Thread.currentThread().interrupt();
-        }
-    }
 
     public Stream<Task> stream() {
         var concat = Stream.concat(byProviders(), byCDI());
@@ -65,54 +51,92 @@ public class Tasks {
         return tasks.stream();
     }
 
-    public void run(String[] args) {
-        config.parse(args);
-        log.info(config.toString());
-        var tasks = stream().filter(this::filter).toList();
-        log.debug("Matched [{}]", tasks.size());
-        runAll(tasks);
+    public void runAll(String[] args) {
+        config.init(args);
+        var tasks = stream().toList();
+        var loaded = tasks.size();
+        tasks = tasks.stream().filter(this::match).toList();
+        var matched = tasks.size();
+        log.debug("Matched {}/{} tasks", matched, loaded);
+        addAll(tasks);
+        runAll();
     }
 
-    private void runAll(List<Task> tasks) {
-        queue.addAll(tasks);
-        while (!queue.isEmpty()) {
-            var task = queue.pop();
-            log.debug("{} tasks queued. Running {} tasks", queue.size(), task);
+    private void addAll(List<Task> tasks) {
+        tasks.forEach(this::addTask);
+    }
+
+    public void addTask(Task task) {
+        if (task.isWrite()) {
+            writeQueue.addFirst(task);
+        }else {
+            readQueue.addLast(task);
+        }
+        debug("Added", task);
+    }
+
+    private void debug(String message, Task task) {
+        log.debug("[R {}/W {}] {} [{}] ",
+                readQueue.size() ,
+                writeQueue.size(),
+                message,
+                task);
+    }
+
+    private void runAll() {
+        log.info("Running read task queue");
+        runReads();
+        log.info("Running write task queue");
+        runWrites();
+        log.info("Task queues empty. Done!");
+    }
+
+    private void runWrites() {
+        while (!writeQueue.isEmpty()) {
+            var task = writeQueue.pop();
+            debug("Writing", task);
             config.waitBeforeRun();
             runTask(task);
         }
-        log.info("Task queue empty! Done!");
+    }
+
+    private void runReads() {
+        while (!readQueue.isEmpty()) {
+            var task = readQueue.pop();
+            debug("Reading", task);
+            config.waitBeforeRun();
+            runTask(task);
+        }
     }
 
     private void runTask(Task task) {
         try {
-            task.run();
-            log.info("Task executed: {}", task);
+            var isWrite = task.isWrite();
+            if (isWrite && config.isDryRun()){
+                debug("Skipped", task);
+                return;
+            }else {
+                task.run();
+                debug("Executed", task);
+            }
         }catch (Exception ex) {
             int retries = task.getRetries();
+            ex.printStackTrace();
             if (retries > 0) {
-                log.warn("Task re-scheduled: {} \n Error {} \n Retries {}", task, ex.getMessage(), retries);
+                log.debug("Re-queued", task);
                 task.retried();
                 addTask(task);
             }else {
-                log.error("Task failed: {} \n {} ", task, ex.getMessage());
+                debug("Failed", task);
+                log.error(ex.getMessage(),ex);
             }
         }
     }
 
-    private boolean filter(Task p) {
+    private boolean match(Task p) {
         var match = p.filter(config.getRoot());
-        var mark = match ? "x" : "o";
-        log.debug("Found task {} {}.{} ", mark, p.getPackage(), p.getSimpleName());
         return match;
     }
 
-    protected ExecutorService getExecutor() {
-        return executor;
-    }
-
-    public void addTask(Task task) {
-        queue.addLast(task);
-    }
 
 }

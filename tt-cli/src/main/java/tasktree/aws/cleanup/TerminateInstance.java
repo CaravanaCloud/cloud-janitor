@@ -10,7 +10,7 @@ import tasktree.spi.BaseResult;
 
 import static tasktree.spi.BaseResult.*;
 
-public class TerminateInstance extends AWSTask {
+public class TerminateInstance extends AWSWrite {
     private final Instance instance;
 
     public TerminateInstance(Configuration config, Instance instance) {

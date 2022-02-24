@@ -2,19 +2,19 @@ package tasktree.aws.cleanup;
 
 import software.amazon.awssdk.regions.Region;
 import tasktree.Configuration;
-import tasktree.aws.AWSTask;
 
-public class CleanupRegion extends AWSTask {
-    public CleanupRegion(Configuration config, Region region) {
+public class FilterRegion extends AWSFilter<Region> {
+    public FilterRegion(Configuration config, Region region) {
         super(config, region);
     }
 
     @Override
     public void run() {
+        log().info("Filtering region {}", getRegion());
         addAllTasks(new FilterInstances(),
                 new FilterNATGateways(),
                 new FilterAddresses(),
-                new FilterLoadBalancers(),
+                new FilterLoadBalancersV2(),
                 new FilterTargetGroups(),
                 new FilterVPCs());
     }

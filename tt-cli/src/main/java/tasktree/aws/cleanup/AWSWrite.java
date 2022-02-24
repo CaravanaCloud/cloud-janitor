@@ -4,17 +4,17 @@ import software.amazon.awssdk.regions.Region;
 import tasktree.Configuration;
 import tasktree.aws.AWSTask;
 
-public abstract class AWSFilter<T> extends AWSTask {
-    public AWSFilter() {}
-    public AWSFilter(Configuration config)  {
+public abstract class AWSWrite  extends AWSTask {
+    public AWSWrite() {}
+    public AWSWrite(Configuration config)  {
         super(config);
     }
-    public AWSFilter(Configuration config, Region region)  {
+    public AWSWrite(Configuration config, Region region)  {
         super(config, region);
     }
 
     @Override
     public boolean isWrite() {
-        return false;
+        return true;
     }
 }

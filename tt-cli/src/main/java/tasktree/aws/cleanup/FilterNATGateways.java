@@ -7,12 +7,12 @@ import tasktree.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterNATGateways extends AWSTask {
+public class FilterNATGateways extends AWSFilter<NatGateway> {
 
     @Override
     public void run() {
         var nats = describeNatGateways().stream().filter(this::match);
-        dryPush(terminateNatGateways(nats));
+        addAllTasks(terminateNatGateways(nats));
     }
 
     private Stream<Task> terminateNatGateways(Stream<NatGateway> nats) {

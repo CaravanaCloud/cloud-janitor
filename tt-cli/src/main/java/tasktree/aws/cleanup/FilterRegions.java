@@ -7,9 +7,11 @@ import tasktree.Configuration;
 import tasktree.aws.AWSTask;
 import tasktree.spi.Task;
 
+import javax.enterprise.context.Dependent;
 import java.util.List;
 
-public class FilterRegions extends AWSTask {
+@Dependent
+public class FilterRegions extends AWSFilter<List<Region>> {
     private static Logger log = LoggerFactory.getLogger(FilterRegions.class);
 
     private final List<Region> filterRegions(Configuration config) {
@@ -31,11 +33,11 @@ public class FilterRegions extends AWSTask {
     @Override
     public void run() {
         var regions = filterRegions(getConfig());
-        var tasks = regions.stream().map(this::toTask);
+        var tasks = regions.stream().map(this::toTask).toList();
         addAllTasks(tasks);
     }
 
     private Task toTask(Region region) {
-        return new CleanupRegion(getConfig(), region);
+        return new FilterRegion(getConfig(), region);
     }
 }

@@ -1,7 +1,6 @@
 package tasktree.aws.cleanup;
 
 import software.amazon.awssdk.services.ec2.model.InternetGateway;
-import software.amazon.awssdk.services.ec2.model.SecurityGroup;
 import tasktree.Configuration;
 import tasktree.spi.Task;
 
@@ -39,7 +38,7 @@ public class FilterInternetGateways extends AWSFilter<InternetGateway> {
     @Override
     public void run() {
         var resources = filterResources();
-        dryPush(deleteTasks(resources));
+        addAllTasks(deleteTasks(resources));
     }
 
 

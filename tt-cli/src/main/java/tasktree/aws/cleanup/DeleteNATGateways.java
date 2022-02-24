@@ -8,7 +8,7 @@ import tasktree.aws.AWSTask;
 
 import java.util.List;
 
-public class DeleteNATGateways extends AWSTask {
+public class DeleteNATGateways extends AWSWrite {
     Ec2Client ec2 = newEC2Client();
     private final List<NatGateway> ns;
 

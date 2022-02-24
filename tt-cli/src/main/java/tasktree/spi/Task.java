@@ -3,10 +3,12 @@ package tasktree.spi;
 import software.amazon.awssdk.services.ec2.model.Instance;
 import tasktree.Configuration;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
+
 
 public interface Task
         extends Runnable {
@@ -37,6 +39,7 @@ public interface Task
         return result;
     }
 
-
-
+    default boolean isWrite(){
+        return true;
+    };
 }

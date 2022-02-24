@@ -2,9 +2,7 @@ package tasktree.aws.cleanup;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import software.amazon.awssdk.services.ec2.model.DescribeInstancesRequest;
 import software.amazon.awssdk.services.ec2.model.DescribeSubnetsRequest;
-import software.amazon.awssdk.services.ec2.model.Instance;
 import software.amazon.awssdk.services.ec2.model.Subnet;
 import tasktree.Configuration;
 import tasktree.aws.AWSTask;
@@ -13,7 +11,7 @@ import tasktree.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterSubnets extends AWSTask {
+public class FilterSubnets extends AWSFilter<Subnet> {
     static final Logger log = LoggerFactory.getLogger(FilterInstances.class);
     private String vpcId;
 
@@ -44,7 +42,7 @@ public class FilterSubnets extends AWSTask {
     public void run() {
         var subnets = filterSubnets();
 
-        dryPush(deleteSubnets(subnets));
+        addAllTasks(deleteSubnets(subnets));
     }
 
     private Stream<Task> deleteSubnets(List<Subnet> subnets) {

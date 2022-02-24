@@ -8,7 +8,7 @@ import tasktree.Configuration;
 import tasktree.aws.AWSTask;
 import tasktree.spi.Task;
 
-public class DeleteNetworkInterface extends AWSTask {
+public class DeleteNetworkInterface extends AWSWrite {
     private final NetworkInterface resource;
 
     public DeleteNetworkInterface(Configuration config, NetworkInterface resource) {

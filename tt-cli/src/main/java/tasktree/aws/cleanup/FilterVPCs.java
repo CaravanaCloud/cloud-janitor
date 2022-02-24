@@ -2,11 +2,8 @@ package tasktree.aws.cleanup;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import software.amazon.awssdk.services.ec2.model.DescribeSubnetsRequest;
 import software.amazon.awssdk.services.ec2.model.DescribeVpcsRequest;
-import software.amazon.awssdk.services.ec2.model.Subnet;
 import software.amazon.awssdk.services.ec2.model.Vpc;
-import tasktree.Configuration;
 import tasktree.spi.Task;
 
 import java.util.List;
@@ -37,29 +34,21 @@ public class FilterVPCs extends AWSFilter<Vpc> {
 
     @Override
     public void run() {
-        var vpcs = filterVpcs();
-        vpcs.stream().forEach(this::filterResources);
-        dryPush(deleteVpcs(vpcs));
+        filterVpcs().stream()
+                .forEach(this::listAndDeleteVPC);
     }
 
-    private void filterResources(Vpc vpc) {
+    private void listAndDeleteVPC(Vpc vpc) {
         var vpcId = vpc.vpcId();
         addAllTasks(
+                new FilterLoadBalancers(config, vpcId),
                 new FilterNetworkInterfaces(config, vpcId),
                 new FilterSubnets(config, vpcId),
                 new FilterRouteTables(config, vpcId),
                 new FilterVPCEndpoints(config, vpcId),
                 new FilterSecurityGroups(config, vpcId),
-                new FilterInternetGateways(config, vpc.vpcId())
+                new FilterInternetGateways(config, vpcId),
+                new DeleteVpc(getConfig(), vpc)
         );
-    }
-
-    private Stream<Task> deleteVpcs(List<Vpc> vpcs) {
-        return vpcs.stream().map(this::deleteVpc);
-    }
-
-
-    private Task deleteVpc(Vpc resource) {
-        return new DeleteVpc(getConfig(), resource);
     }
 }

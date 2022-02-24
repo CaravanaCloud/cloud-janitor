@@ -6,7 +6,7 @@ import tasktree.Configuration;
 import tasktree.aws.AWSTask;
 import tasktree.spi.Task;
 
-public class ReleaseAddress extends AWSTask {
+public class ReleaseAddress extends AWSWrite {
     private final Address addr;
 
     public ReleaseAddress(Configuration config, Address addr) {

@@ -5,7 +5,7 @@ import tasktree.Configuration;
 import tasktree.aws.AWSTask;
 import tasktree.spi.Task;
 
-public class DeleteInternetGateway extends AWSTask {
+public class DeleteInternetGateway extends AWSWrite {
     private final InternetGateway resource;
 
     public DeleteInternetGateway(Configuration config, InternetGateway resource) {

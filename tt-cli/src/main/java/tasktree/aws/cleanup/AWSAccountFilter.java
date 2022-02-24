@@ -3,31 +3,41 @@ package tasktree.aws.cleanup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tasktree.Configuration;
-import tasktree.aws.AWSTask;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 @ApplicationScoped
-public class CleanupTask extends AWSTask {
-    static final Logger log = LoggerFactory.getLogger(CleanupTask.class);
+public class AWSAccountFilter extends AWSFilter<Void> {
+    @Inject
+    Logger log;
 
     @Inject
     Configuration config;
 
+    @Inject
+    FilterRegions filterRegions;
+
+    @Inject
+    FilterRecords filterRecords;
+
     @PostConstruct
     public void postConstruct(){
-        log.debug("Initialized CleanupTask");
+        log.debug("Initializing Configuration");
         setConfig(config);
         setRegion(config.getRegion());
     }
 
     @Override
     public void run() {
-        log.info("Cleaning up AWS Resources");
-        addTask(new FilterRegions());
+        log.info("Filtering AWS Resources");
+        addAllTasks(filterRegions,
+                filterRecords);
     }
 
-
+    @Override
+    public String toString() {
+        return toString("AWS Account");
+    }
 }

@@ -1,0 +1,56 @@
+events.js:292
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: EBADF: bad file descriptor, read
+Emitted 'error' event on ReadStream instance at:
+    at internal/fs/streams.js:202:14
+    at FSReqCallback.wrapper [as oncomplete] (fs.js:539:5) {
+  errno: -9,
+  code: 'EBADF',
+  syscall: 'read'
+}
+2022-02-23 08:36:46,646 [   1850]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: AllHallowsEve from plugins: DBN 
+2022-02-23 08:36:46,646 [   1850]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: VibrantInk from plugins: DBN 
+2022-02-23 08:36:46,646 [   1850]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: Monocai from plugins: DBN 
+2022-02-23 08:36:46,646 [   1850]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: Twilight from plugins: DBN 
+2022-02-23 08:36:46,646 [   1850]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: WarmNeon from plugins: DBN 
+2022-02-23 08:36:46,646 [   1850]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: Monokai from plugins: DBN 
+2022-02-23 08:36:46,646 [   1850]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: Railscasts from plugins: DBN 
+2022-02-23 08:36:46,646 [   1850]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: Cobalt from plugins: DBN 
+2022-02-23 08:36:46,647 [   1851]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: Blackboard from plugins: DBN 
+Info  | RdCoroutineScope          | 14:JobScheduler FJ pool 3/11 | RdCoroutineHost overridden 
+2022-02-23 08:36:47,738 [   2942]   WARN - l.NotificationGroupManagerImpl - Notification group CodeWithMe is already registered (group=com.intellij.notification.NotificationGroup@378d697). Plugin descriptor: PluginDescriptor(name=Code With Me, id=com.jetbrains.codeWithMe, descriptorPath=plugin.xml, path=~/.local/share/JetBrains/Toolbox/apps/IDEA-C/ch-0/213.6777.52/plugins/cwm-plugin, version=213.6777.52, package=null, isBundled=true) 
+DEBUG - [ORACLE-SQL] undefined token type: KW_SHARED
+DEBUG - [ORACLE-SQL] undefined token type: KW_DUPLICATED
+DEBUG - [ORACLE-SQL] undefined token type: KW_IMMUTABLE
+DEBUG - [ORACLE-SQL] undefined token type: KW_BLOCKCHAIN
+DEBUG - [ORACLE-SQL] undefined token type: KW_IDLE
+DEBUG - [ORACLE-SQL] undefined element type: row_movement_clause
+DEBUG - [ORACLE-SQL] undefined element type: alter_external_table_clauses
+DEBUG - [ORACLE-SQL] undefined element type: redo_logfile_spec
+DEBUG - [ORACLE-SQL] undefined element type: scn_value
+DEBUG - [ORACLE-SQL] undefined element type: data_item
+DEBUG - [ORACLE-SQL] undefined element type: heap_org_table_clause
+DEBUG - [ORACLE-SQL] undefined element type: hash_subpartition_quantity
+DEBUG - [ORACLE-SQL] undefined element type: parameter_type
+DEBUG - [ORACLE-SQL] undefined element type: move_table_clause
+DEBUG - [ORACLE-SQL] undefined element type: primary_operator
+DEBUG - [ORACLE-SQL] undefined element type: table_partitioning_clauses
+DEBUG - [ORACLE-SQL] undefined element type: create_cluster
+DEBUG - [ORACLE-SQL] undefined element type: parameter_types
+DEBUG - [ORACLE-SQL] undefined element type: lob_partition_storage
+DEBUG - [ORACLE-SQL] undefined element type: partition_value
+DEBUG - [ORACLE-SQL] undefined element type: records_per_block_clause
+DEBUG - [ORACLE-SQL] undefined element type: xml_type_column_properties
+DEBUG - [ORACLE-SQL] undefined element type: index_compression
+DEBUG - [ORACLE-SQL] undefined element type: ref_attribute
+DEBUG - [ORACLE-SQL] undefined element type: return_type
+DEBUG - [ORACLE-PLSQL] undefined token type: KW_PERIOD
+DEBUG - [ORACLE-PLSQL] undefined token type: KW_PERIOD
+2022-02-23 08:36:49,828 [   5032]   WARN - ctionSystem.impl.ActionUpdater - 108 ms to call on EDT RunAndroidAvdManagerAction#update (org.jetbrains.android.actions.RunAndroidAvdManagerAction) - speed it up and/or implement UpdateInBackground. 
+2022-02-23 08:36:51,999 [   7203]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-02-23 08:36:53,204 [   8408]   WARN - ctionSystem.impl.ActionUpdater - 448 ms to grab EDT for OpenFileAction#update (com.intellij.ide.actions.OpenFileAction) 
+2022-02-23 08:37:42,727 [  57931]   WARN - com.intellij.util.xmlb.Binding - no accessors for com.haulmont.jpb.model.dbtype.DbType 
+2022-02-23 08:38:14,112 [  89316]   WARN - com.intellij.util.xmlb.Binding - no accessors for org.jetbrains.idea.perforce.perforce.ConnectionId 
+2022-02-23 08:38:14,421 [  89625]   WARN - .AzureInsightsTelemetryService - Disposing AzureInsightsTelemetryService 

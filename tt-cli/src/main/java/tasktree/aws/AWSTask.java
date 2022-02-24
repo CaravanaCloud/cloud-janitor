@@ -5,13 +5,16 @@ import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cloudtrail.CloudTrailClient;
 import software.amazon.awssdk.services.ec2.Ec2Client;
+import software.amazon.awssdk.services.elasticloadbalancing.ElasticLoadBalancingClient;
 import software.amazon.awssdk.services.elasticloadbalancingv2.ElasticLoadBalancingV2Client;
+import software.amazon.awssdk.services.route53.Route53Client;
 import software.amazon.awssdk.services.s3.S3Client;
 import tasktree.BaseTask;
 import tasktree.Configuration;
 import tasktree.spi.Task;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 public abstract class AWSTask
@@ -58,8 +61,18 @@ public abstract class AWSTask
         this.region = region;
     }
 
-    protected ElasticLoadBalancingV2Client newELBClient() {
+    protected Route53Client newRoute53Client() {
+        return Route53Client.builder().region(getRegion()).build();
+    }
+
+    protected ElasticLoadBalancingV2Client getELBClientV2() {
         return ElasticLoadBalancingV2Client.builder().region(getRegion()).build();
+    }
+
+    protected ElasticLoadBalancingClient getELBClient() {
+        return ElasticLoadBalancingClient.builder()
+                .region(getRegion())
+                .build();
     }
 
     protected Ec2Client newEC2Client(Region region) {
@@ -85,16 +98,11 @@ public abstract class AWSTask
         task.setConfig(config);
         if (task instanceof AWSTask)
             ((AWSTask)task).setRegion(region);
-        super.addTask(task);
+        getConfig().getTasks().addTask(task);
     }
 
-
-    protected void dryPush(Stream<Task> tasks) {
-        if (! getConfig().isDryRun()) {
-            addAllTasks(tasks);
-        }else{
-            tasks.forEach(t -> log.info("Dry run. Would run {}", t));
-        }
+    public void addAllTasks(List<Task> tasks){
+        addAllTasks(tasks.stream());
     }
 
     public void addAllTasks(Stream<Task> tasks){
@@ -102,7 +110,7 @@ public abstract class AWSTask
     }
 
     public void addAllTasks(Task... tasks){
-        addAllTasks(Arrays.asList(tasks).stream());
+        addAllTasks(Arrays.asList(tasks));
     }
 
     protected String mark(Boolean match){

@@ -38,7 +38,7 @@ public class FilterRouteTables extends AWSFilter<RouteTable> {
     @Override
     public void run() {
         var resources = filterResources();
-        dryPush(deleteTasks(resources));
+        addAllTasks(deleteTasks(resources));
     }
 
 

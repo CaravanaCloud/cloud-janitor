@@ -8,7 +8,7 @@ import tasktree.Configuration;
 import tasktree.aws.AWSTask;
 import tasktree.spi.Task;
 
-public class DeleteRouteTable extends AWSTask {
+public class DeleteRouteTable extends AWSWrite {
     private final RouteTable resource;
 
     public DeleteRouteTable(Configuration config, RouteTable resource) {

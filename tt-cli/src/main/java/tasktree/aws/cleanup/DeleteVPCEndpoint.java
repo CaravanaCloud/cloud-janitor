@@ -8,7 +8,7 @@ import tasktree.Configuration;
 import tasktree.aws.AWSTask;
 import tasktree.spi.Task;
 
-public class DeleteVPCEndpoint extends AWSTask {
+public class DeleteVPCEndpoint extends AWSWrite {
     private final VpcEndpoint resource;
 
     public DeleteVPCEndpoint(Configuration config, VpcEndpoint resource) {

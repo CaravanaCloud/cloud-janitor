@@ -1,13 +1,10 @@
 package tasktree.aws.cleanup;
 
-import software.amazon.awssdk.services.elasticloadbalancingv2.model.DeleteLoadBalancerRequest;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.DeleteTargetGroupRequest;
-import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetGroup;
 import tasktree.Configuration;
-import tasktree.aws.AWSTask;
 
-public class DeleteTargetGroup extends AWSTask {
+public class DeleteTargetGroup extends AWSWrite {
     private final TargetGroup resource;
 
     public DeleteTargetGroup(Configuration config, TargetGroup resource) {
@@ -21,6 +18,6 @@ public class DeleteTargetGroup extends AWSTask {
         var request = DeleteTargetGroupRequest.builder()
                 .targetGroupArn(resource.targetGroupArn())
                 .build();
-        newELBClient().deleteTargetGroup(request);
+        getELBClientV2().deleteTargetGroup(request);
     }
 }

@@ -5,7 +5,7 @@ import software.amazon.awssdk.services.ec2.model.Subnet;
 import tasktree.Configuration;
 import tasktree.aws.AWSTask;
 
-public class DeleteSubnet extends AWSTask {
+public class DeleteSubnet extends AWSWrite {
     private final Subnet net;
 
     public DeleteSubnet(Configuration config, Subnet net) {

@@ -14,6 +14,7 @@ import software.amazon.awssdk.regions.Region;
 import tasktree.spi.Task;
 import tasktree.spi.Tasks;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -22,18 +23,22 @@ import java.util.Map;
 
 @ApplicationScoped
 public class Configuration {
+    static final ObjectMapper mapper = new ObjectMapper();
     private static final int MIN_PREFIX_LENGTH = 4;
+
     @Inject
     Logger log;
 
     @Inject
     Tasks tasks;
 
-    @ConfigProperty(name = "tt.root", defaultValue = "help")
+    @ConfigProperty(name = "tt.task", defaultValue = "help")
     String root;
 
     @ConfigProperty(name = "tt.dryRun", defaultValue = "true")
     boolean dryRun;
+
+
 
     @ConfigProperty(name = "tt.aws.region", defaultValue = "us-east-1")
     String awsRegion;
@@ -41,16 +46,8 @@ public class Configuration {
     @ConfigProperty(name = "tt.aws.cleanup.prefix", defaultValue = "prefix-to-cleanup")
     String awsCleanupPrefix;
 
-    public String getRoot() {
-        return root;
-    }
-
-    public String getAwsCleanupPrefix() {
-        return awsCleanupPrefix;
-    }
-
-    static final ObjectMapper mapper = new ObjectMapper();
-    static ObjectWriter writer = createWriter();
+    @ConfigProperty(name="tt.waitBeforeRun", defaultValue = "1000")
+    private long waitBeforeRun;
 
     private static synchronized ObjectWriter createWriter() {
         if (writer != null) return writer;
@@ -58,6 +55,15 @@ public class Configuration {
         writer = mapper.writer().withDefaultPrettyPrinter();
         return writer;
     }
+
+
+    public String getRoot() {
+        return root;
+    }
+
+    public String getAwsCleanupPrefix() {
+        return awsCleanupPrefix;
+    }    static ObjectWriter writer = createWriter();
 
     @Override
     public String toString() {
@@ -126,13 +132,25 @@ public class Configuration {
         return tasks;
     }
 
-
     public void waitBeforeRun() {
-        int millis = 1000;
+        waitBeforeRun(null);
+    }
+
+    public void waitBeforeRun(Long wait) {
+        var sleep = wait == null ? waitBeforeRun : wait;
         try {
-            Thread.sleep(millis);
+            Thread.sleep(sleep);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
+
+    public void init(String[] args) {
+        parse(args);
+        log.info(toString());
+        waitBeforeRun(10 * (1+waitBeforeRun));
+    }
+
+
+
 }

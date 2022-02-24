@@ -1632,3 +1632,683 @@ java.lang.IllegalArgumentException: Argument for @NotNull parameter 'indicator' 
 2022-02-23 17:12:23,771 [30842187]   WARN - efaultCopilotCompletionService - [10141] Response received. Duration: 320 ms 
 2022-02-23 17:12:29,438 [30847854]   WARN - efaultCopilotCompletionService - [10147] Response received. Duration: 943 ms 
 2022-02-23 17:13:20,530 [30898946]   WARN - efaultCopilotCompletionService - [10157] Response received. Duration: 1141 ms 
+2022-02-23 17:24:08,757 [31547173]   WARN - ctionSystem.impl.ActionUpdater - 203 ms to grab EDT for #update (com.intellij.codeInsight.actions.ReaderModeActionProvider$createAction$1) 
+2022-02-23 19:09:02,586 [37841002]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 19:12:26,009 [38044425]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-02-23 19:13:01,695 [38080111]   WARN - efaultCopilotCompletionService - [10162] Response received. Duration: 5269 ms 
+2022-02-23 19:13:01,708 [38080124]   WARN - efaultCopilotCompletionService - [10162] Response received. Duration: 5282 ms 
+2022-02-23 19:13:01,715 [38080131]   WARN - efaultCopilotCompletionService - [10162] Response received. Duration: 5289 ms 
+2022-02-23 19:13:22,057 [38100473]   WARN - efaultCopilotCompletionService - [10178] Response received. Duration: 358 ms 
+2022-02-23 19:13:22,702 [38101118]   WARN - efaultCopilotCompletionService - [10179] Response received. Duration: 450 ms 
+2022-02-23 19:13:22,731 [38101147]   WARN - efaultCopilotCompletionService - [10179] Response received. Duration: 479 ms 
+2022-02-23 19:13:22,762 [38101178]   WARN - efaultCopilotCompletionService - [10179] Response received. Duration: 510 ms 
+2022-02-23 19:13:41,973 [38120389]   WARN - efaultCopilotCompletionService - [10189] Response received. Duration: 351 ms 
+2022-02-23 19:17:28,724 [38347140]   WARN - efaultCopilotCompletionService - [10221] Response received. Duration: 303 ms 
+2022-02-23 19:17:35,370 [38353786]   WARN - efaultCopilotCompletionService - [10238] Response received. Duration: 166 ms 
+2022-02-23 19:29:32,615 [39071031]   WARN - efaultCopilotCompletionService - [10260] Response received. Duration: 1699 ms 
+2022-02-23 19:29:32,617 [39071033]   WARN - efaultCopilotCompletionService - [10260] Response received. Duration: 1701 ms 
+2022-02-23 19:29:32,619 [39071035]   WARN - efaultCopilotCompletionService - [10260] Response received. Duration: 1703 ms 
+2022-02-23 19:32:06,737 [39225153]   WARN - efaultCopilotCompletionService - [10292] Response received. Duration: 394 ms 
+2022-02-23 19:32:07,673 [39226089]   WARN - efaultCopilotCompletionService - [10293] Response received. Duration: 508 ms 
+2022-02-23 19:32:08,036 [39226452]   WARN - efaultCopilotCompletionService - [10293] Response received. Duration: 871 ms 
+2022-02-23 19:32:08,485 [39226901]   WARN - efaultCopilotCompletionService - [10293] Response received. Duration: 1320 ms 
+2022-02-23 19:32:22,657 [39241073]   WARN - efaultCopilotCompletionService - [10300] Response received. Duration: 254 ms 
+2022-02-23 19:32:24,982 [39243398]   WARN - efaultCopilotCompletionService - [10303] Response received. Duration: 246 ms 
+2022-02-23 19:33:29,398 [39307814]   WARN - efaultCopilotCompletionService - [10318] Response received. Duration: 373 ms 
+2022-02-23 19:33:48,145 [39326561]   WARN - efaultCopilotCompletionService - [10324] Response received. Duration: 377 ms 
+2022-02-23 19:33:56,849 [39335265]   WARN - efaultCopilotCompletionService - [10329] Response received. Duration: 938 ms 
+2022-02-23 19:33:56,919 [39335335]   WARN - efaultCopilotCompletionService - [10329] Response received. Duration: 1008 ms 
+2022-02-23 19:33:57,925 [39336341]   WARN - efaultCopilotCompletionService - [10329] Response received. Duration: 2014 ms 
+2022-02-23 19:34:05,458 [39343874]   WARN - efaultCopilotCompletionService - [10332] Response received. Duration: 5492 ms 
+2022-02-23 19:34:05,469 [39343885]   WARN - efaultCopilotCompletionService - [10332] Response received. Duration: 5503 ms 
+2022-02-23 19:34:05,474 [39343890]   WARN - efaultCopilotCompletionService - [10332] Response received. Duration: 5508 ms 
+2022-02-23 19:34:08,861 [39347277]   WARN - nSystem.impl.ActionToolbarImpl - 'AutoRenaming' toolbar by default uses any focused component to update its actions. Toolbar actions that need local UI context would be incorrectly disabled. Please call toolbar.setTargetComponent() explicitly. 
+java.lang.Throwable: toolbar creation trace
+	at com.intellij.openapi.actionSystem.impl.ActionToolbarImpl.<init>(ActionToolbarImpl.java:115)
+	at com.intellij.openapi.actionSystem.impl.ActionManagerImpl.createActionToolbar(ActionManagerImpl.java:425)
+	at com.intellij.openapi.actionSystem.impl.ActionManagerImpl.createActionToolbar(ActionManagerImpl.java:420)
+	at com.intellij.refactoring.rename.AutomaticRenamingDialog.createNorthPanel(AutomaticRenamingDialog.java:117)
+	at com.intellij.openapi.ui.DialogWrapper.init(DialogWrapper.java:1304)
+	at com.intellij.refactoring.rename.AutomaticRenamingDialog.<init>(AutomaticRenamingDialog.java:98)
+	at com.intellij.refactoring.rename.RenameProcessor.showAutomaticRenamingDialog(RenameProcessor.java:265)
+	at com.intellij.refactoring.rename.RenameProcessor.findRenamedVariables(RenameProcessor.java:244)
+	at com.intellij.refactoring.rename.RenameProcessor.preprocessUsages(RenameProcessor.java:170)
+	at com.intellij.refactoring.BaseRefactoringProcessor.doRun(BaseRefactoringProcessor.java:241)
+	at com.intellij.refactoring.rename.RenameProcessor.doRun(RenameProcessor.java:126)
+	at com.intellij.refactoring.rename.inplace.MemberInplaceRenamer$MyRenameProcessor.doRun(MemberInplaceRenamer.java:383)
+	at com.intellij.util.SlowOperations.allowSlowOperations(SlowOperations.java:147)
+	at com.intellij.refactoring.BaseRefactoringProcessor.lambda$run$19(BaseRefactoringProcessor.java:640)
+	at com.intellij.refactoring.BaseRefactoringProcessor.run(BaseRefactoringProcessor.java:654)
+	at com.intellij.refactoring.rename.inplace.MemberInplaceRenamer.performRenameInner(MemberInplaceRenamer.java:271)
+	at com.intellij.refactoring.rename.inplace.MemberInplaceRenamer.lambda$performRefactoringRename$0(MemberInplaceRenamer.java:237)
+	at com.intellij.openapi.command.impl.CoreCommandProcessor.executeCommand(CoreCommandProcessor.java:219)
+	at com.intellij.openapi.command.impl.CoreCommandProcessor.executeCommand(CoreCommandProcessor.java:174)
+	at com.intellij.openapi.command.impl.CoreCommandProcessor.executeCommand(CoreCommandProcessor.java:164)
+	at com.intellij.openapi.command.impl.CoreCommandProcessor.executeCommand(CoreCommandProcessor.java:150)
+	at com.intellij.refactoring.rename.inplace.MemberInplaceRenamer.lambda$performRefactoringRename$1(MemberInplaceRenamer.java:236)
+	at com.intellij.util.SlowOperations.allowSlowOperations(SlowOperations.java:147)
+	at com.intellij.refactoring.rename.inplace.MemberInplaceRenamer.lambda$performRefactoringRename$2(MemberInplaceRenamer.java:227)
+	at com.intellij.openapi.application.TransactionGuardImpl.runWithWritingAllowed(TransactionGuardImpl.java:214)
+	at com.intellij.openapi.application.TransactionGuardImpl.access$200(TransactionGuardImpl.java:21)
+	at com.intellij.openapi.application.TransactionGuardImpl$2.run(TransactionGuardImpl.java:196)
+	at com.intellij.openapi.application.impl.ApplicationImpl.runIntendedWriteActionOnCurrentThread(ApplicationImpl.java:805)
+	at com.intellij.openapi.application.impl.ApplicationImpl.lambda$invokeLater$4(ApplicationImpl.java:348)
+	at com.intellij.openapi.application.impl.FlushQueue.doRun(FlushQueue.java:82)
+	at com.intellij.openapi.application.impl.FlushQueue.runNextEvent(FlushQueue.java:131)
+	at com.intellij.openapi.application.impl.FlushQueue.flushNow(FlushQueue.java:47)
+	at com.intellij.openapi.application.impl.FlushQueue$FlushNow.run(FlushQueue.java:187)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:313)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:776)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:727)
+	at java.desktop/java.awt.EventQueue$4.run(EventQueue.java:721)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:85)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:746)
+	at com.intellij.ide.IdeEventQueue.defaultDispatchEvent(IdeEventQueue.java:891)
+	at com.intellij.ide.IdeEventQueue._dispatchEvent(IdeEventQueue.java:760)
+	at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$6(IdeEventQueue.java:447)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.computePrioritized(CoreProgressManager.java:818)
+	at com.intellij.ide.IdeEventQueue.lambda$dispatchEvent$7(IdeEventQueue.java:446)
+	at com.intellij.openapi.application.impl.ApplicationImpl.runIntendedWriteActionOnCurrentThread(ApplicationImpl.java:805)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent(IdeEventQueue.java:492)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:203)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:124)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:109)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:90)
+2022-02-23 19:34:18,319 [39356735]   WARN - efaultCopilotCompletionService - [10346] Response received. Duration: 324 ms 
+2022-02-23 19:34:22,537 [39360953]   WARN - efaultCopilotCompletionService - [10349] Response received. Duration: 273 ms 
+2022-02-23 19:34:25,186 [39363602]   WARN - efaultCopilotCompletionService - [10356] Response received. Duration: 251 ms 
+2022-02-23 19:34:27,236 [39365652]   WARN - efaultCopilotCompletionService - [10359] Response received. Duration: 270 ms 
+2022-02-23 19:34:49,960 [39388376]   WARN - efaultCopilotCompletionService - [10394] Response received. Duration: 180 ms 
+2022-02-23 19:35:14,981 [39413397]   WARN - efaultCopilotCompletionService - [10418] Response received. Duration: 332 ms 
+2022-02-23 19:35:14,982 [39413398]   WARN - efaultCopilotCompletionService - [10418] Response received. Duration: 333 ms 
+2022-02-23 19:35:14,984 [39413400]   WARN - efaultCopilotCompletionService - [10418] Response received. Duration: 335 ms 
+2022-02-23 19:35:16,911 [39415327]   WARN - efaultCopilotCompletionService - [10420] Response received. Duration: 372 ms 
+2022-02-23 19:35:16,913 [39415329]   WARN - efaultCopilotCompletionService - [10420] Response received. Duration: 374 ms 
+2022-02-23 19:35:16,913 [39415329]   WARN - efaultCopilotCompletionService - [10420] Response received. Duration: 374 ms 
+2022-02-23 19:35:56,681 [39455097]   WARN - efaultCopilotCompletionService - [10434] Response received. Duration: 195 ms 
+2022-02-23 19:35:57,436 [39455852]   WARN - efaultCopilotCompletionService - [10437] Response received. Duration: 176 ms 
+2022-02-23 19:36:42,420 [39500836]   WARN - efaultCopilotCompletionService - [10449] Response received. Duration: 263 ms 
+2022-02-23 19:36:49,573 [39507989]   WARN - efaultCopilotCompletionService - [10451] Response received. Duration: 374 ms 
+2022-02-23 19:36:50,490 [39508906]   WARN - efaultCopilotCompletionService - [10454] Response received. Duration: 236 ms 
+2022-02-23 19:36:52,963 [39511379]   WARN - efaultCopilotCompletionService - [10457] Response received. Duration: 321 ms 
+2022-02-23 19:37:00,356 [39518772]   WARN - efaultCopilotCompletionService - [10463] Response received. Duration: 221 ms 
+2022-02-23 19:37:06,096 [39524512]   WARN - efaultCopilotCompletionService - [10468] Response received. Duration: 219 ms 
+2022-02-23 19:37:06,686 [39525102]   WARN - ub.copilot.lang.CopilotPsiUtil - findBlockEnd failed after 5 attempts 
+2022-02-23 19:37:06,687 [39525103]   WARN - efaultCopilotCompletionService - [10469] Response received. Duration: 224 ms 
+2022-02-23 19:37:10,376 [39528792]   WARN - ub.copilot.lang.CopilotPsiUtil - findBlockEnd failed after 5 attempts 
+2022-02-23 19:37:10,377 [39528793]   WARN - efaultCopilotCompletionService - [10477] Response received. Duration: 316 ms 
+2022-02-23 19:37:11,100 [39529516]   WARN - efaultCopilotCompletionService - [10481] Response received. Duration: 188 ms 
+2022-02-23 19:37:14,591 [39533007]   WARN - efaultCopilotCompletionService - [10498] Response received. Duration: 327 ms 
+2022-02-23 19:37:15,767 [39534183]   WARN - efaultCopilotCompletionService - [10502] Response received. Duration: 285 ms 
+2022-02-23 19:38:19,264 [39597680]   WARN - efaultCopilotCompletionService - [10539] Response received. Duration: 294 ms 
+2022-02-23 19:38:29,664 [39608080]   WARN - efaultCopilotCompletionService - [10545] Response received. Duration: 1985 ms 
+2022-02-23 19:38:29,753 [39608169]   WARN - efaultCopilotCompletionService - [10545] Response received. Duration: 2074 ms 
+2022-02-23 19:38:29,796 [39608212]   WARN - efaultCopilotCompletionService - [10545] Response received. Duration: 2117 ms 
+2022-02-23 19:39:32,139 [39670555]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-02-23 19:42:09,178 [39827594]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 19:45:37,439 [40035855]   WARN - efaultCopilotCompletionService - [10655] Response received. Duration: 419 ms 
+2022-02-23 19:46:01,088 [40059504]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 19:48:33,570 [40211986]   WARN - efaultCopilotCompletionService - [10675] Response received. Duration: 285 ms 
+2022-02-23 19:48:34,588 [40213004]   WARN - efaultCopilotCompletionService - [10680] Response received. Duration: 246 ms 
+2022-02-23 19:48:34,941 [40213357]   WARN - efaultCopilotCompletionService - [10681] Response received. Duration: 220 ms 
+2022-02-23 19:48:36,571 [40214987]   WARN - efaultCopilotCompletionService - [10684] Response received. Duration: 203 ms 
+2022-02-23 19:48:37,070 [40215486]   WARN - efaultCopilotCompletionService - [10685] Response received. Duration: 231 ms 
+2022-02-23 19:48:49,407 [40227823]   WARN - efaultCopilotCompletionService - [10688] Response received. Duration: 291 ms 
+2022-02-23 19:48:51,899 [40230315]   WARN - efaultCopilotCompletionService - [10690] Response received. Duration: 299 ms 
+2022-02-23 19:48:54,126 [40232542]   WARN - efaultCopilotCompletionService - [10692] Response received. Duration: 282 ms 
+2022-02-23 19:48:57,226 [40235642]   WARN - efaultCopilotCompletionService - [10693] Response received. Duration: 287 ms 
+2022-02-23 19:49:00,498 [40238914]   WARN - efaultCopilotCompletionService - [10695] Response received. Duration: 197 ms 
+2022-02-23 19:49:05,002 [40243418]   WARN - efaultCopilotCompletionService - [10697] Response received. Duration: 370 ms 
+2022-02-23 19:49:08,617 [40247033]   WARN - efaultCopilotCompletionService - [10698] Response received. Duration: 196 ms 
+2022-02-23 19:49:12,682 [40251098]   WARN - efaultCopilotCompletionService - [10700] Response received. Duration: 370 ms 
+2022-02-23 19:49:16,575 [40254991]   WARN - efaultCopilotCompletionService - [10702] Response received. Duration: 350 ms 
+2022-02-23 19:49:42,351 [40280767]   WARN - efaultCopilotCompletionService - [10707] Response received. Duration: 221 ms 
+2022-02-23 19:49:43,406 [40281822]   WARN - efaultCopilotCompletionService - [10711] Response received. Duration: 408 ms 
+2022-02-23 19:49:44,017 [40282433]   WARN - efaultCopilotCompletionService - [10712] Response received. Duration: 303 ms 
+2022-02-23 19:50:02,755 [40301171]   WARN - efaultCopilotCompletionService - [10716] Response received. Duration: 340 ms 
+2022-02-23 19:50:06,500 [40304916]   WARN - efaultCopilotCompletionService - [10718] Response received. Duration: 1789 ms 
+2022-02-23 19:50:06,588 [40305004]   WARN - efaultCopilotCompletionService - [10718] Response received. Duration: 1877 ms 
+2022-02-23 19:50:06,610 [40305026]   WARN - efaultCopilotCompletionService - [10718] Response received. Duration: 1899 ms 
+2022-02-23 19:50:29,673 [40328089]   WARN - efaultCopilotCompletionService - [10742] Response received. Duration: 324 ms 
+2022-02-23 19:50:30,421 [40328837]   WARN - efaultCopilotCompletionService - [10743] Response received. Duration: 201 ms 
+2022-02-23 19:50:33,426 [40331842]   WARN - efaultCopilotCompletionService - [10744] Response received. Duration: 1572 ms 
+2022-02-23 19:50:33,450 [40331866]   WARN - efaultCopilotCompletionService - [10744] Response received. Duration: 1596 ms 
+2022-02-23 19:50:33,472 [40331888]   WARN - efaultCopilotCompletionService - [10744] Response received. Duration: 1618 ms 
+2022-02-23 19:50:35,633 [40334049]   WARN - efaultCopilotCompletionService - [10745] Response received. Duration: 1443 ms 
+2022-02-23 19:50:35,739 [40334155]   WARN - efaultCopilotCompletionService - [10745] Response received. Duration: 1549 ms 
+2022-02-23 19:50:35,756 [40334172]   WARN - efaultCopilotCompletionService - [10745] Response received. Duration: 1566 ms 
+2022-02-23 19:50:40,195 [40338611]   WARN - efaultCopilotCompletionService - [10748] Response received. Duration: 220 ms 
+2022-02-23 19:50:40,545 [40338961]   WARN - efaultCopilotCompletionService - [10750] Response received. Duration: 201 ms 
+2022-02-23 19:51:00,334 [40358750]   WARN - efaultCopilotCompletionService - [10756] Response received. Duration: 273 ms 
+2022-02-23 19:51:02,917 [40361333]   WARN - efaultCopilotCompletionService - [10759] Response received. Duration: 345 ms 
+2022-02-23 19:51:12,716 [40371132]   WARN - efaultCopilotCompletionService - [10768] Response received. Duration: 221 ms 
+2022-02-23 19:51:16,973 [40375389]   WARN - efaultCopilotCompletionService - [10781] Response received. Duration: 294 ms 
+2022-02-23 19:51:27,230 [40385646]   WARN - efaultCopilotCompletionService - [10787] Response received. Duration: 162 ms 
+2022-02-23 19:51:31,540 [40389956]   WARN - ub.copilot.lang.CopilotPsiUtil - findBlockEnd failed after 5 attempts 
+2022-02-23 19:51:34,814 [40393230]   WARN - efaultCopilotCompletionService - [10797] Response received. Duration: 490 ms 
+2022-02-23 19:51:50,907 [40409323]   WARN - efaultCopilotCompletionService - [10806] Response received. Duration: 298 ms 
+2022-02-23 19:51:52,021 [40410437]   WARN - efaultCopilotCompletionService - [10812] Response received. Duration: 267 ms 
+2022-02-23 19:51:52,837 [40411253]   WARN - efaultCopilotCompletionService - [10813] Response received. Duration: 411 ms 
+2022-02-23 19:51:54,220 [40412636]   WARN - efaultCopilotCompletionService - [10815] Response received. Duration: 214 ms 
+2022-02-23 19:52:19,915 [40438331]   WARN - efaultCopilotCompletionService - [10836] Response received. Duration: 334 ms 
+2022-02-23 19:52:22,021 [40440437]   WARN - efaultCopilotCompletionService - [10841] Response received. Duration: 292 ms 
+2022-02-23 19:52:29,276 [40447692]   WARN - efaultCopilotCompletionService - [10851] Response received. Duration: 354 ms 
+2022-02-23 19:52:30,934 [40449350]   WARN - efaultCopilotCompletionService - [10854] Response received. Duration: 357 ms 
+2022-02-23 19:52:32,864 [40451280]   WARN - efaultCopilotCompletionService - [10858] Response received. Duration: 186 ms 
+2022-02-23 19:52:35,134 [40453550]   WARN - efaultCopilotCompletionService - [10859] Response received. Duration: 1456 ms 
+2022-02-23 19:52:35,165 [40453581]   WARN - efaultCopilotCompletionService - [10859] Response received. Duration: 1487 ms 
+2022-02-23 19:52:35,177 [40453593]   WARN - efaultCopilotCompletionService - [10859] Response received. Duration: 1499 ms 
+2022-02-23 19:52:41,731 [40460147]   WARN - efaultCopilotCompletionService - [10861] Response received. Duration: 1422 ms 
+2022-02-23 19:52:41,752 [40460168]   WARN - efaultCopilotCompletionService - [10861] Response received. Duration: 1443 ms 
+2022-02-23 19:52:41,903 [40460319]   WARN - efaultCopilotCompletionService - [10861] Response received. Duration: 1594 ms 
+2022-02-23 19:52:57,965 [40476381]   WARN - efaultCopilotCompletionService - [10864] Response received. Duration: 301 ms 
+2022-02-23 19:53:02,009 [40480425]   WARN - efaultCopilotCompletionService - [10877] Response received. Duration: 180 ms 
+2022-02-23 19:53:02,704 [40481120]   WARN - efaultCopilotCompletionService - [10878] Response received. Duration: 330 ms 
+2022-02-23 19:53:03,495 [40481911]   WARN - efaultCopilotCompletionService - [10879] Response received. Duration: 478 ms 
+2022-02-23 19:53:10,376 [40488792]   WARN - efaultCopilotCompletionService - [10883] Response received. Duration: 227 ms 
+2022-02-23 19:53:10,969 [40489385]   WARN - efaultCopilotCompletionService - [10884] Response received. Duration: 391 ms 
+2022-02-23 19:53:11,321 [40489737]   WARN - efaultCopilotCompletionService - [10885] Response received. Duration: 191 ms 
+2022-02-23 19:53:28,031 [40506447]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 19:55:03,406 [40601822]   WARN - efaultCopilotCompletionService - [10892] Response received. Duration: 381 ms 
+2022-02-23 19:55:25,860 [40624276]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 19:55:46,557 [40644973]   WARN - efaultCopilotCompletionService - [10899] Response received. Duration: 315 ms 
+2022-02-23 19:56:34,469 [40692885]   WARN - efaultCopilotCompletionService - [10912] Response received. Duration: 1104 ms 
+2022-02-23 19:56:34,539 [40692955]   WARN - efaultCopilotCompletionService - [10912] Response received. Duration: 1174 ms 
+2022-02-23 19:56:34,544 [40692960]   WARN - efaultCopilotCompletionService - [10912] Response received. Duration: 1179 ms 
+2022-02-23 19:56:38,338 [40696754]   WARN - efaultCopilotCompletionService - [10915] Response received. Duration: 1587 ms 
+2022-02-23 19:56:38,362 [40696778]   WARN - efaultCopilotCompletionService - [10915] Response received. Duration: 1611 ms 
+2022-02-23 19:56:38,429 [40696845]   WARN - efaultCopilotCompletionService - [10915] Response received. Duration: 1678 ms 
+2022-02-23 19:58:18,069 [40796485]   WARN - efaultCopilotCompletionService - [10930] Response received. Duration: 285 ms 
+2022-02-23 19:58:21,564 [40799980]   WARN - efaultCopilotCompletionService - [10940] Response received. Duration: 255 ms 
+2022-02-23 19:58:23,408 [40801824]   WARN - efaultCopilotCompletionService - [10947] Response received. Duration: 410 ms 
+2022-02-23 19:58:27,191 [40805607]   WARN - efaultCopilotCompletionService - [10964] Response received. Duration: 438 ms 
+2022-02-23 19:58:28,210 [40806626]   WARN - efaultCopilotCompletionService - [10965] Response received. Duration: 286 ms 
+2022-02-23 19:58:42,956 [40821372]   WARN - efaultCopilotCompletionService - [10973] Response received. Duration: 369 ms 
+2022-02-23 19:58:45,725 [40824141]   WARN - efaultCopilotCompletionService - [10979] Response received. Duration: 391 ms 
+2022-02-23 19:58:51,464 [40829880]   WARN - efaultCopilotCompletionService - [10983] Response received. Duration: 583 ms 
+2022-02-23 19:58:52,358 [40830774]   WARN - efaultCopilotCompletionService - [10988] Response received. Duration: 201 ms 
+2022-02-23 19:58:54,135 [40832551]   WARN - efaultCopilotCompletionService - [10992] Response received. Duration: 285 ms 
+2022-02-23 19:59:28,719 [40867135]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-02-23 19:59:38,333 [40876749]   WARN - efaultCopilotCompletionService - [11005] Response received. Duration: 1271 ms 
+2022-02-23 19:59:38,335 [40876751]   WARN - efaultCopilotCompletionService - [11005] Response received. Duration: 1273 ms 
+2022-02-23 19:59:38,369 [40876785]   WARN - efaultCopilotCompletionService - [11005] Response received. Duration: 1307 ms 
+2022-02-23 19:59:56,583 [40894999]   WARN - efaultCopilotCompletionService - [11024] Response received. Duration: 342 ms 
+2022-02-23 20:00:19,379 [40917795]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:00:26,178 [40924594]   WARN - efaultCopilotCompletionService - [11026] Response received. Duration: 969 ms 
+2022-02-23 20:00:26,275 [40924691]   WARN - efaultCopilotCompletionService - [11026] Response received. Duration: 1066 ms 
+2022-02-23 20:00:26,365 [40924781]   WARN - efaultCopilotCompletionService - [11026] Response received. Duration: 1156 ms 
+2022-02-23 20:00:27,925 [40926341]   WARN - efaultCopilotCompletionService - [11028] Response received. Duration: 216 ms 
+2022-02-23 20:00:30,616 [40929032]   WARN - efaultCopilotCompletionService - [11029] Response received. Duration: 292 ms 
+2022-02-23 20:00:30,618 [40929034]   WARN - efaultCopilotCompletionService - [11029] Response received. Duration: 294 ms 
+2022-02-23 20:00:30,619 [40929035]   WARN - efaultCopilotCompletionService - [11029] Response received. Duration: 295 ms 
+2022-02-23 20:00:32,139 [40930555]   WARN - efaultCopilotCompletionService - [11032] Response received. Duration: 259 ms 
+2022-02-23 20:00:32,140 [40930556]   WARN - efaultCopilotCompletionService - [11032] Response received. Duration: 260 ms 
+2022-02-23 20:00:32,140 [40930556]   WARN - efaultCopilotCompletionService - [11032] Response received. Duration: 260 ms 
+2022-02-23 20:01:07,091 [40965507]   WARN - efaultCopilotCompletionService - [11044] Response received. Duration: 349 ms 
+2022-02-23 20:01:24,771 [40983187]   WARN - efaultCopilotCompletionService - [11050] Response received. Duration: 1583 ms 
+2022-02-23 20:01:24,847 [40983263]   WARN - efaultCopilotCompletionService - [11050] Response received. Duration: 1659 ms 
+2022-02-23 20:01:24,864 [40983280]   WARN - efaultCopilotCompletionService - [11050] Response received. Duration: 1676 ms 
+2022-02-23 20:01:41,550 [40999966]   WARN - efaultCopilotCompletionService - [11060] Response received. Duration: 367 ms 
+2022-02-23 20:01:51,447 [41009863]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:02:04,254 [41022670]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:02:23,239 [41041655]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:03:26,090 [41104506]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:04:08,561 [41146977]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:05:17,195 [41215611]   WARN - efaultCopilotCompletionService - [11111] Response received. Duration: 221 ms 
+2022-02-23 20:05:36,743 [41235159]   WARN - efaultCopilotCompletionService - [11115] Response received. Duration: 411 ms 
+2022-02-23 20:05:40,030 [41238446]   WARN - efaultCopilotCompletionService - [11124] Response received. Duration: 323 ms 
+2022-02-23 20:05:45,255 [41243671]   WARN - efaultCopilotCompletionService - [11135] Response received. Duration: 227 ms 
+2022-02-23 20:05:57,601 [41256017]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:06:30,528 [41288944]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-02-23 20:06:57,921 [41316337]   WARN - efaultCopilotCompletionService - [11142] Response received. Duration: 1376 ms 
+2022-02-23 20:06:57,931 [41316347]   WARN - efaultCopilotCompletionService - [11142] Response received. Duration: 1386 ms 
+2022-02-23 20:07:04,139 [41322555]   WARN - efaultCopilotCompletionService - [11143] Response received. Duration: 5963 ms 
+2022-02-23 20:07:04,211 [41322627]   WARN - efaultCopilotCompletionService - [11143] Response received. Duration: 6035 ms 
+2022-02-23 20:07:04,247 [41322663]   WARN - efaultCopilotCompletionService - [11143] Response received. Duration: 6071 ms 
+2022-02-23 20:07:32,777 [41351193]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:07:39,025 [41357441]   WARN - efaultCopilotCompletionService - [11146] Response received. Duration: 1359 ms 
+2022-02-23 20:07:48,249 [41366665]   WARN - efaultCopilotCompletionService - [11149] Response received. Duration: 237 ms 
+2022-02-23 20:07:48,255 [41366671]   WARN - efaultCopilotCompletionService - [11149] Response received. Duration: 243 ms 
+2022-02-23 20:07:48,261 [41366677]   WARN - efaultCopilotCompletionService - [11149] Response received. Duration: 249 ms 
+2022-02-23 20:07:48,802 [41367218]   WARN - efaultCopilotCompletionService - [11150] Response received. Duration: 362 ms 
+2022-02-23 20:07:48,808 [41367224]   WARN - efaultCopilotCompletionService - [11150] Response received. Duration: 368 ms 
+2022-02-23 20:07:48,812 [41367228]   WARN - efaultCopilotCompletionService - [11150] Response received. Duration: 372 ms 
+2022-02-23 20:07:54,932 [41373348]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:08:14,044 [41392460]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:08:52,451 [41430867]   WARN - efaultCopilotCompletionService - [11155] Response received. Duration: 399 ms 
+2022-02-23 20:08:55,577 [41433993]   WARN - efaultCopilotCompletionService - [11162] Response received. Duration: 199 ms 
+2022-02-23 20:09:09,403 [41447819]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:09:59,291 [41497707]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:14:17,795 [41756211]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:14:28,845 [41767261]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:15:11,077 [41809493]   WARN - efaultCopilotCompletionService - [11201] Response received. Duration: 197 ms 
+2022-02-23 20:15:11,501 [41809917]   WARN - efaultCopilotCompletionService - [11203] Response received. Duration: 258 ms 
+2022-02-23 20:15:34,570 [41832986]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:15:59,968 [41858384]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:16:38,300 [41896716]   WARN - efaultCopilotCompletionService - [11224] Response received. Duration: 220 ms 
+2022-02-23 20:16:38,859 [41897275]   WARN - efaultCopilotCompletionService - [11225] Response received. Duration: 202 ms 
+2022-02-23 20:16:59,050 [41917466]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:21:27,183 [42185599]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-23 20:24:19,172 [42357588]   WARN - efaultCopilotCompletionService - [11248] Response received. Duration: 1494 ms 
+2022-02-23 20:26:27,579 [42485995]   WARN - efaultCopilotCompletionService - [11261] Response received. Duration: 5568 ms 
+2022-02-23 20:26:27,891 [42486307]   WARN - efaultCopilotCompletionService - [11261] Response received. Duration: 5880 ms 
+2022-02-23 20:26:27,919 [42486335]   WARN - efaultCopilotCompletionService - [11261] Response received. Duration: 5908 ms 
+2022-02-23 20:26:37,513 [42495929]   WARN - efaultCopilotCompletionService - [11280] Response received. Duration: 432 ms 
+2022-02-23 20:26:39,610 [42498026]   WARN - efaultCopilotCompletionService - [11281] Response received. Duration: 388 ms 
+2022-02-23 20:26:40,694 [42499110]   WARN - efaultCopilotCompletionService - [11291] Response received. Duration: 569 ms 
+2022-02-23 20:26:40,798 [42499214]   WARN - efaultCopilotCompletionService - [11291] Response received. Duration: 673 ms 
+2022-02-23 20:26:54,782 [42513198]   WARN - efaultCopilotCompletionService - [11356] Response received. Duration: 397 ms 
+2022-02-23 20:26:57,564 [42515980]   WARN - efaultCopilotCompletionService - [11382] Response received. Duration: 454 ms 
+2022-02-23 20:26:58,226 [42516642]   WARN - efaultCopilotCompletionService - [11384] Response received. Duration: 259 ms 
+2022-02-23 20:27:01,882 [42520298]   WARN - efaultCopilotCompletionService - [11386] Response received. Duration: 387 ms 
+2022-02-23 20:27:05,675 [42524091]   WARN - efaultCopilotCompletionService - [11395] Response received. Duration: 388 ms 
+2022-02-23 20:27:06,999 [42525415]   WARN - efaultCopilotCompletionService - [11400] Response received. Duration: 272 ms 
+2022-02-23 20:27:38,381 [42556797]   WARN - efaultCopilotCompletionService - [11410] Response received. Duration: 326 ms 
+2022-02-23 20:27:41,827 [42560243]   WARN - efaultCopilotCompletionService - [11414] Response received. Duration: 342 ms 
+2022-02-23 20:27:45,516 [42563932]   WARN - efaultCopilotCompletionService - [11424] Response received. Duration: 202 ms 
+2022-02-23 20:27:48,561 [42566977]   WARN - efaultCopilotCompletionService - [11432] Response received. Duration: 215 ms 
+2022-02-23 20:28:39,747 [42618163]   WARN - efaultCopilotCompletionService - [11455] Response received. Duration: 187 ms 
+2022-02-23 20:28:41,517 [42619933]   WARN - efaultCopilotCompletionService - [11456] Response received. Duration: 302 ms 
+2022-02-23 20:28:46,697 [42625113]   WARN - efaultCopilotCompletionService - [11460] Response received. Duration: 260 ms 
+2022-02-23 20:29:51,970 [42690386]   WARN - efaultCopilotCompletionService - [11467] Response received. Duration: 305 ms 
+2022-02-23 20:30:00,851 [42699267]   WARN - efaultCopilotCompletionService - [11502] Response received. Duration: 404 ms 
+2022-02-23 20:30:01,640 [42700056]   WARN - efaultCopilotCompletionService - [11504] Response received. Duration: 292 ms 
+2022-02-23 20:30:03,223 [42701639]   WARN - efaultCopilotCompletionService - fetchCompletions: unable to create file for BasicEditorRequest(language=com.github.copilot.lang.java.JavaLanguageSupport@2896ffa3, completionType=GhostText, useTabIndents=false, tabWidth=4, requestId=11509, fileLanguage=Language: JAVA, relativeFilePath=src/main/java/tasktree/aws/cleanup/FilterLoadBalancers.java, documentContent=package tasktree.aws.cleanup;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import software.amazon.awssdk.services.elasticloadbalancing.model.LoadBalancerDescription;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
+import tasktree.spi.Task;
+
+import java.util.List;
+import java.util.stream.Stream;
+
+public class FilterLoadBalancers extends AWSFilter<LoadBalancerDescription> {
+    static final Logger log = LoggerFactory.getLogger(FilterInstances.class);
+
+    private void FilterLoadBalancers(Configurat)
+        
+    private boolean match(LoadBalancerDescription resource) {
+        var prefix = getConfig().getAwsCleanupPrefix();
+        var match = resource.loadBalancerName().startsWith(prefix);
+        log.info("Found Load Balancer {} {}", mark(match), resource);
+        return match;
+    }
+
+    private List<LoadBalancer> filterLBs() {
+        var elb = newELBClient();
+        var resources = elb.describeLoadBalancers().loadBalancerDescriptions();
+        var matches = resources.stream().filter(this::match).toList();
+        log.info("Matched {} ELBs in region [{}]", matches.size(), getRegion());
+        return matches;
+    }
+
+
+
+    @Override
+    public void run() {
+        var resources = filterLBs();
+        addAllTasks(deleteLBs(resources));
+    }
+
+
+    private Stream<Task> deleteLBs(List<LoadBalancer> subnets) {
+        return subnets.stream().map(this::deleteLoadBalancer);
+    }
+
+
+    private Task deleteLoadBalancer(LoadBalancer resource) {
+        return new DeleteLoadBalancer(getConfig(), resource);
+    }
+}
+, offset=548, lineInfo=LineInfo(lineCount=50, lineNumber=14, lineStartOffset=501, columnOffset=47, line=    private void FilterLoadBalancers(Configurat), nextLineIndent=4), requestTimestamp=1645644603147, documentModificationSequence=112, isCancelled=true) 
+2022-02-23 20:30:04,935 [42703351]   WARN - efaultCopilotCompletionService - [11523] Response received. Duration: 405 ms 
+2022-02-23 20:30:07,841 [42706257]   WARN - efaultCopilotCompletionService - [11534] Response received. Duration: 299 ms 
+2022-02-23 20:30:13,521 [42711937]   WARN - efaultCopilotCompletionService - [11546] Response received. Duration: 483 ms 
+2022-02-23 20:30:13,527 [42711943]   WARN - efaultCopilotCompletionService - [11546] Response received. Duration: 489 ms 
+2022-02-23 20:30:13,535 [42711951]   WARN - efaultCopilotCompletionService - [11546] Response received. Duration: 497 ms 
+2022-02-23 20:30:19,107 [42717523]   WARN - efaultCopilotCompletionService - [11555] Response received. Duration: 465 ms 
+2022-02-23 20:30:22,108 [42720524]   WARN - efaultCopilotCompletionService - [11562] Response received. Duration: 346 ms 
+2022-02-23 20:30:22,775 [42721191]   WARN - efaultCopilotCompletionService - [11563] Response received. Duration: 221 ms 
+2022-02-23 20:30:25,889 [42724305]   WARN - efaultCopilotCompletionService - [11573] Response received. Duration: 398 ms 
+2022-02-23 20:30:26,788 [42725204]   WARN - efaultCopilotCompletionService - [11576] Response received. Duration: 335 ms 
+2022-02-23 20:30:27,948 [42726364]   WARN - efaultCopilotCompletionService - [11577] Response received. Duration: 200 ms 
+2022-02-23 20:31:39,464 [42797880]   WARN - efaultCopilotCompletionService - [11613] Response received. Duration: 294 ms 
+2022-02-23 20:31:43,050 [42801466]   WARN - efaultCopilotCompletionService - [11623] Response received. Duration: 459 ms 
+2022-02-23 20:31:46,761 [42805177]   WARN - efaultCopilotCompletionService - [11628] Response received. Duration: 420 ms 
+2022-02-23 20:31:49,222 [42807638]   WARN - efaultCopilotCompletionService - [11633] Response received. Duration: 456 ms 
+2022-02-23 20:32:15,336 [42833752]   WARN - efaultCopilotCompletionService - [11644] Response received. Duration: 230 ms 
+2022-02-23 20:32:22,847 [42841263]   WARN - efaultCopilotCompletionService - [11647] Response received. Duration: 2609 ms 
+2022-02-23 20:32:22,873 [42841289]   WARN - efaultCopilotCompletionService - [11647] Response received. Duration: 2635 ms 
+2022-02-23 20:32:22,949 [42841365]   WARN - efaultCopilotCompletionService - [11647] Response received. Duration: 2711 ms 
+2022-02-23 20:32:57,674 [42876090]   WARN - efaultCopilotCompletionService - [11653] Response received. Duration: 223 ms 
+2022-02-23 20:33:33,282 [42911698]   WARN - efaultCopilotCompletionService - [11680] Response received. Duration: 1401 ms 
+2022-02-23 20:33:33,383 [42911799]   WARN - efaultCopilotCompletionService - [11680] Response received. Duration: 1502 ms 
+2022-02-23 20:33:33,392 [42911808]   WARN - efaultCopilotCompletionService - [11680] Response received. Duration: 1511 ms 
+2022-02-23 20:34:42,114 [42980530]   WARN - efaultCopilotCompletionService - [11716] Response received. Duration: 281 ms 
+2022-02-23 20:34:43,620 [42982036]   WARN - efaultCopilotCompletionService - [11721] Response received. Duration: 259 ms 
+2022-02-23 20:34:44,535 [42982951]   WARN - efaultCopilotCompletionService - [11724] Response received. Duration: 289 ms 
+2022-02-23 20:34:52,589 [42991005]   WARN - efaultCopilotCompletionService - [11727] Response received. Duration: 201 ms 
+2022-02-23 20:35:04,218 [43002634]   WARN - efaultCopilotCompletionService - [11761] Response received. Duration: 355 ms 
+2022-02-23 20:35:05,333 [43003749]   WARN - efaultCopilotCompletionService - [11765] Response received. Duration: 249 ms 
+2022-02-23 20:36:21,606 [43080022]   WARN - map.impl.IdeKeyEventDispatcher - Action 'GoTo' (class com.intellij.codeInsight.navigation.actions.GotoDeclarationAction) has become disabled in `beforeActionPerformedUpdate` right after successful `update` 
+2022-02-23 20:37:26,835 [43145251]   WARN - efaultCopilotCompletionService - [11817] Response received. Duration: 429 ms 
+2022-02-23 20:37:36,401 [43154817]   WARN - efaultCopilotCompletionService - [11825] Response received. Duration: 203 ms 
+2022-02-23 20:37:40,874 [43159290]   WARN - efaultCopilotCompletionService - [11832] Response received. Duration: 221 ms 
+2022-02-23 20:38:11,901 [43190317]   WARN - efaultCopilotCompletionService - [11844] Response received. Duration: 445 ms 
+2022-02-23 20:38:22,443 [43200859]   WARN - efaultCopilotCompletionService - [11851] Response received. Duration: 438 ms 
+2022-02-23 20:38:24,961 [43203377]   WARN - efaultCopilotCompletionService - [11862] Response received. Duration: 304 ms 
+2022-02-23 20:38:26,436 [43204852]   WARN - efaultCopilotCompletionService - [11869] Response received. Duration: 277 ms 
+2022-02-23 20:38:29,366 [43207782]   WARN - efaultCopilotCompletionService - [11878] Response received. Duration: 300 ms 
+2022-02-23 20:38:39,555 [43217971]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+shutdown on Thread[AWT-EventQueue-0,6,main]
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007fb3fce11b07, pid=17169, tid=17285
+#
+# JRE version: OpenJDK Runtime Environment JBR-11.0.13.7-1751.25-jcef (11.0.13+7) (build 11.0.13+7-b1751.25)
+# Java VM: OpenJDK 64-Bit Server VM JBR-11.0.13.7-1751.25-jcef (11.0.13+7-b1751.25, mixed mode, tiered, compressed oops, g1 gc, linux-amd64)
+# Problematic frame:
+# C  [libcef.so+0x700eb07]
+#
+# Core dump will be written. Default location: Core dumps may be processed with "/usr/lib/systemd/systemd-coredump %P %u %g %s %t %c %h %e" (or dumping to /home/jufaerma/code/task-tree/tt-cli/core.17169)
+#
+# An error report file with more information is saved as:
+# /home/jufaerma/java_error_in_idea_17169.log
+#
+# If you would like to submit a bug report, please visit:
+#   https://bugreport.java.com/bugreport/crash.jsp
+#
+/home/jufaerma/.local/share/JetBrains/Toolbox/apps/IDEA-C/ch-0/213.6777.52/bin/idea.sh: line 159: 17169 Aborted                 (core dumped) "$JAVA_BIN" -classpath "$CLASSPATH" ${VM_OPTIONS} "-XX:ErrorFile=$HOME/java_error_in_idea_%p.log" "-XX:HeapDumpPath=$HOME/java_error_in_idea_.hprof" "-Djb.vmOptionsFile=${USER_VM_OPTIONS_FILE:-${VM_OPTIONS_FILE}}" ${IDE_PROPERTIES_PROPERTY} -Djava.system.class.loader=com.intellij.util.lang.PathClassLoader -Didea.vendor.name=JetBrains -Didea.paths.selector=IdeaIC2021.3 -Didea.platform.prefix=Idea -Didea.jre.check=true -Dsplash=true com.intellij.idea.Main "$@"
+2022-02-24 16:34:13,470 [   1605]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: AllHallowsEve from plugins: DBN 
+2022-02-24 16:34:13,470 [   1605]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: VibrantInk from plugins: DBN 
+2022-02-24 16:34:13,473 [   1608]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: Monocai from plugins: DBN 
+2022-02-24 16:34:13,474 [   1609]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: Twilight from plugins: DBN 
+2022-02-24 16:34:13,474 [   1609]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: WarmNeon from plugins: DBN 
+2022-02-24 16:34:13,474 [   1609]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: Monokai from plugins: DBN 
+2022-02-24 16:34:13,474 [   1609]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: Railscasts from plugins: DBN 
+2022-02-24 16:34:13,474 [   1609]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: Cobalt from plugins: DBN 
+2022-02-24 16:34:13,474 [   1609]   WARN - s.impl.EditorColorsManagerImpl - Cannot find scheme: Blackboard from plugins: DBN 
+2022-02-24 16:34:14,222 [   2357]   WARN - l.NotificationGroupManagerImpl - Notification group CodeWithMe is already registered (group=com.intellij.notification.NotificationGroup@5a06ca5e). Plugin descriptor: PluginDescriptor(name=Code With Me, id=com.jetbrains.codeWithMe, descriptorPath=plugin.xml, path=~/.local/share/JetBrains/Toolbox/apps/IDEA-C/ch-0/213.6777.52/plugins/cwm-plugin, version=213.6777.52, package=null, isBundled=true) 
+Info  | RdCoroutineScope          | 14:JobScheduler FJ pool 3/11 | RdCoroutineHost overridden 
+DEBUG - [ORACLE-SQL] undefined token type: KW_SHARED
+DEBUG - [ORACLE-SQL] undefined token type: KW_DUPLICATED
+DEBUG - [ORACLE-SQL] undefined token type: KW_IMMUTABLE
+DEBUG - [ORACLE-SQL] undefined token type: KW_BLOCKCHAIN
+DEBUG - [ORACLE-SQL] undefined token type: KW_IDLE
+DEBUG - [ORACLE-SQL] undefined element type: row_movement_clause
+DEBUG - [ORACLE-SQL] undefined element type: alter_external_table_clauses
+DEBUG - [ORACLE-SQL] undefined element type: redo_logfile_spec
+DEBUG - [ORACLE-SQL] undefined element type: scn_value
+DEBUG - [ORACLE-SQL] undefined element type: data_item
+DEBUG - [ORACLE-SQL] undefined element type: heap_org_table_clause
+DEBUG - [ORACLE-SQL] undefined element type: hash_subpartition_quantity
+DEBUG - [ORACLE-SQL] undefined element type: parameter_type
+DEBUG - [ORACLE-SQL] undefined element type: move_table_clause
+DEBUG - [ORACLE-SQL] undefined element type: primary_operator
+DEBUG - [ORACLE-SQL] undefined element type: table_partitioning_clauses
+DEBUG - [ORACLE-SQL] undefined element type: create_cluster
+DEBUG - [ORACLE-SQL] undefined element type: parameter_types
+DEBUG - [ORACLE-SQL] undefined element type: lob_partition_storage
+DEBUG - [ORACLE-SQL] undefined element type: partition_value
+DEBUG - [ORACLE-SQL] undefined element type: records_per_block_clause
+DEBUG - [ORACLE-SQL] undefined element type: xml_type_column_properties
+DEBUG - [ORACLE-SQL] undefined element type: index_compression
+DEBUG - [ORACLE-SQL] undefined element type: ref_attribute
+DEBUG - [ORACLE-SQL] undefined element type: return_type
+DEBUG - [ORACLE-PLSQL] undefined token type: KW_PERIOD
+DEBUG - [ORACLE-PLSQL] undefined token type: KW_PERIOD
+2022-02-24 16:34:17,343 [   5478]   WARN - ctionSystem.impl.ActionUpdater - 643 ms to grab EDT for ShowRecentFilesAction#update (com.intellij.ide.actions.ShowRecentFilesAction) 
+2022-02-24 16:34:19,737 [   7872]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-02-24 16:34:21,583 [   9718]   WARN - ctionSystem.impl.ActionUpdater - 202 ms to grab EDT for TabListAction#update (com.intellij.ide.actions.TabListAction) 
+2022-02-24 16:34:31,505 [  19640]   WARN - ctionSystem.impl.ActionUpdater - 2102 ms to call on BGT RunContextAction#update (com.intellij.execution.actions.RunContextAction) 
+2022-02-24 16:34:31,769 [  19904]   WARN - ystem.impl.ActionPopupMenuImpl - 2971 ms to fill popup menu ProjectViewPopup 
+2022-02-24 16:34:46,911 [  35046]   WARN - com.intellij.util.xmlb.Binding - no accessors for com.dci.intellij.dbn.debugger.common.settings.DBProgramDebuggerState 
+2022-02-24 16:34:57,974 [  46109]   WARN - com.intellij.util.xmlb.Binding - no accessors for scala.collection.immutable.Seq 
+2022-02-24 16:34:58,166 [  46301]   WARN - com.intellij.util.xmlb.Binding - no accessors for com.haulmont.jpb.model.dbtype.DbType 
+2022-02-24 16:34:58,186 [  46321]   WARN - com.intellij.util.xmlb.Binding - no accessors for org.jetbrains.idea.perforce.perforce.ConnectionId 
+2022-02-24 16:38:29,979 [ 258114]   WARN - efaultCopilotCompletionService - [6] Response received. Duration: 255 ms 
+2022-02-24 16:38:31,668 [ 259803]   WARN - efaultCopilotCompletionService - [15] Response received. Duration: 215 ms 
+2022-02-24 16:38:32,503 [ 260638]   WARN - efaultCopilotCompletionService - [17] Response received. Duration: 209 ms 
+2022-02-24 16:38:33,093 [ 261228]   WARN - efaultCopilotCompletionService - [18] Response received. Duration: 226 ms 
+2022-02-24 16:38:34,035 [ 262170]   WARN - efaultCopilotCompletionService - [19] Response received. Duration: 212 ms 
+2022-02-24 16:38:36,781 [ 264916]   WARN - efaultCopilotCompletionService - [21] Response received. Duration: 897 ms 
+2022-02-24 16:38:36,814 [ 264949]   WARN - efaultCopilotCompletionService - [21] Response received. Duration: 930 ms 
+2022-02-24 16:38:36,920 [ 265055]   WARN - efaultCopilotCompletionService - [21] Response received. Duration: 1036 ms 
+2022-02-24 16:38:39,147 [ 267282]   WARN - efaultCopilotCompletionService - [22] Response received. Duration: 681 ms 
+2022-02-24 16:38:39,270 [ 267405]   WARN - efaultCopilotCompletionService - [22] Response received. Duration: 804 ms 
+2022-02-24 16:38:39,285 [ 267420]   WARN - efaultCopilotCompletionService - [22] Response received. Duration: 819 ms 
+2022-02-24 16:38:48,564 [ 276699]   WARN - efaultCopilotCompletionService - [25] Response received. Duration: 993 ms 
+2022-02-24 16:38:48,600 [ 276735]   WARN - efaultCopilotCompletionService - [25] Response received. Duration: 1029 ms 
+2022-02-24 16:38:48,689 [ 276824]   WARN - efaultCopilotCompletionService - [25] Response received. Duration: 1118 ms 
+2022-02-24 16:40:53,789 [ 401924]   WARN - efaultCopilotCompletionService - [74] Response received. Duration: 450 ms 
+2022-02-24 16:41:08,069 [ 416204]   WARN - efaultCopilotCompletionService - [106] Response received. Duration: 1939 ms 
+2022-02-24 16:41:08,227 [ 416362]   WARN - efaultCopilotCompletionService - [106] Response received. Duration: 2097 ms 
+2022-02-24 16:41:08,233 [ 416368]   WARN - efaultCopilotCompletionService - [106] Response received. Duration: 2103 ms 
+2022-02-24 16:41:15,795 [ 423930]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Class path contains multiple SLF4J bindings. 
+2022-02-24 16:41:15,795 [ 423930]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/jufaerma/.local/share/JetBrains/Toolbox/apps/IDEA-C/ch-0/213.6777.52/plugins/maven/lib/maven36-server.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2022-02-24 16:41:15,795 [ 423930]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/jufaerma/.local/share/JetBrains/Toolbox/apps/IDEA-C/ch-0/213.6777.52/lib/3rd-party-rt.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2022-02-24 16:41:15,795 [ 423930]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation. 
+2022-02-24 16:41:15,795 [ 423930]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Actual binding is of type [org.jetbrains.idea.maven.server.Maven3WrapperSl4LoggerFactory] 
+2022-02-24 16:41:17,648 [ 425783]   WARN - efaultCopilotCompletionService - [107] Response received. Duration: 2101 ms 
+2022-02-24 16:41:17,657 [ 425792]   WARN - efaultCopilotCompletionService - [107] Response received. Duration: 2110 ms 
+2022-02-24 16:41:17,664 [ 425799]   WARN - efaultCopilotCompletionService - [107] Response received. Duration: 2117 ms 
+2022-02-24 16:41:40,202 [ 448337]   WARN - efaultCopilotCompletionService - [133] Response received. Duration: 1860 ms 
+2022-02-24 16:41:40,233 [ 448368]   WARN - efaultCopilotCompletionService - [133] Response received. Duration: 1891 ms 
+2022-02-24 16:41:40,314 [ 448449]   WARN - efaultCopilotCompletionService - [133] Response received. Duration: 1972 ms 
+2022-02-24 16:43:01,349 [ 529484]   WARN - efaultCopilotCompletionService - [168] Response received. Duration: 1763 ms 
+2022-02-24 16:43:01,409 [ 529544]   WARN - efaultCopilotCompletionService - [168] Response received. Duration: 1823 ms 
+2022-02-24 16:43:01,483 [ 529618]   WARN - efaultCopilotCompletionService - [168] Response received. Duration: 1897 ms 
+2022-02-24 16:43:06,660 [ 534795]   WARN - efaultCopilotCompletionService - [170] Response received. Duration: 2997 ms 
+2022-02-24 16:43:06,707 [ 534842]   WARN - efaultCopilotCompletionService - [170] Response received. Duration: 3044 ms 
+2022-02-24 16:43:06,772 [ 534907]   WARN - efaultCopilotCompletionService - [170] Response received. Duration: 3109 ms 
+2022-02-24 16:43:49,924 [ 578059]   WARN - efaultCopilotCompletionService - [181] Response received. Duration: 377 ms 
+2022-02-24 16:43:58,592 [ 586727]   WARN - efaultCopilotCompletionService - [193] Response received. Duration: 5222 ms 
+2022-02-24 16:43:58,703 [ 586838]   WARN - efaultCopilotCompletionService - [193] Response received. Duration: 5333 ms 
+2022-02-24 16:43:58,750 [ 586885]   WARN - efaultCopilotCompletionService - [193] Response received. Duration: 5380 ms 
+2022-02-24 16:44:04,721 [ 592856]   WARN - efaultCopilotCompletionService - [194] Response received. Duration: 507 ms 
+2022-02-24 16:44:04,866 [ 593001]   WARN - efaultCopilotCompletionService - [194] Response received. Duration: 652 ms 
+2022-02-24 16:44:04,869 [ 593004]   WARN - efaultCopilotCompletionService - [194] Response received. Duration: 655 ms 
+2022-02-24 16:44:23,789 [ 611924]   WARN - efaultCopilotCompletionService - [223] Response received. Duration: 407 ms 
+2022-02-24 16:44:24,992 [ 613127]   WARN - efaultCopilotCompletionService - [224] Response received. Duration: 500 ms 
+2022-02-24 16:44:26,988 [ 615123]   WARN - efaultCopilotCompletionService - [231] Response received. Duration: 374 ms 
+2022-02-24 16:44:28,014 [ 616149]   WARN - efaultCopilotCompletionService - [233] Response received. Duration: 396 ms 
+2022-02-24 16:44:29,657 [ 617792]   WARN - efaultCopilotCompletionService - [237] Response received. Duration: 248 ms 
+2022-02-24 16:44:30,735 [ 618870]   WARN - efaultCopilotCompletionService - [238] Response received. Duration: 470 ms 
+2022-02-24 16:44:43,167 [ 631302]   WARN - efaultCopilotCompletionService - [251] Response received. Duration: 309 ms 
+2022-02-24 16:44:46,912 [ 635047]   WARN - efaultCopilotCompletionService - [259] Response received. Duration: 211 ms 
+2022-02-24 16:45:04,475 [ 652610]   WARN - efaultCopilotCompletionService - [267] Response received. Duration: 901 ms 
+2022-02-24 16:45:04,514 [ 652649]   WARN - efaultCopilotCompletionService - [267] Response received. Duration: 940 ms 
+2022-02-24 16:45:04,520 [ 652655]   WARN - efaultCopilotCompletionService - [267] Response received. Duration: 946 ms 
+2022-02-24 16:45:08,767 [ 656902]   WARN - efaultCopilotCompletionService - [277] Response received. Duration: 355 ms 
+2022-02-24 16:45:14,564 [ 662699]   WARN - efaultCopilotCompletionService - [302] Response received. Duration: 284 ms 
+2022-02-24 16:45:19,008 [ 667143]   WARN - efaultCopilotCompletionService - [325] Response received. Duration: 459 ms 
+2022-02-24 16:46:02,663 [ 710798]   WARN - efaultCopilotCompletionService - [349] Response received. Duration: 430 ms 
+2022-02-24 16:46:08,824 [ 716959]   WARN - efaultCopilotCompletionService - [357] Response received. Duration: 399 ms 
+2022-02-24 16:46:09,502 [ 717637]   WARN - efaultCopilotCompletionService - [358] Response received. Duration: 369 ms 
+2022-02-24 16:46:11,387 [ 719522]   WARN - efaultCopilotCompletionService - [365] Response received. Duration: 280 ms 
+2022-02-24 16:46:12,261 [ 720396]   WARN - efaultCopilotCompletionService - [371] Response received. Duration: 269 ms 
+2022-02-24 16:46:13,072 [ 721207]   WARN - efaultCopilotCompletionService - [372] Response received. Duration: 282 ms 
+2022-02-24 16:46:22,104 [ 730239]   WARN - efaultCopilotCompletionService - [379] Response received. Duration: 250 ms 
+2022-02-24 16:46:23,500 [ 731635]   WARN - efaultCopilotCompletionService - [383] Response received. Duration: 758 ms 
+2022-02-24 16:48:27,769 [ 855904]   WARN - efaultCopilotCompletionService - [394] Response received. Duration: 240 ms 
+2022-02-24 16:48:39,044 [ 867179]   WARN - efaultCopilotCompletionService - [419] Response received. Duration: 348 ms 
+2022-02-24 16:48:41,054 [ 869189]   WARN - efaultCopilotCompletionService - [426] Response received. Duration: 217 ms 
+2022-02-24 16:48:41,555 [ 869690]   WARN - efaultCopilotCompletionService - [428] Response received. Duration: 331 ms 
+2022-02-24 16:48:43,160 [ 871295]   WARN - efaultCopilotCompletionService - [430] Response received. Duration: 467 ms 
+2022-02-24 16:48:44,999 [ 873134]   WARN - efaultCopilotCompletionService - [434] Response received. Duration: 272 ms 
+2022-02-24 16:48:49,669 [ 877804]   WARN - efaultCopilotCompletionService - [448] Response received. Duration: 312 ms 
+2022-02-24 16:48:53,836 [ 881971]   WARN - efaultCopilotCompletionService - [453] Response received. Duration: 700 ms 
+2022-02-24 16:49:04,754 [ 892889]   WARN - efaultCopilotCompletionService - [454] Response received. Duration: 390 ms 
+2022-02-24 16:49:05,784 [ 893919]   WARN - efaultCopilotCompletionService - [456] Response received. Duration: 313 ms 
+2022-02-24 16:49:12,751 [ 900886]   WARN - efaultCopilotCompletionService - [462] Response received. Duration: 424 ms 
+2022-02-24 16:50:13,935 [ 962070]   WARN - efaultCopilotCompletionService - [469] Response received. Duration: 214 ms 
+2022-02-24 16:51:00,669 [1008804]   WARN - efaultCopilotCompletionService - [503] Response received. Duration: 494 ms 
+2022-02-24 16:51:16,803 [1024938]   WARN - efaultCopilotCompletionService - [514] Response received. Duration: 471 ms 
+2022-02-24 16:51:32,555 [1040690]   WARN - efaultCopilotCompletionService - [523] Response received. Duration: 295 ms 
+2022-02-24 16:51:34,637 [1042772]   WARN - efaultCopilotCompletionService - [531] Response received. Duration: 567 ms 
+2022-02-24 16:51:37,971 [1046106]   WARN - efaultCopilotCompletionService - [550] Response received. Duration: 433 ms 
+2022-02-24 16:51:40,764 [1048899]   WARN - efaultCopilotCompletionService - [554] Response received. Duration: 353 ms 
+2022-02-24 16:51:45,834 [1053969]   WARN - efaultCopilotCompletionService - [556] Response received. Duration: 210 ms 
+2022-02-24 16:51:47,203 [1055338]   WARN - efaultCopilotCompletionService - [560] Response received. Duration: 258 ms 
+2022-02-24 16:51:48,113 [1056248]   WARN - efaultCopilotCompletionService - [562] Response received. Duration: 189 ms 
+2022-02-24 16:51:51,362 [1059497]   WARN - efaultCopilotCompletionService - [565] Response received. Duration: 183 ms 
+2022-02-24 16:51:52,858 [1060993]   WARN - efaultCopilotCompletionService - fetchCompletions: unable to create file for BasicEditorRequest(language=com.github.copilot.lang.java.JavaLanguageSupport@2e97d2f6, completionType=GhostText, useTabIndents=false, tabWidth=4, requestId=570, fileLanguage=Language: JAVA, relativeFilePath=src/main/java/tasktree/aws/cleanup/FilterRecords.java, documentContent=package tasktree.aws.cleanup;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import software.amazon.awssdk.services.route53.model.ListResourceRecordSetsRequest;
+
+import java.util.function.Consumer;
+
+public class FilterRecords extends AWSFilter<Record> {
+    @ConfigProperty(name = "tt.ocp.baseDomain", defaultValue = "redhat.com")
+    String baseDomain;
+
+    @Override
+    public void run() {
+        var r53 = newRoute53Client();
+        var listZones = r53.listHostedZones().hostedZones().str
+        var listRecords = ListResourceRecordSetsRequest
+                .builder()
+                .hostedZoneId(hostedZoneId)
+                .build();
+        var records = r53.listResourceRecordSets(listRecords).resourceRecordSets();
+    }
+}
+, offset=510, lineInfo=LineInfo(lineCount=23, lineNumber=14, lineStartOffset=447, columnOffset=63, line=        var listZones = r53.listHostedZones().hostedZones().str, nextLineIndent=8), requestTimestamp=1645717912782, documentModificationSequence=445, isCancelled=true) 
+2022-02-24 16:51:53,446 [1061581]   WARN - efaultCopilotCompletionService - [571] Response received. Duration: 511 ms 
+2022-02-24 16:52:14,902 [1083037]   WARN - efaultCopilotCompletionService - [586] Response received. Duration: 310 ms 
+2022-02-24 16:52:22,966 [1091101]   WARN - efaultCopilotCompletionService - [590] Response received. Duration: 617 ms 
+2022-02-24 16:52:25,370 [1093505]   WARN - efaultCopilotCompletionService - [599] Response received. Duration: 264 ms 
+2022-02-24 16:52:26,348 [1094483]   WARN - efaultCopilotCompletionService - [605] Response received. Duration: 302 ms 
+2022-02-24 16:52:27,686 [1095821]   WARN - efaultCopilotCompletionService - [612] Response received. Duration: 262 ms 
+2022-02-24 16:52:29,034 [1097169]   WARN - efaultCopilotCompletionService - [615] Response received. Duration: 213 ms 
+2022-02-24 16:52:34,815 [1102950]   WARN - efaultCopilotCompletionService - [618] Response received. Duration: 283 ms 
+2022-02-24 16:52:59,440 [1127575]   WARN - efaultCopilotCompletionService - [649] Response received. Duration: 322 ms 
+2022-02-24 16:53:06,384 [1134519]   WARN - efaultCopilotCompletionService - [656] Response received. Duration: 258 ms 
+2022-02-24 16:53:08,501 [1136636]   WARN - efaultCopilotCompletionService - [664] Response received. Duration: 237 ms 
+2022-02-24 16:53:36,968 [1165103]   WARN - efaultCopilotCompletionService - [689] Response received. Duration: 221 ms 
+2022-02-24 16:53:38,932 [1167067]   WARN - efaultCopilotCompletionService - [695] Response received. Duration: 827 ms 
+2022-02-24 16:53:49,065 [1177200]   WARN - efaultCopilotCompletionService - [733] Response received. Duration: 206 ms 
+2022-02-24 16:54:24,393 [1212528]   WARN - efaultCopilotCompletionService - [763] Response received. Duration: 369 ms 
+2022-02-24 16:54:29,838 [1217973]   WARN - efaultCopilotCompletionService - [766] Response received. Duration: 252 ms 
+2022-02-24 16:54:31,456 [1219591]   WARN - efaultCopilotCompletionService - [776] Response received. Duration: 356 ms 
+2022-02-24 16:54:32,478 [1220613]   WARN - efaultCopilotCompletionService - [779] Response received. Duration: 379 ms 
+2022-02-24 16:54:34,722 [1222857]   WARN - efaultCopilotCompletionService - [787] Response received. Duration: 224 ms 
+2022-02-24 16:54:35,275 [1223410]   WARN - efaultCopilotCompletionService - [790] Response received. Duration: 212 ms 
+2022-02-24 16:54:36,373 [1224508]   WARN - efaultCopilotCompletionService - [794] Response received. Duration: 251 ms 
+2022-02-24 16:54:39,395 [1227530]   WARN - efaultCopilotCompletionService - [797] Response received. Duration: 289 ms 
+2022-02-24 16:54:39,938 [1228073]   WARN - efaultCopilotCompletionService - [798] Response received. Duration: 304 ms 
+2022-02-24 16:55:45,582 [1293717]   WARN - efaultCopilotCompletionService - [853] Response received. Duration: 300 ms 
+2022-02-24 16:55:59,463 [1307598]   WARN - efaultCopilotCompletionService - [867] Response received. Duration: 360 ms 
+2022-02-24 16:56:07,685 [1315820]   WARN - efaultCopilotCompletionService - [893] Response received. Duration: 258 ms 
+2022-02-24 16:56:17,752 [1325887]   WARN - efaultCopilotCompletionService - [895] Response received. Duration: 387 ms 
+2022-02-24 16:56:29,547 [1337682]   WARN - efaultCopilotCompletionService - [912] Response received. Duration: 355 ms 
+2022-02-24 16:56:30,296 [1338431]   WARN - efaultCopilotCompletionService - [915] Response received. Duration: 347 ms 
+2022-02-24 16:56:41,848 [1349983]   WARN - efaultCopilotCompletionService - [920] Response received. Duration: 405 ms 
+2022-02-24 16:56:46,117 [1354252]   WARN - efaultCopilotCompletionService - [923] Response received. Duration: 521 ms 
+2022-02-24 16:56:50,615 [1358750]   WARN - efaultCopilotCompletionService - [934] Response received. Duration: 412 ms 
+2022-02-24 16:58:32,049 [1460184]   WARN - efaultCopilotCompletionService - [955] Response received. Duration: 224 ms 
+2022-02-24 16:58:59,589 [1487724]   WARN - efaultCopilotCompletionService - [956] Response received. Duration: 308 ms 
+2022-02-24 16:59:00,310 [1488445]   WARN - efaultCopilotCompletionService - [957] Response received. Duration: 324 ms 
+2022-02-24 16:59:02,611 [1490746]   WARN - efaultCopilotCompletionService - [983] Response received. Duration: 414 ms 
+2022-02-24 16:59:08,679 [1496814]   WARN - efaultCopilotCompletionService - [987] Response received. Duration: 458 ms 
+2022-02-24 16:59:13,425 [1501560]   WARN - efaultCopilotCompletionService - [994] Response received. Duration: 387 ms 
+2022-02-24 16:59:26,229 [1514364]   WARN - efaultCopilotCompletionService - [1000] Response received. Duration: 400 ms 
+2022-02-24 16:59:28,886 [1517021]   WARN - efaultCopilotCompletionService - [1004] Response received. Duration: 428 ms 
+2022-02-24 16:59:29,569 [1517704]   WARN - efaultCopilotCompletionService - [1005] Response received. Duration: 237 ms 
+2022-02-24 16:59:42,649 [1530784]   WARN - efaultCopilotCompletionService - [1011] Response received. Duration: 357 ms 
+2022-02-24 16:59:43,033 [1531168]   WARN - efaultCopilotCompletionService - [1012] Response received. Duration: 259 ms 
+2022-02-24 16:59:48,147 [1536282]   WARN - efaultCopilotCompletionService - [1017] Response received. Duration: 220 ms 
+2022-02-24 16:59:57,201 [1545336]   WARN - efaultCopilotCompletionService - [1022] Response received. Duration: 279 ms 
+2022-02-24 16:59:59,081 [1547216]   WARN - efaultCopilotCompletionService - [1027] Response received. Duration: 539 ms 
+2022-02-24 16:59:59,662 [1547797]   WARN - efaultCopilotCompletionService - [1029] Response received. Duration: 235 ms 
+2022-02-24 17:00:02,158 [1550293]   WARN - efaultCopilotCompletionService - [1037] Response received. Duration: 243 ms 
+2022-02-24 17:00:03,690 [1551825]   WARN - efaultCopilotCompletionService - [1039] Response received. Duration: 261 ms 
+2022-02-24 17:00:17,000 [1565135]   WARN - efaultCopilotCompletionService - [1049] Response received. Duration: 273 ms 
+2022-02-24 17:00:25,234 [1573369]   WARN - efaultCopilotCompletionService - [1058] Response received. Duration: 299 ms 
+2022-02-24 17:00:42,891 [1591026]   WARN - efaultCopilotCompletionService - [1086] Response received. Duration: 269 ms 
+2022-02-24 17:00:45,671 [1593806]   WARN - efaultCopilotCompletionService - [1091] Response received. Duration: 422 ms 
+2022-02-24 17:02:19,470 [1687605]   WARN - efaultCopilotCompletionService - [1096] Response received. Duration: 320 ms 
+2022-02-24 17:02:24,181 [1692316]   WARN - efaultCopilotCompletionService - [1097] Response received. Duration: 2212 ms 
+2022-02-24 17:02:24,183 [1692318]   WARN - efaultCopilotCompletionService - [1097] Response received. Duration: 2214 ms 
+2022-02-24 17:02:24,719 [1692854]   WARN - efaultCopilotCompletionService - [1097] Response received. Duration: 2750 ms 
+2022-02-24 17:02:27,692 [1695827]   WARN - efaultCopilotCompletionService - [1105] Response received. Duration: 616 ms 
+2022-02-24 17:03:04,236 [1732371]   WARN - efaultCopilotCompletionService - [1122] Response received. Duration: 399 ms 
+2022-02-24 17:03:06,203 [1734338]   WARN - efaultCopilotCompletionService - [1125] Response received. Duration: 289 ms 
+2022-02-24 17:03:17,078 [1745213]   WARN - efaultCopilotCompletionService - [1128] Response received. Duration: 249 ms 
+2022-02-24 17:03:21,755 [1749890]   WARN - efaultCopilotCompletionService - [1139] Response received. Duration: 245 ms 
+2022-02-24 17:03:26,001 [1754136]   WARN - efaultCopilotCompletionService - [1142] Response received. Duration: 218 ms 
+2022-02-24 17:03:27,792 [1755927]   WARN - efaultCopilotCompletionService - [1148] Response received. Duration: 278 ms 
+2022-02-24 17:03:28,272 [1756407]   WARN - efaultCopilotCompletionService - [1150] Response received. Duration: 281 ms 
+2022-02-24 17:03:34,942 [1763077]   WARN - efaultCopilotCompletionService - [1152] Response received. Duration: 202 ms 
+2022-02-24 17:03:46,061 [1774196]   WARN - efaultCopilotCompletionService - [1154] Response received. Duration: 398 ms 
+2022-02-24 17:03:47,532 [1775667]   WARN - efaultCopilotCompletionService - [1161] Response received. Duration: 315 ms 
+2022-02-24 17:03:48,164 [1776299]   WARN - efaultCopilotCompletionService - [1162] Response received. Duration: 467 ms 
+2022-02-24 17:03:51,960 [1780095]   WARN - efaultCopilotCompletionService - [1174] Response received. Duration: 527 ms 
+2022-02-24 17:03:53,445 [1781580]   WARN - efaultCopilotCompletionService - [1177] Response received. Duration: 211 ms 
+2022-02-24 17:04:04,939 [1793074]   WARN - efaultCopilotCompletionService - [1182] Response received. Duration: 447 ms 
+2022-02-24 17:04:10,041 [1798176]   WARN - ub.copilot.lang.CopilotPsiUtil - findBlockEnd failed after 5 attempts 
+2022-02-24 17:04:11,123 [1799258]   WARN - efaultCopilotCompletionService - [1200] Response received. Duration: 392 ms 
+2022-02-24 17:04:28,440 [1816575]   WARN - efaultCopilotCompletionService - [1213] Response received. Duration: 288 ms 
+2022-02-24 17:04:39,367 [1827502]   WARN - efaultCopilotCompletionService - [1214] Response received. Duration: 1987 ms 
+2022-02-24 17:04:39,507 [1827642]   WARN - efaultCopilotCompletionService - [1214] Response received. Duration: 2127 ms 
+2022-02-24 17:04:39,522 [1827657]   WARN - efaultCopilotCompletionService - [1214] Response received. Duration: 2142 ms 
+2022-02-24 17:04:48,252 [1836387]   WARN - efaultCopilotCompletionService - [1220] Response received. Duration: 372 ms 
+2022-02-24 17:04:50,847 [1838982]   WARN - efaultCopilotCompletionService - [1225] Response received. Duration: 560 ms 
+2022-02-24 17:04:51,345 [1839480]   WARN - efaultCopilotCompletionService - [1227] Response received. Duration: 240 ms 
+2022-02-24 17:04:51,964 [1840099]   WARN - efaultCopilotCompletionService - [1228] Response received. Duration: 249 ms 
+2022-02-24 17:05:06,747 [1854882]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-24 17:05:51,440 [1899575]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-02-24 17:05:52,684 [1900819]   WARN - ctionSystem.impl.ActionUpdater - 892 ms to grab EDT for ToggleUseSoftWrapsInPreviewAction#update (com.intellij.openapi.editor.actions.ToggleUseSoftWrapsInPreviewAction) 
+2022-02-24 17:06:22,836 [1930971]   WARN - efaultCopilotCompletionService - [1239] Response received. Duration: 349 ms 
+2022-02-24 17:06:32,309 [1940444]   WARN - efaultCopilotCompletionService - fetchCompletions: unable to create file for BasicEditorRequest(language=com.github.copilot.lang.java.JavaLanguageSupport@2e97d2f6, completionType=GhostText, useTabIndents=false, tabWidth=4, requestId=1254, fileLanguage=Language: JAVA, relativeFilePath=src/main/java/tasktree/aws/cleanup/CleanupTask.java, documentContent=package tasktree.aws.cleanup;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import tasktree.Configuration;
+import tasktree.aws.AWSTask;
+
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
+@ApplicationScoped
+public class CleanupTask extends AWSFilter<Void> {
+    static final Logger log = LoggerFactory.getLogger(CleanupTask.class);
+
+    @Inject
+    Configuration config;
+
+    @PostConstruct
+    public void postConstruct(){
+        log.debug("Initialized CleanupTask");
+        setConfig(config);
+        setRegion(config.getRegion());
+    }
+
+    @Override
+    public void run() {
+        log.info("Cleaning up AWS Resources");
+        addAllTasks(
+                new FilterRegions(),
+                new
+        );
+    }
+
+
+}
+, offset=785, lineInfo=LineInfo(lineCount=37, lineNumber=30, lineStartOffset=766, columnOffset=19, line=                new, nextLineIndent=8), requestTimestamp=1645718792230, documentModificationSequence=16, isCancelled=true) 
+2022-02-24 17:06:33,693 [1941828]   WARN - efaultCopilotCompletionService - [1262] Response received. Duration: 233 ms 
+2022-02-24 17:06:35,061 [1943196]   WARN - efaultCopilotCompletionService - [1267] Response received. Duration: 218 ms 
+2022-02-24 17:06:37,242 [1945377]   WARN - efaultCopilotCompletionService - [1269] Response received. Duration: 348 ms 
+2022-02-24 17:06:37,972 [1946107]   WARN - efaultCopilotCompletionService - [1272] Response received. Duration: 196 ms 
+2022-02-24 17:06:38,992 [1947127]   WARN - efaultCopilotCompletionService - [1273] Response received. Duration: 190 ms 
+2022-02-24 17:06:41,935 [1950070]   WARN - efaultCopilotCompletionService - [1278] Response received. Duration: 220 ms 
+2022-02-24 17:06:47,940 [1956075]   WARN - efaultCopilotCompletionService - [1281] Response received. Duration: 231 ms 
+2022-02-24 17:07:01,562 [1969697]   WARN - .AzureInsightsTelemetryService - Disposing AzureInsightsTelemetryService 
