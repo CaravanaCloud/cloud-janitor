@@ -15,4 +15,6 @@ jobs:
       - name: Install native-image component
         run: gu install native-image
       - name: Run maven buid
-        run: mvn --no-transfer-progress -B clean package -Dnative
+        run: mvn clean package -Dnative ${MVN_EXTRAS}
+        env:
+          MVN_EXTRAS: -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
