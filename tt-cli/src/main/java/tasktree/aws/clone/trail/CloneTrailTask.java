@@ -14,14 +14,16 @@ import tasktree.Configuration;
 import tasktree.aws.AWSTask;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-@ApplicationScoped
+@Dependent
 public class CloneTrailTask extends AWSTask {
-    private Logger log = LoggerFactory.getLogger(CloneTrailTask.class);
+    @Inject
+    Logger log;
 
     @ConfigProperty(name = "tt.aws.trail", defaultValue = "aws-cloudtrail-name-to-clone")
-    private String trailName;
+    String trailName;
 
     public CloneTrailTask(){}
 

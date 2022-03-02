@@ -8,21 +8,31 @@ import tasktree.aws.AWSTask;
 import tasktree.spi.Task;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 import java.util.List;
 
 @Dependent
 public class FilterRegions extends AWSFilter<List<Region>> {
-    private static Logger log = LoggerFactory.getLogger(FilterRegions.class);
 
-    private final List<Region> filterRegions(Configuration config) {
+    @Inject
+    Instance<FilterRegion> filterRegionInstance;
+
+    @Inject
+    Logger log;
+
+    List<Region> filterRegions() {
         try {
             var ec2 = newEC2Client();
-            var regions = ec2.describeRegions().regions().stream()
+            var regions = ec2.describeRegions()
+                    .regions()
+                    .stream()
                     .map(software.amazon.awssdk.services.ec2.model.Region::regionName)
                     .filter(config::filterRegion)
                     .map(Region::of)
                     .toList();
-            log.info("Filtered regions {}", regions);
+            log.debug("Matched regions [{}]", regions);
             return regions;
         }catch (Exception e) {
             log.info("Failed to filter regions", e);
@@ -32,12 +42,14 @@ public class FilterRegions extends AWSFilter<List<Region>> {
 
     @Override
     public void run() {
-        var regions = filterRegions(getConfig());
-        var tasks = regions.stream().map(this::toTask).toList();
+        var regions = filterRegions();
+        var tasks = regions.stream().map(this::newFilterRegion);
         addAllTasks(tasks);
     }
 
-    private Task toTask(Region region) {
-        return new FilterRegion(getConfig(), region);
+    Task newFilterRegion(Region region) {
+        var filterRegion = filterRegionInstance.get();
+        filterRegion.setRegion(region);
+        return filterRegion;
     }
 }

@@ -17,4 +17,13 @@ public abstract class AWSFilter<T> extends AWSTask {
     public boolean isWrite() {
         return false;
     }
+
+    public String toString(String resourceType,
+                           String... obs) {
+        return super.asString(
+                "Filter",
+                resourceType,
+                obs);
+    }
+
 }

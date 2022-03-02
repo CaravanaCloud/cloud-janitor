@@ -1,14 +1,10 @@
 package tasktree.aws.cleanup;
 
-import software.amazon.awssdk.services.ec2.model.DeleteRouteTableRequest;
 import software.amazon.awssdk.services.ec2.model.DeleteVpcEndpointsRequest;
-import software.amazon.awssdk.services.ec2.model.RouteTable;
 import software.amazon.awssdk.services.ec2.model.VpcEndpoint;
 import tasktree.Configuration;
-import tasktree.aws.AWSTask;
-import tasktree.spi.Task;
 
-public class DeleteVPCEndpoint extends AWSWrite {
+public class DeleteVPCEndpoint extends AWSDelete {
     private final VpcEndpoint resource;
 
     public DeleteVPCEndpoint(Configuration config, VpcEndpoint resource) {
@@ -23,5 +19,10 @@ public class DeleteVPCEndpoint extends AWSWrite {
                 .vpcEndpointIds(resource.vpcEndpointId())
                 .build();
         newEC2Client().deleteVpcEndpoints(request);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString("VPC Endpoint", resource.vpcEndpointId());
     }
 }

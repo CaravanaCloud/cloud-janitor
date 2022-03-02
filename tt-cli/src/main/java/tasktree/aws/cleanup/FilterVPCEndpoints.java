@@ -11,8 +11,7 @@ public class FilterVPCEndpoints extends AWSFilter<VpcEndpoint> {
 
     private String vpcId;
 
-    public FilterVPCEndpoints(Configuration config, String vpcId) {
-        super(config);
+    public FilterVPCEndpoints(String vpcId) {
         this.vpcId = vpcId;
     }
 

@@ -3,9 +3,8 @@ package tasktree.aws.cleanup;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.route53.model.*;
 import tasktree.Configuration;
-import tasktree.spi.Task;
 
-public class DeleteRecord extends AWSWrite {
+public class DeleteRecord extends AWSDelete {
     private final ResourceRecordSet record;
 
     public DeleteRecord(Configuration config, Region region, ResourceRecordSet resourceRecordSet) {
@@ -15,7 +14,7 @@ public class DeleteRecord extends AWSWrite {
 
     @Override
     public void run() {
-        log().info("Deleting record {}", record);
+        log().debug("Deleting record {}", record);
         var change = Change.builder()
                 .resourceRecordSet(record)
                 .action(ChangeAction.DELETE)
@@ -27,5 +26,10 @@ public class DeleteRecord extends AWSWrite {
                 .changeBatch(changes)
                 .build();
         newRoute53Client().changeResourceRecordSets(request);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString("Record",record.name());
     }
 }

@@ -2,10 +2,8 @@ package tasktree.aws.cleanup;
 
 import software.amazon.awssdk.services.ec2.model.*;
 import tasktree.Configuration;
-import tasktree.aws.AWSTask;
-import tasktree.spi.Task;
 
-public class DeleteInternetGateway extends AWSWrite {
+public class DeleteInternetGateway extends AWSDelete {
     private final InternetGateway resource;
 
     public DeleteInternetGateway(Configuration config, InternetGateway resource) {
@@ -24,7 +22,7 @@ public class DeleteInternetGateway extends AWSWrite {
     }
 
     private void deleteAttachment(InternetGatewayAttachment att) {
-        log().info("Detaching {}",att);
+        log().debug("Detaching {}",att);
         var request = DetachInternetGatewayRequest.builder()
                 .internetGatewayId(resource.internetGatewayId())
                 .vpcId(att.vpcId())
@@ -33,11 +31,17 @@ public class DeleteInternetGateway extends AWSWrite {
     }
 
     private void deleteInternetGateway() {
-        log().info("Deleting internet gateway {}", resource.internetGatewayId());
+        log().debug("Deleting internet gateway {}", resource.internetGatewayId());
         var request = DeleteInternetGatewayRequest.builder()
                 .internetGatewayId(resource.internetGatewayId())
                 .build();
         newEC2Client().deleteInternetGateway(request);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString("Internet Gateway",
+                resource.internetGatewayId());
     }
 }
 

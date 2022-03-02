@@ -1,16 +1,10 @@
 package tasktree.aws.cleanup;
 
-import org.slf4j.Logger;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.model.Instance;
 import software.amazon.awssdk.services.ec2.model.TerminateInstancesRequest;
 import tasktree.Configuration;
-import tasktree.aws.AWSTask;
-import tasktree.spi.BaseResult;
 
-import static tasktree.spi.BaseResult.*;
-
-public class TerminateInstance extends AWSWrite {
+public class TerminateInstance extends AWSDelete {
     private final Instance instance;
 
     public TerminateInstance(Configuration config, Instance instance) {
@@ -34,8 +28,6 @@ public class TerminateInstance extends AWSWrite {
 
     @Override
     public String toString() {
-        return super.toString() +
-                " [instanceId=%s]".formatted(
-                        instance.instanceId());
+        return super.toString("Instance", instance.instanceId());
     }
 }

@@ -3,18 +3,21 @@ package tasktree.help;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tasktree.BaseTask;
-import tasktree.spi.BaseResult;
-import tasktree.spi.Task;
+import tasktree.ReadTask;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named("help")
-@ApplicationScoped
-public class HelpTask extends BaseTask {
-    static final Logger log = LoggerFactory.getLogger(HelpTask.class);
+@Dependent
+public class HelpTask extends ReadTask {
+    @Inject
+    Logger log;
+
     @Override
     public void run() {
-        log.info("Help task");
+        log.info("Don't Panic!");
     }
 }

@@ -4,7 +4,7 @@ import software.amazon.awssdk.services.elasticloadbalancing.model.DeleteLoadBala
 import software.amazon.awssdk.services.elasticloadbalancing.model.LoadBalancerDescription;
 import tasktree.Configuration;
 
-public class DeleteLoadBalancerDescription extends AWSWrite {
+public class DeleteLoadBalancerDescription extends AWSDelete {
     private final LoadBalancerDescription resource;
 
     public DeleteLoadBalancerDescription(Configuration config, LoadBalancerDescription resource) {
@@ -14,10 +14,16 @@ public class DeleteLoadBalancerDescription extends AWSWrite {
 
     @Override
     public void run() {
-        log().info("Deleting Classic ELB {}", resource.loadBalancerName());
+        log().debug("Deleting Classic ELB {}", resource.loadBalancerName());
         var request = DeleteLoadBalancerRequest.builder()
                 .loadBalancerName(resource.loadBalancerName())
                 .build();
         getELBClient().deleteLoadBalancer(request);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString("Classic Load Balancer",
+                resource.loadBalancerName());
     }
 }

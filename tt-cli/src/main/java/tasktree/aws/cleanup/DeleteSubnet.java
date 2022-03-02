@@ -3,9 +3,8 @@ package tasktree.aws.cleanup;
 import software.amazon.awssdk.services.ec2.model.DeleteSubnetRequest;
 import software.amazon.awssdk.services.ec2.model.Subnet;
 import tasktree.Configuration;
-import tasktree.aws.AWSTask;
 
-public class DeleteSubnet extends AWSWrite {
+public class DeleteSubnet extends AWSDelete {
     private final Subnet net;
 
     public DeleteSubnet(Configuration config, Subnet net) {
@@ -21,8 +20,13 @@ public class DeleteSubnet extends AWSWrite {
 
 
     private void deleteSubnet() {
-        log().info("Deleting subnet " + net.subnetId());
+        log().debug("Deleting subnet " + net.subnetId());
         DeleteSubnetRequest delSub = DeleteSubnetRequest.builder().subnetId(net.subnetId()).build();
         newEC2Client().deleteSubnet(delSub);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString("Subnet", net.subnetId());
     }
 }

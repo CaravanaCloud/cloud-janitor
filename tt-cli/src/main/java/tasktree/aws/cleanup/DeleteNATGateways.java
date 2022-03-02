@@ -4,11 +4,10 @@ import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.ec2.model.DeleteNatGatewayRequest;
 import software.amazon.awssdk.services.ec2.model.NatGateway;
 import tasktree.Configuration;
-import tasktree.aws.AWSTask;
 
 import java.util.List;
 
-public class DeleteNATGateways extends AWSWrite {
+public class DeleteNATGateways extends AWSDelete {
     Ec2Client ec2 = newEC2Client();
     private final List<NatGateway> ns;
 
@@ -29,8 +28,17 @@ public class DeleteNATGateways extends AWSWrite {
     }
 
     private void deleteNatGateway(NatGateway nat) {
-        log().info("Deleting {}", nat);
+        log().debug("Deleting {}", nat);
         var deleteNat = DeleteNatGatewayRequest.builder().natGatewayId(nat.natGatewayId()).build();
         ec2.deleteNatGateway(deleteNat);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString("NAT Gateways",
+                ns.stream()
+                        .map(n->n.natGatewayId().toString())
+                        .toString()
+                        .join(", "));
     }
 }

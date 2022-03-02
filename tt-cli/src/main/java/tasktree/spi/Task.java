@@ -27,7 +27,17 @@ public interface Task
     }
 
     default String getName() {
-        return getClass().getCanonicalName();
+        var name = getSimpleName();
+        var named = getClass().getAnnotation(Named.class);
+        if (named != null) {
+            name = named.value();
+        }
+        var superclass = getClass().getSuperclass();
+        named = superclass.getAnnotation(Named.class);
+        if (named != null) {
+            name = named.value();
+        }
+        return name;
     }
 
     static final String defaultPrefix = "tasktree.";

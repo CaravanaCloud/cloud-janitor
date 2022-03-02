@@ -8,11 +8,9 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class FilterNetworkInterfaces extends AWSFilter<NetworkInterface> {
+    String vpcId;
 
-    private String vpcId;
-
-    public FilterNetworkInterfaces(Configuration config, String vpcId) {
-        super(config);
+    public FilterNetworkInterfaces(String vpcId) {
         this.vpcId = vpcId;
     }
 
@@ -22,7 +20,7 @@ public class FilterNetworkInterfaces extends AWSFilter<NetworkInterface> {
         match = match  || resource.tagSet().stream()
                 .anyMatch(tag -> tag.key().equals("Name")
                         && tag.value().startsWith(prefix));
-        log().info("Found Network Interface {} {}", mark(match), resource);
+        log().trace("Found Network Interface {} {}", mark(match), resource);
         return match;
     }
 
@@ -30,7 +28,7 @@ public class FilterNetworkInterfaces extends AWSFilter<NetworkInterface> {
         var client = newEC2Client();
         var resources = client.describeNetworkInterfaces().networkInterfaces();
         var matches = resources.stream().filter(this::match).toList();
-        log().info("Matched {} Network Interfaces in region [{}]", matches.size(), getRegion());
+        log().info("Matched [{}] Network Interfaces in region [{}] [{}]", matches.size(), getRegion(), matches);
         return matches;
     }
 

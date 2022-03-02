@@ -4,7 +4,7 @@ import software.amazon.awssdk.services.elasticloadbalancingv2.model.DeleteTarget
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetGroup;
 import tasktree.Configuration;
 
-public class DeleteTargetGroup extends AWSWrite {
+public class DeleteTargetGroup extends AWSDelete {
     private final TargetGroup resource;
 
     public DeleteTargetGroup(Configuration config, TargetGroup resource) {
@@ -14,10 +14,15 @@ public class DeleteTargetGroup extends AWSWrite {
 
     @Override
     public void run() {
-        log().info("Deleting Target group {}", resource.targetGroupArn());
+        log().debug("Deleting Target group {}", resource.targetGroupArn());
         var request = DeleteTargetGroupRequest.builder()
                 .targetGroupArn(resource.targetGroupArn())
                 .build();
         getELBClientV2().deleteTargetGroup(request);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString("Target Group", resource.targetGroupName());
     }
 }

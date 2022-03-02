@@ -1,11 +1,12 @@
 package tasktree;
 
 import org.slf4j.LoggerFactory;
-import tasktree.spi.Task;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
+import javax.inject.Named;
 
-@ApplicationScoped
+@Dependent
+@Named("empty")
 public class EmptyTask extends BaseTask {
     @Override
     public void run() {

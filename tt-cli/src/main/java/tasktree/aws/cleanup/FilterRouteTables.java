@@ -11,8 +11,7 @@ public class FilterRouteTables extends AWSFilter<RouteTable> {
 
     private String vpcId;
 
-    public FilterRouteTables(Configuration config, String vpcId) {
-        super(config);
+    public FilterRouteTables(String vpcId) {
         this.vpcId = vpcId;
     }
 
@@ -22,7 +21,7 @@ public class FilterRouteTables extends AWSFilter<RouteTable> {
         match = match || resource.tags().stream()
                 .anyMatch(tag -> tag.key().equals("Name")
                         && tag.value().startsWith(prefix));
-        log().info("Found Route Table {} {}", mark(match), resource);
+        log().debug("Found Route Table {} {}", mark(match), resource);
         return match;
     }
 
@@ -30,7 +29,7 @@ public class FilterRouteTables extends AWSFilter<RouteTable> {
         var client = newEC2Client();
         var resources = client.describeRouteTables().routeTables();
         var matches = resources.stream().filter(this::match).toList();
-        log().info("Matched {} Route Tables in region [{}]", matches.size(), getRegion());
+        log().info("Matched [{}] Route Tables in region [{}]", matches.size(), getRegion(), matches);
         return matches;
     }
 

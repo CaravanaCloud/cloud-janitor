@@ -18,7 +18,7 @@ public class FilterVPCs extends AWSFilter<Vpc> {
         var prefix = getConfig().getAwsCleanupPrefix();
         var match = vpc.tags().stream()
                 .anyMatch(tag -> tag.key().equals("Name") && tag.value().startsWith(prefix));
-        log.info("Found Vpc {} {}", mark(match), vpc);
+        log.debug("Found Vpc {} {}", mark(match), vpc);
         return match;
     }
 
@@ -27,28 +27,27 @@ public class FilterVPCs extends AWSFilter<Vpc> {
         var request = DescribeVpcsRequest.builder().build();
         var resources = client.describeVpcs(request).vpcs().stream();
         var matches = resources.filter(this::match).toList();
-        log.info("Matched {} VPCs in region [{}]", matches.size(), getRegion());
+        log.info("Matched [{}] VPCs in region [{}] [{}]", matches.size(), getRegion(), matches);
         return matches;
     }
 
 
     @Override
     public void run() {
-        filterVpcs().stream()
-                .forEach(this::listAndDeleteVPC);
+        filterVpcs().forEach(this::listAndDeleteVPC);
     }
 
     private void listAndDeleteVPC(Vpc vpc) {
         var vpcId = vpc.vpcId();
         addAllTasks(
-                new FilterLoadBalancers(config, vpcId),
-                new FilterNetworkInterfaces(config, vpcId),
-                new FilterSubnets(config, vpcId),
-                new FilterRouteTables(config, vpcId),
-                new FilterVPCEndpoints(config, vpcId),
-                new FilterSecurityGroups(config, vpcId),
-                new FilterInternetGateways(config, vpcId),
-                new DeleteVpc(getConfig(), vpc)
+                new FilterLoadBalancers(vpcId),
+                new FilterVPCEndpoints(vpcId),
+                new FilterNetworkInterfaces(vpcId),
+                new FilterRouteTables(vpcId),
+                new FilterSecurityGroups(vpcId),
+                new FilterSubnets(vpcId),
+                new FilterInternetGateways(vpcId),
+                new DeleteVpc(vpc)
         );
     }
 }

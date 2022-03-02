@@ -3,19 +3,26 @@ package tasktree.aws.cleanup;
 import software.amazon.awssdk.regions.Region;
 import tasktree.Configuration;
 
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+
+@Dependent
 public class FilterRegion extends AWSFilter<Region> {
-    public FilterRegion(Configuration config, Region region) {
-        super(config, region);
+    @Inject
+    public FilterRegion(Configuration configuration) {
+        super(configuration);
     }
 
     @Override
     public void run() {
-        log().info("Filtering region {}", getRegion());
-        addAllTasks(new FilterInstances(),
-                new FilterNATGateways(),
-                new FilterAddresses(),
-                new FilterLoadBalancersV2(),
-                new FilterTargetGroups(),
-                new FilterVPCs());
+        log().info("Filtering region [{}]", getRegion());
+        addAllTasks(
+                new FilterVPCs(),
+                    new FilterTargetGroups(),
+                    new FilterLoadBalancersV2(),
+                    new FilterNATGateways(),
+                    new FilterAddresses(),
+                        new FilterInstances()
+        );
     }
 }

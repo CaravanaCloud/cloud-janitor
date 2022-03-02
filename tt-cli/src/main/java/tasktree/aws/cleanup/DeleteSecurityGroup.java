@@ -2,13 +2,8 @@ package tasktree.aws.cleanup;
 
 import software.amazon.awssdk.services.ec2.model.*;
 import tasktree.Configuration;
-import tasktree.aws.AWSTask;
-import tasktree.spi.Task;
 
-import java.security.Security;
-import java.util.List;
-
-public class DeleteSecurityGroup extends AWSWrite {
+public class DeleteSecurityGroup extends AWSDelete {
     private final SecurityGroup resource;
 
     public DeleteSecurityGroup(Configuration config, SecurityGroup resource) {
@@ -24,7 +19,7 @@ public class DeleteSecurityGroup extends AWSWrite {
 
     private void deleteRules() {
         var groupId = resource.groupId();
-        log().info("Deleting Security Group Rules for {}", groupId);
+        log().debug("Deleting Security Group Rules for {}", groupId);
         var describeRules = DescribeSecurityGroupRulesRequest
                 .builder()
                 .build();
@@ -57,7 +52,7 @@ public class DeleteSecurityGroup extends AWSWrite {
 
 
     private void deleteSecurityGroup() {
-        log().info("Deleting Security Group {}", resource.groupId());
+        log().debug("Deleting Security Group {}", resource.groupId());
         var request = DeleteSecurityGroupRequest.builder()
                 .groupId(resource.groupId())
                 .build();
@@ -66,8 +61,7 @@ public class DeleteSecurityGroup extends AWSWrite {
 
     @Override
     public String toString() {
-        return "DeleteSecurityGroup{" +
-                "resource=" + resource +
-                '}';
+        return super.toString("Security Group",
+                resource.groupId());
     }
 }

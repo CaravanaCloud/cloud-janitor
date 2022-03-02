@@ -5,10 +5,8 @@ import software.amazon.awssdk.services.ec2.model.DeleteRouteTableRequest;
 import software.amazon.awssdk.services.ec2.model.Route;
 import software.amazon.awssdk.services.ec2.model.RouteTable;
 import tasktree.Configuration;
-import tasktree.aws.AWSTask;
-import tasktree.spi.Task;
 
-public class DeleteRouteTable extends AWSWrite {
+public class DeleteRouteTable extends AWSDelete {
     private final RouteTable resource;
 
     public DeleteRouteTable(Configuration config, RouteTable resource) {
@@ -48,10 +46,15 @@ public class DeleteRouteTable extends AWSWrite {
     }
 
     private void deleteRouteTable() {
-        log().info("Deleting route table {}", resource.routeTableId());
+        log().debug("Deleting route table {}", resource.routeTableId());
         var request = DeleteRouteTableRequest.builder()
                 .routeTableId(resource.routeTableId())
                 .build();
         newEC2Client().deleteRouteTable(request);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString("Route Table",resource.routeTableId());
     }
 }

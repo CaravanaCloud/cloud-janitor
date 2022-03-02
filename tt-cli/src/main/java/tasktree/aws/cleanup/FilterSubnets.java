@@ -15,8 +15,7 @@ public class FilterSubnets extends AWSFilter<Subnet> {
     static final Logger log = LoggerFactory.getLogger(FilterInstances.class);
     private String vpcId;
 
-    public FilterSubnets(Configuration config, String vpcId) {
-        super(config);
+    public FilterSubnets(String vpcId) {
         this.vpcId = vpcId;
     }
 
@@ -24,7 +23,7 @@ public class FilterSubnets extends AWSFilter<Subnet> {
         var prefix = getConfig().getAwsCleanupPrefix();
         var match = net.tags().stream()
                 .anyMatch(tag -> tag.key().equals("Name") && tag.value().startsWith(prefix));
-        log.info("Found Subnet {} {}", mark(match), net);
+        log.("Found Subnet {} {}", mark(match), net);
         return match;
     }
 
@@ -41,7 +40,6 @@ public class FilterSubnets extends AWSFilter<Subnet> {
     @Override
     public void run() {
         var subnets = filterSubnets();
-
         addAllTasks(deleteSubnets(subnets));
     }
 

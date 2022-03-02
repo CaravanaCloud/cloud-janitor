@@ -11,8 +11,7 @@ public class FilterInternetGateways extends AWSFilter<InternetGateway> {
 
     private String vpcId;
 
-    public FilterInternetGateways(Configuration config, String vpcId) {
-        super(config);
+    public FilterInternetGateways(String vpcId) {
         this.vpcId = vpcId;
     }
 
@@ -22,7 +21,7 @@ public class FilterInternetGateways extends AWSFilter<InternetGateway> {
         match = match || resource.tags().stream()
                 .anyMatch(tag -> tag.key().equals("Name")
                         && tag.value().startsWith(prefix));
-        log().debug("Found Internet Gateway {} {}", mark(match), resource);
+        log().trace("Found Internet Gateway {} {}", mark(match), resource);
         return match;
     }
 
@@ -41,11 +40,9 @@ public class FilterInternetGateways extends AWSFilter<InternetGateway> {
         addAllTasks(deleteTasks(resources));
     }
 
-
     private Stream<Task> deleteTasks(List<InternetGateway> resources) {
         return resources.stream().map(this::deleteTask);
     }
-
 
     private Task deleteTask(InternetGateway resource) {
         return new DeleteInternetGateway(getConfig(), resource);

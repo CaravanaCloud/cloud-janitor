@@ -11,8 +11,7 @@ public class FilterSecurityGroups extends AWSFilter<SecurityGroup> {
 
     private String vpcId;
 
-    public FilterSecurityGroups(Configuration config, String vpcId) {
-        super(config);
+    public FilterSecurityGroups(String vpcId) {
         this.vpcId = vpcId;
     }
 
@@ -28,7 +27,7 @@ public class FilterSecurityGroups extends AWSFilter<SecurityGroup> {
         var client = newEC2Client();
         var resources = client.describeSecurityGroups().securityGroups();
         var matches = resources.stream().filter(this::match).toList();
-        log().info("Matched {} Security Groups in region [{}]", matches.size(), getRegion());
+        log().info("Matched {} Security Groups in region [{}] [{}]", matches.size(), getRegion(), matches);
         return matches;
     }
 

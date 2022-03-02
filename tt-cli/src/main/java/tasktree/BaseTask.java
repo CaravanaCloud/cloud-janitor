@@ -7,7 +7,7 @@ import tasktree.spi.Task;
 import javax.enterprise.context.Dependent;
 
 @Dependent
-public abstract class   BaseTask implements Task {
+public abstract class BaseTask implements Task {
     static final Logger log = LoggerFactory.getLogger(BaseTask.class);
     protected Configuration config;
 
@@ -25,7 +25,7 @@ public abstract class   BaseTask implements Task {
         config.getTasks().addTask(task);
     }
 
-    private static final int DEFAULT_RETRIES = 3;
+    private static final int DEFAULT_RETRIES = 5;
     int retries = DEFAULT_RETRIES;
     @Override
     public int getRetries() {
@@ -41,23 +41,29 @@ public abstract class   BaseTask implements Task {
         return config;
     }
 
-    protected String getRWMark(){
-        return isWrite() ? "W" : "R";
-    }
-
 
     @Override
     public String toString() {
-        return toString(null);
+        return asString(null,null);
     }
 
-    public String toString(String resourceType, String... obs) {
-        return "%s [%s] [%s] Retries[%d]".formatted(
-                resourceType != null ? resourceType : getSimpleName(),
-                String.join(",", obs),
-                getRWMark(),
-                getRetries()
-        );
+    public String asString(String taskName,
+                           String resourceType,
+                           String... taskInfo) {
+        StringBuffer sb = new StringBuffer();
+        sb.append(getName());
+        if (resourceType != null) {
+            sb.append(" (");
+            sb.append(resourceType);
+            sb.append(")");
+        }
+        if (taskInfo != null) {
+            sb.append("(");
+            sb.append(String.join(",", taskInfo));
+            sb.append(")");
+        }
+        sb.append(" *"+getRetries());
+        return sb.toString();
     }
 
 

@@ -1,5 +1,6 @@
 tt:
-  task: aws.cleanup.AWSAccountFilter
+  task: cleanup-aws
+  dryRun: true
   ocp:
     baseDomain: devcluster.openshift.com
   aws:

@@ -6,9 +6,12 @@ import tasktree.Configuration;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.inject.Named;
 
-@ApplicationScoped
+@Named("cleanup-aws")
+@Dependent
 public class AWSAccountFilter extends AWSFilter<Void> {
     @Inject
     Logger log;

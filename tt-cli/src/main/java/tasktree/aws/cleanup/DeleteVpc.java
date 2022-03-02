@@ -3,13 +3,11 @@ package tasktree.aws.cleanup;
 import software.amazon.awssdk.services.ec2.model.DeleteVpcRequest;
 import software.amazon.awssdk.services.ec2.model.Vpc;
 import tasktree.Configuration;
-import tasktree.aws.AWSTask;
 
-public class DeleteVpc extends AWSWrite {
-    private  Vpc resource;
+public class DeleteVpc extends AWSDelete {
+    Vpc resource;
 
-    public DeleteVpc(Configuration config, Vpc resource) {
-        super(config);
+    public DeleteVpc(Vpc resource) {
         this.resource = resource;
     }
 
@@ -20,10 +18,15 @@ public class DeleteVpc extends AWSWrite {
 
 
     private void deleteVPC() {
-        log().info("Deleting VPC {}", resource.vpcId());
+        log().trace("Deleting VPC [{}]", resource.vpcId());
         var request = DeleteVpcRequest.builder()
                 .vpcId(resource.vpcId())
                 .build();
         newEC2Client().deleteVpc(request);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString("VPC", resource.vpcId());
     }
 }

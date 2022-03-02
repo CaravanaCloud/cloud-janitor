@@ -11,17 +11,17 @@ import java.util.stream.Stream;
 
 public class FilterLoadBalancers extends AWSFilter<LoadBalancerDescription> {
     static final Logger log = LoggerFactory.getLogger(FilterInstances.class);
+
     private String vpcId;
 
-    public FilterLoadBalancers(Configuration config, String vpcId) {
-        super(config);
+    public FilterLoadBalancers(String vpcId) {
         this.vpcId = vpcId;
     }
 
     private boolean match(LoadBalancerDescription resource) {
         var prefix = getConfig().getAwsCleanupPrefix();
         var match = resource.vpcId().equals(vpcId);
-        log.info("Found Load Balancer {} {}", mark(match), resource);
+        log.debug("Found Load Balancer {} {}", mark(match), resource);
         return match;
     }
 
@@ -29,7 +29,7 @@ public class FilterLoadBalancers extends AWSFilter<LoadBalancerDescription> {
         var elb = getELBClient();
         var resources = elb.describeLoadBalancers().loadBalancerDescriptions();
         var matches = resources.stream().filter(this::match).toList();
-        log.info("Matched {} Classic ELBs in region [{}]", matches.size(), getRegion());
+        log.info("Matched [{}] Classic ELBs in region [{}] [{}]", matches.size(), getRegion(), matches);
         return matches;
     }
 

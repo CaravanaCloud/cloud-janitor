@@ -14,7 +14,7 @@ public class FilterLoadBalancersV2 extends AWSFilter<LoadBalancer> {
     private boolean match(LoadBalancer resource) {
         var prefix = getConfig().getAwsCleanupPrefix();
         var match = resource.loadBalancerName().startsWith(prefix);
-        log.info("Found Load Balancer {} {}", mark(match), resource);
+        log.trace("Found Load Balancer V2 {} {}", mark(match), resource);
         return match;
     }
 
@@ -22,7 +22,7 @@ public class FilterLoadBalancersV2 extends AWSFilter<LoadBalancer> {
         var elb = getELBClientV2();
         var resources = elb.describeLoadBalancers().loadBalancers();
         var matches = resources.stream().filter(this::match).toList();
-        log.info("Matched {} ELBs in region [{}]", matches.size(), getRegion());
+        log.info("Matched [{}] Load Balancers V2 in region [{}]", matches.size(), getRegion());
         return matches;
     }
 
@@ -40,6 +40,6 @@ public class FilterLoadBalancersV2 extends AWSFilter<LoadBalancer> {
 
 
     private Task deleteLoadBalancer(LoadBalancer resource) {
-        return new DeleteLoadBalancer(getConfig(), resource);
+        return new DeleteLoadBalancer(resource);
     }
 }
