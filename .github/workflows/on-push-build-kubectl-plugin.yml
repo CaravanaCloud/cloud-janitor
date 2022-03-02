@@ -3,9 +3,6 @@ name: Build on push
 on: [push]
 
 jobs:
-  all-steps:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build Kubectl Plugin
-        uses: ./.github/workflows/build-kubctl-plugin
+  build-kubectl-plugin:
+    uses: ./.github/workflows/build-kubctl-plugin.yml
 

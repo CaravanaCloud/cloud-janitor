@@ -6,12 +6,11 @@ on:
       - 'tasktree-*'
 
 jobs:
-  all-steps:
+  build-kubectl-plugin:
+    uses: ./.github/workflows/build-kubctl-plugin.yml
+  upload-artifacts:
     runs-on: ubuntu-latest
     steps:
-      - name: Build Kubectl Plugin
-        uses: ./.github/workflows/build-kubctl-plugin
-
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
