@@ -1,8 +1,10 @@
-name: Build kubectl plugin
+name: Build a new release from tag
+
 on:
   push:
     tags:
       - 'tasktree-*'
+
 jobs:
   all-steps:
     runs-on: ubuntu-latest

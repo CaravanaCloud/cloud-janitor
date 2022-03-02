@@ -1,5 +1,7 @@
-name: On push build kubectl plugin
+name: Build on push
+
 on: [push]
+
 jobs:
   all-steps:
     runs-on: ubuntu-latest

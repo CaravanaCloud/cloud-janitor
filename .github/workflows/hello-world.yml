@@ -1,0 +1,13 @@
+name: Build a new release from tag
+
+on:
+  push:
+    branches:
+      - 'hello-*'
+
+jobs:
+  all-steps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say it
+        run: echo "Hello World"
