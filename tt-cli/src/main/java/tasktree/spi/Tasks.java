@@ -97,20 +97,29 @@ public class Tasks {
         debug("Added", task);
     }
 
+    static final String LOG_FORMAT = "{} [{}] [R {}/W {}]";
     private void debug(String message, Task task) {
-        log.debug("[R {}/W {}] {} [{}] ",
-                readQueue.size() ,
-                writeQueue.size(),
+        log.debug(LOG_FORMAT,
                 message,
-                task);
+                task,
+                readQueue.size() ,
+                writeQueue.size());
+    }
+
+    private void info(String message, Task task) {
+        log.info(LOG_FORMAT,
+                message,
+                task,
+                readQueue.size(),
+                writeQueue.size());
     }
 
     private void runAll() {
-        log.debug("Running read task queue");
+        log.info("Processing read task queue");
         runReads();
-        log.debug("Running write task queue");
+        log.info("Processing write task queue [dryRun={}]", config.isDryRun());
         runWrites();
-        log.debug("Task queues empty. Done!");
+        log.info("Task queues empty. Done!");
     }
 
     private void runWrites() {

@@ -15,4 +15,4 @@ jobs:
       - name: Install native-image component
         run: gu install native-image
       - name: Run maven buid
-        run: mvn clean package -Dnative
+        run: mvn --no-transfer-progress -B clean package -Dnative

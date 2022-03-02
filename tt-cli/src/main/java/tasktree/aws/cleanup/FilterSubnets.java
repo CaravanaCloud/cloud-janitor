@@ -23,7 +23,7 @@ public class FilterSubnets extends AWSFilter<Subnet> {
         var prefix = getConfig().getAwsCleanupPrefix();
         var match = net.tags().stream()
                 .anyMatch(tag -> tag.key().equals("Name") && tag.value().startsWith(prefix));
-        log.("Found Subnet {} {}", mark(match), net);
+        log.trace("Found Subnet {} {}", mark(match), net);
         return match;
     }
 
@@ -32,7 +32,7 @@ public class FilterSubnets extends AWSFilter<Subnet> {
         var describeNets = DescribeSubnetsRequest.builder().build();
         var nets = ec2.describeSubnets(describeNets).subnets().stream();
         var matches = nets.filter(this::match).toList();
-        log.info("Matched {} subnets in region [{}]", matches.size(), getRegion());
+        log.info("Matched {} subnets in region [{}] [{}]", matches.size(), getRegion(), matches);
         return matches;
     }
 
@@ -44,11 +44,7 @@ public class FilterSubnets extends AWSFilter<Subnet> {
     }
 
     private Stream<Task> deleteSubnets(List<Subnet> subnets) {
-        return subnets.stream().map(this::deleteSubnet);
+        return subnets.stream().map(DeleteSubnet::new);
     }
 
-
-    private Task deleteSubnet(Subnet net) {
-        return new DeleteSubnet(getConfig(), net);
-    }
 }

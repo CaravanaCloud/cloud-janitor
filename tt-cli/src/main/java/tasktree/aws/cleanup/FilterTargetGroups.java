@@ -14,7 +14,7 @@ public class FilterTargetGroups extends AWSFilter<TargetGroup> {
     private boolean match(TargetGroup resource) {
         var prefix = getConfig().getAwsCleanupPrefix();
         var match = resource.targetGroupName().startsWith(prefix);
-        log.info("Found Load Balancer {} {}", mark(match), resource);
+        log.trace("Found Target Group {} {}", mark(match), resource);
         return match;
     }
 
@@ -22,7 +22,7 @@ public class FilterTargetGroups extends AWSFilter<TargetGroup> {
         var elb = getELBClientV2();
         var resources = elb.describeTargetGroups().targetGroups();
         var matches = resources.stream().filter(this::match).toList();
-        log.info("Matched {} Target Groups in region [{}]", matches.size(), getRegion());
+        log.info("Matched {} Target Groups in region [{}] [{}]", matches.size(), getRegion(), matches);
         return matches;
     }
 
@@ -33,14 +33,11 @@ public class FilterTargetGroups extends AWSFilter<TargetGroup> {
         addAllTasks(deleteTasks(resources));
     }
 
-
     private Stream<Task> deleteTasks(List<TargetGroup> subnets) {
         return subnets.stream().map(this::deleteTask);
     }
 
-
     private Task deleteTask(TargetGroup resource) {
         return new DeleteTargetGroup(getConfig(), resource);
     }
-
 }

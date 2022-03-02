@@ -21,7 +21,7 @@ public class FilterVPCEndpoints extends AWSFilter<VpcEndpoint> {
         match = match || resource.tags().stream()
                 .anyMatch(tag -> tag.key().equals("Name")
                         && tag.value().startsWith(prefix));
-        log().debug("Found VPC Endpoint {} {}", mark(match), resource);
+        log().trace("Found VPC Endpoint {} {}", mark(match), resource);
         return match;
     }
 
@@ -29,7 +29,7 @@ public class FilterVPCEndpoints extends AWSFilter<VpcEndpoint> {
         var client = newEC2Client();
         var resources = client.describeVpcEndpoints().vpcEndpoints();
         var matches = resources.stream().filter(this::match).toList();
-        log().info("Matched {} VPC Endpoints in region [{}]", matches.size(), getRegion());
+        log().info("Matched [{}] VPC Endpoints in region [{}] [{}]", matches.size(), getRegion(), matches);
         return matches;
     }
 

@@ -7,8 +7,7 @@ import tasktree.Configuration;
 public class DeleteSubnet extends AWSDelete {
     private final Subnet net;
 
-    public DeleteSubnet(Configuration config, Subnet net) {
-        super(config);
+    public DeleteSubnet(Subnet net) {
         this.net = net;
     }
 
