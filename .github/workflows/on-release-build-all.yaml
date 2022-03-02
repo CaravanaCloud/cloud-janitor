@@ -2,7 +2,7 @@ name: Build kubectl plugin
 on:
   push:
     tags:
-      - 'v*'
+      - 'tasktree-*'
 jobs:
   all-steps:
     runs-on: ubuntu-latest
