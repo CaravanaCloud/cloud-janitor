@@ -31,3 +31,9 @@ jobs:
         run: mvn clean package -Dnative ${MVN_EXTRAS}
         env:
           MVN_EXTRAS: -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: kubectl-plugin
+          path: target/kubectl-task

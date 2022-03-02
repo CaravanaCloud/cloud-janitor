@@ -8,9 +8,15 @@ on:
 jobs:
   build-kubectl-plugin:
     uses: ./.github/workflows/build-kubectl-plugin.yml
+
   upload-artifacts:
+    needs: build-kubectl-plugin
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: kubectl-task
+
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
