@@ -7,5 +7,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build Kubectl Plugin
-        uses: CaravanaCloud/task-tree/.github/workflows/build-kubctl-plugin.yml@master
+        uses: ./.github/workflows/build-kubctl-plugin.yml
 
