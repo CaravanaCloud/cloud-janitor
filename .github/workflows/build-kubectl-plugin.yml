@@ -6,14 +6,25 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
+
       - name: Setup GraalVM
         uses: DeLaGuardo/setup-graalvm@5.0
         with:
           graalvm: '22.0.0.2'
           java: 'java17'
           arch: 'amd64'
+
       - name: Install native-image component
         run: gu install native-image
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
       - name: Run maven buid
         run: mvn clean package -Dnative ${MVN_EXTRAS}
         env:
