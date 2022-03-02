@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-kubectl-plugin:
-    uses: ./.github/workflows/build-kubctl-plugin.yml
+    uses: ./.github/workflows/build-kubectl-plugin.yml
   upload-artifacts:
     runs-on: ubuntu-latest
     steps:
