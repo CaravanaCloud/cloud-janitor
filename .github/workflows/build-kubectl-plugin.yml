@@ -1,5 +1,5 @@
 name: Build kubectl plugin
-on: [push]
+on: workflow_call
 jobs:
   all-steps:
     runs-on: ubuntu-latest

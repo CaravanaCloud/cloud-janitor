@@ -1,0 +1,9 @@
+name: On push build kubectl plugin
+on: [push]
+jobs:
+  all-steps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Kubectl Plugin
+        uses: CaravanaCloud/task-tree/.github/workflows/build-kubctl-plugin.yml@master
+
