@@ -16,7 +16,7 @@ public class FilterVPCEndpoints extends AWSFilter<VpcEndpoint> {
     }
 
     private boolean match(VpcEndpoint resource) {
-        var prefix = getConfig().getAwsCleanupPrefix();
+        var prefix = getAwsCleanupPrefix();
         var match = resource.vpcId().equals(vpcId);
         match = match || resource.tags().stream()
                 .anyMatch(tag -> tag.key().equals("Name")

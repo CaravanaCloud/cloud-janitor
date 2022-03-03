@@ -15,7 +15,7 @@ public class FilterNetworkInterfaces extends AWSFilter<NetworkInterface> {
     }
 
     private boolean match(NetworkInterface resource) {
-        var prefix = getConfig().getAwsCleanupPrefix();
+        var prefix = getAwsCleanupPrefix();
         var match = resource.vpcId().equals(vpcId);
         match = match  || resource.tagSet().stream()
                 .anyMatch(tag -> tag.key().equals("Name")

@@ -17,6 +17,9 @@ jobs:
         with:
           name: kubectl-task
 
+      - name: Locate Artifacts
+        run: find .
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1

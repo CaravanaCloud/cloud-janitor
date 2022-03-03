@@ -29,7 +29,6 @@ public class AWSAccountFilter extends AWSFilter<Void> {
     public void postConstruct(){
         log.debug("Initializing Configuration");
         setConfig(config);
-        setRegion(config.getRegion());
     }
 
     @Override

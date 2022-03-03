@@ -19,7 +19,7 @@ public class FilterLoadBalancers extends AWSFilter<LoadBalancerDescription> {
     }
 
     private boolean match(LoadBalancerDescription resource) {
-        var prefix = getConfig().getAwsCleanupPrefix();
+        var prefix = getAwsCleanupPrefix();
         var match = resource.vpcId().equals(vpcId);
         log.debug("Found Load Balancer {} {}", mark(match), resource);
         return match;

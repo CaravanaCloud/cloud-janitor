@@ -5,12 +5,10 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.route53.Route53Client;
 import software.amazon.awssdk.services.route53.model.HostedZone;
 import software.amazon.awssdk.services.route53.model.ListResourceRecordSetsRequest;
-import software.amazon.awssdk.services.route53.model.ResourceRecord;
 import software.amazon.awssdk.services.route53.model.ResourceRecordSet;
 import tasktree.Configuration;
 
 import javax.enterprise.context.Dependent;
-import java.util.function.Consumer;
 
 @Dependent
 public class FilterRecords extends AWSFilter<Record> {
@@ -55,7 +53,7 @@ public class FilterRecords extends AWSFilter<Record> {
 
     private boolean matchRecord(ResourceRecordSet rrs) {
         var name = rrs.name();
-        var prefix = getConfig().getAwsCleanupPrefix();
+        var prefix = getAwsCleanupPrefix();
         var match = name.startsWith(prefix);
         if(match) {
             matched++;

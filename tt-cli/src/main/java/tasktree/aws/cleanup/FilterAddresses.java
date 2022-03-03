@@ -14,7 +14,7 @@ public class    FilterAddresses extends AWSFilter<Address> {
     static final Logger log = LoggerFactory.getLogger(FilterInstances.class);
 
     private boolean match(Address addr) {
-        var prefix = getConfig().getAwsCleanupPrefix();
+        var prefix = getAwsCleanupPrefix();
         var match = addr.tags().stream()
                 .anyMatch(tag -> tag.key().equals("Name") && tag.value().startsWith(prefix));
         return match;

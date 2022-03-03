@@ -18,7 +18,7 @@ public class FilterInstances extends AWSFilter<Instance> {
         var state = instance.state().nameAsString().toLowerCase();
         var running = state.equals("running");
         if (!running) return false;
-        var prefix = getConfig().getAwsCleanupPrefix();
+        var prefix = getAwsCleanupPrefix();
         match = match || instance.tags().stream()
                 .anyMatch(tag -> tag.key().equals("Name") && tag.value().startsWith(prefix));
         return match;

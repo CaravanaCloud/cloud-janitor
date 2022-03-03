@@ -1,5 +1,6 @@
 package tasktree.aws;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.regions.Region;
@@ -13,14 +14,22 @@ import tasktree.BaseTask;
 import tasktree.Configuration;
 import tasktree.spi.Task;
 
+import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
 public abstract class AWSTask
         extends BaseTask {
+
     static final Region DEFAULT_REGION = Region.US_EAST_1;
     static final Logger log = LoggerFactory.getLogger(AWSTask.class);
+
+    @ConfigProperty(name = "tt.aws.region", defaultValue = "us-east-1")
+    String defaultRegion;
+
+    @ConfigProperty(name = "tt.aws.cleanup.prefix", defaultValue = "prefix-to-cleanup")
+    String awsCleanupPrefix;
 
     Region region;
 
@@ -44,17 +53,6 @@ public abstract class AWSTask
 
     protected Ec2Client newEC2Client() {
         return newEC2Client(getRegion());
-    }
-
-    protected Region getRegion() {
-        var result = region;
-        if (result == null && config != null) {
-            result = config.getRegion();
-        };
-        if (result == null) {
-            result = DEFAULT_REGION;
-        }
-        return result;
     }
 
     public void setRegion(Region region){
@@ -115,5 +113,58 @@ public abstract class AWSTask
 
     protected String mark(Boolean match){
         return match? "x" : "o";
+    }
+
+    public String getAwsCleanupPrefix() {
+        return awsCleanupPrefix;
+    }
+
+    public boolean isDryRun() {
+        if (unsafeConfig()) {
+            log.debug("Enforcing dry run, prefix too short {}", awsCleanupPrefix);
+            return true;
+        }else
+            return config.isDryRun();
+    }
+
+    private boolean unsafeConfig() {
+        boolean shortPrefix = awsCleanupPrefix == null || (awsCleanupPrefix.length() < MIN_PREFIX_LENGTH);
+        if (shortPrefix) {
+            return true;
+        }
+        return false;
+    }
+
+    private static final int MIN_PREFIX_LENGTH = 4;
+
+    public String getDefaultRegion() {
+        return defaultRegion;
+    }
+
+    public boolean filterRegion(String regionName) {
+        if (getDefaultRegion() == null || getDefaultRegion().isEmpty())
+            return true;
+        else
+            return regionName.startsWith(getDefaultRegion());
+    }
+
+    protected Region getRegion() {
+        if (region == null){
+            var defaultRegion = getDefaultRegion();
+            if (defaultRegion == null || defaultRegion.isEmpty()){
+                log.warn("No region set, using default region {}", DEFAULT_REGION);
+                region = DEFAULT_REGION;
+            }
+            region = Region.of(defaultRegion);
+        }
+        return region;
+    }
+
+    @PostConstruct
+    public void postConstruct(){
+        log.debug("Initializing AWS Task");
+        if (region == null){
+            region = Region.of(getDefaultRegion());
+        }
     }
 }

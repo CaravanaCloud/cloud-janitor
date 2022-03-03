@@ -12,7 +12,7 @@ public class FilterTargetGroups extends AWSFilter<TargetGroup> {
     static final Logger log = LoggerFactory.getLogger(FilterInstances.class);
 
     private boolean match(TargetGroup resource) {
-        var prefix = getConfig().getAwsCleanupPrefix();
+        var prefix = getAwsCleanupPrefix();
         var match = resource.targetGroupName().startsWith(prefix);
         log.trace("Found Target Group {} {}", mark(match), resource);
         return match;

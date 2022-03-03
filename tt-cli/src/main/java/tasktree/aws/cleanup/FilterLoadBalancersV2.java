@@ -12,7 +12,7 @@ public class FilterLoadBalancersV2 extends AWSFilter<LoadBalancer> {
     static final Logger log = LoggerFactory.getLogger(FilterInstances.class);
 
     private boolean match(LoadBalancer resource) {
-        var prefix = getConfig().getAwsCleanupPrefix();
+        var prefix = getAwsCleanupPrefix();
         var match = resource.loadBalancerName().startsWith(prefix);
         log.trace("Found Load Balancer V2 {} {}", mark(match), resource);
         return match;

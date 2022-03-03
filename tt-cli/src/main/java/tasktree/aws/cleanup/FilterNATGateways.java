@@ -26,7 +26,7 @@ public class FilterNATGateways extends AWSFilter<NatGateway> {
     }
 
     public boolean match(NatGateway nat) {
-        var match = nameMatches(nat, getConfig().getAwsCleanupPrefix());
+        var match = nameMatches(nat, getAwsCleanupPrefix());
         var mark = match ? "x" : "o";
         log().debug("Found NAT gateway {} {}", mark, nat);
         return match;

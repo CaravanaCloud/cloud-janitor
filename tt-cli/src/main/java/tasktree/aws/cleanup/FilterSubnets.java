@@ -20,7 +20,7 @@ public class FilterSubnets extends AWSFilter<Subnet> {
     }
 
     private boolean match(Subnet net) {
-        var prefix = getConfig().getAwsCleanupPrefix();
+        var prefix = getAwsCleanupPrefix();
         var match = net.tags().stream()
                 .anyMatch(tag -> tag.key().equals("Name") && tag.value().startsWith(prefix));
         log.trace("Found Subnet {} {}", mark(match), net);

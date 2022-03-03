@@ -16,7 +16,7 @@ public class FilterRouteTables extends AWSFilter<RouteTable> {
     }
 
     private boolean match(RouteTable resource) {
-        var prefix = getConfig().getAwsCleanupPrefix();
+        var prefix = getAwsCleanupPrefix();
         var match = resource.vpcId().equals(vpcId);
         match = match || resource.tags().stream()
                 .anyMatch(tag -> tag.key().equals("Name")

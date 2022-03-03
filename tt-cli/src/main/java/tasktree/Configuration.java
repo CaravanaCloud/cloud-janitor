@@ -16,7 +16,6 @@ import java.util.HashMap;
 @ApplicationScoped
 public class Configuration {
     static final ObjectMapper mapper = new ObjectMapper();
-    private static final int MIN_PREFIX_LENGTH = 4;
 
     @Inject
     Logger log;
@@ -30,11 +29,6 @@ public class Configuration {
     @ConfigProperty(name = "tt.dryRun", defaultValue = "true")
     boolean dryRun;
 
-    @ConfigProperty(name = "tt.aws.region", defaultValue = "us-east-1")
-    String awsRegion;
-
-    @ConfigProperty(name = "tt.aws.cleanup.prefix", defaultValue = "prefix-to-cleanup")
-    String awsCleanupPrefix;
 
     @ConfigProperty(name="tt.waitBeforeRun", defaultValue = "1000")
     long waitBeforeRun;
@@ -53,9 +47,8 @@ public class Configuration {
         return taskName;
     }
 
-    public String getAwsCleanupPrefix() {
-        return awsCleanupPrefix;
-    }    static ObjectWriter writer = createWriter();
+
+    static ObjectWriter writer = createWriter();
 
     @Override
     public String toString() {
@@ -64,8 +57,6 @@ public class Configuration {
                 put("task", taskName);
                 put("args", String.join(" ",args));
                 put("dryRun", "" + dryRun);
-                put("aws.region", awsRegion);
-                put("aws.cleanup.prefix", awsCleanupPrefix);
             }};
             return writer.writeValueAsString(dump);
         } catch (JsonProcessingException e) {
@@ -81,36 +72,6 @@ public class Configuration {
         }
     }
 
-    public boolean isDryRun() {
-        if (unsafeConfig()) {
-            log.debug("Enforcing dry run, prefix too short {}", awsCleanupPrefix);
-            return true;
-        }else
-            return dryRun;
-    }
-
-    private boolean unsafeConfig() {
-        boolean shortPrefix = awsCleanupPrefix == null || (awsCleanupPrefix.length() < MIN_PREFIX_LENGTH);
-        if (shortPrefix) {
-            return true;
-        }
-        return false;
-    }
-
-    public String getAWSRegion() {
-        return awsRegion;
-    }
-
-    public boolean filterRegion(String regionName) {
-        if (awsRegion == null)
-            return true;
-        else
-            return regionName.equals(awsRegion);
-    }
-
-    public Region getRegion() {
-        return Region.of(awsRegion);
-    }
 
     public Tasks getTasks() {
         return tasks;
@@ -136,5 +97,7 @@ public class Configuration {
     }
 
 
-
+    public boolean isDryRun() {
+        return dryRun;
+    }
 }

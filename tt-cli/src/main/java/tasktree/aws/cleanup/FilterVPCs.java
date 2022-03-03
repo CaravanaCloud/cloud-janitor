@@ -12,10 +12,8 @@ import java.util.stream.Stream;
 public class FilterVPCs extends AWSFilter<Vpc> {
     static final Logger log = LoggerFactory.getLogger(FilterVPCs.class);
 
-    public FilterVPCs(){}
-
     private boolean match(Vpc vpc) {
-        var prefix = getConfig().getAwsCleanupPrefix();
+        var prefix = getAwsCleanupPrefix();
         var match = vpc.tags().stream()
                 .anyMatch(tag -> tag.key().equals("Name") && tag.value().startsWith(prefix));
         log.debug("Found Vpc {} {}", mark(match), vpc);

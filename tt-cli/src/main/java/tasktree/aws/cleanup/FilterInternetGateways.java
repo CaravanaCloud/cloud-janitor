@@ -16,7 +16,7 @@ public class FilterInternetGateways extends AWSFilter<InternetGateway> {
     }
 
     private boolean match(InternetGateway resource) {
-        var prefix = getConfig().getAwsCleanupPrefix();
+        var prefix = getAwsCleanupPrefix();
         var match = resource.attachments().stream().anyMatch(vpc -> vpc.vpcId().equals(vpcId));
         match = match || resource.tags().stream()
                 .anyMatch(tag -> tag.key().equals("Name")

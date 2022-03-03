@@ -29,7 +29,7 @@ public class FilterRegions extends AWSFilter<List<Region>> {
                     .regions()
                     .stream()
                     .map(software.amazon.awssdk.services.ec2.model.Region::regionName)
-                    .filter(config::filterRegion)
+                    .filter(this::filterRegion)
                     .map(Region::of)
                     .toList();
             log.debug("Matched regions [{}]", regions);
