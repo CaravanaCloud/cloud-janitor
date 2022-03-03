@@ -37,5 +37,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./kubectl-task
-          asset_name: kubectl-tasks
+          asset_name: kubectl-task
           asset_content_type: application/octet-stream
