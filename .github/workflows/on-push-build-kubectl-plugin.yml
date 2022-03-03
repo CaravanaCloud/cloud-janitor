@@ -1,6 +1,9 @@
 name: Build on push
 
-on: [push]
+on:
+  push:
+    branches:
+      - "**"
 
 jobs:
   build-kubectl-plugin:
