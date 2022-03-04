@@ -8,10 +8,6 @@ import javax.inject.Inject;
 
 @Dependent
 public class FilterRegion extends AWSFilter<Region> {
-    @Inject
-    public FilterRegion(Configuration configuration) {
-        super(configuration);
-    }
 
     @Override
     public void run() {

@@ -6,19 +6,17 @@ on:
       - 'tasktree-*'
 
 jobs:
-  build-kubectl-plugin:
-    uses: ./.github/workflows/build-kubectl-plugin.yml
+  build-uberjar:
+    uses: ./.github/workflows/build-uberjar.yml
 
   upload-artifacts:
-    needs: build-kubectl-plugin
+    needs: build-uberjar
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v2
+      - name: Download uberjar
+        uses: actions/download-artifact@v2
         with:
-          name: kubectl-task
-
-      - name: Locate Artifacts
-        run: find .
+          name: tasktree-runner.jar
 
       - name: Create Release
         id: create_release
@@ -38,6 +36,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./kubectl-task
-          asset_name: kubectl-task
+          asset_path: ./tasktree-runner.jar
+          asset_name: tasktree-runner.jar
           asset_content_type: application/octet-stream

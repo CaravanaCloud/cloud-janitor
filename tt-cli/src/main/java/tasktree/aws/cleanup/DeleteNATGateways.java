@@ -8,16 +8,16 @@ import tasktree.Configuration;
 import java.util.List;
 
 public class DeleteNATGateways extends AWSDelete {
-    Ec2Client ec2 = newEC2Client();
-    private final List<NatGateway> ns;
+    Ec2Client ec2;
+    List<NatGateway> ns = List.of();
 
-    public DeleteNATGateways(Configuration config, List<NatGateway> ns) {
-        super(config);
+    public DeleteNATGateways(List<NatGateway> ns) {
         this.ns = ns;
     }
 
     @Override
     public void run() {
+        ec2 = newEC2Client();
         terminateNATGateways(ns);;
     }
 
@@ -35,10 +35,13 @@ public class DeleteNATGateways extends AWSDelete {
 
     @Override
     public String toString() {
-        return super.toString("NAT Gateways",
-                ns.stream()
-                        .map(n->n.natGatewayId().toString())
-                        .toString()
-                        .join(", "));
+        var nats = "null";
+        if (ns != null){
+            nats = ns.stream()
+                    .map(n->n.natGatewayId().toString())
+                    .toList()
+                    .toString();
+        }
+        return super.toString("NAT Gateways", nats);
     }
 }

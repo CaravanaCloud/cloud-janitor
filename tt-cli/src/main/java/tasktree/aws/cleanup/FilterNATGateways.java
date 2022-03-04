@@ -16,7 +16,7 @@ public class FilterNATGateways extends AWSFilter<NatGateway> {
     }
 
     private Stream<Task> terminateNatGateways(Stream<NatGateway> nats) {
-        return Stream.of(new DeleteNATGateways(getConfig(), nats.toList())) ;
+        return Stream.of(new DeleteNATGateways(nats.toList())) ;
     }
 
     private List<NatGateway> describeNatGateways() {

@@ -1,0 +1,43 @@
+name: Build uberjar
+
+on: workflow_call
+
+env:
+  GRAALVM_VERSION: '22.0.0.2'
+  GRAALVM_JAVA: 'java17'
+  GRAALVM_ARCH: 'amd64'
+
+jobs:
+  all-steps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Setup GraalVM
+        uses: DeLaGuardo/setup-graalvm@5.0
+        with:
+          graalvm: ${env.GRAALVM_VERSION}
+          java: ${env.GRAALVM_JAVA}
+          arch: ${env.GRAALVM_ARCH}
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Run maven buid
+        run: mvn ${MVN_GOAL} ${MVN_ARGS} ${MVN_EXTRAS}
+        env:
+          MVN_GOAL: clean package
+          MVN_ARGS: -Dquarkus.package.type=uber-jar
+          MVN_EXTRAS: -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+
+      - name: Upload tasktree-runner.jar
+        uses: actions/upload-artifact@v2
+        with:
+          name: tasktree-runner.jar
+          path: tt-cli/target/tasktree-runner.jar

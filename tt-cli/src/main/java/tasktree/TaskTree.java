@@ -1,11 +1,14 @@
 package tasktree;
 
+import io.quarkus.runtime.ShutdownEvent;
+import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.quarkus.runtime.QuarkusApplication;
 import tasktree.spi.Tasks;
 
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 public class TaskTree implements QuarkusApplication{
@@ -21,14 +24,15 @@ public class TaskTree implements QuarkusApplication{
         return 0;
     }
 
-    /*
+
     void onStart(@Observes StartupEvent ev) {
-        log.info("The application is starting...");
+        log.debug("The application is starting...");
+        // Set the default synchronous HTTP client to UrlConnectionHttpClient
+        System.setProperty("software.amazon.awssdk.http.service.impl",
+                "software.amazon.awssdk.http.urlconnection.UrlConnectionSdkHttpService");
     }
 
     void onStop(@Observes ShutdownEvent ev) {
-        log.info("The application is stopping...");
-        System.exit(0);
+        log.debug("The application is stopping...");
     }
-    */
 }

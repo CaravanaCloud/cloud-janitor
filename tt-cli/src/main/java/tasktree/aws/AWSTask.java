@@ -33,6 +33,8 @@ public abstract class AWSTask
 
     Region region;
 
+
+
     public AWSTask(){}
 
     public AWSTask(Configuration config){
@@ -89,13 +91,13 @@ public abstract class AWSTask
 
     @Override
     public String toString() {
-        return getSimpleName() + " (" + getRegion() + ")";
+        return super.toString() + " (" + region + ")";
     }
 
     public void addTask(Task task){
         task.setConfig(config);
         if (task instanceof AWSTask)
-            ((AWSTask)task).setRegion(region);
+            ((AWSTask)task).setRegion(getRegion());
         getConfig().getTasks().addTask(task);
     }
 
@@ -152,7 +154,7 @@ public abstract class AWSTask
         if (region == null){
             var defaultRegion = getDefaultRegion();
             if (defaultRegion == null || defaultRegion.isEmpty()){
-                log.warn("No region set, using default region {}", DEFAULT_REGION);
+                log.warn("No region set, using default region [{}] [{}]", DEFAULT_REGION, getSimpleName());
                 region = DEFAULT_REGION;
             }
             region = Region.of(defaultRegion);
