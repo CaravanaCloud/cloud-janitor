@@ -32,7 +32,7 @@ jobs:
       - name: Run maven buid
         run: mvn ${MVN_GOAL} ${MVN_ARGS} ${MVN_EXTRAS}
         env:
-          MVN_GOAL: clean package
+          MVN_GOAL: package
           MVN_ARGS: -Dquarkus.package.type=uber-jar
           MVN_EXTRAS: -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 
