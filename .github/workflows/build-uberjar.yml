@@ -17,9 +17,9 @@ jobs:
       - name: Setup GraalVM
         uses: DeLaGuardo/setup-graalvm@5.0
         with:
-          graalvm: ${env.GRAALVM_VERSION}
-          java: ${env.GRAALVM_JAVA}
-          arch: ${env.GRAALVM_ARCH}
+          graalvm: ${{env.GRAALVM_VERSION}}
+          java: ${{env.GRAALVM_JAVA}}
+          arch: ${{env.GRAALVM_ARCH}}
 
       - name: Cache local Maven repository
         uses: actions/cache@v2
@@ -39,5 +39,5 @@ jobs:
       - name: Upload tasktree-runner.jar
         uses: actions/upload-artifact@v2
         with:
-          name: tasktree-runner.jar
+          name:
           path: tt-cli/target/tasktree-runner.jar
