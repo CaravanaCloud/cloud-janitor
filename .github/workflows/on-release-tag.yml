@@ -30,11 +30,21 @@ jobs:
       - name: Trust but verify
         run: find .
 
+      - name: Upload rpm
+        uses: actions/upload-artifact@v2
+        with:
+          name: tasktree-1.0-1.x86_64.rpm
+          path: ./tasktree-1.0-1.x86_64.rpm
 
   upload-artifacts:
-    needs: build-uberjar
+    needs: build-rpm
     runs-on: ubuntu-latest
     steps:
+      - name: Download RPM
+        uses: actions/download-artifact@v2
+        with:
+          name: tasktree-1.0-1.x86_64.rpm
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -53,6 +63,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./tasktree-runner.jar
-          asset_name: tasktree-runner.jar
+          asset_path: tasktree-1.0-1.x86_64.rpm
+          asset_name: tasktree-1.0-1.x86_64.rpm
           asset_content_type: application/octet-stream
