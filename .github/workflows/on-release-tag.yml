@@ -9,6 +9,13 @@ jobs:
   build-uberjar:
     uses: ./.github/workflows/build-uberjar.yml
 
+  build-package:
+    needs: build-uberjar
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Build the package'
+        run: "echo BUILD IT"
+
   upload-artifacts:
     needs: build-uberjar
     runs-on: ubuntu-latest
