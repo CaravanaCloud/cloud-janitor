@@ -9,15 +9,8 @@ jobs:
   build-uberjar:
     uses: ./.github/workflows/build-uberjar.yml
 
-  build-package:
-    needs: build-uberjar
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Build the package'
-        run: "echo BUILD IT"
-
-  upload-artifacts:
-    needs: build-uberjar
+  build-rpm:
+    needs: build-rpm
     runs-on: ubuntu-latest
     steps:
       - name: Download uberjar
@@ -25,6 +18,23 @@ jobs:
         with:
           name: tasktree-runner.jar
 
+      - name: 'Build the package'
+        run: >
+          jpackage --input target/ 
+            --name tasktree 
+            --main-jar tasktree-runner.jar 
+            --main-class tasktree.Main 
+            --type rpm 
+            --java-options '--enable-preview'
+
+      - name: 'Trust but verifyh'
+        run: find .
+
+
+    upload-artifacts:
+    needs: build-uberjar
+    runs-on: ubuntu-latest
+    steps:
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
