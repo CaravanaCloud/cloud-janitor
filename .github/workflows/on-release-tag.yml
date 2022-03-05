@@ -39,7 +39,7 @@ jobs:
             --main-class "tasktree.Main" \
             --type "rpm" \
             --java-options "--enable-preview" \
-            --app-version "0.0.1" \
+            --app-version "${{steps.lookup_version.outputs.VERSION}}" \
             --linux-app-release "1" \
             --description "TaskTree RPM Package" \
             --vendor "CaravanaCloud" 
