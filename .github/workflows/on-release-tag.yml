@@ -24,10 +24,16 @@ jobs:
       - name: Lookup version
         id: lookup_version
         run: |
-          echo ::set-output name=VERSION::$(echo "$REF_NAME" | cut -d\- -f2-)
+          VERSION=$(echo "$REF_NAME" | cut -d\- -f2-)
+          RELEASE=1
+          ARCH=x86_64
+          RPM_PKG="./tasktree-$VERSION-$RELEASE.$ARCH.rpm"
+          echo ::set-output name=VERSION::$VERSION
+          echo ::set-output name=RELEASE::$RELEASE
+          echo ::set-output name=RPM_PKG::$RPM_PKG
 
       - name: Before package
-        run: echo "PKG_VERSION=${{steps.lookup_version.outputs.VERSION}}"
+        run: echo "RPM_PKG=${{steps.lookup_version.outputs.RPM_PKG}}"
 
       - name: Trust but verify
         run: find .
@@ -40,7 +46,7 @@ jobs:
             --type "rpm" \
             --java-options "--enable-preview" \
             --app-version "${{steps.lookup_version.outputs.VERSION}}" \
-            --linux-app-release "1" \
+            --linux-app-release "${{steps.lookup_version.outputs.RELEASE}}" \
             --description "TaskTree RPM Package" \
             --vendor "CaravanaCloud" 
 
@@ -50,8 +56,8 @@ jobs:
       - name: Upload rpm
         uses: actions/upload-artifact@v2
         with:
-          name: tasktree-1.0-1.x86_64.rpm
-          path: ./tasktree-1.0-1.x86_64.rpm
+          name: tasktree-cli.rpm
+          path: ./${{steps.lookup_version.outputs.RPM_PKG}}
 
   upload-artifacts:
     needs: build-rpm
@@ -65,7 +71,7 @@ jobs:
       - name: Download RPM
         uses: actions/download-artifact@v2
         with:
-          name: tasktree-1.0-1.x86_64.rpm
+          name: tasktree-cli.rpm
 
       - name: Create Release
         id: create_release
