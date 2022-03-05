@@ -40,6 +40,7 @@ jobs:
             --type "rpm" \
             --java-options "--enable-preview" \
             --app-version "0.0.1" \
+            --linux-app-release "1" \
             --description "TaskTree RPM Package" \
             --vendor "CaravanaCloud" 
 
