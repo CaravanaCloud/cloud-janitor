@@ -50,14 +50,14 @@ jobs:
             --description "TaskTree RPM Package" \
             --vendor "CaravanaCloud" 
 
-      - name: Trust but verify
-        run: find .
+      - name: Alias to unversioned package name
+        run: ln -s "${{steps.lookup_version.outputs.RELEASE}}" "./tasktree-cli.rpm"
 
       - name: Upload rpm
         uses: actions/upload-artifact@v2
         with:
           name: tasktree-cli.rpm
-          path: ${{steps.lookup_version.outputs.RPM_PKG}}
+          path: ./tasktree-cli.rpm
 
   upload-artifacts:
     needs: build-rpm
