@@ -5,6 +5,9 @@ on:
     tags:
       - 'tasktree-*'
 
+env:
+  PKG_VERSION: ${{ github.event.release.tag_name }}
+
 jobs:
   build-uberjar:
     uses: ./.github/workflows/build-uberjar.yml
@@ -18,15 +21,21 @@ jobs:
         with:
           name: tasktree-runner.jar
 
+      - name: Before package
+        run: echo "PKG_VERSION=$PKG_VERSION"
+
       - name: Build the package
         run: >
           jpackage --input . 
-          --name tasktree 
-          --main-jar tasktree-runner.jar 
-          --main-class tasktree.Main 
-          --type rpm 
-          --java-options '--enable-preview'
-
+            --name tasktree 
+            --main-jar tasktree-runner.jar 
+            --main-class tasktree.Main 
+            --type rpm 
+            --java-options '--enable-preview'
+            --app-version 0.0.1
+            --description 'TaskTree RPM Package'
+            --vendor 'CaravanaCloud'
+            --verbose
       - name: Trust but verify
         run: find .
 
