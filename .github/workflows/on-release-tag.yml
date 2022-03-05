@@ -29,9 +29,8 @@ jobs:
 
       - name: Build the package
         run: >
-          jpackage --input "$PWD" 
+          jpackage --input "$PWD" --main-jar "tasktree-runner.jar" 
             --name "tasktree" 
-            --main-jar "tasktree-runner.jar" 
             --main-class "tasktree.Main"
             --type "rpm"
             --java-options "--enable-preview"
