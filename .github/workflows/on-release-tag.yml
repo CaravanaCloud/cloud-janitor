@@ -35,9 +35,6 @@ jobs:
       - name: Before package
         run: echo "RPM_PKG=${{steps.lookup_version.outputs.RPM_PKG}}"
 
-      - name: Trust but verify
-        run: find .
-
       - name: Build the package
         run: |
           jpackage --input "$PWD" --main-jar "tasktree-runner.jar" \
@@ -58,6 +55,9 @@ jobs:
         with:
           name: tasktree-cli.rpm
           path: ./tasktree-cli.rpm
+
+      - name: Trust but verify
+        run: find .
 
   upload-artifacts:
     needs: build-rpm
