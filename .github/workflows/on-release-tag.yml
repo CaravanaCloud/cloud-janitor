@@ -6,7 +6,7 @@ on:
       - 'tasktree-*'
 
 env:
-  PKG_VERSION: ${{ github.ref_name }}
+  REF_NAME: ${{ github.ref_name }}
 
 jobs:
   build-uberjar:
@@ -21,8 +21,13 @@ jobs:
         with:
           name: tasktree-runner.jar
 
+      - name: Lookup version
+        id: lookup_version
+        run: |
+          echo ::set-output name=VERSION::$(echo "$REF_NAME" | cut -d\- -f2-)
+
       - name: Before package
-        run: echo "PKG_VERSION=$PKG_VERSION PWD=$PWD"
+        run: echo "PKG_VERSION=${{steps.lookup_version.outputs.VERSION}}"
 
       - name: Trust but verify
         run: find .
