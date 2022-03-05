@@ -33,15 +33,15 @@ jobs:
         run: find .
 
       - name: Build the package
-        run: >
-          jpackage --input "$PWD" --main-jar "tasktree-runner.jar" 
-            --name "tasktree" 
-            --main-class "tasktree.Main"
-            --type "rpm"
-            --java-options "--enable-preview"
-            --app-version "0.0.1"
-            --description "TaskTree RPM Package"
-            --vendor "CaravanaCloud"
+        run: |
+          jpackage --input "$PWD" --main-jar "tasktree-runner.jar" \
+            --name "tasktree" \
+            --main-class "tasktree.Main" \
+            --type "rpm" \
+            --java-options "--enable-preview" \
+            --app-version "0.0.1" \
+            --description "TaskTree RPM Package" \
+            --vendor "CaravanaCloud" 
 
       - name: Trust but verify
         run: find .
