@@ -1,6 +1,6 @@
 # Today we'll build
 
-- Sample application
+- Sample "Pet Care" application
 - Service-oriented
 - Secure from the start
 - Multi-module
@@ -10,10 +10,10 @@ Featuring:
 - Keycloak
 
 # Create root dir
-
+mkdir petcare
 
 # Create "core" module
-quarkus create cli  --java=17 --help
+quarkus create cli ptc-core --java=17 --help
 quarkus dev
 
 # Create "api" module
