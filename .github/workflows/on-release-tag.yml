@@ -6,7 +6,7 @@ on:
       - 'tasktree-*'
 
 env:
-  PKG_VERSION: ${{ github.event.release.tag_name }}
+  PKG_VERSION: ${{ github.ref_name }}
 
 jobs:
   build-uberjar:
