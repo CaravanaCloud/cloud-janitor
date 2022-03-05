@@ -70,8 +70,8 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Upload UberJar
-        id: upload-release-asset
+      - name: Release UberJar
+        id: release-uberjar
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -81,8 +81,8 @@ jobs:
           asset_name: tasktree-runner.jar
           asset_content_type: application/octet-stream
 
-      - name: Upload RPM
-        id: upload-release-asset
+      - name: Release RPM
+        id: release-rpm
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
