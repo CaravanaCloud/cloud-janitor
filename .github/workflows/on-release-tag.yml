@@ -24,6 +24,9 @@ jobs:
       - name: Before package
         run: echo "PKG_VERSION=$PKG_VERSION"
 
+      - name: Trust but verify
+        run: find .
+
       - name: Build the package
         run: >
           jpackage --input "." 
