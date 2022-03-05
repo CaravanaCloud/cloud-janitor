@@ -10,9 +10,10 @@ jpackage --input "$RDIR/tt-cli/target" \
   --main-class "tasktree.Main" \
   --type "rpm" \
   --java-options "--enable-preview" \
-  --app-version "0.0.1" \
+  --app-version "0.1.$(date +%s)" \
+  --linux-app-release "1" \
   --description "TaskTree RPM Package" \
   --vendor "CaravanaCloud" \
-#  --verbose
+  --verbose
 
 echo "done"
