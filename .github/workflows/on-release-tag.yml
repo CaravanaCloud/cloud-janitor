@@ -51,7 +51,7 @@ jobs:
             --vendor "CaravanaCloud" 
 
       - name: Alias to unversioned package name
-        run: ln -s "${{steps.lookup_version.outputs.RELEASE}}" "./tasktree-cli.rpm"
+        run: ln -s "${{steps.lookup_version.outputs.RPM_PKG}}" "./tasktree-cli.rpm"
 
       - name: Upload rpm
         uses: actions/upload-artifact@v2
