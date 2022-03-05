@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>tt-cli</module>
+        <module>tt-api</module>
         <module>tt-app</module>
     </modules>
     <build>
