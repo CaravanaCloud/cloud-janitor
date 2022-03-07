@@ -27,7 +27,7 @@ public class FilterSecurityGroups extends AWSFilter<SecurityGroup> {
         var client = newEC2Client();
         var resources = client.describeSecurityGroups().securityGroups();
         var matches = resources.stream().filter(this::match).toList();
-        log().info("Matched {} Security Groups in region [{}] [{}]", matches.size(), getRegion(), matches);
+        log().info("Matched [{}] {} in region [{}] [{}]", matches.size(), "Security Groups", getRegion(), matches);
         return matches;
     }
 

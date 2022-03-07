@@ -1,6 +1,6 @@
 tt:
   task: cleanup-aws
-  dryRun: true
+  dryRun: false
   ocp:
     baseDomain: devcluster.openshift.com
   aws:

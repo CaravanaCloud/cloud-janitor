@@ -29,7 +29,7 @@ public class FilterInternetGateways extends AWSFilter<InternetGateway> {
         var client = newEC2Client();
         var resources = client.describeInternetGateways().internetGateways();
         var matches = resources.stream().filter(this::match).toList();
-        log().info("Matched {} Internet Gateways in region [{}]", matches.size(), getRegion());
+        log().info("Matched [{}] Internet Gateways in region [{}]", matches.size(), getRegion());
         return matches;
     }
 

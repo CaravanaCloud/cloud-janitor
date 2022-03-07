@@ -161,7 +161,7 @@ public class Tasks {
             debug("Executed", task);
         }catch (Throwable ex) {
             int retries = task.getRetries();
-            ex.printStackTrace();
+            //ex.printStackTrace();
             if (retries > 0) {
                 debug("Re-queued [%s]".formatted(ex.getMessage()), task);
                 task.retried();

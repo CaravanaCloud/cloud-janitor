@@ -32,7 +32,7 @@ public class FilterInstances extends AWSFilter<Instance> {
         var found = instances.size();
         var matches = instances.stream().filter(this::match).toList();
         var matched = matches.size();
-        log.info("Matched {}/{} instances in [{}]", matched, found, getRegion());
+        log.info("Matched [{}/{}] {} in [{}]", matched, found, "Instances", getRegion());
         return matches;
     }
 

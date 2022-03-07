@@ -19,14 +19,14 @@ public class DeleteSecurityGroup extends AWSDelete {
 
     private void deleteRules() {
         var groupId = resource.groupId();
-        log().debug("Deleting Security Group Rules for {}", groupId);
+        log().debug("Deleting Security Group Rules for [{}]", groupId);
         var describeRules = DescribeSecurityGroupRulesRequest
                 .builder()
                 .build();
         var ec2 = newEC2Client();
         var rules = ec2.describeSecurityGroupRules(describeRules).securityGroupRules();
         rules.forEach(rule -> {
-            log().debug("Found security group rule {}",rule);
+            log().debug("Found security group rule [{}]",rule);
             if (rule.groupId().equals(resource.groupId())){
                 if (rule.isEgress()){
                     log().debug("Deleting security group egress {}", rule);
