@@ -1,20 +1,73 @@
 # Task Tree
 
-A set of automations for resource management and debugging, focused on cloud and kubernetes.
+"Task Tree" is an automation tool to help developers build and share maintenance
+and troubleshooting tasks. It is built to be easy to run and customize.
 
-Here is what it should do for a starting point:
-1. Let you configure and run tasks, which can be possibly any code.
-2. Gather and evaluate the logs and outputs.
-3. Continue with the desired next steps or debugging flow.
-4. If it matches the knowledge base, notify and/or fix the issue
+# Getting Started using the JAR release
+1. Download the latest JAR release:
+https://github.com/CaravanaCloud/task-tree/releases
+2. Run it:
+```
+java -jar java -jar tasktree-runner.jar
+```
 
-# Initial features:
-- Report/Delete resources created by OCP installer by name
-- Report/Delete resources created by OCP installer by tag
-- Report/Delete underutilized resources
+# Getting Started using the RPM release
+1. Download the latest RPM release:
+   https://github.com/CaravanaCloud/task-tree/releases
+2. Install it:
+```
+rpm -Uvh --force tt-cli/target/tasktree-cli.rpm
+```
+3. Add it to your PATH:
+```
+ln -sf /opt/tasktree/bin/tasktree /usr/local/bin/tt
+```
+4. Run it:
+```
+tt
+```
+
+# Configuring Tasks
+
+## Quarkus Configuration
+You can configure the tasks to run using a Quarkus configuration YAML file in the ($CWD/config/application.yaml).
+Examples are provided below and in the "config" directory in this repository.
+
+## Dry Run
+Write tasks, such as deleting AWS resources, are protected by a dry run lock so that they'll only run if explicitly enabled.
+
+# Task Library
+
+## marvin
+Don't panic! This is just a sample task.
+```bash
+tt marvin
+```
+
+## cleanup-aws
+Delete AWS resources based on a naming prefix.
+```yaml
+tt:
+  task: cleanup-aws
+  dryRun: true
+  ocp:
+    baseDomain: devcluster.openshift.com
+  aws:
+    region: ap-northeast-1
+    cleanup:
+      prefix: rhnb-
+```
+
+# Tasks Wishlist:
+- Support more AWS Services on cleanup task
+- Delete AWS resources by tag
+- Delete AWS resources by usage
 - Report/Notify usage by attribution ("chargeback")
+- OpenShift Cluster Provisioning and Deployment
+- Fully-automated OpenShift management (Source2Service)
 
-# Implementation considerations:
-1. (Idea) Integrate with ansible
-1. (Idea) Use Kogito to map the user tasks and match rules
-1. (Idea) Use CloudWatch and/or ElasticSearch/Logstash/Kibana for visuzization
+# Features Wishlist:
+1. Integrate with ansible
+2. Kogito-defined tasks
+3. CloudWatch and/or ElasticSearch/Logstash/Kibana for visualization
+

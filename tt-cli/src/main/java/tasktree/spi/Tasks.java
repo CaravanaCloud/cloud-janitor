@@ -115,11 +115,11 @@ public class Tasks {
     }
 
     private void runAll() {
-        log.info("Processing read task queue");
+        log.debug("Processing read task queue");
         runReads();
-        log.info("Processing write task queue [dryRun={}]", config.isDryRun());
+        log.debug("Processing write task queue [dryRun={}]", config.isDryRun());
         runWrites();
-        log.info("Task queues empty. Done!");
+        log.debug("Task queues empty. Done!");
     }
 
     private void runWrites() {

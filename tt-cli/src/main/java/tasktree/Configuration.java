@@ -23,7 +23,7 @@ public class Configuration {
     @Inject
     Tasks tasks;
 
-    @ConfigProperty(name = "tt.task", defaultValue = "help")
+    @ConfigProperty(name = "tt.task", defaultValue = "marvin")
     String taskName;
 
     @ConfigProperty(name = "tt.dryRun", defaultValue = "true")
@@ -92,7 +92,7 @@ public class Configuration {
 
     public void init(String[] args) {
         parse(args);
-        log.info(toString());
+        log.info("TaskTree Configuration: {}", this);
         waitBeforeRun(10 * (1+waitBeforeRun));
     }
 
