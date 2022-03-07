@@ -17,19 +17,10 @@ public class AWSAccountFilter extends AWSFilter<Void> {
     Logger log;
 
     @Inject
-    Configuration config;
-
-    @Inject
     FilterRegions filterRegions;
 
     @Inject
     FilterRecords filterRecords;
-
-    @PostConstruct
-    public void postConstruct(){
-        log.debug("Initializing Configuration");
-        setConfig(config);
-    }
 
     @Override
     public void run() {

@@ -40,12 +40,14 @@ Write tasks, such as deleting AWS resources, are protected by a dry run lock so 
 
 ## marvin
 Don't panic! This is just a sample task.
+Try running this one to check everything is working:
 ```bash
 tt marvin
 ```
 
 ## cleanup-aws
 Delete AWS resources based on a naming prefix.
+Try adding this configuration to ```$CWD/config/application.yaml```:
 ```yaml
 tt:
   task: cleanup-aws

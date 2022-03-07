@@ -72,7 +72,6 @@ public class Tasks {
         var ctx = bm.createCreationalContext(bean);
         var ref = bm.getReference(bean, bean.getBeanClass(), ctx);
         if (ref instanceof Task task) {
-            log.debug("Adding task {}", task.getName());
             addTask((Task) task);
         }else{
             log.error("Bean {} is not a Task", bean);
@@ -94,10 +93,19 @@ public class Tasks {
         }else {
             readQueue.addLast(task);
         }
-        debug("Added", task);
+        trace("Added", task);
     }
 
     static final String LOG_FORMAT = "{} [{}] [R {}/W {}]";
+
+    private void trace(String message, Task task) {
+        log.trace(LOG_FORMAT,
+                message,
+                task,
+                readQueue.size() ,
+                writeQueue.size());
+    }
+
     private void debug(String message, Task task) {
         log.debug(LOG_FORMAT,
                 message,
@@ -150,12 +158,12 @@ public class Tasks {
     private void tryRun(Task task) {
         try {
             task.run();
-            debug("Executed {}", task);
+            debug("Executed", task);
         }catch (Throwable ex) {
             int retries = task.getRetries();
-            //ex.printStackTrace();
+            ex.printStackTrace();
             if (retries > 0) {
-                debug("Re-queued", task);
+                debug("Re-queued [%s]".formatted(ex.getMessage()), task);
                 task.retried();
                 addTask(task);
             }else {

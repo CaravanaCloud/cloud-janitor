@@ -67,7 +67,7 @@ public class FilterRecords extends AWSFilter<Record> {
     private boolean match(HostedZone zone) {
         var zoneName = zone.name();
         var match = zoneName.startsWith(baseDomain);
-        log().debug("Found Hosted Zone {} {} ", mark(match), zoneName);
+        log().trace("Found Hosted Zone {} {} ", mark(match), zoneName);
         return match;
     }
 

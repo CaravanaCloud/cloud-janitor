@@ -5,11 +5,14 @@ import org.slf4j.LoggerFactory;
 import tasktree.spi.Task;
 
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 
 @Dependent
 public abstract class BaseTask implements Task {
     static final Logger log = LoggerFactory.getLogger(BaseTask.class);
-    protected Configuration config;
+
+    @Inject
+    Configuration config;
 
     public BaseTask(){}
 
@@ -57,7 +60,7 @@ public abstract class BaseTask implements Task {
             sb.append(resourceType);
             sb.append(")");
         }
-        if (taskInfo != null) {
+        if (taskInfo != null && taskInfo.length > 0) {
             sb.append("(");
             sb.append(String.join(",", taskInfo));
             sb.append(")");

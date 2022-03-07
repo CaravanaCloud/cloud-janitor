@@ -34,7 +34,6 @@ public abstract class AWSTask
     Region region;
 
 
-
     public AWSTask(){}
 
     public AWSTask(Configuration config){
@@ -45,8 +44,6 @@ public abstract class AWSTask
         super(config);
         this.region = region;
     }
-
-
 
     protected S3Client newS3Client(){
         var s3 = S3Client.builder().region(getRegion()).build();
@@ -95,10 +92,16 @@ public abstract class AWSTask
     }
 
     public void addTask(Task task){
-        task.setConfig(config);
-        if (task instanceof AWSTask)
-            ((AWSTask)task).setRegion(getRegion());
+        propagateConfig(task);
         getConfig().getTasks().addTask(task);
+    }
+
+    private void propagateConfig(Task task) {
+        task.setConfig(getConfig());
+        if (task instanceof AWSTask awstask) {
+            awstask.setRegion(getRegion());
+            awstask.setAwsCleanupPrefix(getAwsCleanupPrefix());
+        }
     }
 
     public void addAllTasks(List<Task> tasks){
@@ -117,21 +120,32 @@ public abstract class AWSTask
         return match? "x" : "o";
     }
 
+    public void setAwsCleanupPrefix(String prefix){
+        this.awsCleanupPrefix = prefix;
+    }
+
     public String getAwsCleanupPrefix() {
+        if (awsCleanupPrefix == null || awsCleanupPrefix.isEmpty()){
+            log.warn("No cleanup prefix configured.  This is probably a mistake.");
+        }
         return awsCleanupPrefix;
     }
 
     public boolean isDryRun() {
-        if (unsafeConfig()) {
-            log.debug("Enforcing dry run, prefix too short {}", awsCleanupPrefix);
+        if (getConfig().isDryRun())
             return true;
-        }else
-            return config.isDryRun();
+        else {
+            var unsafe = unsafeConfig();
+            if (unsafe)
+                log.warn("Enforcing dry run due to unsafe configuration.");
+            return false;
+       }
     }
 
     private boolean unsafeConfig() {
         boolean shortPrefix = awsCleanupPrefix == null || (awsCleanupPrefix.length() < MIN_PREFIX_LENGTH);
         if (shortPrefix) {
+            log.warn("Unsafe configuration: naming prefix too short {}", awsCleanupPrefix);
             return true;
         }
         return false;
@@ -164,7 +178,7 @@ public abstract class AWSTask
 
     @PostConstruct
     public void postConstruct(){
-        log.debug("Initializing AWS Task");
+        log.trace("Initializing AWS Task {}", this);
         if (region == null){
             region = Region.of(getDefaultRegion());
         }
