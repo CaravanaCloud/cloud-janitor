@@ -23,7 +23,7 @@ public class FilterSecurityGroups extends AWSFilter<SecurityGroup> {
         return match;
     }
 
-    private List<SecurityGroup> filterResources() {
+    protected List<SecurityGroup> filterResources() {
         var client = newEC2Client();
         var resources = client.describeSecurityGroups().securityGroups();
         var matches = resources.stream().filter(this::match).toList();

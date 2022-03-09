@@ -18,8 +18,8 @@ public class FilterTargetGroups extends AWSFilter<TargetGroup> {
         return match;
     }
 
-    private List<TargetGroup> filterResources() {
-        var elb = getELBClientV2();
+    protected List<TargetGroup> filterResources() {
+        var elb = aws.getELBClientV2(getRegion());
         var resources = elb.describeTargetGroups().targetGroups();
         var matches = resources.stream().filter(this::match).toList();
         log.info("Matched {} Target Groups in region [{}] [{}]", matches.size(), getRegion(), matches);
@@ -33,11 +33,11 @@ public class FilterTargetGroups extends AWSFilter<TargetGroup> {
         addAllTasks(deleteTasks(resources));
     }
 
-    private Stream<Task> deleteTasks(List<TargetGroup> subnets) {
+    protected Stream<Task> deleteTasks(List<TargetGroup> subnets) {
         return subnets.stream().map(this::deleteTask);
     }
 
-    private Task deleteTask(TargetGroup resource) {
+    protected Task deleteTask(TargetGroup resource) {
         return new DeleteTargetGroup(getConfig(), resource);
     }
 }

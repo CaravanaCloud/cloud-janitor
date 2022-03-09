@@ -19,7 +19,7 @@ public class FilterLoadBalancersV2 extends AWSFilter<LoadBalancer> {
     }
 
     private List<LoadBalancer> filterLBs() {
-        var elb = getELBClientV2();
+        var elb = aws.getELBClientV2(getRegion());
         var resources = elb.describeLoadBalancers().loadBalancers();
         var matches = resources.stream().filter(this::match).toList();
         log.info("Matched [{}] Load Balancers V2 in region [{}]", matches.size(), getRegion());

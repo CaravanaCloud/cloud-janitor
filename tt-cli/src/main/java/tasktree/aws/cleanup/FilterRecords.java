@@ -18,12 +18,8 @@ public class FilterRecords extends AWSFilter<Record> {
     @ConfigProperty(name = "tt.ocp.baseDomain", defaultValue = "redhat.com")
     String baseDomain;
 
-    private Route53Client r53 = newRoute53Client();
+    private Route53Client r53 = aws.newRoute53Client(getRegion());
 
-
-    public FilterRecords(Configuration config) {
-        super(config);
-    }
 
     @Override
     public void run() {
@@ -65,6 +61,10 @@ public class FilterRecords extends AWSFilter<Record> {
 
 
     private boolean match(HostedZone zone) {
+        if (baseDomain==null) {
+            log().trace("base domain not set");
+            return false;
+        }
         var zoneName = zone.name();
         var match = zoneName.startsWith(baseDomain);
         log().trace("Found Hosted Zone {} {} ", mark(match), zoneName);

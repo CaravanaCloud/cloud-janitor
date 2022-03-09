@@ -1,6 +1,6 @@
 package tasktree.aws;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
+    import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.regions.Region;
@@ -15,6 +15,7 @@ import tasktree.Configuration;
 import tasktree.spi.Task;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -31,8 +32,9 @@ public abstract class AWSTask
     @ConfigProperty(name = "tt.aws.cleanup.prefix", defaultValue = "prefix-to-cleanup")
     String awsCleanupPrefix;
 
-    Region region;
+    protected Region region;
 
+    protected AWSClients aws = new AWSClients();
 
     public AWSTask(){}
 
@@ -46,35 +48,17 @@ public abstract class AWSTask
     }
 
     protected S3Client newS3Client(){
-        var s3 = S3Client.builder().region(getRegion()).build();
-        return s3;
+        return aws.newS3Client(getRegion());
     }
 
     protected Ec2Client newEC2Client() {
-        return newEC2Client(getRegion());
+        return aws.newEC2Client(getRegion());
     }
 
     public void setRegion(Region region){
         this.region = region;
     }
 
-    protected Route53Client newRoute53Client() {
-        return Route53Client.builder().region(getRegion()).build();
-    }
-
-    protected ElasticLoadBalancingV2Client getELBClientV2() {
-        return ElasticLoadBalancingV2Client.builder().region(getRegion()).build();
-    }
-
-    protected ElasticLoadBalancingClient getELBClient() {
-        return ElasticLoadBalancingClient.builder()
-                .region(getRegion())
-                .build();
-    }
-
-    protected Ec2Client newEC2Client(Region region) {
-        return Ec2Client.builder().region(region).build();
-    }
 
     protected Logger log() {
         return log;
@@ -99,9 +83,15 @@ public abstract class AWSTask
     private void propagateConfig(Task task) {
         task.setConfig(getConfig());
         if (task instanceof AWSTask awstask) {
-            awstask.setRegion(getRegion());
+            var _region = getRegion();
+            awstask.setDefaultRegion(getDefaultRegion());
+            awstask.setRegion(_region);
             awstask.setAwsCleanupPrefix(getAwsCleanupPrefix());
         }
+    }
+
+    private void setDefaultRegion(String defaultRegion) {
+        this.defaultRegion = defaultRegion;
     }
 
     public void addAllTasks(List<Task> tasks){
@@ -158,10 +148,12 @@ public abstract class AWSTask
     }
 
     public boolean filterRegion(String regionName) {
-        if (getDefaultRegion() == null || getDefaultRegion().isEmpty())
+        if ( defaultRegion == null || defaultRegion.isEmpty())
             return true;
-        else
-            return regionName.startsWith(getDefaultRegion());
+        else {
+            var filter = regionName.equals(defaultRegion);
+            return filter;
+        }
     }
 
     protected Region getRegion() {
@@ -183,4 +175,9 @@ public abstract class AWSTask
             region = Region.of(getDefaultRegion());
         }
     }
+
+    protected String getResourceType() {
+        return "UNKNOWN_RESOURCE_TYPE";
+    }
+
 }

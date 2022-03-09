@@ -25,7 +25,7 @@ public class FilterRouteTables extends AWSFilter<RouteTable> {
         return match;
     }
 
-    private List<RouteTable> filterResources() {
+    protected List<RouteTable> filterResources() {
         var client = newEC2Client();
         var resources = client.describeRouteTables().routeTables();
         var matches = resources.stream().filter(this::match).toList();

@@ -25,7 +25,7 @@ public class FilterInternetGateways extends AWSFilter<InternetGateway> {
         return match;
     }
 
-    private List<InternetGateway> filterResources() {
+    protected List<InternetGateway> filterResources() {
         var client = newEC2Client();
         var resources = client.describeInternetGateways().internetGateways();
         var matches = resources.stream().filter(this::match).toList();

@@ -1,55 +1,43 @@
 package tasktree.aws.cleanup;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.regions.Region;
-import tasktree.Configuration;
-import tasktree.aws.AWSTask;
+import software.amazon.awssdk.services.ec2.Ec2Client;
 import tasktree.spi.Task;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
-import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.stream.Stream;
 
-@Dependent
-public class FilterRegions extends AWSFilter<List<Region>> {
+public class FilterRegions extends AWSFilter<Region> {
 
-    @Inject
-    Instance<FilterRegion> filterRegionInstance;
-
-    @Inject
-    Logger log;
-
-    List<Region> filterRegions() {
-        try {
-            var ec2 = newEC2Client();
-            var regions = ec2.describeRegions()
+    @Override
+    public List<Region> filterResources() {
+            var regions = aws.newEC2Client(getRegion()).describeRegions()
                     .regions()
                     .stream()
                     .map(software.amazon.awssdk.services.ec2.model.Region::regionName)
+                    .toList();
+            var matches = regions
+                    .stream()
                     .filter(this::filterRegion)
                     .map(Region::of)
                     .toList();
-            log.debug("Matched regions [{}]", regions);
-            return regions;
-        }catch (Exception e) {
-            log.info("Failed to filter regions", e);
-        }
-        return List.of();
+            log().debug("Matched regions {}", matches);
+            return matches;
+    }
+
+
+    @Override
+    public Stream<Task> mapSubtasks(Region region) {
+        var filterRegion = new FilterRegion(region);
+        return Stream.of(filterRegion);
     }
 
     @Override
-    public void run() {
-        var regions = filterRegions();
-        var tasks = regions.stream().map(this::newFilterRegion);
-        addAllTasks(tasks);
-    }
-
-    Task newFilterRegion(Region region) {
-        var filterRegion = filterRegionInstance.get();
-        filterRegion.setRegion(region);
-        return filterRegion;
+    protected String getResourceType() {
+        return "Region";
     }
 }

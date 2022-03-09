@@ -23,10 +23,14 @@ public class FilterVPCs extends AWSFilter<Vpc> {
         return match;
     }
 
-    private List<Vpc> filterVpcs() {
+    private List<Vpc> findAll(){
         var request = DescribeVpcsRequest.builder().build();
         var resources = ec2.describeVpcs(request).vpcs();
-        var matches = resources.stream().filter(this::match).toList();
+        return resources;
+    }
+
+    private List<Vpc> filterVpcs() {
+        var matches = findAll().stream().filter(this::match).toList();
         log.info("Matched [{}] VPCs in region [{}] {}", matches.size(), getRegion(), matches);
         return matches;
     }
@@ -34,13 +38,19 @@ public class FilterVPCs extends AWSFilter<Vpc> {
 
     @Override
     public void run() {
-        ec2 = newEC2Client();
-        filterVpcs().forEach(this::listAndDeleteVPC);
+        init();
+        var vpcs = filterVpcs();
+        var subtasks = vpcs.stream().flatMap(this::toSubtaks);
+        subtasks.forEach(this::addTask);
     }
 
-    private void listAndDeleteVPC(Vpc vpc) {
+    private void init() {
+        ec2 = newEC2Client();
+    }
+
+    public Stream<Task> toSubtaks(Vpc vpc) {
         var vpcId = vpc.vpcId();
-        addAllTasks(
+        return Stream.of(
                 new FilterLoadBalancers(vpcId),
                 new FilterVPCEndpoints(vpcId),
                 new FilterNetworkInterfaces(vpcId),

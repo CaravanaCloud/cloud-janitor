@@ -26,7 +26,7 @@ public class FilterLoadBalancers extends AWSFilter<LoadBalancerDescription> {
     }
 
     private List<LoadBalancerDescription> filterLBs() {
-        var elb = getELBClient();
+        var elb = aws.getELBClient(getRegion());
         var resources = elb.describeLoadBalancers().loadBalancerDescriptions();
         var matches = resources.stream().filter(this::match).toList();
         log.info("Matched [{}] Classic ELBs in region [{}] [{}]", matches.size(), getRegion(), matches);

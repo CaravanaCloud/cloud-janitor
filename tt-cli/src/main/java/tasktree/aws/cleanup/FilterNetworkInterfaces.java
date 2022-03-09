@@ -24,7 +24,7 @@ public class FilterNetworkInterfaces extends AWSFilter<NetworkInterface> {
         return match;
     }
 
-    private List<NetworkInterface> filterResources() {
+    protected List<NetworkInterface> filterResources() {
         var client = newEC2Client();
         var resources = client.describeNetworkInterfaces().networkInterfaces();
         var matches = resources.stream().filter(this::match).toList();

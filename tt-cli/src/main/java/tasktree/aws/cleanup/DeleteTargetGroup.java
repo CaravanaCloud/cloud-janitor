@@ -18,7 +18,7 @@ public class DeleteTargetGroup extends AWSDelete {
         var request = DeleteTargetGroupRequest.builder()
                 .targetGroupArn(resource.targetGroupArn())
                 .build();
-        getELBClientV2().deleteTargetGroup(request);
+        aws.getELBClientV2(getRegion()).deleteTargetGroup(request);
     }
 
     @Override

@@ -25,7 +25,7 @@ public class FilterVPCEndpoints extends AWSFilter<VpcEndpoint> {
         return match;
     }
 
-    private List<VpcEndpoint> filterResources() {
+    protected List<VpcEndpoint> filterResources() {
         var client = newEC2Client();
         var resources = client.describeVpcEndpoints().vpcEndpoints();
         var matches = resources.stream().filter(this::match).toList();

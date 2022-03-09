@@ -6,8 +6,11 @@ import tasktree.Configuration;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-@Dependent
 public class FilterRegion extends AWSFilter<Region> {
+
+    public FilterRegion(Region region) {
+        setRegion(region);
+    }
 
     @Override
     public void run() {

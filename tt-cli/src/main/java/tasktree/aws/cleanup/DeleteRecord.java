@@ -25,7 +25,7 @@ public class DeleteRecord extends AWSDelete {
         var request = ChangeResourceRecordSetsRequest.builder()
                 .changeBatch(changes)
                 .build();
-        newRoute53Client().changeResourceRecordSets(request);
+        aws.newRoute53Client(getRegion()).changeResourceRecordSets(request);
     }
 
     @Override

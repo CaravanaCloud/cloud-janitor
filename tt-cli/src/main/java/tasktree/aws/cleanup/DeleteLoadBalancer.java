@@ -17,7 +17,7 @@ public class DeleteLoadBalancer extends AWSDelete {
         var request = DeleteLoadBalancerRequest.builder()
                 .loadBalancerArn(resource.loadBalancerArn())
                 .build();
-        getELBClientV2().deleteLoadBalancer(request);
+        aws.getELBClientV2(getRegion()).deleteLoadBalancer(request);
     }
 
     @Override

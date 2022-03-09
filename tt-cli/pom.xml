@@ -67,24 +67,34 @@
     <!-- AWS Clients -->
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
+      <artifactId>sts</artifactId>
+      <version>${awssdk.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
       <artifactId>ec2</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
+
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>s3</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
+
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>elasticloadbalancingv2</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
+
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>elasticloadbalancing</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
+
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>route53</artifactId>
@@ -108,6 +118,7 @@
       <artifactId>url-connection-client</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
+
   </dependencies>
 
   <build>

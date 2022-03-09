@@ -155,13 +155,14 @@ public class Tasks {
         tryRun(task);
     }
 
-    private void tryRun(Task task) {
+    private void
+    tryRun(Task task) {
         try {
             task.run();
             debug("Executed", task);
         }catch (Throwable ex) {
+            ex.printStackTrace();
             int retries = task.getRetries();
-            //ex.printStackTrace();
             if (retries > 0) {
                 debug("Re-queued [%s]".formatted(ex.getMessage()), task);
                 task.retried();
