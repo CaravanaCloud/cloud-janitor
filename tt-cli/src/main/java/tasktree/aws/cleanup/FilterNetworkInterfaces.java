@@ -24,29 +24,26 @@ public class FilterNetworkInterfaces extends AWSFilter<NetworkInterface> {
         return match;
     }
 
+    @Override
     protected List<NetworkInterface> filterResources() {
         var client = newEC2Client();
         var resources = client.describeNetworkInterfaces().networkInterfaces();
         var matches = resources.stream().filter(this::match).toList();
-        log().info("Matched [{}] Network Interfaces in region [{}] [{}]", matches.size(), getRegion(), matches);
         return matches;
     }
 
+    @Override
+    protected Stream<Task> mapSubtasks(NetworkInterface resource) {
+        return Stream.of(new DeleteNetworkInterface(resource));
+    }
 
     @Override
-    public void run() {
-        var resources = filterResources();
-        addAllTasks(deleteTasks(resources));
+    protected String toString(NetworkInterface networkInterface) {
+        return networkInterface.networkInterfaceId();
     }
 
-
-    private Stream<Task> deleteTasks(List<NetworkInterface> subnets) {
-        return subnets.stream().map(this::deleteTask);
+    @Override
+    protected String getResourceType() {
+        return "Network Interface";
     }
-
-
-    private Task deleteTask(NetworkInterface resource) {
-        return new DeleteNetworkInterface(getConfig(), resource);
-    }
-
 }

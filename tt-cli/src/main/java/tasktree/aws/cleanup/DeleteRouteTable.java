@@ -9,8 +9,7 @@ import tasktree.Configuration;
 public class DeleteRouteTable extends AWSDelete {
     private final RouteTable resource;
 
-    public DeleteRouteTable(Configuration config, RouteTable resource) {
-        super(config);
+    public DeleteRouteTable(RouteTable resource) {
         this.resource = resource;
     }
 

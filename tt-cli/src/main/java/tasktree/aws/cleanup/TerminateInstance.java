@@ -7,8 +7,7 @@ import tasktree.Configuration;
 public class TerminateInstance extends AWSDelete {
     private final Instance instance;
 
-    public TerminateInstance(Configuration config, Instance instance) {
-        super(config);
+    public TerminateInstance(Instance instance) {
         this.instance = instance;
     }
 
@@ -27,7 +26,7 @@ public class TerminateInstance extends AWSDelete {
     }
 
     @Override
-    public String toString() {
-        return super.toString("Instance", instance.instanceId());
+    protected String getResourceType() {
+        return "EC2 Instance";
     }
 }

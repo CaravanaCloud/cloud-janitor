@@ -6,8 +6,7 @@ import tasktree.Configuration;
 public class DeleteSecurityGroup extends AWSDelete {
     private final SecurityGroup resource;
 
-    public DeleteSecurityGroup(Configuration config, SecurityGroup resource) {
-        super(config);
+    public DeleteSecurityGroup(SecurityGroup resource) {
         this.resource = resource;
     }
 

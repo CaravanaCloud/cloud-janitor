@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class FilterSecurityGroups extends AWSFilter<SecurityGroup> {
-
     private String vpcId;
 
     public FilterSecurityGroups(String vpcId) {
@@ -23,30 +22,27 @@ public class FilterSecurityGroups extends AWSFilter<SecurityGroup> {
         return match;
     }
 
+    @Override
     protected List<SecurityGroup> filterResources() {
         var client = newEC2Client();
         var resources = client.describeSecurityGroups().securityGroups();
         var matches = resources.stream().filter(this::match).toList();
-        log().info("Matched [{}] {} in region [{}] [{}]", matches.size(), "Security Groups", getRegion(), matches);
         return matches;
     }
 
+    @Override
+    protected Stream<Task> mapSubtasks(SecurityGroup resource) {
+        return Stream.of(new DeleteSecurityGroup(resource));
+    }
 
     @Override
-    public void run() {
-        var resources = filterResources();
-        addAllTasks(deleteTasks(resources));
+    protected String getResourceType() {
+        return "Security Group";
     }
 
-
-    private Stream<Task> deleteTasks(List<SecurityGroup> resources) {
-        return resources.stream().map(this::deleteTask);
+    @Override
+    protected String toString(SecurityGroup securityGroup) {
+        return securityGroup.groupId();
     }
-
-
-    private Task deleteTask(SecurityGroup resource) {
-        return new DeleteSecurityGroup(getConfig(), resource);
-    }
-
 }
 

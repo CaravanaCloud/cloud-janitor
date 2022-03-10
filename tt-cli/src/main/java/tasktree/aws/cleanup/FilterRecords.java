@@ -75,4 +75,9 @@ public class FilterRecords extends AWSFilter<Record> {
     protected Region getRegion() {
         return Region.AWS_GLOBAL;
     }
+
+    @Override
+    protected String getResourceType() {
+        return "Records";
+    }
 }

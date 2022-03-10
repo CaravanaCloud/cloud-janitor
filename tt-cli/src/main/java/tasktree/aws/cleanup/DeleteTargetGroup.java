@@ -7,9 +7,8 @@ import tasktree.Configuration;
 public class DeleteTargetGroup extends AWSDelete {
     private final TargetGroup resource;
 
-    public DeleteTargetGroup(Configuration config, TargetGroup resource) {
-        super(config);
-        this.resource = resource;
+    public DeleteTargetGroup(TargetGroup resource) {
+         this.resource = resource;
     }
 
     @Override

@@ -34,12 +34,17 @@ public abstract class AWSFilter<T> extends AWSTask {
     public void run() {
         var resourceType = getResourceType();
         var found = filterResources();
+        var foundStr = found.stream().map(this::toString).toList();
         var subtasks = found
                 .stream()
-                .flatMap( r -> mapSubtasks(r))
+                .flatMap(this::mapSubtasks)
                 .toList();
         subtasks.forEach(this::addTask);
-        log().debug("Filtered {} {} on {}", found.size(), resourceType, getRegion());
+        log().info("Filtered {} {} on {}: {}", found.size(), resourceType, getRegion(), foundStr);
+    }
+
+    protected String toString(T t){
+        return t.toString();
     }
 
     protected Stream<Task> mapSubtasks(T t) {

@@ -7,8 +7,7 @@ import tasktree.Configuration;
 public class DeleteVPCEndpoint extends AWSDelete {
     private final VpcEndpoint resource;
 
-    public DeleteVPCEndpoint(Configuration config, VpcEndpoint resource) {
-        super(config);
+    public DeleteVPCEndpoint(VpcEndpoint resource) {
         this.resource = resource;
     }
 

@@ -7,8 +7,7 @@ import tasktree.Configuration;
 public class ReleaseAddress extends AWSDelete {
     private final Address addr;
 
-    public ReleaseAddress(Configuration config, Address addr) {
-        super(config);
+    public ReleaseAddress(Address addr) {
         this.addr = addr;
     }
 

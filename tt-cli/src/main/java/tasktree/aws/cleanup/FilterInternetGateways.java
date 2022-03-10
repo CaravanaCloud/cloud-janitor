@@ -25,28 +25,27 @@ public class FilterInternetGateways extends AWSFilter<InternetGateway> {
         return match;
     }
 
+    @Override
     protected List<InternetGateway> filterResources() {
         var client = newEC2Client();
         var resources = client.describeInternetGateways().internetGateways();
         var matches = resources.stream().filter(this::match).toList();
-        log().info("Matched [{}] Internet Gateways in region [{}]", matches.size(), getRegion());
         return matches;
     }
 
+    @Override
+    protected Stream<Task> mapSubtasks(InternetGateway igw) {
+        return Stream.of(new DeleteInternetGateway(igw));
+    }
 
     @Override
-    public void run() {
-        var resources = filterResources();
-        addAllTasks(deleteTasks(resources));
+    protected String toString(InternetGateway internetGateway) {
+        return internetGateway.internetGatewayId();
     }
 
-    private Stream<Task> deleteTasks(List<InternetGateway> resources) {
-        return resources.stream().map(this::deleteTask);
+    @Override
+    protected String getResourceType() {
+        return "Internet Gateways";
     }
-
-    private Task deleteTask(InternetGateway resource) {
-        return new DeleteInternetGateway(getConfig(), resource);
-    }
-
 }
 

@@ -13,42 +13,28 @@ import java.util.stream.Stream;
 public class FilterVPCs extends AWSFilter<Vpc> {
     static final Logger log = LoggerFactory.getLogger(FilterVPCs.class);
 
-    Ec2Client ec2;
-
     private boolean match(Vpc vpc) {
         var prefix = getAwsCleanupPrefix();
         var match = vpc.tags().stream()
                 .anyMatch(tag -> tag.key().equals("Name") && tag.value().startsWith(prefix));
-        log.debug("Found {} {} {}", "VPC", mark(match), vpc);
         return match;
     }
 
     private List<Vpc> findAll(){
+        var ec2 = newEC2Client();
         var request = DescribeVpcsRequest.builder().build();
         var resources = ec2.describeVpcs(request).vpcs();
         return resources;
     }
 
-    private List<Vpc> filterVpcs() {
+    @Override
+    protected List<Vpc> filterResources() {
         var matches = findAll().stream().filter(this::match).toList();
-        log.info("Matched [{}] VPCs in region [{}] {}", matches.size(), getRegion(), matches);
         return matches;
     }
 
-
     @Override
-    public void run() {
-        init();
-        var vpcs = filterVpcs();
-        var subtasks = vpcs.stream().flatMap(this::toSubtaks);
-        subtasks.forEach(this::addTask);
-    }
-
-    private void init() {
-        ec2 = newEC2Client();
-    }
-
-    public Stream<Task> toSubtaks(Vpc vpc) {
+    public Stream<Task> mapSubtasks(Vpc vpc) {
         var vpcId = vpc.vpcId();
         return Stream.of(
                 new FilterLoadBalancers(vpcId),
@@ -60,5 +46,15 @@ public class FilterVPCs extends AWSFilter<Vpc> {
                 new FilterInternetGateways(vpcId),
                 new DeleteVpc(vpc)
         );
+    }
+
+    @Override
+    protected String getResourceType() {
+        return "VPC";
+    }
+
+    @Override
+    protected String toString(Vpc vpc) {
+        return vpc.vpcId();
     }
 }

@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AWSClients {
-    Map<Region, Map<Class<? extends SdkClient>, SdkClient>> clients;
+    Map<Region, Map<Class<? extends SdkClient>, SdkClient>> clients = new HashMap<>();
 
     public <T extends SdkClient> T getClient(Region region, Class<T> clientClass) {
         var regionClients = clients.getOrDefault(region, new HashMap<>());
@@ -23,7 +23,7 @@ public class AWSClients {
                 case "S3Client" -> newS3Client(region);
                 case "Route53Client" -> newRoute53Client(region);
                 case "Ec2Client" -> newEC2Client(region);
-                case "STSClient" -> newSTSClient(region);
+                case "StsClient" -> newSTSClient(region);
                 default -> throw new IllegalArgumentException("Unknown client class: " + clientClass.getSimpleName());
             };
         }

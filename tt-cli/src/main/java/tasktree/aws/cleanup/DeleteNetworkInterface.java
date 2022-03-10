@@ -7,8 +7,7 @@ import tasktree.Configuration;
 public class DeleteNetworkInterface extends AWSDelete {
     private final NetworkInterface resource;
 
-    public DeleteNetworkInterface(Configuration config, NetworkInterface resource) {
-        super(config);
+    public DeleteNetworkInterface(NetworkInterface resource) {
         this.resource = resource;
     }
 

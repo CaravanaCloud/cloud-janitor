@@ -9,35 +9,32 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class FilterTargetGroups extends AWSFilter<TargetGroup> {
-    static final Logger log = LoggerFactory.getLogger(FilterInstances.class);
-
     private boolean match(TargetGroup resource) {
         var prefix = getAwsCleanupPrefix();
         var match = resource.targetGroupName().startsWith(prefix);
-        log.trace("Found Target Group {} {}", mark(match), resource);
         return match;
     }
 
+    @Override
     protected List<TargetGroup> filterResources() {
         var elb = aws.getELBClientV2(getRegion());
         var resources = elb.describeTargetGroups().targetGroups();
         var matches = resources.stream().filter(this::match).toList();
-        log.info("Matched {} Target Groups in region [{}] [{}]", matches.size(), getRegion(), matches);
         return matches;
     }
 
+    @Override
+    public Stream<Task> mapSubtasks(TargetGroup resource) {
+        return Stream.of(new DeleteTargetGroup(resource));
+    }
 
     @Override
-    public void run() {
-        var resources = filterResources();
-        addAllTasks(deleteTasks(resources));
+    protected String getResourceType() {
+        return "Target Group";
     }
 
-    protected Stream<Task> deleteTasks(List<TargetGroup> subnets) {
-        return subnets.stream().map(this::deleteTask);
-    }
-
-    protected Task deleteTask(TargetGroup resource) {
-        return new DeleteTargetGroup(getConfig(), resource);
+    @Override
+    protected String toString(TargetGroup targetGroup) {
+        return targetGroup.targetGroupName();
     }
 }

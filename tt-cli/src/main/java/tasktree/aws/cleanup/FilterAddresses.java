@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class    FilterAddresses extends AWSFilter<Address> {
-    static final Logger log = LoggerFactory.getLogger(FilterInstances.class);
 
     private boolean match(Address addr) {
         var prefix = getAwsCleanupPrefix();
@@ -20,26 +19,28 @@ public class    FilterAddresses extends AWSFilter<Address> {
         return match;
     }
 
-    private List<Address> filterEIPs() {
+    @Override
+    protected List<Address> filterResources() {
         var ec2 = newEC2Client();
         var describeAddresses = DescribeAddressesRequest.builder().build();
         var addresses = ec2.describeAddresses(describeAddresses).addresses().stream();
         var matches = addresses.filter(this::match).toList();
-        log.info("Matched {} instances in region [{}]", matches.size(), getRegion());
         return matches;
     }
 
-    private Task toTask(Address addr) {
-        return new ReleaseAddress(getConfig(), addr);
+
+    @Override
+    protected Stream<Task> mapSubtasks(Address addr) {
+        return Stream.of(new ReleaseAddress(addr));
     }
 
     @Override
-    public void run() {
-        var addrs = filterEIPs();
-        addAllTasks(releaseAddresses(addrs));
+    protected String toString(Address address) {
+        return address.publicIp();
     }
 
-    private Stream<Task> releaseAddresses(List<Address> addrs) {
-        return addrs.stream().map(this::toTask);
+    @Override
+    protected String getResourceType() {
+        return "Elastic IPs";
     }
 }

@@ -149,7 +149,7 @@ public class Tasks {
     private void runTask(Task task) {
         var isWrite = task.isWrite();
         if (isWrite && config.isDryRun()){
-            debug("Skipped", task);
+            info("Skipped [dry run]", task);
             return;
         }
         tryRun(task);

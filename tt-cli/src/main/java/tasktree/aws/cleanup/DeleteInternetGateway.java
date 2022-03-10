@@ -6,8 +6,7 @@ import tasktree.Configuration;
 public class DeleteInternetGateway extends AWSDelete {
     private final InternetGateway resource;
 
-    public DeleteInternetGateway(Configuration config, InternetGateway resource) {
-        super(config);
+    public DeleteInternetGateway(InternetGateway resource) {
         this.resource = resource;
     }
 

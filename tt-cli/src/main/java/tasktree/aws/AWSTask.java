@@ -3,20 +3,18 @@ package tasktree.aws;
     import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import software.amazon.awssdk.regions.Region;
+    import software.amazon.awssdk.core.SdkClient;
+    import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cloudtrail.CloudTrailClient;
 import software.amazon.awssdk.services.ec2.Ec2Client;
-import software.amazon.awssdk.services.elasticloadbalancing.ElasticLoadBalancingClient;
-import software.amazon.awssdk.services.elasticloadbalancingv2.ElasticLoadBalancingV2Client;
-import software.amazon.awssdk.services.route53.Route53Client;
-import software.amazon.awssdk.services.s3.S3Client;
-import tasktree.BaseTask;
+    import software.amazon.awssdk.services.s3.S3Client;
+    import software.amazon.awssdk.services.sts.StsClient;
+    import tasktree.BaseTask;
 import tasktree.Configuration;
 import tasktree.spi.Task;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.util.Arrays;
+    import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -36,9 +34,10 @@ public abstract class AWSTask
 
     protected AWSClients aws = new AWSClients();
 
-    public AWSTask(){}
+    public AWSTask() {
+    }
 
-    public AWSTask(Configuration config){
+    public AWSTask(Configuration config) {
         super(config);
     }
 
@@ -47,7 +46,7 @@ public abstract class AWSTask
         this.region = region;
     }
 
-    protected S3Client newS3Client(){
+    protected S3Client newS3Client() {
         return aws.newS3Client(getRegion());
     }
 
@@ -55,7 +54,7 @@ public abstract class AWSTask
         return aws.newEC2Client(getRegion());
     }
 
-    public void setRegion(Region region){
+    public void setRegion(Region region) {
         this.region = region;
     }
 
@@ -75,7 +74,7 @@ public abstract class AWSTask
         return super.toString() + " (" + region + ")";
     }
 
-    public void addTask(Task task){
+    public void addTask(Task task) {
         propagateConfig(task);
         getConfig().getTasks().addTask(task);
     }
@@ -94,28 +93,28 @@ public abstract class AWSTask
         this.defaultRegion = defaultRegion;
     }
 
-    public void addAllTasks(List<Task> tasks){
+    public void addAllTasks(List<Task> tasks) {
         addAllTasks(tasks.stream());
     }
 
-    public void addAllTasks(Stream<Task> tasks){
+    public void addAllTasks(Stream<Task> tasks) {
         tasks.forEach(this::addTask);
     }
 
-    public void addAllTasks(Task... tasks){
+    public void addAllTasks(Task... tasks) {
         addAllTasks(Arrays.asList(tasks));
     }
 
-    protected String mark(Boolean match){
-        return match? "x" : "o";
+    protected String mark(Boolean match) {
+        return match ? "x" : "o";
     }
 
-    public void setAwsCleanupPrefix(String prefix){
+    public void setAwsCleanupPrefix(String prefix) {
         this.awsCleanupPrefix = prefix;
     }
 
     public String getAwsCleanupPrefix() {
-        if (awsCleanupPrefix == null || awsCleanupPrefix.isEmpty()){
+        if (awsCleanupPrefix == null || awsCleanupPrefix.isEmpty()) {
             log.warn("No cleanup prefix configured.  This is probably a mistake.");
         }
         return awsCleanupPrefix;
@@ -129,7 +128,7 @@ public abstract class AWSTask
             if (unsafe)
                 log.warn("Enforcing dry run due to unsafe configuration.");
             return false;
-       }
+        }
     }
 
     private boolean unsafeConfig() {
@@ -148,7 +147,7 @@ public abstract class AWSTask
     }
 
     public boolean filterRegion(String regionName) {
-        if ( defaultRegion == null || defaultRegion.isEmpty())
+        if (defaultRegion == null || defaultRegion.isEmpty())
             return true;
         else {
             var filter = regionName.equals(defaultRegion);
@@ -157,9 +156,9 @@ public abstract class AWSTask
     }
 
     protected Region getRegion() {
-        if (region == null){
+        if (region == null) {
             var defaultRegion = getDefaultRegion();
-            if (defaultRegion == null || defaultRegion.isEmpty()){
+            if (defaultRegion == null || defaultRegion.isEmpty()) {
                 log.warn("No region set, using default region [{}] [{}]", DEFAULT_REGION, getSimpleName());
                 region = DEFAULT_REGION;
             }
@@ -169,9 +168,9 @@ public abstract class AWSTask
     }
 
     @PostConstruct
-    public void postConstruct(){
+    public void postConstruct() {
         log.trace("Initializing AWS Task {}", this);
-        if (region == null){
+        if (region == null) {
             region = Region.of(getDefaultRegion());
         }
     }
@@ -180,4 +179,8 @@ public abstract class AWSTask
         return "UNKNOWN_RESOURCE_TYPE";
     }
 
+
+    protected  <T extends SdkClient> T getClient(Class<T> clientClass) {
+        return aws.getClient(getRegion(), clientClass);
+    }
 }

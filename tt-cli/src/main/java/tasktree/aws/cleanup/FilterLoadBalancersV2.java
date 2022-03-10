@@ -9,37 +9,39 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class FilterLoadBalancersV2 extends AWSFilter<LoadBalancer> {
-    static final Logger log = LoggerFactory.getLogger(FilterInstances.class);
 
     private boolean match(LoadBalancer resource) {
         var prefix = getAwsCleanupPrefix();
         var match = resource.loadBalancerName().startsWith(prefix);
-        log.trace("Found Load Balancer V2 {} {}", mark(match), resource);
         return match;
     }
 
-    private List<LoadBalancer> filterLBs() {
+    @Override
+    protected List<LoadBalancer> filterResources() {
         var elb = aws.getELBClientV2(getRegion());
         var resources = elb.describeLoadBalancers().loadBalancers();
         var matches = resources.stream().filter(this::match).toList();
-        log.info("Matched [{}] Load Balancers V2 in region [{}]", matches.size(), getRegion());
         return matches;
     }
 
 
     @Override
-    public void run() {
-        var resources = filterLBs();
-        addAllTasks(deleteLBs(resources));
-    }
-
-
-    private Stream<Task> deleteLBs(List<LoadBalancer> subnets) {
-        return subnets.stream().map(this::deleteLoadBalancer);
+    protected Stream<Task> mapSubtasks(LoadBalancer lb) {
+        return Stream.of(deleteLoadBalancer(lb));
     }
 
 
     private Task deleteLoadBalancer(LoadBalancer resource) {
         return new DeleteLoadBalancer(resource);
+    }
+
+    @Override
+    protected String getResourceType() {
+        return "Load Balancer V2";
+    }
+
+    @Override
+    protected String toString(LoadBalancer loadBalancer) {
+        return loadBalancer.loadBalancerName();
     }
 }

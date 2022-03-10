@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 
 
 public class FilterInstances extends AWSFilter<Instance> {
-    static final Logger log = LoggerFactory.getLogger(FilterInstances.class);
 
     private boolean match(Instance instance) {
         var match = false;
@@ -24,31 +23,29 @@ public class FilterInstances extends AWSFilter<Instance> {
         return match;
     }
 
-    private List<Instance> filterInstances() {
+    @Override
+    protected List<Instance> filterResources() {
         var ec2 = newEC2Client();
         var describeInstances = DescribeInstancesRequest.builder().build();
         var reservations = ec2.describeInstancesPaginator(describeInstances).reservations().stream();
         var instances = reservations.flatMap(reservation -> reservation.instances().stream()).toList();
-        var found = instances.size();
         var matches = instances.stream().filter(this::match).toList();
-        var matched = matches.size();
-        log.info("Matched [{}/{}] {} in [{}]", matched, found, "Instances", getRegion());
         return matches;
+    }
+
+    @Override
+    protected Stream<Task> mapSubtasks(Instance instance) {
+        return Stream.of(new TerminateInstance(instance));
     }
 
 
     @Override
-    public void run() {
-        var instances = filterInstances();
-        addAllTasks(terminateInstances(instances));
-    }
-    
-    private Stream<Task> terminateInstances(List<Instance> instances) {
-        return instances.stream().map(this::terminateInstance);
+    protected String toString(Instance instance) {
+        return instance.instanceId();
     }
 
-
-    private Task terminateInstance(Instance i) {
-        return new TerminateInstance(getConfig(), i);
+    @Override
+    protected String getResourceType() {
+        return "EC2 Instance";
     }
 }

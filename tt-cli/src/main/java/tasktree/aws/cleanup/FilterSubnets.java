@@ -27,24 +27,27 @@ public class FilterSubnets extends AWSFilter<Subnet> {
         return match;
     }
 
-    private List<Subnet> filterSubnets() {
+    @Override
+    protected List<Subnet> filterResources() {
         var ec2 = newEC2Client();
         var describeNets = DescribeSubnetsRequest.builder().build();
         var nets = ec2.describeSubnets(describeNets).subnets().stream();
         var matches = nets.filter(this::match).toList();
-        log.info("Matched {} subnets in region [{}] [{}]", matches.size(), getRegion(), matches);
         return matches;
     }
 
+    @Override
+    protected Stream<Task> mapSubtasks(Subnet subnet) {
+        return Stream.of(new DeleteSubnet(subnet));
+    }
 
     @Override
-    public void run() {
-        var subnets = filterSubnets();
-        addAllTasks(deleteSubnets(subnets));
+    protected String getResourceType() {
+        return "Subnets";
     }
 
-    private Stream<Task> deleteSubnets(List<Subnet> subnets) {
-        return subnets.stream().map(DeleteSubnet::new);
+    @Override
+    protected String toString(Subnet subnet) {
+        return subnet.subnetId();
     }
-
 }

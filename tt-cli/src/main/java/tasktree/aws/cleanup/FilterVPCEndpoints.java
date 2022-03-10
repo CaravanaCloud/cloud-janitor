@@ -25,30 +25,27 @@ public class FilterVPCEndpoints extends AWSFilter<VpcEndpoint> {
         return match;
     }
 
+    @Override
     protected List<VpcEndpoint> filterResources() {
         var client = newEC2Client();
         var resources = client.describeVpcEndpoints().vpcEndpoints();
         var matches = resources.stream().filter(this::match).toList();
-        log().info("Matched [{}] VPC Endpoints in region [{}] [{}]", matches.size(), getRegion(), matches);
         return matches;
     }
 
+    @Override
+    protected Stream<Task> mapSubtasks(VpcEndpoint resource) {
+        return Stream.of(new DeleteVPCEndpoint(resource));
+    }
 
     @Override
-    public void run() {
-        var resources = filterResources();
-        addAllTasks(deleteTasks(resources));
+    protected String toString(VpcEndpoint vpcEndpoint) {
+        return vpcEndpoint.vpcEndpointId();
     }
 
-
-    private Stream<Task> deleteTasks(List<VpcEndpoint> resources) {
-        return resources.stream().map(this::deleteTask);
+    @Override
+    protected String getResourceType() {
+        return "VPC Endpoint";
     }
-
-
-    private Task deleteTask(VpcEndpoint resource) {
-        return new DeleteVPCEndpoint(getConfig(), resource);
-    }
-
 }
 

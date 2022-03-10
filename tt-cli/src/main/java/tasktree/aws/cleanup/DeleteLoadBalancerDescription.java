@@ -7,8 +7,7 @@ import tasktree.Configuration;
 public class DeleteLoadBalancerDescription extends AWSDelete {
     private final LoadBalancerDescription resource;
 
-    public DeleteLoadBalancerDescription(Configuration config, LoadBalancerDescription resource) {
-        super(config);
+    public DeleteLoadBalancerDescription(LoadBalancerDescription resource) {
         this.resource = resource;
     }
 
