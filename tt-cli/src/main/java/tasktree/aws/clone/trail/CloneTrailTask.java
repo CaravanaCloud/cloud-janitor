@@ -33,7 +33,7 @@ public class CloneTrailTask extends AWSTask {
     }
 
     @Override
-    public void run()  {
+    public void runSafe()  {
         log.info("Cloning trail [{}]", trailName);
         var cloudtrail = newCloudTrailClient();
         var describeTrailRequest = DescribeTrailsRequest.builder().trailNameList(trailName).build();

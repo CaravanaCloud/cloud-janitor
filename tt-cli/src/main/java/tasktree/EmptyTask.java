@@ -9,7 +9,7 @@ import javax.inject.Named;
 @Named("empty")
 public class EmptyTask extends BaseTask {
     @Override
-    public void run() {
+    public void runSafe() {
         LoggerFactory
                 .getLogger(EmptyTask.class)
                 .info("Empty task");

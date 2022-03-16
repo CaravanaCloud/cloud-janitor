@@ -12,7 +12,7 @@ public class DeleteTargetGroup extends AWSDelete {
     }
 
     @Override
-    public void run() {
+    public void runSafe() {
         log().debug("Deleting Target group {}", resource.targetGroupArn());
         var request = DeleteTargetGroupRequest.builder()
                 .targetGroupArn(resource.targetGroupArn())
@@ -21,7 +21,14 @@ public class DeleteTargetGroup extends AWSDelete {
     }
 
     @Override
-    public String toString() {
-        return super.toString("Target Group", resource.targetGroupName());
+    public String getResourceDescription() {
+        return resource.targetGroupName();
     }
+
+    @Override
+    protected String getResourceType() {
+        return "Target Group";
+    }
+
+
 }

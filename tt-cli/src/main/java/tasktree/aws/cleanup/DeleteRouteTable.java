@@ -14,7 +14,7 @@ public class DeleteRouteTable extends AWSDelete {
     }
 
     @Override
-    public void run() {
+    public void runSafe() {
         if (! isMainRouteTable()) {
             deleteRoutes();
             deleteRouteTable();
@@ -53,7 +53,12 @@ public class DeleteRouteTable extends AWSDelete {
     }
 
     @Override
-    public String toString() {
-        return super.toString("Route Table",resource.routeTableId());
+    public String getResourceDescription() {
+        return resource.routeTableId();
+    }
+
+    @Override
+    protected String getResourceType() {
+        return "Route Table";
     }
 }

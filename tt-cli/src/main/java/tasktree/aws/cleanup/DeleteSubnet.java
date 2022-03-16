@@ -12,7 +12,7 @@ public class DeleteSubnet extends AWSDelete {
     }
 
     @Override
-    public void run() {
+    public void runSafe() {
         deleteSubnet();
     }
 
@@ -25,7 +25,12 @@ public class DeleteSubnet extends AWSDelete {
     }
 
     @Override
-    public String toString() {
-        return super.toString("Subnet", net.subnetId());
+    public String getResourceDescription() {
+        return  net.subnetId();
+    }
+
+    @Override
+    protected String getResourceType() {
+        return "Subnet";
     }
 }

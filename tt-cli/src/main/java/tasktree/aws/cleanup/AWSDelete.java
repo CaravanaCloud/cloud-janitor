@@ -18,11 +18,4 @@ public abstract class AWSDelete extends AWSTask {
         return true;
     }
 
-    public String toString(String resourceType,
-                           String... obs) {
-        return super.asString(
-                "Delete",
-                resourceType,
-                obs);
-    }
 }

@@ -13,7 +13,7 @@ public class DeleteRecord extends AWSDelete {
     }
 
     @Override
-    public void run() {
+    public void runSafe() {
         log().debug("Deleting record {}", record);
         var change = Change.builder()
                 .resourceRecordSet(record)
@@ -29,7 +29,13 @@ public class DeleteRecord extends AWSDelete {
     }
 
     @Override
-    public String toString() {
-        return super.toString("Record",record.name());
+    public String getResourceDescription() {
+        return record.name();
     }
+
+    @Override
+    protected String getResourceType() {
+        return "Record";
+    }
+
 }

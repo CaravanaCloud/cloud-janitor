@@ -1,0 +1,15 @@
+name: 'Task Tree'
+description: 'Maintenance and cleanup tasks'
+inputs:
+  task-name:
+    description: 'Task to execute'
+    required: true
+    default: 'marvin'
+outputs:
+  result:
+    description: 'Some output result'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.task-name }}

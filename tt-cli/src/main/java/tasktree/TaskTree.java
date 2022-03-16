@@ -15,11 +15,12 @@ public class TaskTree implements QuarkusApplication{
     private static final Logger log = LoggerFactory.getLogger(TaskTree.class);
 
     @Inject
-    Tasks tasks;
+    TaskManager tasks;
 
     @Override
     public int run(String... args){
         tasks.runAll(args);
+        //tasks.runAll(args);
         //Quarkus.waitForExit();
         return 0;
     }

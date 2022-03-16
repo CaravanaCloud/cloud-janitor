@@ -12,7 +12,7 @@ public class DeleteVpc extends AWSDelete {
     }
 
     @Override
-    public void run() {
+    public void runSafe() {
         deleteVPC();
     }
 
@@ -26,7 +26,12 @@ public class DeleteVpc extends AWSDelete {
     }
 
     @Override
-    public String toString() {
-        return super.toString("VPC", resource.vpcId());
+    public String getResourceDescription() {
+        return resource.vpcId();
+    }
+
+    @Override
+    protected String getResourceType() {
+        return "VPC";
     }
 }

@@ -6,6 +6,9 @@ import tasktree.spi.Task;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 @Dependent
 public abstract class BaseTask implements Task {
@@ -13,6 +16,8 @@ public abstract class BaseTask implements Task {
 
     @Inject
     Configuration config;
+
+    List<Task> subtasks = new ArrayList<>();
 
     public BaseTask(){}
 
@@ -30,6 +35,7 @@ public abstract class BaseTask implements Task {
 
     private static final int DEFAULT_RETRIES = 5;
     int retries = DEFAULT_RETRIES;
+
     @Override
     public int getRetries() {
         return retries;
@@ -40,34 +46,36 @@ public abstract class BaseTask implements Task {
         retries--;
     }
 
-    protected Configuration getConfig(){
+    @Override
+    public Configuration getConfig(){
         return config;
     }
 
 
     @Override
     public String toString() {
-        return asString(null,null);
+        return asString(getSimpleName());
     }
 
-    public String asString(String taskName,
-                           String resourceType,
-                           String... taskInfo) {
+    public String asString(String name,
+                           String... extras) {
         StringBuffer sb = new StringBuffer();
-        sb.append(getName());
-        if (resourceType != null) {
-            sb.append(" (");
-            sb.append(resourceType);
-            sb.append(")");
-        }
-        if (taskInfo != null && taskInfo.length > 0) {
-            sb.append("(");
-            sb.append(String.join(",", taskInfo));
-            sb.append(")");
-        }
+        sb.append(name);
+        sb.append(" ");
+        var _extras = Stream.of(extras).map(e -> "(%s)".formatted(e)).toList();
+        var __extras = String.join(" ",_extras) ;
+        sb.append(__extras);
         sb.append(" *"+getRetries());
         return sb.toString();
     }
 
+    @Override
+    public List<Task> getSubtasks(){
+        return subtasks;
+    }
 
+    @Override
+    public void runSafe(){
+        config.runTask(this);
+    }
 }

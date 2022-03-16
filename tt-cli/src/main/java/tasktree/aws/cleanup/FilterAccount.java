@@ -10,17 +10,18 @@ import java.util.stream.Stream;
 
 @Named("cleanup-aws")
 @Dependent
-public class FilterAccount extends AWSFilter<String> {
+public class FilterAccount extends AWSFilter<AWSAccount> {
 
     @Override
-    protected List<String> filterResources() {
+    protected List<AWSAccount> filterResources() {
         var sts = getClient(StsClient.class);
         var accountId = sts.getCallerIdentity().account();
-        return List.of(accountId);
+        setResourceDescription(accountId);
+        return List.of(new AWSAccount(accountId));
     }
 
     @Override
-    protected Stream<Task> mapSubtasks(String accountId) {
+    protected Stream<Task> mapSubtasks(AWSAccount accountId) {
         return Stream.of(
                 new FilterRegions(),
                 new FilterRecords());
@@ -30,4 +31,5 @@ public class FilterAccount extends AWSFilter<String> {
     protected String getResourceType() {
         return "AWS Account";
     }
+
 }

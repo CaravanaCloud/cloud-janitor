@@ -12,7 +12,7 @@ public class DeleteLoadBalancerDescription extends AWSDelete {
     }
 
     @Override
-    public void run() {
+    public void runSafe() {
         log().debug("Deleting Classic ELB {}", resource.loadBalancerName());
         var request = DeleteLoadBalancerRequest.builder()
                 .loadBalancerName(resource.loadBalancerName())
@@ -21,8 +21,13 @@ public class DeleteLoadBalancerDescription extends AWSDelete {
     }
 
     @Override
-    public String toString() {
-        return super.toString("Classic Load Balancer",
-                resource.loadBalancerName());
+    public String getResourceDescription() {
+        return
+        resource.loadBalancerName();
+    }
+
+    @Override
+    protected String getResourceType() {
+        return "Classic Load Balancer";
     }
 }

@@ -18,7 +18,6 @@ public class FilterSecurityGroups extends AWSFilter<SecurityGroup> {
         var notDefault = ! resource.groupName().equals("default");
         var targetVPC = resource.vpcId().equals(vpcId);
         var match = notDefault && targetVPC;
-        log().debug("Found Security Group {} {}", mark(match), resource);
         return match;
     }
 

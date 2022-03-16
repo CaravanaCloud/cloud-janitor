@@ -12,15 +12,20 @@ public class DeleteNetworkInterface extends AWSDelete {
     }
 
     @Override
-    public void run() {
+    public void runSafe() {
         log().debug("Deleting ENI {}", resource.networkInterfaceId());
         var request = DeleteNetworkInterfaceRequest.builder().networkInterfaceId(resource.networkInterfaceId()).build();
         newEC2Client().deleteNetworkInterface(request);
     }
 
     @Override
-    public String toString() {
-        return super.toString("Network Interface",
-                resource.networkInterfaceId());
+    protected String getResourceType() {
+        return "Network Interface";
     }
+
+    @Override
+    public String getResourceDescription() {
+        return super.getResourceDescription();
+    }
+
 }

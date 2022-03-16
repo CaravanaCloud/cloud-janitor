@@ -11,7 +11,7 @@ public class TerminateInstance extends AWSDelete {
         this.instance = instance;
     }
 
-    public void run() {
+    public void runSafe() {
         var state = instance.state().nameAsString().toLowerCase();
         if (state.toString().equals("running")) {
             log().info("Terminating instance {}", instance);

@@ -11,7 +11,7 @@ public class DeleteInternetGateway extends AWSDelete {
     }
 
     @Override
-    public void run() {
+    public void runSafe() {
         deleteAttachments();
         deleteInternetGateway();
     }
@@ -38,9 +38,14 @@ public class DeleteInternetGateway extends AWSDelete {
     }
 
     @Override
-    public String toString() {
-        return super.toString("Internet Gateway",
-                resource.internetGatewayId());
+    protected String getResourceType() {
+        return "Internet Gateway";
     }
+
+    @Override
+    public String getResourceDescription() {
+        return resource.internetGatewayId();
+    }
+
 }
 

@@ -12,14 +12,20 @@ public class ReleaseAddress extends AWSDelete {
     }
 
     @Override
-    public void run() {
+    public void runSafe() {
         log().debug("Releasing address {}", addr.publicIp());
         var request = ReleaseAddressRequest.builder().allocationId(addr.allocationId()).build();
         newEC2Client().releaseAddress(request);
     }
 
     @Override
-    public String toString() {
-        return super.toString("Address", addr.publicIp(), addr.allocationId());
+    protected String getResourceType() {
+        return "Address";
     }
+
+    @Override
+    public String getResourceDescription() {
+        return "%s %s".formatted(addr.publicIp(), addr.allocationId());
+    }
+
 }

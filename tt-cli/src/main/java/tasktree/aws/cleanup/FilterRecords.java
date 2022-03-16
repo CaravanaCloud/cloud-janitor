@@ -22,7 +22,7 @@ public class FilterRecords extends AWSFilter<Record> {
 
 
     @Override
-    public void run() {
+    public void runSafe() {
         r53.listHostedZones()
                 .hostedZones()
                 .stream()

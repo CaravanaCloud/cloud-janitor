@@ -12,7 +12,7 @@ public class DeleteVPCEndpoint extends AWSDelete {
     }
 
     @Override
-    public void run() {
+    public void runSafe() {
         log().info("Deleting vpc endpoint {}", resource.vpcEndpointId());
         var request = DeleteVpcEndpointsRequest.builder()
                 .vpcEndpointIds(resource.vpcEndpointId())
@@ -21,7 +21,13 @@ public class DeleteVPCEndpoint extends AWSDelete {
     }
 
     @Override
-    public String toString() {
-        return super.toString("VPC Endpoint", resource.vpcEndpointId());
+    public String getResourceDescription() {
+        return resource.vpcEndpointId();
     }
+
+    @Override
+    protected String getResourceType() {
+        return "VPC Endpoint";
+    }
+
 }

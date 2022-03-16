@@ -28,7 +28,7 @@ public class ProcessTask extends BaseTask {
         this.line = line;
     }
 
-    public void run() {
+    public void runSafe() {
         var result = process(predicate, line);
         log.info(result.toString());
     }

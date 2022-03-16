@@ -1,22 +1,29 @@
 package tasktree.spi;
 
-import software.amazon.awssdk.services.ec2.model.Instance;
 import tasktree.Configuration;
 
-import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.function.Supplier;
 
 
-public interface Task
-        extends Runnable {
+public interface Task extends Runnable{
 
+    void runSafe();
+
+    Configuration getConfig();
     void setConfig(Configuration config);
+
+    @Override
+    default void run() {
+        getConfig().runTask(this);
+    }
 
     default int getRetries(){return 0;};
     void retried();
+
+    default List<Task> getSubtasks(){
+        return List.of();
+    }
 
     default String getSimpleName(){
         return getClass().getSimpleName().split("_")[0];
@@ -40,7 +47,7 @@ public interface Task
         return name;
     }
 
-    static final String defaultPrefix = "tasktree.";
+    String defaultPrefix = "tasktree.";
     default boolean filter(String root){
         var className = getClass().getName().toLowerCase();
         var rootName = root.toLowerCase();

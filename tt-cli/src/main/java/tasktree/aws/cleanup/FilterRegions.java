@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterRegions extends AWSFilter< Region> {
+public class FilterRegions extends AWSFilter<Region> {
 
     @Override
     public List<Region> filterResources() {

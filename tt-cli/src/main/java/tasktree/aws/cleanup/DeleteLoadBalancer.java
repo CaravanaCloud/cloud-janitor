@@ -12,7 +12,7 @@ public class DeleteLoadBalancer extends AWSDelete {
     }
 
     @Override
-    public void run() {
+    public void runSafe() {
         log().info("Deleting ELBV2 {}", resource.loadBalancerArn());
         var request = DeleteLoadBalancerRequest.builder()
                 .loadBalancerArn(resource.loadBalancerArn())
@@ -21,8 +21,13 @@ public class DeleteLoadBalancer extends AWSDelete {
     }
 
     @Override
-    public String toString() {
-        return super.toString("Application Load Balancer",
-                resource.loadBalancerName());
+    protected String getResourceType() {
+        return "Application Load Balancer";
     }
+
+    @Override
+    public String getResourceDescription() {
+        return resource.loadBalancerName();
+    }
+
 }

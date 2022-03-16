@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
-import software.amazon.awssdk.regions.Region;
+import tasktree.spi.Task;
 import tasktree.spi.Tasks;
+import tasktree.visitor.PrintTreeVisitor;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.HashMap;
 
 @ApplicationScoped
@@ -100,4 +100,18 @@ public class Configuration {
     public boolean isDryRun() {
         return dryRun;
     }
+
+    public void runTask(Task task) {
+        waitBeforeRun();
+        if (task.isWrite()
+                && isDryRun()) {
+            log.info("Dry run: {}", task);
+        }else {
+            task.runSafe();
+            log.info("Executed {} ({})", task,
+                    task.isWrite() ? "W" : "R");
+        }
+    }
+
+
 }

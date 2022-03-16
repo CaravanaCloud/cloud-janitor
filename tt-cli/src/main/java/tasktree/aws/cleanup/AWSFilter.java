@@ -2,6 +2,7 @@ package tasktree.aws.cleanup;
 
 import software.amazon.awssdk.regions.Region;
 import tasktree.Configuration;
+import tasktree.aws.AWSResources;
 import tasktree.aws.AWSTask;
 import tasktree.spi.Task;
 
@@ -22,25 +23,26 @@ public abstract class AWSFilter<T> extends AWSTask {
         return false;
     }
 
-    public String toString(String resourceType,
-                           String... obs) {
-        return super.asString(
-                "Filter",
-                resourceType,
-                obs);
-    }
 
     @Override
-    public void run() {
+    public void runSafe() {
         var resourceType = getResourceType();
         var found = filterResources();
-        var foundStr = found.stream().map(this::toString).toList();
+        var foundStr = String.join(",", found
+                .stream()
+                .map(o -> getDescription(o))
+                .toList());
+        setResourceDescription(foundStr);
         var subtasks = found
                 .stream()
                 .flatMap(this::mapSubtasks)
                 .toList();
         subtasks.forEach(this::addTask);
-        log().info("Filtered {} {} on {}: {}", found.size(), resourceType, getRegion(), foundStr);
+        log().debug("Filtered {} {} on {}", found.size(), resourceType, getRegion());
+    }
+
+    private String getDescription(T t) {
+        return AWSResources.getDescription(t);
     }
 
     protected String toString(T t){
@@ -55,8 +57,4 @@ public abstract class AWSFilter<T> extends AWSTask {
         return (List<T>) List.of(new Object());
     }
 
-    @Override
-    public String toString() {
-        return toString(getResourceType());
-    }
 }

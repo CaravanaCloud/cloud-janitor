@@ -2,6 +2,7 @@ package tasktree.spi;
 
 import org.slf4j.Logger;
 import tasktree.Configuration;
+import tasktree.visitor.PrintTreeVisitor;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Any;
@@ -28,6 +29,9 @@ public class Tasks {
 
     @Inject
     Configuration config;
+
+    @Inject
+    PrintTreeVisitor visitor;
 
     Deque<Task> readQueue = new LinkedList<>();
     Deque<Task> writeQueue = new LinkedList<>();
@@ -158,10 +162,10 @@ public class Tasks {
     private void
     tryRun(Task task) {
         try {
-            task.run();
+            task.runSafe();
             debug("Executed", task);
         }catch (Throwable ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
             int retries = task.getRetries();
             if (retries > 0) {
                 debug("Re-queued [%s]".formatted(ex.getMessage()), task);

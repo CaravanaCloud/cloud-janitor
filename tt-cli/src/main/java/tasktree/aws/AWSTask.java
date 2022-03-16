@@ -30,9 +30,11 @@ public abstract class AWSTask
     @ConfigProperty(name = "tt.aws.cleanup.prefix", defaultValue = "prefix-to-cleanup")
     String awsCleanupPrefix;
 
+    String resourceDescription = "";
+
     protected Region region;
 
-    protected AWSClients aws = new AWSClients();
+    protected AWSClients aws = AWSClients.getInstance();
 
     public AWSTask() {
     }
@@ -71,12 +73,15 @@ public abstract class AWSTask
 
     @Override
     public String toString() {
-        return super.toString() + " (" + region + ")";
+        return asString(getName(),
+                getResourceType(),
+                getResourceDescription());
     }
 
     public void addTask(Task task) {
         propagateConfig(task);
-        getConfig().getTasks().addTask(task);
+        //getConfig().getTasks().addTask(task);
+        getSubtasks().add(task);
     }
 
     private void propagateConfig(Task task) {
@@ -176,11 +181,19 @@ public abstract class AWSTask
     }
 
     protected String getResourceType() {
-        return "UNKNOWN_RESOURCE_TYPE";
+        return "AWS Resource";
     }
 
 
     protected  <T extends SdkClient> T getClient(Class<T> clientClass) {
         return aws.getClient(getRegion(), clientClass);
+    }
+
+    public String getResourceDescription() {
+        return resourceDescription;
+    }
+
+    public void setResourceDescription(String resourceDescription) {
+        this.resourceDescription = resourceDescription;
     }
 }

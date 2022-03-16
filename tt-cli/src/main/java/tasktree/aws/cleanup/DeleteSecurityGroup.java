@@ -11,7 +11,7 @@ public class DeleteSecurityGroup extends AWSDelete {
     }
 
     @Override
-    public void run() {
+    public void runSafe() {
         deleteRules();
         deleteSecurityGroup();
     }
@@ -59,8 +59,12 @@ public class DeleteSecurityGroup extends AWSDelete {
     }
 
     @Override
-    public String toString() {
-        return super.toString("Security Group",
-                resource.groupId());
+    public String getResourceDescription() {
+        return resource.groupId();
+    }
+
+    @Override
+    protected String getResourceType() {
+        return "Security Group";
     }
 }

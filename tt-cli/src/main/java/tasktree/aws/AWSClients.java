@@ -13,7 +13,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AWSClients {
+    static final AWSClients instance = new AWSClients();
     Map<Region, Map<Class<? extends SdkClient>, SdkClient>> clients = new HashMap<>();
+
+    public static AWSClients getInstance() {
+        return instance;
+    }
 
     public <T extends SdkClient> T getClient(Region region, Class<T> clientClass) {
         var regionClients = clients.getOrDefault(region, new HashMap<>());
