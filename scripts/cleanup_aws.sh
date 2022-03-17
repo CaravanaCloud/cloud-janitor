@@ -7,7 +7,7 @@ export QUARKUS_PROFILE="prod"
 export TT_TASK="cleanup-aws"
 export TT_DRYRUN="true"
 export TT_OCP_BASEDIR="devcluster.openshift.com"
-export TT_AWS_REGION="eu-west-1,ap-northeast-1"
+export TT_AWS_REGIONS="eu-west-1,ap-northeast-1"
 export TT_AWS_CLEANUP_PREFIX="rhnb-"
 
 echo "Running: $TT_CMD"

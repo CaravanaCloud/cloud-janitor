@@ -1,22 +1,20 @@
 package tasktree.aws;
 
-    import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-    import software.amazon.awssdk.core.SdkClient;
-    import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.core.SdkClient;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cloudtrail.CloudTrailClient;
 import software.amazon.awssdk.services.ec2.Ec2Client;
-    import software.amazon.awssdk.services.s3.S3Client;
-    import software.amazon.awssdk.services.sts.StsClient;
-    import tasktree.BaseTask;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.sts.StsClient;
+import tasktree.BaseTask;
 import tasktree.Configuration;
 import tasktree.spi.Task;
 
 import javax.annotation.PostConstruct;
-    import java.util.ArrayList;
-    import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 public abstract class AWSTask<T>
@@ -24,21 +22,17 @@ public abstract class AWSTask<T>
 
     static final Region DEFAULT_REGION = Region.US_EAST_1;
     static final Logger log = LoggerFactory.getLogger(AWSTask.class);
-
+    private static final int MIN_PREFIX_LENGTH = 4;
     protected List<T> resources = new ArrayList<>();
     protected List<Task> subtasks = null;
-
-    @ConfigProperty(name = "tt.aws.region", defaultValue = "us-east-1")
-    String defaultRegion;
-
+    protected Region region;
+    protected AWSClients aws = AWSClients.getInstance();
+    @ConfigProperty(name = "tt.aws.regions", defaultValue = "us-east-1")
+    String targetRegions;
+    Set<String> targetRegionsSet;
     @ConfigProperty(name = "tt.aws.cleanup.prefix", defaultValue = "prefix-to-cleanup")
     String awsCleanupPrefix;
-
     String resourceDescription = "";
-
-    protected Region region;
-
-    protected AWSClients aws = AWSClients.getInstance();
 
     public AWSTask() {
     }
@@ -59,11 +53,6 @@ public abstract class AWSTask<T>
     protected Ec2Client newEC2Client() {
         return aws.newEC2Client(getRegion());
     }
-
-    public void setRegion(Region region) {
-        this.region = region;
-    }
-
 
     protected Logger log() {
         return log;
@@ -92,15 +81,10 @@ public abstract class AWSTask<T>
         task.setConfig(getConfig());
         if (task instanceof AWSTask awstask) {
             var _region = getRegion();
-            awstask.setDefaultRegion(getDefaultRegion());
             awstask.setRegion(_region);
             awstask.setAwsCleanupPrefix(getAwsCleanupPrefix());
         }
         return task;
-    }
-
-    private void setDefaultRegion(String defaultRegion) {
-        this.defaultRegion = defaultRegion;
     }
 
     public void addAllTasks(List<Task> tasks) {
@@ -119,15 +103,15 @@ public abstract class AWSTask<T>
         return match ? "x" : "o";
     }
 
-    public void setAwsCleanupPrefix(String prefix) {
-        this.awsCleanupPrefix = prefix;
-    }
-
     public String getAwsCleanupPrefix() {
         if (awsCleanupPrefix == null || awsCleanupPrefix.isEmpty()) {
             log.warn("No cleanup prefix configured.  This is probably a mistake.");
         }
         return awsCleanupPrefix;
+    }
+
+    public void setAwsCleanupPrefix(String prefix) {
+        this.awsCleanupPrefix = prefix;
     }
 
     public boolean isDryRun() {
@@ -150,39 +134,48 @@ public abstract class AWSTask<T>
         return false;
     }
 
-    private static final int MIN_PREFIX_LENGTH = 4;
-
-    public String getDefaultRegion() {
-        return defaultRegion;
-    }
-
     public boolean filterRegion(String regionName) {
-        if (defaultRegion == null || defaultRegion.isEmpty())
+        if (targetRegions == null || targetRegions.isEmpty()) {
+            log.warn("Target regions not set [tt.aws.regions], searching all.");
             return true;
-        else {
-            var filter = regionName.equals(defaultRegion);
+        } else {
+            var set = getTargetRegionsSet();
+            var filter = set.contains(regionName);
             return filter;
         }
     }
 
+    private Set<String> getTargetRegionsSet() {
+        if (targetRegionsSet == null) {
+            var split = targetRegions.split(",");
+            targetRegionsSet = new HashSet<String>(Arrays.asList(split));
+        }
+        return targetRegionsSet;
+    }
+
     protected Region getRegion() {
         if (region == null) {
-            var defaultRegion = getDefaultRegion();
-            if (defaultRegion == null || defaultRegion.isEmpty()) {
-                log.warn("No region set, using default region [{}] [{}]", DEFAULT_REGION, getSimpleName());
-                region = DEFAULT_REGION;
-            }
-            region = Region.of(defaultRegion);
+            region = getDefaultRegion();
         }
         return region;
+    }
+
+    private Region getDefaultRegion() {
+        var regionName = targetRegions.split(",")[0];
+        if (! regionName.isEmpty()){
+            log.debug("Using region [{}] as default", region);
+        }
+        var defaultRegion = Region.of(regionName);
+        return defaultRegion;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
     }
 
     @PostConstruct
     public void postConstruct() {
         log.trace("Initializing AWS Task {}", this);
-        if (region == null) {
-            region = Region.of(getDefaultRegion());
-        }
     }
 
     protected String getResourceType() {
@@ -190,12 +183,8 @@ public abstract class AWSTask<T>
     }
 
 
-    protected  <T extends SdkClient> T getClient(Class<T> clientClass) {
+    protected <T extends SdkClient> T getClient(Class<T> clientClass) {
         return aws.getClient(getRegion(), clientClass);
-    }
-
-    public void setResourceDescription(String resourceDescription) {
-        this.resourceDescription = resourceDescription;
     }
 
     @Override
@@ -220,5 +209,9 @@ public abstract class AWSTask<T>
                 .map(AWSResources::getDescription)
                 .toList());
         return description;
+    }
+
+    public void setResourceDescription(String resourceDescription) {
+        this.resourceDescription = resourceDescription;
     }
 }
