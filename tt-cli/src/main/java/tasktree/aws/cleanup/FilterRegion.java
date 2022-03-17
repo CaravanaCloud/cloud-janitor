@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public class FilterRegion extends AWSFilter<Region> {
 
     public FilterRegion(Region region) {
-        this.region = region;
+        super(region);
     }
 
     @Override

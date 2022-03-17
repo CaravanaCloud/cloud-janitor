@@ -41,6 +41,10 @@ public abstract class AWSTask<T>
         super(config);
     }
 
+    public AWSTask(Region newRegion) {
+        setRegion(newRegion);
+    }
+
     public AWSTask(Configuration config, Region region) {
         super(config);
         this.region = region;
@@ -81,10 +85,17 @@ public abstract class AWSTask<T>
         task.setConfig(getConfig());
         if (task instanceof AWSTask awstask) {
             var _region = getRegion();
-            awstask.setRegion(_region);
+            awstask.setTargetRegions(targetRegions);
+            if (awstask.getRegion() == null) {
+                awstask.setRegion(_region);
+            }
             awstask.setAwsCleanupPrefix(getAwsCleanupPrefix());
         }
         return task;
+    }
+
+    private void setTargetRegions(String targetRegions) {
+        this.targetRegions = targetRegions;
     }
 
     public void addAllTasks(List<Task> tasks) {

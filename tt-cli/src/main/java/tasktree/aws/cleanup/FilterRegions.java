@@ -30,7 +30,7 @@ public class FilterRegions extends AWSFilter<Region> {
 
     @Override
     public Stream<Task> mapSubtasks(Region region) {
-        var filterRegion = new FilterRegion (region);
+        var filterRegion = new FilterRegion(region);
         return Stream.of(filterRegion);
     }
 

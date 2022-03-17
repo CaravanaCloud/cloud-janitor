@@ -14,8 +14,8 @@ public abstract class AWSFilter<T> extends AWSTask<T> {
     public AWSFilter(Configuration config)  {
         super(config);
     }
-    public AWSFilter(Configuration config, Region region)  {
-        super(config, region);
+    public AWSFilter(Region region)  {
+        super(region);
     }
 
 
