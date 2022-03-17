@@ -44,7 +44,7 @@ public class FilterRecords extends AWSFilter<Record> {
     }
 
     private void deleteRecord(ResourceRecordSet resourceRecordSet) {
-        addTask(new DeleteRecord(getConfig(), getRegion(), resourceRecordSet));
+        addTask(new DeleteRecord(resourceRecordSet));
     }
 
     private boolean matchRecord(ResourceRecordSet rrs) {

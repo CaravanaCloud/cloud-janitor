@@ -4,24 +4,23 @@ import software.amazon.awssdk.services.ec2.model.Instance;
 import software.amazon.awssdk.services.ec2.model.TerminateInstancesRequest;
 import tasktree.Configuration;
 
-public class TerminateInstance extends AWSDelete {
-    private final Instance instance;
-
+public class TerminateInstance extends AWSDelete<Instance> {
     public TerminateInstance(Instance instance) {
-        this.instance = instance;
+        super(instance);
     }
 
-    public void runSafe() {
-        var state = instance.state().nameAsString().toLowerCase();
+    @Override
+    public void cleanup(Instance resource) {
+        var state = resource.state().nameAsString().toLowerCase();
         if (state.toString().equals("running")) {
-            log().info("Terminating instance {}", instance);
+            log().debug("Terminating instance {}", resource);
             var terminateInstance = TerminateInstancesRequest.builder()
-                    .instanceIds(instance.instanceId())
+                    .instanceIds(resource.instanceId())
                     .build();
             var ec2 = newEC2Client();
             ec2.terminateInstances(terminateInstance);
         }else {
-            log().info("Not terminating instance {} {}",state ,instance);
+            log().info("Not terminating instance {} {}",state ,resource);
         }
     }
 

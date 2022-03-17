@@ -3,7 +3,8 @@ package tasktree;
 import org.slf4j.Logger;
 import tasktree.spi.Task;
 import tasktree.visitor.PrintTreeVisitor;
-import tasktree.visitor.SyncExecutionVisitor;
+import tasktree.visitor.SyncReadVisitor;
+import tasktree.visitor.SyncWriteVisitor;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.spi.Bean;
@@ -22,7 +23,11 @@ public class TaskManager {
     Logger log;
 
     @Inject
-    SyncExecutionVisitor visitor;
+    SyncReadVisitor reads;
+
+    @Inject
+    SyncWriteVisitor writes;
+
 
     public void runAll(String[] args) {
         config.init(args);
@@ -31,14 +36,22 @@ public class TaskManager {
     }
 
     private void runByName(String taskName) {
-        var tasks = bm.getBeans(taskName)
+        bm.getBeans(taskName)
                 .stream()
                 .map(this::fromBean)
-                .toList();
-        for (var task : tasks) {
-            visitor.visit(task);
+                .forEach(this::runTask);
+    }
+
+    private void runTask(Task task) {
+        reads.visit(task);
+        logTree(task);
+        if(config.isDryRun()){
+           log.info("Dry run, skipping writes");
+        }else {
+            writes.visit(task);
             logTree(task);
         }
+
     }
 
     private void logTree(Task task) {

@@ -14,15 +14,19 @@ import tasktree.Configuration;
 import tasktree.spi.Task;
 
 import javax.annotation.PostConstruct;
+    import java.util.ArrayList;
     import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-public abstract class AWSTask
+public abstract class AWSTask<T>
         extends BaseTask {
 
     static final Region DEFAULT_REGION = Region.US_EAST_1;
     static final Logger log = LoggerFactory.getLogger(AWSTask.class);
+
+    protected List<T> resources = new ArrayList<>();
+    protected List<Task> subtasks = null;
 
     @ConfigProperty(name = "tt.aws.region", defaultValue = "us-east-1")
     String defaultRegion;
@@ -84,7 +88,7 @@ public abstract class AWSTask
         getSubtasks().add(task);
     }
 
-    private void propagateConfig(Task task) {
+    public Task propagateConfig(Task task) {
         task.setConfig(getConfig());
         if (task instanceof AWSTask awstask) {
             var _region = getRegion();
@@ -92,6 +96,7 @@ public abstract class AWSTask
             awstask.setRegion(_region);
             awstask.setAwsCleanupPrefix(getAwsCleanupPrefix());
         }
+        return task;
     }
 
     private void setDefaultRegion(String defaultRegion) {
@@ -189,11 +194,31 @@ public abstract class AWSTask
         return aws.getClient(getRegion(), clientClass);
     }
 
-    public String getResourceDescription() {
-        return resourceDescription;
-    }
-
     public void setResourceDescription(String resourceDescription) {
         this.resourceDescription = resourceDescription;
+    }
+
+    @Override
+    public final List<Task> getSubtasks() {
+        if (subtasks == null) {
+            subtasks = resources
+                    .stream()
+                    .flatMap(this::mapSubtasks)
+                    .map(this::propagateConfig)
+                    .toList();
+        }
+        return subtasks;
+    }
+
+    protected <R> Stream<Task> mapSubtasks(T t) {
+        return Stream.of();
+    }
+
+    public final String getResourceDescription() {
+        var description = String.join(",", resources
+                .stream()
+                .map(AWSResources::getDescription)
+                .toList());
+        return description;
     }
 }

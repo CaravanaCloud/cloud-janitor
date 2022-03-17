@@ -3,22 +3,19 @@ package tasktree.aws.cleanup;
 import software.amazon.awssdk.services.ec2.model.DeleteVpcRequest;
 import software.amazon.awssdk.services.ec2.model.Vpc;
 import tasktree.Configuration;
+import tasktree.spi.Task;
 
-public class DeleteVpc extends AWSDelete {
-    Vpc resource;
+import java.util.List;
+import java.util.stream.Stream;
 
+public class DeleteVpc extends AWSDelete<Vpc> {
     public DeleteVpc(Vpc resource) {
-        this.resource = resource;
+        super(resource);
     }
 
     @Override
-    public void runSafe() {
-        deleteVPC();
-    }
-
-
-    private void deleteVPC() {
-        log().trace("Deleting VPC [{}]", resource.vpcId());
+    public void cleanup(Vpc resource) {
+        log().debug("Deleting VPC [{}]", resource.vpcId());
         var request = DeleteVpcRequest.builder()
                 .vpcId(resource.vpcId())
                 .build();
@@ -26,12 +23,21 @@ public class DeleteVpc extends AWSDelete {
     }
 
     @Override
-    public String getResourceDescription() {
-        return resource.vpcId();
+    protected String getResourceType() {
+        return "VPC";
     }
 
     @Override
-    protected String getResourceType() {
-        return "VPC";
+    public Stream<Task> mapSubtasks(Vpc resource) {
+        var vpcId = resource.vpcId();
+        return Stream.of(
+                new FilterLoadBalancers(vpcId),
+                new FilterVPCEndpoints(vpcId),
+                new FilterNetworkInterfaces(vpcId),
+                new FilterRouteTables(vpcId),
+                new FilterSecurityGroups(vpcId),
+                new FilterSubnets(vpcId),
+                new FilterInternetGateways(vpcId)
+        );
     }
 }

@@ -4,7 +4,9 @@ import software.amazon.awssdk.regions.Region;
 import tasktree.Configuration;
 import tasktree.aws.AWSTask;
 
-public abstract class AWSDelete extends AWSTask {
+import java.util.List;
+
+public abstract class AWSDelete<T> extends AWSTask<T> {
     public AWSDelete() {}
     public AWSDelete(Configuration config)  {
         super(config);
@@ -13,9 +15,26 @@ public abstract class AWSDelete extends AWSTask {
         super(config, region);
     }
 
+
+    public AWSDelete(T resource){
+        this.resources = List.of(resource);
+    }
+
     @Override
     public boolean isWrite() {
         return true;
     }
+    
+    @Override
+    public final void runSafe() {
+        for (T resource : resources) {
+            cleanup(resource);
+        }
+    }
+
+    protected void cleanup(T resource) {
+        throw new UnsupportedOperationException("cleanup not implemented");
+    }
+
 
 }

@@ -37,13 +37,6 @@ public class FilterVPCs extends AWSFilter<Vpc> {
     public Stream<Task> mapSubtasks(Vpc vpc) {
         var vpcId = vpc.vpcId();
         return Stream.of(
-                new FilterLoadBalancers(vpcId),
-                new FilterVPCEndpoints(vpcId),
-                new FilterNetworkInterfaces(vpcId),
-                new FilterRouteTables(vpcId),
-                new FilterSecurityGroups(vpcId),
-                new FilterSubnets(vpcId),
-                new FilterInternetGateways(vpcId),
                 new DeleteVpc(vpc)
         );
     }

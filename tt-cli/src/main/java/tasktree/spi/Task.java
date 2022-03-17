@@ -4,11 +4,13 @@ import tasktree.Configuration;
 
 import javax.inject.Named;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 public interface Task extends Runnable{
 
     void runSafe();
+    List<Task> getSubtasks();
 
     Configuration getConfig();
     void setConfig(Configuration config);
@@ -19,11 +21,9 @@ public interface Task extends Runnable{
     }
 
     default int getRetries(){return 0;};
+
     void retried();
 
-    default List<Task> getSubtasks(){
-        return List.of();
-    }
 
     default String getSimpleName(){
         return getClass().getSimpleName().split("_")[0];

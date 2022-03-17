@@ -21,8 +21,8 @@ public class PrintTreeVisitor {
         buf.append(padding);
         buf.append(task);
         buf.append("\n");
-
-        for (var sub : task.getSubtasks()) {
+        var subs = task.getSubtasks();
+        for (var sub : subs) {
             visit(sub, padding + PADDING);
         }
     }

@@ -4,25 +4,20 @@ import software.amazon.awssdk.services.elasticloadbalancingv2.model.DeleteTarget
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetGroup;
 import tasktree.Configuration;
 
-public class DeleteTargetGroup extends AWSDelete {
-    private final TargetGroup resource;
+import java.lang.annotation.Target;
 
+public class DeleteTargetGroup extends AWSDelete<TargetGroup> {
     public DeleteTargetGroup(TargetGroup resource) {
-         this.resource = resource;
+         super(resource);
     }
 
     @Override
-    public void runSafe() {
+    public void cleanup(TargetGroup resource) {
         log().debug("Deleting Target group {}", resource.targetGroupArn());
         var request = DeleteTargetGroupRequest.builder()
                 .targetGroupArn(resource.targetGroupArn())
                 .build();
         aws.getELBClientV2(getRegion()).deleteTargetGroup(request);
-    }
-
-    @Override
-    public String getResourceDescription() {
-        return resource.targetGroupName();
     }
 
     @Override

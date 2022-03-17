@@ -39,9 +39,4 @@ public class FilterLoadBalancersV2 extends AWSFilter<LoadBalancer> {
     protected String getResourceType() {
         return "Load Balancer V2";
     }
-
-    @Override
-    protected String toString(LoadBalancer loadBalancer) {
-        return loadBalancer.loadBalancerName();
-    }
 }

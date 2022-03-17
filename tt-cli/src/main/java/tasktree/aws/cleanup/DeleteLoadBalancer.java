@@ -4,15 +4,14 @@ import software.amazon.awssdk.services.elasticloadbalancingv2.model.DeleteLoadBa
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
 import tasktree.Configuration;
 
-public class DeleteLoadBalancer extends AWSDelete {
-    private final LoadBalancer resource;
+public class DeleteLoadBalancer extends AWSDelete<LoadBalancer> {
 
     public DeleteLoadBalancer(LoadBalancer resource) {
-        this.resource = resource;
+        super(resource);
     }
 
     @Override
-    public void runSafe() {
+    public void cleanup(LoadBalancer resource) {
         log().info("Deleting ELBV2 {}", resource.loadBalancerArn());
         var request = DeleteLoadBalancerRequest.builder()
                 .loadBalancerArn(resource.loadBalancerArn())
@@ -24,10 +23,4 @@ public class DeleteLoadBalancer extends AWSDelete {
     protected String getResourceType() {
         return "Application Load Balancer";
     }
-
-    @Override
-    public String getResourceDescription() {
-        return resource.loadBalancerName();
-    }
-
 }

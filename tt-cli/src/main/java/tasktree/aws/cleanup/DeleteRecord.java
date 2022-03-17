@@ -4,19 +4,16 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.route53.model.*;
 import tasktree.Configuration;
 
-public class DeleteRecord extends AWSDelete {
-    private final ResourceRecordSet record;
-
-    public DeleteRecord(Configuration config, Region region, ResourceRecordSet resourceRecordSet) {
-        super(config, region);
-        this.record = resourceRecordSet;
+public class DeleteRecord extends AWSDelete<ResourceRecordSet> {
+    DeleteRecord(ResourceRecordSet rrs){
+        super(rrs);
     }
 
     @Override
-    public void runSafe() {
-        log().debug("Deleting record {}", record);
+    public void cleanup(ResourceRecordSet resource) {
+        log().debug("Deleting record {}", resource);
         var change = Change.builder()
-                .resourceRecordSet(record)
+                .resourceRecordSet(resource)
                 .action(ChangeAction.DELETE)
                 .build();
         var changes = ChangeBatch.builder()
@@ -26,11 +23,6 @@ public class DeleteRecord extends AWSDelete {
                 .changeBatch(changes)
                 .build();
         aws.newRoute53Client(getRegion()).changeResourceRecordSets(request);
-    }
-
-    @Override
-    public String getResourceDescription() {
-        return record.name();
     }
 
     @Override

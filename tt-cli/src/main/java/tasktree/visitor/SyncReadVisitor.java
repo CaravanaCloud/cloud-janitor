@@ -8,7 +8,7 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 @Dependent
-public class SyncExecutionVisitor {
+public class SyncReadVisitor implements Visitor {
 
     @Inject
     Logger log;
@@ -17,12 +17,11 @@ public class SyncExecutionVisitor {
     Configuration configuration;
 
     public void visit(Task task) {
-        configuration.runTask(task);
+        if (! task.isWrite()){
+            configuration.runTask(task);
+        }
         for(Task child : task.getSubtasks()) {
             visit(child);
         }
     }
-
-
-
 }

@@ -1,20 +1,24 @@
 package tasktree.aws;
 
 import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.ec2.model.NetworkInterface;
-import software.amazon.awssdk.services.ec2.model.RouteTable;
-import software.amazon.awssdk.services.ec2.model.Vpc;
-import software.amazon.awssdk.services.ec2.model.VpcEndpoint;
+import software.amazon.awssdk.services.ec2.model.*;
 import software.amazon.awssdk.services.elasticloadbalancing.model.LoadBalancerDescription;
 import tasktree.aws.cleanup.AWSAccount;
 
-public class AWSResources {
+public enum AWSResources {
+
+    Subnet;
 
     public static <T> String getDescription(T t) {
         var className = t.getClass().getSimpleName();
         return switch (className) {
             case "" -> ((Object)t).toString();
-
+            case "Address" -> ((Address)t).allocationId();
+            case "NatGateway" -> ((NatGateway)t).natGatewayId();
+            case "InternetGateway" -> ((InternetGateway)t).internetGatewayId();
+            case "Subnet" -> ((Subnet)t).subnetId();
+            case "Instance" -> ((Instance)t).instanceId();
+            case "SecurityGroup" -> ((SecurityGroup)t).groupId();
             case "RouteTable" -> ((RouteTable)t).routeTableId();
             case "NetworkInterface" -> ((NetworkInterface)t).networkInterfaceId();
             case "VpcEndpoint" -> ((VpcEndpoint)t).vpcEndpointId();

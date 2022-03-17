@@ -107,9 +107,13 @@ public class Configuration {
                 && isDryRun()) {
             log.info("Dry run: {}", task);
         }else {
-            task.runSafe();
-            log.info("Executed {} ({})", task,
-                    task.isWrite() ? "W" : "R");
+            try {
+                task.runSafe();
+                log.info("Executed {} ({})", task,
+                        task.isWrite() ? "W" : "R");
+            } catch (Exception e) {
+                log.error("Error executing {}: {}", task, e.getMessage());
+            }
         }
     }
 

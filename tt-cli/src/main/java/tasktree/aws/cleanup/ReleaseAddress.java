@@ -4,17 +4,15 @@ import software.amazon.awssdk.services.ec2.model.Address;
 import software.amazon.awssdk.services.ec2.model.ReleaseAddressRequest;
 import tasktree.Configuration;
 
-public class ReleaseAddress extends AWSDelete {
-    private final Address addr;
-
+public class ReleaseAddress extends AWSDelete<Address> {
     public ReleaseAddress(Address addr) {
-        this.addr = addr;
+        super(addr);
     }
 
     @Override
-    public void runSafe() {
-        log().debug("Releasing address {}", addr.publicIp());
-        var request = ReleaseAddressRequest.builder().allocationId(addr.allocationId()).build();
+    public void cleanup(Address resource) {
+        log().debug("Releasing address {}", resource.publicIp());
+        var request = ReleaseAddressRequest.builder().allocationId(resource.allocationId()).build();
         newEC2Client().releaseAddress(request);
     }
 
@@ -23,9 +21,5 @@ public class ReleaseAddress extends AWSDelete {
         return "Address";
     }
 
-    @Override
-    public String getResourceDescription() {
-        return "%s %s".formatted(addr.publicIp(), addr.allocationId());
-    }
 
 }

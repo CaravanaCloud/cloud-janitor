@@ -33,8 +33,4 @@ public class FilterTargetGroups extends AWSFilter<TargetGroup> {
         return "Target Group";
     }
 
-    @Override
-    protected String toString(TargetGroup targetGroup) {
-        return targetGroup.targetGroupName();
-    }
 }

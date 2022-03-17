@@ -17,8 +17,6 @@ public abstract class BaseTask implements Task {
     @Inject
     Configuration config;
 
-    List<Task> subtasks = new ArrayList<>();
-
     public BaseTask(){}
 
     public BaseTask(Configuration config){
@@ -71,7 +69,7 @@ public abstract class BaseTask implements Task {
 
     @Override
     public List<Task> getSubtasks(){
-        return subtasks;
+        return List.of();
     }
 
     @Override

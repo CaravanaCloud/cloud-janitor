@@ -1,22 +1,20 @@
 package tasktree.aws.cleanup;
 
 import software.amazon.awssdk.services.ec2.model.*;
-import tasktree.Configuration;
 
-public class DeleteSecurityGroup extends AWSDelete {
-    private final SecurityGroup resource;
+public class DeleteSecurityGroup extends AWSDelete<SecurityGroup> {
 
     public DeleteSecurityGroup(SecurityGroup resource) {
-        this.resource = resource;
+        super(resource);
     }
 
     @Override
-    public void runSafe() {
-        deleteRules();
-        deleteSecurityGroup();
+    protected void cleanup(SecurityGroup resource) {
+        deleteRules(resource);
+        deleteSecurityGroup(resource);
     }
 
-    private void deleteRules() {
+    private void deleteRules(SecurityGroup resource) {
         var groupId = resource.groupId();
         log().debug("Deleting Security Group Rules for [{}]", groupId);
         var describeRules = DescribeSecurityGroupRulesRequest
@@ -50,19 +48,13 @@ public class DeleteSecurityGroup extends AWSDelete {
     }
 
 
-    private void deleteSecurityGroup() {
+    private void deleteSecurityGroup(SecurityGroup resource) {
         log().debug("Deleting Security Group {}", resource.groupId());
         var request = DeleteSecurityGroupRequest.builder()
                 .groupId(resource.groupId())
                 .build();
         newEC2Client().deleteSecurityGroup(request);
     }
-
-    @Override
-    public String getResourceDescription() {
-        return resource.groupId();
-    }
-
     @Override
     protected String getResourceType() {
         return "Security Group";
