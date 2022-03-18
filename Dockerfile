@@ -3,7 +3,7 @@ FROM ${UBI} AS build
 COPY --chown=quarkus:quarkus . /opt/quarkus-src
 USER quarkus
 WORKDIR /opt/quarkus-src
-RUN ./mvnw -B \
+RUN ./mvnw -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
     org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline
 RUN ./mvnw -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
     -f /opt/quarkus-src/pom.xml \
