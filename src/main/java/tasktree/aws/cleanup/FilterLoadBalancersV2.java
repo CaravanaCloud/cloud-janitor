@@ -1,7 +1,5 @@
 package tasktree.aws.cleanup;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
 import tasktree.spi.Task;
 
@@ -18,7 +16,7 @@ public class FilterLoadBalancersV2 extends AWSFilter<LoadBalancer> {
 
     @Override
     protected List<LoadBalancer> filterResources() {
-        var elb = aws.getELBClientV2(getRegion());
+        var elb = aws.getELBClientV2(getRegionOrDefault());
         var resources = elb.describeLoadBalancers().loadBalancers();
         var matches = resources.stream().filter(this::match).toList();
         return matches;

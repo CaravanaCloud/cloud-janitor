@@ -2,7 +2,6 @@ package tasktree.aws.cleanup;
 
 import software.amazon.awssdk.services.elasticloadbalancing.model.DeleteLoadBalancerRequest;
 import software.amazon.awssdk.services.elasticloadbalancing.model.LoadBalancerDescription;
-import tasktree.Configuration;
 
 public class DeleteLoadBalancerDescription extends AWSDelete<LoadBalancerDescription> {
 
@@ -16,7 +15,7 @@ public class DeleteLoadBalancerDescription extends AWSDelete<LoadBalancerDescrip
         var request = DeleteLoadBalancerRequest.builder()
                 .loadBalancerName(resource.loadBalancerName())
                 .build();
-        aws.getELBClient(getRegion()).deleteLoadBalancer(request);
+        aws.getELBClient(getRegionOrDefault()).deleteLoadBalancer(request);
     }
 
     @Override

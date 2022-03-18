@@ -1,8 +1,6 @@
 package tasktree.aws.cleanup;
 
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.route53.model.*;
-import tasktree.Configuration;
 
 public class DeleteRecord extends AWSDelete<ResourceRecordSet> {
     DeleteRecord(ResourceRecordSet rrs){
@@ -22,7 +20,7 @@ public class DeleteRecord extends AWSDelete<ResourceRecordSet> {
         var request = ChangeResourceRecordSetsRequest.builder()
                 .changeBatch(changes)
                 .build();
-        aws.newRoute53Client(getRegion()).changeResourceRecordSets(request);
+        aws.newRoute53Client(getRegionOrDefault()).changeResourceRecordSets(request);
     }
 
     @Override

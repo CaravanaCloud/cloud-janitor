@@ -8,7 +8,6 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cloudtrail.CloudTrailClient;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.sts.StsClient;
 import tasktree.BaseTask;
 import tasktree.Configuration;
 import tasktree.spi.Task;
@@ -51,11 +50,11 @@ public abstract class AWSTask<T>
     }
 
     protected S3Client newS3Client() {
-        return aws.newS3Client(getRegion());
+        return aws.newS3Client(getRegionOrDefault());
     }
 
     protected Ec2Client newEC2Client() {
-        return aws.newEC2Client(getRegion());
+        return aws.newEC2Client(getRegionOrDefault());
     }
 
     protected Logger log() {
@@ -63,7 +62,7 @@ public abstract class AWSTask<T>
     }
 
     protected CloudTrailClient newCloudTrailClient() {
-        var region = getRegion();
+        var region = getRegionOrDefault();
         var client = CloudTrailClient.builder().region(region).build();
         return client;
     }
@@ -71,6 +70,7 @@ public abstract class AWSTask<T>
     @Override
     public String toString() {
         return asString(getName(),
+                getRegionOrDefault().toString(),
                 getResourceType(),
                 getResourceDescription());
     }
@@ -84,10 +84,10 @@ public abstract class AWSTask<T>
     public Task propagateConfig(Task task) {
         task.setConfig(getConfig());
         if (task instanceof AWSTask awstask) {
-            var _region = getRegion();
+            var taskName = awstask.getName();
             awstask.setTargetRegions(targetRegions);
             if (awstask.getRegion() == null) {
-                awstask.setRegion(_region);
+                awstask.setRegion(getRegion());
             }
             awstask.setAwsCleanupPrefix(getAwsCleanupPrefix());
         }
@@ -164,24 +164,29 @@ public abstract class AWSTask<T>
         return targetRegionsSet;
     }
 
-    protected Region getRegion() {
+    protected Region getRegion(){
+        return region;
+    }
+
+    protected Region getRegionOrDefault() {
         if (region == null) {
-            region = getDefaultRegion();
+            return getDefaultRegion();
         }
         return region;
     }
 
+    public void setRegion(Region region) {
+        this.region = region;
+    }
+
     private Region getDefaultRegion() {
+        if (region != null) return region;
         var regionName = targetRegions.split(",")[0];
-        if (! regionName.isEmpty()){
+        if (!regionName.isEmpty()) {
             log.debug("Using region [{}] as default", region);
         }
         var defaultRegion = Region.of(regionName);
         return defaultRegion;
-    }
-
-    public void setRegion(Region region) {
-        this.region = region;
     }
 
     @PostConstruct
@@ -195,7 +200,7 @@ public abstract class AWSTask<T>
 
 
     protected <T extends SdkClient> T getClient(Class<T> clientClass) {
-        return aws.getClient(getRegion(), clientClass);
+        return aws.getClient(getRegionOrDefault(), clientClass);
     }
 
     @Override

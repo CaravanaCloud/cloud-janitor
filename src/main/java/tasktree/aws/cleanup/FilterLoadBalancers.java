@@ -1,9 +1,6 @@
 package tasktree.aws.cleanup;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.services.elasticloadbalancing.model.LoadBalancerDescription;
-import tasktree.Configuration;
 import tasktree.spi.Task;
 
 import java.util.List;
@@ -24,7 +21,7 @@ public class FilterLoadBalancers extends AWSFilter<LoadBalancerDescription> {
 
     @Override
     protected List<LoadBalancerDescription> filterResources() {
-        var elb = aws.getELBClient(getRegion());
+        var elb = aws.getELBClient(getRegionOrDefault());
         var resources = elb.describeLoadBalancers().loadBalancerDescriptions();
         var matches = resources.stream().filter(this::match).toList();
         return matches;
@@ -40,8 +37,4 @@ public class FilterLoadBalancers extends AWSFilter<LoadBalancerDescription> {
         return "Classic Load Balancer";
     }
 
-    @Override
-    protected String toString(LoadBalancerDescription loadBalancerDescription) {
-        return loadBalancerDescription.loadBalancerName();
-    }
 }

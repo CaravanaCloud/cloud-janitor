@@ -1,6 +1,7 @@
 package tasktree.spi;
 
 import tasktree.Configuration;
+import tasktree.visitor.Visitor;
 
 import javax.inject.Named;
 import java.util.List;
@@ -59,4 +60,14 @@ public interface Task extends Runnable{
     default boolean isWrite(){
         return true;
     };
+
+    default void accept(Visitor visitor) {
+        if (! isWrite())
+            visitor.read(this);
+        for(Task child : getSubtasks()) {
+            child.accept(visitor);
+        }
+        if (isWrite())
+            visitor.write(this);
+    }
 }

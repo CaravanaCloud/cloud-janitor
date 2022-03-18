@@ -3,27 +3,30 @@ package tasktree.visitor;
 import tasktree.spi.Task;
 
 import javax.enterprise.context.Dependent;
-import java.io.IOException;
 
 @Dependent
-public class PrintTreeVisitor {
+public class PrintTreeVisitor implements Visitor{
     static final String PADDING = "-";
     StringBuilder buf = new StringBuilder();
+    boolean root = true;
 
-    public void visit(Task task) {
-        visit(task, "");
+    public void read(Task task) {
+        if (root) {
+            root = false;
+            appendString(task, "");
+        }
         var out = System.out;
         out.println(buf.toString());
     }
 
-    private void visit(Task task, String padding) {
+    private void appendString(Task task, String padding) {
         if (task == null) return;
         buf.append(padding);
         buf.append(task);
         buf.append("\n");
         var subs = task.getSubtasks();
         for (var sub : subs) {
-            visit(sub, padding + PADDING);
+            appendString(sub, padding + PADDING);
         }
     }
 }

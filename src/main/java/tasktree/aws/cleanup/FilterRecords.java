@@ -6,7 +6,6 @@ import software.amazon.awssdk.services.route53.Route53Client;
 import software.amazon.awssdk.services.route53.model.HostedZone;
 import software.amazon.awssdk.services.route53.model.ListResourceRecordSetsRequest;
 import software.amazon.awssdk.services.route53.model.ResourceRecordSet;
-import tasktree.Configuration;
 
 import javax.enterprise.context.Dependent;
 
@@ -18,7 +17,7 @@ public class FilterRecords extends AWSFilter<Record> {
     @ConfigProperty(name = "tt.ocp.baseDomain", defaultValue = "redhat.com")
     String baseDomain;
 
-    private Route53Client r53 = aws.newRoute53Client(getRegion());
+    private Route53Client r53 = aws.newRoute53Client(getRegionOrDefault());
 
 
     @Override
@@ -72,7 +71,7 @@ public class FilterRecords extends AWSFilter<Record> {
     }
 
     @Override
-    protected Region getRegion() {
+    protected Region getRegionOrDefault() {
         return Region.AWS_GLOBAL;
     }
 

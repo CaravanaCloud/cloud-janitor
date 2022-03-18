@@ -39,9 +39,5 @@ public class FilterSecurityGroups extends AWSFilter<SecurityGroup> {
         return "Security Group";
     }
 
-    @Override
-    protected String toString(SecurityGroup securityGroup) {
-        return securityGroup.groupId();
-    }
 }
 

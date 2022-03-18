@@ -46,8 +46,4 @@ public class FilterSubnets extends AWSFilter<Subnet> {
         return "Subnets";
     }
 
-    @Override
-    protected String toString(Subnet subnet) {
-        return subnet.subnetId();
-    }
 }

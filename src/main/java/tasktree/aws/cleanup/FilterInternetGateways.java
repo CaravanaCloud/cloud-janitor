@@ -39,11 +39,6 @@ public class FilterInternetGateways extends AWSFilter<InternetGateway> {
     }
 
     @Override
-    protected String toString(InternetGateway internetGateway) {
-        return internetGateway.internetGatewayId();
-    }
-
-    @Override
     protected String getResourceType() {
         return "Internet Gateways";
     }

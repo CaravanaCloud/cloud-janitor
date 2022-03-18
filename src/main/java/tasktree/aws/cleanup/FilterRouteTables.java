@@ -37,11 +37,6 @@ public class FilterRouteTables extends AWSFilter<RouteTable> {
     }
 
     @Override
-    protected String toString(RouteTable routeTable) {
-        return routeTable.routeTableId();
-    }
-
-    @Override
     protected String getResourceType() {
         return "Route Table";
     }

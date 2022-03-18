@@ -38,12 +38,6 @@ public class FilterInstances extends AWSFilter<Instance> {
         return Stream.of(new TerminateInstance(instance));
     }
 
-
-    @Override
-    protected String toString(Instance instance) {
-        return instance.instanceId();
-    }
-
     @Override
     protected String getResourceType() {
         return "EC2 Instance";

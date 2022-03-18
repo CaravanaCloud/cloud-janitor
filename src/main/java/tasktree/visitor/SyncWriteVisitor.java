@@ -16,12 +16,7 @@ public class SyncWriteVisitor implements Visitor {
     @Inject
     Configuration configuration;
 
-    public void visit(Task task) {
-        for(Task child : task.getSubtasks()) {
-            visit(child);
-        }
-        if (task.isWrite()){
+    public void write(Task task) {
             configuration.runTask(task);
-        }
     }
 }

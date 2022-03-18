@@ -39,11 +39,6 @@ public class FilterVPCEndpoints extends AWSFilter<VpcEndpoint> {
     }
 
     @Override
-    protected String toString(VpcEndpoint vpcEndpoint) {
-        return vpcEndpoint.vpcEndpointId();
-    }
-
-    @Override
     protected String getResourceType() {
         return "VPC Endpoint";
     }

@@ -3,5 +3,6 @@ package tasktree.visitor;
 import tasktree.spi.Task;
 
 public interface Visitor {
-    void visit(Task task);
+    default void read(Task task){}
+    default void write(Task task){}
 }

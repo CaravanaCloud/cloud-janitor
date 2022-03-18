@@ -35,11 +35,6 @@ public class    FilterAddresses extends AWSFilter<Address> {
     }
 
     @Override
-    protected String toString(Address address) {
-        return address.publicIp();
-    }
-
-    @Override
     protected String getResourceType() {
         return "Elastic IPs";
     }

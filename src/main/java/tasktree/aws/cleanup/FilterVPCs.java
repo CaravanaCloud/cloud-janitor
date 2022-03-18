@@ -46,8 +46,4 @@ public class FilterVPCs extends AWSFilter<Vpc> {
         return "VPC";
     }
 
-    @Override
-    protected String toString(Vpc vpc) {
-        return vpc.vpcId();
-    }
 }

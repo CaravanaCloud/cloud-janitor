@@ -43,20 +43,20 @@ public class TaskManager {
     }
 
     private void runTask(Task task) {
-        reads.visit(task);
+        task.accept(reads);
         logTree(task);
         if(config.isDryRun()){
            log.info("Dry run, skipping writes");
         }else {
-            writes.visit(task);
+            task.accept(writes);
             logTree(task);
         }
 
     }
 
     private void logTree(Task task) {
-        var visitor = new PrintTreeVisitor();
-        visitor.visit(task);
+        var print = new PrintTreeVisitor();
+        task.accept(print);
     }
 
     private Task fromBean(Bean<?> bean) {

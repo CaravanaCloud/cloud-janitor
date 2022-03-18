@@ -38,11 +38,6 @@ public class FilterNetworkInterfaces extends AWSFilter<NetworkInterface> {
     }
 
     @Override
-    protected String toString(NetworkInterface networkInterface) {
-        return networkInterface.networkInterfaceId();
-    }
-
-    @Override
     protected String getResourceType() {
         return "Network Interface";
     }

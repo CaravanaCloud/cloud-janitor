@@ -2,9 +2,6 @@ package tasktree.aws.cleanup;
 
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.DeleteTargetGroupRequest;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetGroup;
-import tasktree.Configuration;
-
-import java.lang.annotation.Target;
 
 public class DeleteTargetGroup extends AWSDelete<TargetGroup> {
     public DeleteTargetGroup(TargetGroup resource) {
@@ -17,7 +14,7 @@ public class DeleteTargetGroup extends AWSDelete<TargetGroup> {
         var request = DeleteTargetGroupRequest.builder()
                 .targetGroupArn(resource.targetGroupArn())
                 .build();
-        aws.getELBClientV2(getRegion()).deleteTargetGroup(request);
+        aws.getELBClientV2(getRegionOrDefault()).deleteTargetGroup(request);
     }
 
     @Override
