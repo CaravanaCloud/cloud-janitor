@@ -1,8 +1,19 @@
 package tasktree.aws;
 
 import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.ec2.model.*;
+import software.amazon.awssdk.services.ec2.model.Address;
+import software.amazon.awssdk.services.ec2.model.Instance;
+import software.amazon.awssdk.services.ec2.model.InternetGateway;
+import software.amazon.awssdk.services.ec2.model.NatGateway;
+import software.amazon.awssdk.services.ec2.model.SecurityGroup;
+import software.amazon.awssdk.services.ec2.model.NetworkInterface;
+import software.amazon.awssdk.services.ec2.model.RouteTable;
+import software.amazon.awssdk.services.ec2.model.Subnet;
+import software.amazon.awssdk.services.ec2.model.Vpc;
+import software.amazon.awssdk.services.ec2.model.VpcEndpoint;
 import software.amazon.awssdk.services.elasticloadbalancing.model.LoadBalancerDescription;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetGroup;
 import tasktree.aws.cleanup.AWSAccount;
 
 public enum AWSResources {
@@ -13,6 +24,8 @@ public enum AWSResources {
         var className = t.getClass().getSimpleName();
         return switch (className) {
             case "" -> ((Object)t).toString();
+            case "LoadBalancer" -> ((LoadBalancer)t).loadBalancerName();
+            case "TargetGroup" -> ((TargetGroup)t).targetGroupName();
             case "Address" -> ((Address)t).allocationId();
             case "NatGateway" -> ((NatGateway)t).natGatewayId();
             case "InternetGateway" -> ((InternetGateway)t).internetGatewayId();

@@ -20,6 +20,7 @@ public class AWSClients {
         return instance;
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends SdkClient> T getClient(Region region, Class<T> clientClass) {
         var regionClients = clients.getOrDefault(region, new HashMap<>());
         var client = regionClients.get(clientClass);
