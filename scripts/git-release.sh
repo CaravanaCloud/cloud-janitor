@@ -1,10 +1,10 @@
 #/bin/bash
 
-MAJOR=0
-MINOR=1
+MAJOR=1
+MINOR=0
 PATCH=$(date +%Y%m%d%H%M%S)
 VERSION="$MAJOR.$MINOR.$PATCH"
-TAG="tasktree-$VERSION"
+TAG="v$VERSION"
 NOTES=${NOTES:-"TaskTree release $VERSION"}
 git tag $TAG -m "$NOTES"
 git push origin $TAG

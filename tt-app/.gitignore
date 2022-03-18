@@ -1,9 +1,0 @@
-﻿.idea
-node_modules
-frontend/generated
-target
-*.iml
-.project
-.classpath
-.npmrc
-.settings
