@@ -31,6 +31,13 @@ public class DeleteVpc extends AWSDelete<Vpc> {
     public Stream<Task> mapSubtasks(Vpc resource) {
         var vpcId = resource.vpcId();
         return Stream.of(
+                //TODO: Filter by VPC
+                new FilterTargetGroups(),
+                new FilterLoadBalancersV2(),
+                new FilterNATGateways(),
+                new FilterAddresses(),
+                new FilterInstances(),
+                //VPC Resoruces
                 new FilterLoadBalancers(vpcId),
                 new FilterVPCEndpoints(vpcId),
                 new FilterNetworkInterfaces(vpcId),

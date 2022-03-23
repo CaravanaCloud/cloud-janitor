@@ -22,13 +22,7 @@ public class FilterRegion extends AWSFilter<Region> {
 
     @Override
     protected Stream<Task> mapSubtasks(Region region) {
-        return Stream.of(new FilterVPCs(),
-                new FilterTargetGroups(),
-                new FilterLoadBalancersV2(),
-                new FilterNATGateways(),
-                new FilterAddresses(),
-                new FilterInstances()
-        );
+        return Stream.of(new FilterVPCs());
     }
 
     @Override
