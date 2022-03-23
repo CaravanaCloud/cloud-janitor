@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.s3.S3Client;
 import tasktree.BaseTask;
 import tasktree.Configuration;
+import tasktree.Result;
 import tasktree.spi.Task;
 
 import javax.annotation.PostConstruct;
@@ -72,7 +73,7 @@ public abstract class AWSTask<T>
         return asString(getName(),
                 getRegionOrDefault().toString(),
                 getResourceType(),
-                getResourceDescription());
+                getDescription());
     }
 
     public void addTask(Task task) {
@@ -219,8 +220,12 @@ public abstract class AWSTask<T>
         return Stream.of();
     }
 
-    public final String getResourceDescription() {
-        var description = String.join(",", resources
+    static final String SEP = ",";
+
+    public final String getDescription() {
+        if (resources == null)
+            return "";
+        var description = String.join(SEP, resources
                 .stream()
                 .map(AWSResources::getDescription)
                 .toList());
@@ -229,5 +234,17 @@ public abstract class AWSTask<T>
 
     public void setResourceDescription(String resourceDescription) {
         this.resourceDescription = resourceDescription;
+    }
+
+    protected void success() {
+        setResult(Result.success(this));
+    }
+
+    public List<T> getResources() {
+        return resources;
+    }
+
+    public void setResources(List<T> resources) {
+        this.resources = resources;
     }
 }

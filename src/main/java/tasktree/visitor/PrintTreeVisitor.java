@@ -5,7 +5,7 @@ import tasktree.spi.Task;
 import javax.enterprise.context.Dependent;
 
 @Dependent
-public class PrintTreeVisitor implements Visitor{
+public class PrintTreeVisitor extends TaskVisitor{
     static final String PADDING = "-";
     StringBuilder buf = new StringBuilder();
     boolean root = true;

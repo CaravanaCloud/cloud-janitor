@@ -1,9 +1,12 @@
 package tasktree.spi;
 
 import tasktree.Configuration;
+import tasktree.Result;
 import tasktree.visitor.Visitor;
 
 import javax.inject.Named;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -69,5 +72,27 @@ public interface Task extends Runnable{
         }
         if (isWrite())
             visitor.write(this);
+    }
+
+    default Result getResult(){
+        return Result.empty(this);
+    }
+
+    void setResult(Result result);
+
+    default String getDescription(){
+        return "";
+    }
+
+    default LocalDateTime getStartTime(){
+        return LocalDateTime.now();
+    }
+
+    default LocalDateTime getEndTime(){
+        return LocalDateTime.now();
+    }
+
+    default Duration getElapsedTime(){
+        return Duration.between(getStartTime(), getEndTime());
     }
 }

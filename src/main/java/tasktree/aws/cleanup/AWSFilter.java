@@ -2,6 +2,7 @@ package tasktree.aws.cleanup;
 
 import software.amazon.awssdk.regions.Region;
 import tasktree.Configuration;
+import tasktree.Result;
 import tasktree.aws.AWSTask;
 
 import java.util.List;
@@ -23,8 +24,7 @@ public abstract class AWSFilter<T> extends AWSTask<T> {
 
     @Override
     public void runSafe() {
-        resources = filterResources();
-        log().info("Filtered {} {} on  => {}", resources.size(), getResourceType(), getRegionOrDefault(), getSubtasks().size());
+        setResources(filterResources());
     }
 
     protected List<T> filterResources() {

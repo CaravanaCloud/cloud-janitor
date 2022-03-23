@@ -11,6 +11,7 @@ import tasktree.visitor.PrintTreeVisitor;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 @ApplicationScoped
@@ -93,7 +94,7 @@ public class Configuration {
     public void init(String[] args) {
         parse(args);
         log.info("TaskTree Configuration: {}", this);
-        waitBeforeRun(10 * (1+waitBeforeRun));
+        waitBeforeRun();
     }
 
 
@@ -101,20 +102,32 @@ public class Configuration {
         return dryRun;
     }
 
-    public void runTask(Task task) {
+    public Result runTask(Task task) {
         waitBeforeRun();
+        var startTime = LocalDateTime.now();
+        var result = (Result) null;
         if (task.isWrite()
                 && isDryRun()) {
+            result = Result.dryRun(task);
             log.info("Dry run: {}", task);
         }else {
             try {
                 task.runSafe();
+                result = task.getResult();
+                if (result == null){
+                    result = Result.success(task);
+                }
                 log.info("Executed {} ({})", task,
                         task.isWrite() ? "W" : "R");
             } catch (Exception e) {
+                result = Result.failure(task, e);
                 log.error("Error executing {}: {}", task, e.getMessage());
             }
         }
+        var endTime = LocalDateTime.now();
+        result.setEndTime(endTime);
+        task.setResult(result);
+        return result;
     }
 
 

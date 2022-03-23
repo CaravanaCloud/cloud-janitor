@@ -8,15 +8,11 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 @Dependent
-public class SyncReadVisitor implements Visitor {
-
-    @Inject
-    Logger log;
-
+public class SyncReadVisitor extends TaskVisitor {
     @Inject
     Configuration configuration;
 
     public void read(Task task) {
-        configuration.runTask(task);
+        collect(configuration.runTask(task));
     }
 }

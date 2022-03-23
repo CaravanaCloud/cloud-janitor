@@ -6,6 +6,7 @@ import tasktree.spi.Task;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -16,6 +17,8 @@ public abstract class BaseTask implements Task {
 
     @Inject
     Configuration config;
+
+    Result result;
 
     public BaseTask(){}
 
@@ -76,4 +79,15 @@ public abstract class BaseTask implements Task {
     public void runSafe(){
         config.runTask(this);
     }
+
+    @Override
+    public Result getResult() {
+        return result;
+    }
+
+    @Override
+    public void setResult(Result result) {
+        this.result = result;
+    }
+
 }

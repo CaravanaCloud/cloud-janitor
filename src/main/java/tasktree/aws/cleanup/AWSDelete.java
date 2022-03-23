@@ -17,7 +17,7 @@ public abstract class AWSDelete<T> extends AWSTask<T> {
 
 
     public AWSDelete(T resource){
-        this.resources = List.of(resource);
+        setResources(List.of(resource));;
     }
 
     @Override
@@ -27,9 +27,8 @@ public abstract class AWSDelete<T> extends AWSTask<T> {
     
     @Override
     public final void runSafe() {
-        for (T resource : resources) {
-            cleanup(resource);
-        }
+        resources.forEach(this::cleanup);
+        success();
     }
 
     protected void cleanup(T resource) {

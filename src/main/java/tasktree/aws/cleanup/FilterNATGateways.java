@@ -13,7 +13,16 @@ public class FilterNATGateways extends AWSFilter<NatGateway> {
     protected List<NatGateway> filterResources() {
         var ec2 = newEC2Client();
         return ec2.describeNatGateways()
-                .natGateways();
+                .natGateways()
+                .stream()
+                .filter(this::filter)
+                .toList();
+    }
+
+    private boolean filter(NatGateway natGateway) {
+        var state = natGateway.state().toString();
+        var skip =  state.equals("deleted");
+        return !skip;
     }
 
     @Override
