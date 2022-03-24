@@ -109,4 +109,9 @@ public interface Task extends Runnable{
     private Logger getLogger() {
         return LoggerFactory.getLogger(getName());
     }
+
+    default void debug(String message, String... args){
+        getLogger().debug(message, args);
+    }
+
 }

@@ -117,7 +117,7 @@ public class Configuration {
                 if (result == null){
                     result = Result.success(task);
                 }
-                task.info("Executed {} ({})", task.toString(),
+                task.debug("Executed {} ({})", task.toString(),
                         task.isWrite() ? "W" : "R");
             } catch (Exception e) {
                 result = Result.failure(task, e);
