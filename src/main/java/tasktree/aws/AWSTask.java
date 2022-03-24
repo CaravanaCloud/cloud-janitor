@@ -183,7 +183,8 @@ public abstract class AWSTask<T>
     private Region getDefaultRegion() {
         if (region != null) return region;
         var regionName = targetRegions.split(",")[0];
-        if (!regionName.isEmpty()) {
+        if (regionName == null || regionName.isEmpty()) {
+            regionName = DEFAULT_REGION.id();
             log.debug("Using region [{}] as default", region);
         }
         var defaultRegion = Region.of(regionName);
