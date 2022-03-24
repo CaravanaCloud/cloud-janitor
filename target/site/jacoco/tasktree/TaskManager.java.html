@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TaskManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tt-cli</a> &gt; <a href="index.source.html" class="el_package">tasktree</a> &gt; <span class="el_source">TaskManager.java</span></div><h1>TaskManager.java</h1><pre class="source lang-java linenums">package tasktree;
+
+import org.slf4j.Logger;
+import tasktree.spi.Task;
+import tasktree.visitor.CSVVisitor;
+import tasktree.visitor.PrintTreeVisitor;
+import tasktree.visitor.SyncReadVisitor;
+import tasktree.visitor.SyncWriteVisitor;
+
+import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.inject.Inject;
+
+@Dependent
+<span class="fc" id="L16">public class TaskManager {</span>
+    @Inject
+    BeanManager bm;
+
+    @Inject
+    Configuration config;
+
+    @Inject
+    Logger log;
+
+    @Inject
+    SyncReadVisitor reads;
+
+    @Inject
+    SyncWriteVisitor writes;
+
+    @Inject
+    CSVVisitor csv;
+
+
+    public void runAll(String[] args) {
+<span class="nc" id="L37">        config.init(args);</span>
+<span class="nc" id="L38">        var taskName = config.getTaskName();</span>
+<span class="nc" id="L39">        runByName(taskName);</span>
+<span class="nc" id="L40">    }</span>
+
+    private void runByName(String taskName) {
+<span class="nc" id="L43">        bm.getBeans(taskName)</span>
+<span class="nc" id="L44">                .stream()</span>
+<span class="nc" id="L45">                .map(this::fromBean)</span>
+<span class="nc" id="L46">                .forEach(this::runTask);</span>
+<span class="nc" id="L47">    }</span>
+
+    private void runTask(Task task) {
+<span class="nc" id="L50">        task.accept(reads);</span>
+<span class="nc" id="L51">        logTree(task);</span>
+<span class="nc" id="L52">        task.accept(writes);</span>
+<span class="nc" id="L53">        logTree(task);</span>
+<span class="nc" id="L54">        task.accept(csv);</span>
+<span class="nc" id="L55">        System.out.println(csv);;</span>
+<span class="nc" id="L56">    }</span>
+
+    private void logTree(Task task) {
+<span class="nc" id="L59">        var print = new PrintTreeVisitor();</span>
+<span class="nc" id="L60">        task.accept(print);</span>
+<span class="nc" id="L61">    }</span>
+
+    private Task fromBean(Bean&lt;?&gt; bean) {
+<span class="nc" id="L64">        var ctx = bm.createCreationalContext(bean);</span>
+<span class="nc" id="L65">        var ref = bm.getReference(bean, bean.getBeanClass(), ctx);</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (ref instanceof Task task) {</span>
+<span class="nc" id="L67">            return (Task) task;</span>
+        }else{
+<span class="nc" id="L69">            log.error(&quot;Bean {} is not a Task&quot;, bean);</span>
+<span class="nc" id="L70">            return null;</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

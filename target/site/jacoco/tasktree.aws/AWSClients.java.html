@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AWSClients.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tt-cli</a> &gt; <a href="index.source.html" class="el_package">tasktree.aws</a> &gt; <span class="el_source">AWSClients.java</span></div><h1>AWSClients.java</h1><pre class="source lang-java linenums">package tasktree.aws;
+
+import software.amazon.awssdk.core.SdkClient;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.ec2.Ec2Client;
+import software.amazon.awssdk.services.elasticloadbalancing.ElasticLoadBalancingClient;
+import software.amazon.awssdk.services.elasticloadbalancingv2.ElasticLoadBalancingV2Client;
+import software.amazon.awssdk.services.route53.Route53Client;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.sts.StsClient;
+
+import java.util.HashMap;
+import java.util.Map;
+
+<span class="nc" id="L15">public class AWSClients {</span>
+<span class="nc" id="L16">    static final AWSClients instance = new AWSClients();</span>
+<span class="nc" id="L17">    Map&lt;Region, Map&lt;Class&lt;? extends SdkClient&gt;, SdkClient&gt;&gt; clients = new HashMap&lt;&gt;();</span>
+
+    public static AWSClients getInstance() {
+<span class="nc" id="L20">        return instance;</span>
+    }
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;T extends SdkClient&gt; T getClient(Region region, Class&lt;T&gt; clientClass) {
+<span class="nc" id="L25">        var regionClients = clients.getOrDefault(region, new HashMap&lt;&gt;());</span>
+<span class="nc" id="L26">        var client = regionClients.get(clientClass);</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        if (client == null) {</span>
+<span class="nc bnc" id="L28" title="All 5 branches missed.">            client = switch (clientClass.getSimpleName()) {</span>
+<span class="nc" id="L29">                case &quot;S3Client&quot; -&gt; newS3Client(region);</span>
+<span class="nc" id="L30">                case &quot;Route53Client&quot; -&gt; newRoute53Client(region);</span>
+<span class="nc" id="L31">                case &quot;Ec2Client&quot; -&gt; newEC2Client(region);</span>
+<span class="nc" id="L32">                case &quot;StsClient&quot; -&gt; newSTSClient(region);</span>
+<span class="nc" id="L33">                default -&gt; throw new IllegalArgumentException(&quot;Unknown client class: &quot; + clientClass.getSimpleName());</span>
+            };
+        }
+<span class="nc" id="L36">        return (T) client;</span>
+    }
+
+    private StsClient newSTSClient(Region region) {
+<span class="nc" id="L40">        var sts = StsClient.builder().region(region).build();</span>
+<span class="nc" id="L41">        return sts;</span>
+    }
+
+    public S3Client newS3Client(Region region){
+<span class="nc" id="L45">        var s3 = S3Client.builder().region(region).build();</span>
+<span class="nc" id="L46">        return s3;</span>
+    }
+
+    public Route53Client newRoute53Client(Region region) {
+<span class="nc" id="L50">        return Route53Client.builder().region(region).build();</span>
+    }
+
+    public ElasticLoadBalancingV2Client getELBClientV2(Region region) {
+<span class="nc" id="L54">        return ElasticLoadBalancingV2Client.builder().region(region).build();</span>
+    }
+
+    public ElasticLoadBalancingClient getELBClient(Region region) {
+<span class="nc" id="L58">        return ElasticLoadBalancingClient.builder()</span>
+<span class="nc" id="L59">                .region(region)</span>
+<span class="nc" id="L60">                .build();</span>
+    }
+
+    public Ec2Client newEC2Client(Region region) {
+<span class="nc" id="L64">        return Ec2Client.builder().region(region).build();</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

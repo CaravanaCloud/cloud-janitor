@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DeleteSubnet.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tt-cli</a> &gt; <a href="index.source.html" class="el_package">tasktree.aws.cleanup</a> &gt; <span class="el_source">DeleteSubnet.java</span></div><h1>DeleteSubnet.java</h1><pre class="source lang-java linenums">package tasktree.aws.cleanup;
+
+import software.amazon.awssdk.services.ec2.model.DeleteSubnetRequest;
+import software.amazon.awssdk.services.ec2.model.Subnet;
+import tasktree.Configuration;
+import tasktree.spi.Task;
+
+import java.util.stream.Stream;
+
+public class DeleteSubnet extends AWSDelete&lt;Subnet&gt; {
+    public DeleteSubnet(Subnet net) {
+<span class="nc" id="L12">        super(net);</span>
+<span class="nc" id="L13">    }</span>
+
+    @Override
+    public void cleanup(Subnet resource) {
+<span class="nc" id="L17">        log().debug(&quot;Deleting subnet &quot; + resource.subnetId());</span>
+<span class="nc" id="L18">        DeleteSubnetRequest delSub = DeleteSubnetRequest.builder().subnetId(resource.subnetId()).build();</span>
+<span class="nc" id="L19">        newEC2Client().deleteSubnet(delSub);</span>
+<span class="nc" id="L20">    }</span>
+
+    @Override
+    protected &lt;R&gt; Stream&lt;Task&gt; mapSubtasks(Subnet subnet) {
+<span class="nc" id="L24">        return super.mapSubtasks(subnet);</span>
+    }
+
+    @Override
+    protected String getResourceType() {
+<span class="nc" id="L29">        return &quot;Subnet&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

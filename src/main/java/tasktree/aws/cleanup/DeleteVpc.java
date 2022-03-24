@@ -32,17 +32,17 @@ public class DeleteVpc extends AWSDelete<Vpc> {
         var vpcId = resource.vpcId();
         return Stream.of(
                 //TODO: Filter by VPC
-                new FilterTargetGroups(),
                 new FilterLoadBalancersV2(),
+                new FilterTargetGroups(),
                 new FilterNATGateways(),
-                new FilterAddresses(),
                 new FilterInstances(),
-                //VPC Resoruces
+                new FilterAddresses(),
+                //VPC Resources
                 new FilterLoadBalancers(vpcId),
                 new FilterVPCEndpoints(vpcId),
-                new FilterNetworkInterfaces(vpcId),
                 new FilterRouteTables(vpcId),
                 new FilterSecurityGroups(vpcId),
+                new FilterNetworkInterfaces(vpcId),
                 new FilterSubnets(vpcId),
                 new FilterInternetGateways(vpcId)
         );

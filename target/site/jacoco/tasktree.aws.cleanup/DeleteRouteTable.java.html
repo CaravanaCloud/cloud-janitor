@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DeleteRouteTable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tt-cli</a> &gt; <a href="index.source.html" class="el_package">tasktree.aws.cleanup</a> &gt; <span class="el_source">DeleteRouteTable.java</span></div><h1>DeleteRouteTable.java</h1><pre class="source lang-java linenums">package tasktree.aws.cleanup;
+
+import software.amazon.awssdk.services.ec2.model.DeleteRouteRequest;
+import software.amazon.awssdk.services.ec2.model.DeleteRouteTableRequest;
+import software.amazon.awssdk.services.ec2.model.Route;
+import software.amazon.awssdk.services.ec2.model.RouteTable;
+
+public class DeleteRouteTable extends AWSDelete&lt;RouteTable&gt; {
+
+    public DeleteRouteTable(RouteTable resource) {
+<span class="nc" id="L11">        super(resource);</span>
+<span class="nc" id="L12">    }</span>
+
+    @Override
+    public void cleanup(RouteTable resource) {
+<span class="nc bnc" id="L16" title="All 2 branches missed.">        if (! isMainRouteTable(resource)) {</span>
+<span class="nc" id="L17">            deleteRoutes(resource);</span>
+<span class="nc" id="L18">            deleteRouteTable(resource);</span>
+        } else{
+<span class="nc" id="L20">            log().debug(&quot;Not deleting main route table {}&quot;, resource.routeTableId());</span>
+        }
+<span class="nc" id="L22">    }</span>
+
+    private boolean isMainRouteTable(RouteTable resource) {
+<span class="nc" id="L25">        boolean isMain = resource.associations().stream().anyMatch(assoc -&gt; assoc.main());</span>
+<span class="nc" id="L26">        return isMain;</span>
+    }
+
+    private void deleteRoutes(RouteTable resource) {
+<span class="nc" id="L30">        resource.routes().stream().forEach(r -&gt; deleteRoute(resource, r));</span>
+<span class="nc" id="L31">    }</span>
+
+    private void deleteRoute(RouteTable resource, Route route) {
+<span class="nc" id="L34">        log().debug(&quot;Found rounte {}&quot;, route);</span>
+<span class="nc" id="L35">        var gatewayId = route.gatewayId();</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        if (&quot;local&quot;.equals(gatewayId)) return;</span>
+<span class="nc" id="L37">        log().info(&quot;Deleting route {}&quot;, route.toString());</span>
+<span class="nc" id="L38">        var builder = DeleteRouteRequest.builder()</span>
+<span class="nc" id="L39">                .routeTableId(resource.routeTableId());</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (route.destinationCidrBlock() != null) {</span>
+<span class="nc" id="L41">            builder.destinationCidrBlock(route.destinationCidrBlock());</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        }else if (route.destinationPrefixListId() != null) {</span>
+<span class="nc" id="L43">            builder.destinationPrefixListId(route.destinationPrefixListId());</span>
+        }
+<span class="nc" id="L45">        var request = builder.build();</span>
+<span class="nc" id="L46">        newEC2Client().deleteRoute(request);</span>
+<span class="nc" id="L47">    }</span>
+
+    private void deleteRouteTable(RouteTable resource) {
+<span class="nc" id="L50">        log().debug(&quot;Deleting route table {}&quot;, resource.routeTableId());</span>
+<span class="nc" id="L51">        var request = DeleteRouteTableRequest.builder()</span>
+<span class="nc" id="L52">                .routeTableId(resource.routeTableId())</span>
+<span class="nc" id="L53">                .build();</span>
+<span class="nc" id="L54">        newEC2Client().deleteRouteTable(request);</span>
+<span class="nc" id="L55">    }</span>
+
+    @Override
+    protected String getResourceType() {
+<span class="nc" id="L59">        return &quot;Route Table&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

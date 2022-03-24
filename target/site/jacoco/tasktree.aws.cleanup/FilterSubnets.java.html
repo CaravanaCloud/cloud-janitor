@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FilterSubnets.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tt-cli</a> &gt; <a href="index.source.html" class="el_package">tasktree.aws.cleanup</a> &gt; <span class="el_source">FilterSubnets.java</span></div><h1>FilterSubnets.java</h1><pre class="source lang-java linenums">package tasktree.aws.cleanup;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import software.amazon.awssdk.services.ec2.model.DescribeSubnetsRequest;
+import software.amazon.awssdk.services.ec2.model.Subnet;
+import tasktree.Configuration;
+import tasktree.aws.AWSTask;
+import tasktree.spi.Task;
+
+import java.util.List;
+import java.util.stream.Stream;
+
+public class FilterSubnets extends AWSFilter&lt;Subnet&gt; {
+<span class="nc" id="L15">    static final Logger log = LoggerFactory.getLogger(FilterInstances.class);</span>
+    private String vpcId;
+
+<span class="nc" id="L18">    public FilterSubnets(String vpcId) {</span>
+<span class="nc" id="L19">        this.vpcId = vpcId;</span>
+<span class="nc" id="L20">    }</span>
+
+    private boolean match(Subnet net) {
+<span class="nc" id="L23">        var prefix = getAwsCleanupPrefix();</span>
+<span class="nc" id="L24">        var match = net.tags().stream()</span>
+<span class="nc bnc" id="L25" title="All 4 branches missed.">                .anyMatch(tag -&gt; tag.key().equals(&quot;Name&quot;) &amp;&amp; tag.value().startsWith(prefix));</span>
+<span class="nc" id="L26">        log.trace(&quot;Found Subnet {} {}&quot;, mark(match), net);</span>
+<span class="nc" id="L27">        return match;</span>
+    }
+
+    @Override
+    protected List&lt;Subnet&gt; filterResources() {
+<span class="nc" id="L32">        var ec2 = newEC2Client();</span>
+<span class="nc" id="L33">        var describeNets = DescribeSubnetsRequest.builder().build();</span>
+<span class="nc" id="L34">        var nets = ec2.describeSubnets(describeNets).subnets().stream();</span>
+<span class="nc" id="L35">        var matches = nets.filter(this::match).toList();</span>
+<span class="nc" id="L36">        return matches;</span>
+    }
+
+    @Override
+    protected Stream&lt;Task&gt; mapSubtasks(Subnet subnet) {
+<span class="nc" id="L41">        return Stream.of(new DeleteSubnet(subnet));</span>
+    }
+
+    @Override
+    protected String getResourceType() {
+<span class="nc" id="L46">        return &quot;Subnets&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

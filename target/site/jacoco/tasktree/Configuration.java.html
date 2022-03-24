@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Configuration.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tt-cli</a> &gt; <a href="index.source.html" class="el_package">tasktree</a> &gt; <span class="el_source">Configuration.java</span></div><h1>Configuration.java</h1><pre class="source lang-java linenums">package tasktree;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import tasktree.spi.Task;
+import tasktree.spi.Tasks;
+import tasktree.visitor.PrintTreeVisitor;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import java.util.HashMap;
+
+@ApplicationScoped
+<span class="fc" id="L17">public class Configuration {</span>
+<span class="fc" id="L18">    static final ObjectMapper mapper = new ObjectMapper();</span>
+
+    @Inject
+    Logger log;
+
+    @Inject
+    Tasks tasks;
+
+    @ConfigProperty(name = &quot;tt.task&quot;, defaultValue = &quot;marvin&quot;)
+    String taskName;
+
+    @ConfigProperty(name = &quot;tt.dryRun&quot;, defaultValue = &quot;true&quot;)
+    boolean dryRun;
+
+
+    @ConfigProperty(name=&quot;tt.waitBeforeRun&quot;, defaultValue = &quot;1000&quot;)
+    long waitBeforeRun;
+
+    String[] args;
+
+    private static synchronized ObjectWriter createWriter() {
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if (writer != null) return writer;</span>
+        //TODO: Filter out properties with $
+<span class="fc" id="L41">        writer = mapper.writer().withDefaultPrettyPrinter();</span>
+<span class="fc" id="L42">        return writer;</span>
+    }
+
+
+    public String getTaskName() {
+<span class="nc" id="L47">        return taskName;</span>
+    }
+
+
+<span class="fc" id="L51">    static ObjectWriter writer = createWriter();</span>
+
+    @Override
+    public String toString() {
+        try {
+<span class="nc" id="L56">            var dump = new HashMap&lt;String, String&gt;() {{</span>
+<span class="nc" id="L57">                put(&quot;task&quot;, taskName);</span>
+<span class="nc" id="L58">                put(&quot;args&quot;, String.join(&quot; &quot;,args));</span>
+<span class="nc" id="L59">                put(&quot;dryRun&quot;, &quot;&quot; + dryRun);</span>
+<span class="nc" id="L60">            }};</span>
+<span class="nc" id="L61">            return writer.writeValueAsString(dump);</span>
+<span class="nc" id="L62">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L63">            e.printStackTrace();</span>
+        }
+<span class="nc" id="L65">        return &quot;Configuration{?}&quot;;</span>
+    }
+
+    public void parse(String[] args) {
+<span class="nc" id="L69">        this.args = args;</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (args.length &gt; 0) {</span>
+<span class="nc" id="L71">            taskName = args[0];</span>
+        }
+<span class="nc" id="L73">    }</span>
+
+
+    public Tasks getTasks() {
+<span class="nc" id="L77">        return tasks;</span>
+    }
+
+    public void waitBeforeRun() {
+<span class="nc" id="L81">        waitBeforeRun(null);</span>
+<span class="nc" id="L82">    }</span>
+
+    public void waitBeforeRun(Long wait) {
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        var sleep = wait == null ? waitBeforeRun : wait;</span>
+        try {
+<span class="nc" id="L87">            Thread.sleep(sleep);</span>
+<span class="nc" id="L88">        } catch (InterruptedException e) {</span>
+<span class="nc" id="L89">            e.printStackTrace();</span>
+<span class="nc" id="L90">        }</span>
+<span class="nc" id="L91">    }</span>
+
+    public void init(String[] args) {
+<span class="nc" id="L94">        parse(args);</span>
+<span class="nc" id="L95">        log.info(&quot;TaskTree Configuration: {}&quot;, this);</span>
+<span class="nc" id="L96">        waitBeforeRun(10 * (1+waitBeforeRun));</span>
+<span class="nc" id="L97">    }</span>
+
+
+    public boolean isDryRun() {
+<span class="nc" id="L101">        return dryRun;</span>
+    }
+
+    public void runTask(Task task) {
+<span class="nc" id="L105">        waitBeforeRun();</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">        if (task.isWrite()</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">                &amp;&amp; isDryRun()) {</span>
+<span class="nc" id="L108">            log.info(&quot;Dry run: {}&quot;, task);</span>
+        }else {
+            try {
+<span class="nc" id="L111">                task.runSafe();</span>
+<span class="nc" id="L112">                log.info(&quot;Executed {} ({})&quot;, task,</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                        task.isWrite() ? &quot;W&quot; : &quot;R&quot;);</span>
+<span class="nc" id="L114">            } catch (Exception e) {</span>
+<span class="nc" id="L115">                log.error(&quot;Error executing {}: {}&quot;, task, e.getMessage());</span>
+<span class="nc" id="L116">            }</span>
+        }
+<span class="nc" id="L118">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
