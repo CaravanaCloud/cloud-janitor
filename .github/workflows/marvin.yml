@@ -1,0 +1,19 @@
+name: Marvin
+
+on: [workflow_dispatch]
+
+jobs:
+  all-steps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Task Tree
+        uses: CaravanaCloud/task-tree@v1.0.20220318114521
+        env:
+          TT_TASK: marvin
+
+      - name: Upload report
+        uses: actions/upload-artifact@v3
+        with:
+          name: tasktree.csv
+          path: tasktree.csv
+          retention-days: 14
