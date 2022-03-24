@@ -18,11 +18,8 @@ jobs:
       - name: Verify AWS Authentication
         run: aws sts get-caller-identity
 
-      - name: GPG?
-        run: gpg --version
-
       - name: Task Tree
-        uses: CaravanaCloud/task-tree@v1.0.20220318114521
+        uses: CaravanaCloud/task-tree@v1.0.20220324161817
         env:
           TT_TASK: cleanup-aws
           TT_DRYRUN: true
