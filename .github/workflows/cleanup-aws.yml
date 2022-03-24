@@ -1,0 +1,35 @@
+name: Cleanup an AWS Account (Dry Run)
+
+on: [workflow_dispatch]
+
+jobs:
+  all-steps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.OCP_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.OCP_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.OCP_AWS_REGION}}
+
+      - name: Verify AWS Authentication
+        run: aws sts get-caller-identity
+
+      - name: GPG?
+        run: gpg --version
+
+      - name: Task Tree
+        uses: CaravanaCloud/task-tree@v1.0.20220318114521
+        env:
+          TT_TASK: cleanup-aws
+          TT_DRYRUN: true
+          TT_AWS_REGIONS: ap-northeast-1,eu-west-2
+          TT_AWS_CLEANUP_PREFIX: rhnb-
+
+      - name: Upload report
+        uses: actions/upload-artifact@v3
+        with:
+          name: tasktree.csv
+          path: tasktree.csv
+          retention-days: 14

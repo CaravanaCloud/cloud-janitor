@@ -1,5 +1,7 @@
 package tasktree.spi;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tasktree.Configuration;
 import tasktree.Result;
 import tasktree.visitor.Visitor;
@@ -94,5 +96,17 @@ public interface Task extends Runnable{
 
     default Duration getElapsedTime(){
         return Duration.between(getStartTime(), getEndTime());
+    }
+
+    default void info(String message, String... args){
+        getLogger().info(message, args);
+    }
+
+    default void error(String message, String... args){
+        getLogger().error(message, args);
+    }
+
+    private Logger getLogger() {
+        return LoggerFactory.getLogger(getName());
     }
 }

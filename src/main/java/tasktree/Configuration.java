@@ -117,11 +117,11 @@ public class Configuration {
                 if (result == null){
                     result = Result.success(task);
                 }
-                log.info("Executed {} ({})", task,
+                task.info("Executed {} ({})", task.toString(),
                         task.isWrite() ? "W" : "R");
             } catch (Exception e) {
                 result = Result.failure(task, e);
-                log.error("Error executing {}: {}", task, e.getMessage());
+                task.error("Error executing {}: {}", task.toString(), e.getMessage());
             }
         }
         var endTime = LocalDateTime.now();
