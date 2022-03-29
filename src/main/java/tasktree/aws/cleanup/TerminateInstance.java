@@ -20,7 +20,7 @@ public class TerminateInstance extends AWSDelete<Instance> {
             var ec2 = newEC2Client();
             ec2.terminateInstances(terminateInstance);
         }else {
-            log().info("Not terminating instance {} {}",state ,resource);
+            log().trace("Not terminating instance {} {}",state ,resource);
         }
     }
 

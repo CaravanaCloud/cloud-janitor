@@ -53,6 +53,7 @@ public class TaskManager {
         accept(task, writes);
         accept(task, new PrintTreeVisitor());
         accept(task, csv);
+        accept(task, new PrintTableVisitor());
     }
 
     private void accept(Task task, Visitor visitor) {

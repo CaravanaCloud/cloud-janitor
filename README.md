@@ -1,7 +1,14 @@
 # Task Tree
 
 "Task Tree" is an automation tool to help developers build and share maintenance
-and troubleshooting tasks. It is built to be easy to run and customize.
+and troubleshooting tasks. It is built to:
+
+* Save time and money for Red Hat customers & partners.
+* Be safe to execute, in prod.
+* Be easy to run and customize.
+* Provide correct filtering and dependency resolution
+* Report results effectively
+
 
 # Getting Started using the JAR release
 1. Download the latest JAR release:

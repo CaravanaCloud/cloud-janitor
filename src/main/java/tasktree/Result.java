@@ -105,4 +105,8 @@ public class Result{
                 description
         );
     }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
 }
