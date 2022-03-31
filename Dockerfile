@@ -11,4 +11,6 @@ RUN ./mvnw -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMa
 
 FROM  quay.io/quarkus/ubi-quarkus-native-image:22.0-java17 AS runtime
 COPY --from=build --chown=quarkus:quarkus /opt/quarkus-src/target/quarkus-app /opt/quarkus-app/
+RUN yum update -y \
+  && yum clean all
 ENTRYPOINT ["java","-jar","/opt/quarkus-app/quarkus-run.jar"]
