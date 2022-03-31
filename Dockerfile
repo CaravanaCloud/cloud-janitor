@@ -1,4 +1,5 @@
-ARG UBI=ghcr.io/graalvm/graalvm-ce:latest
+ARG UBI=ghcr.io/graalvm/native-image:latest
+# ARG UBI=ghcr.io/graalvm/graalvm-ce:latest
 # ARG UBI=quay.io/quarkus/ubi-quarkus-native-image:22.0-java17
 
 FROM ${UBI} AS build
@@ -11,6 +12,5 @@ RUN ./mvnw -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMa
     package
 
 FROM ${UBI} AS runtime
-# RUN yum update -y && yum clean all -y
 COPY --from=build /opt/quarkus-src/target/quarkus-app /opt/quarkus-app/
 ENTRYPOINT ["java","-jar","/opt/quarkus-app/quarkus-run.jar"]
