@@ -10,7 +10,7 @@ public class DeleteSecurityGroup extends AWSDelete<SecurityGroup> {
 
     @Override
     protected void cleanup(SecurityGroup resource) {
-        // deleteRules(resource);
+        deleteRules(resource);
         deleteSecurityGroup(resource);
     }
 
