@@ -11,5 +11,6 @@ RUN ./mvnw -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMa
     package
 
 FROM ${UBI} AS runtime
+RUN yum update -y && yum clean all -y
 COPY --from=build /opt/quarkus-src/target/quarkus-app /opt/quarkus-app/
 ENTRYPOINT ["java","-jar","/opt/quarkus-app/quarkus-run.jar"]
