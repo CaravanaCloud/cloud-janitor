@@ -59,7 +59,7 @@ public abstract class AWSTask<T>
     }
 
     protected Logger log() {
-        return log;
+        return LoggerFactory.getLogger(getName());
     }
 
     protected CloudTrailClient newCloudTrailClient() {
@@ -72,7 +72,7 @@ public abstract class AWSTask<T>
     public String toString() {
         return asString(getName(),
                 getRegionOrDefault().toString(),
-                getResourceType(),
+                getResultType(),
                 getDescription());
     }
 
@@ -247,5 +247,11 @@ public abstract class AWSTask<T>
 
     public void setResources(List<T> resources) {
         this.resources = resources;
+    }
+
+    public String getResultType() {
+        Result result = getResult();
+        return result == null ? "NULL"
+                : result.getType().toString();
     }
 }

@@ -20,11 +20,6 @@ public class DeleteSubnet extends AWSDelete<Subnet> {
     }
 
     @Override
-    protected <R> Stream<Task> mapSubtasks(Subnet subnet) {
-        return super.mapSubtasks(subnet);
-    }
-
-    @Override
     protected String getResourceType() {
         return "Subnet";
     }

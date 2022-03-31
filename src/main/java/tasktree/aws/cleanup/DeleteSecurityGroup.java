@@ -26,7 +26,7 @@ public class DeleteSecurityGroup extends AWSDelete<SecurityGroup> {
             log().debug("Found security group rule [{}]",rule);
             if (rule.groupId().equals(resource.groupId())){
                 if (rule.isEgress()){
-                    log().debug("Deleting security group egress {}", rule);
+                    log().trace("Deleting security group egress {}", rule);
                     var request = RevokeSecurityGroupEgressRequest
                             .builder()
                             .groupId(resource.groupId())
@@ -34,7 +34,7 @@ public class DeleteSecurityGroup extends AWSDelete<SecurityGroup> {
                             .build();
                     ec2.revokeSecurityGroupEgress(request);
                 }else{
-                    log().debug("Deleting security group ingress {}", rule);
+                    log().trace("Deleting security group ingress {}", rule);
                     var request = RevokeSecurityGroupIngressRequest
                             .builder()
                             .groupId(resource.groupId())
@@ -49,7 +49,7 @@ public class DeleteSecurityGroup extends AWSDelete<SecurityGroup> {
 
 
     private void deleteSecurityGroup(SecurityGroup resource) {
-        log().debug("Deleting Security Group {}", resource.groupId());
+        log().trace("Deleting Security Group {}", resource.groupId());
         var request = DeleteSecurityGroupRequest.builder()
                 .groupId(resource.groupId())
                 .build();
