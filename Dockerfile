@@ -1,7 +1,8 @@
-ARG UBI=quay.io/quarkus/ubi-quarkus-native-image:22.0-java17
+ARG UBI=ghcr.io/graalvm/graalvm-ce:latest
+# ARG UBI=quay.io/quarkus/ubi-quarkus-native-image:22.0-java17
+
 FROM ${UBI} AS build
-COPY --chown=quarkus:quarkus . /opt/quarkus-src
-USER quarkus
+COPY . /opt/quarkus-src
 WORKDIR /opt/quarkus-src
 RUN ./mvnw -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
     org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline
@@ -9,8 +10,6 @@ RUN ./mvnw -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMa
     -f /opt/quarkus-src/pom.xml \
     package
 
-FROM  quay.io/quarkus/ubi-quarkus-native-image:22.0-java17 AS runtime
-COPY --from=build --chown=quarkus:quarkus /opt/quarkus-src/target/quarkus-app /opt/quarkus-app/
-RUN yum update -y \
-  && yum clean all
+FROM ${UBI} AS runtime
+COPY --from=build /opt/quarkus-src/target/quarkus-app /opt/quarkus-app/
 ENTRYPOINT ["java","-jar","/opt/quarkus-app/quarkus-run.jar"]
