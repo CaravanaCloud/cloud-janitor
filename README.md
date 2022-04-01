@@ -24,19 +24,18 @@ Task Tree is also built to be easily extensible and contributions are most welco
 
 Here are a few ways you can execute Task Tree. The default task is called "marvin" and is mostly harmless. It will just print "Don't panic" to the logs.
 
-## Executable Docker Container
+All mentioned binaries can be found in the [project releases page](https://github.com/CaravanaCloud/task-tree/releases).
+
+## Docker Container
 ```bash
 docker run caravanacloud/task-tree
 ```
 
-
-# Getting Started using the JAR release
-1. Download the latest JAR release:
-https://github.com/CaravanaCloud/task-tree/releases
-2. Run it:
-```
+## Executable Jar
+```bash
 java -jar java -jar tasktree-runner.jar
 ```
+
 
 # Getting Started using the RPM release
 1. Download the latest RPM release:
