@@ -1,13 +1,33 @@
 # Task Tree
 
-"Task Tree" is an automation tool to help developers build and share maintenance
-and troubleshooting tasks. It is built to:
+"Task Tree" is a tool to automate complex maintenance and troubleshooting tasks in cloud computing. It's built considering the security and flexibility requirements found in operating real-world production workloads.
 
-* Save time and money for Red Hat customers & partners.
-* Be safe to execute, in prod.
-* Be easy to run and customize.
-* Provide correct filtering and dependency resolution
-* Report results effectively
+In cloud computing many responsibilities are shared between the provider and the consumer of services. This tool's goal is to share automations that customers and partners frequently need to build themselves, often with minimal differences.
+
+As an example context, consider the task of cleaning up your AWS account after testing some drafts. Here's how *Task Tree* features can help:
+
+**Resource Filtering** so that only the matched resources are deleted.
+
+**Defensive Defaults** so that resources are only deleted when you disable the "dry run" flag.
+
+**Dependency Resolution** so that deletes are cascaded to dependent resources.
+
+**Logs & Reporting** so that you have a record of invocations and their results for queries and visualization.
+
+**Flexible Runtime** so it can be used as an executable container, executable jar, native executable, github action or your preferred CI/CD tool.
+
+**Easy to Operate** all configuration can be passed as environment variables, as well as other sources supported by quarkus.io.
+
+Task Tree is also built to be easily extensible and contributions are most welcome! 
+
+# Executing Task Tree
+
+Here are a few ways you can execute Task Tree. The default task is called "marvin" and is mostly harmless. It will just print "Don't panic" to the logs.
+
+## Executable Docker Container
+```bash
+docker run caravanacloud/task-tree
+```
 
 
 # Getting Started using the JAR release

@@ -2,6 +2,7 @@ ARG UBI=ghcr.io/graalvm/native-image:latest
 # ARG UBI=ghcr.io/graalvm/graalvm-ce:latest
 # ARG UBI=quay.io/quarkus/ubi-quarkus-native-image:22.0-java17
 
+
 FROM ${UBI} AS build
 COPY . /opt/quarkus-src
 WORKDIR /opt/quarkus-src

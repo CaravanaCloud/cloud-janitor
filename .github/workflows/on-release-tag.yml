@@ -7,11 +7,26 @@ on:
 
 env:
   REF_NAME: ${{ github.ref_name }}
+  GRAALVM_VERSION: '22.0.0.2'
+  GRAALVM_JAVA: 'java17'
+  GRAALVM_ARCH: 'amd64'
 
 jobs:
   create-release:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Build uberjar
+        env:
+          MVN_FLAGS: -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
+          QUARKUS_PACKAGE_TYPE: uber-jar
+        run: ./mvnw $MVN_FLAGS package
+
+      - name: Debug
+        run: find .
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
