@@ -10,6 +10,7 @@ env:
   GRAALVM_VERSION: '22.0.0.2'
   GRAALVM_JAVA: 'java17'
   GRAALVM_ARCH: 'amd64'
+  PKG_VERSION: "1.0"
 
 jobs:
   create-release:
@@ -33,7 +34,7 @@ jobs:
       - name: Build RPM
         run: |
           jpackage --input target/ \
-            --app-version "${{ github.ref }}" \
+            --app-version "${PKG_VERSION}" \
             --name TaskTree \
             --main-jar tasktree-runner.jar \
             --main-class tasktree.Main \
