@@ -31,7 +31,14 @@ jobs:
         run: ./mvnw $MVN_FLAGS package
 
       - name: Build RPM
-        run: echo RPMin
+        run: |
+          jpackage --input target/ \
+            --app-version "${{ github.ref }}" \
+            --name TaskTree \
+            --main-jar tasktree-runner.jar \
+            --main-class tasktree.Main \
+            --type rpm \
+            --java-options '--enable-preview'
 
       - name: Debug
         run: find .
