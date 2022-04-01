@@ -31,24 +31,26 @@ All mentioned binaries can be found in the [project releases page](https://githu
 docker run caravanacloud/task-tree
 ```
 
+## Github Action
+```
+
+```
+
 ## Executable Jar
 ```bash
 java -jar java -jar tasktree-runner.jar
 ```
 
-
-# Getting Started using the RPM release
-1. Download the latest RPM release:
-   https://github.com/CaravanaCloud/task-tree/releases
-2. Install it:
+## RPM Package
+Install it:
 ```
-rpm -Uvh --force tt-cli/target/tasktree-cli.rpm
+rpm -Uvh --force tasktree.rpm
 ```
-3. Add it to your PATH:
+Add it to your PATH:
 ```
-ln -sf /opt/tasktree/bin/tasktree /usr/local/bin/tt
+sudo ln -sf /opt/tasktree/bin/tasktree /usr/local/bin/tt
 ```
-4. Run it:
+Run it:
 ```
 tt
 ```
