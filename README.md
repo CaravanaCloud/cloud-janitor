@@ -33,7 +33,8 @@ docker run caravanacloud/task-tree
 
 ## Github Action
 ```
-
+- name: Task Tree
+  uses: CaravanaCloud/task-tree@v1.0.20220324161817
 ```
 
 ## Executable Jar
@@ -55,21 +56,19 @@ Run it:
 tt
 ```
 
+## From sources (dev mode)
+```
+./mvnw quarkus:dev
+```
+
 # Configuring Tasks
 
-## Quarkus Configuration
-You can configure the tasks to run using a Quarkus configuration YAML file in the ($CWD/config/application.yaml).
-Examples are provided below and in the "config" directory in this repository.
-
-## Dry Run
-Write tasks, such as deleting AWS resources, are protected by a dry run lock so that they'll only run if explicitly enabled.
-
-# Task Library
+Here are a few samples demonstrating how to use environment variables to configure tasks.
 
 ## marvin
 Don't panic! This is just a sample task.
 Try running this one to check everything is working:
-```bash
+```
 tt marvin
 ```
 
@@ -97,7 +96,7 @@ tt:
 - Fully-automated OpenShift management (Source2Service)
 
 # Features Wishlist:
-1. Integrate with ansible
+1. Ansible integration
 2. Kogito-defined tasks
 3. CloudWatch and/or ElasticSearch/Logstash/Kibana for visualization
 
