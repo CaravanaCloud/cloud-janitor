@@ -4,6 +4,8 @@ import software.amazon.awssdk.services.ec2.model.Instance;
 import software.amazon.awssdk.services.ec2.model.TerminateInstancesRequest;
 import tasktree.Configuration;
 
+import java.util.Optional;
+
 public class TerminateInstance extends AWSDelete<Instance> {
     public TerminateInstance(Instance instance) {
         super(instance);
@@ -19,13 +21,29 @@ public class TerminateInstance extends AWSDelete<Instance> {
                     .build();
             var ec2 = newEC2Client();
             ec2.terminateInstances(terminateInstance);
+            waitForTermination(resource);
         }else {
             log().trace("Not terminating instance {} {}",state ,resource);
+        }
+    }
+
+    private void waitForTermination(Instance resource) {
+        //TODO: Actually check
+        try {
+            log().debug("Waiting instance termination...");
+            Thread.sleep(30_000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     protected String getResourceType() {
         return "EC2 Instance";
+    }
+
+    @Override
+    public Optional<Long> getWaitAfterRun() {
+        return Optional.of(30_000L);
     }
 }

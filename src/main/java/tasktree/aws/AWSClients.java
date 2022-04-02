@@ -2,6 +2,7 @@ package tasktree.aws;
 
 import software.amazon.awssdk.core.SdkClient;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.athena.AthenaClient;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.elasticloadbalancing.ElasticLoadBalancingClient;
 import software.amazon.awssdk.services.elasticloadbalancingv2.ElasticLoadBalancingV2Client;
@@ -9,9 +10,11 @@ import software.amazon.awssdk.services.route53.Route53Client;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.sts.StsClient;
 
+import javax.enterprise.context.Dependent;
 import java.util.HashMap;
 import java.util.Map;
 
+@Dependent
 public class AWSClients {
     static final AWSClients instance = new AWSClients();
     Map<Region, Map<Class<? extends SdkClient>, SdkClient>> clients = new HashMap<>();
@@ -64,5 +67,8 @@ public class AWSClients {
         return Ec2Client.builder().region(region).build();
     }
 
+    public AthenaClient newAthenaClient(Region region) {
+        return AthenaClient.builder().region(region).build();
+    }
 
 }

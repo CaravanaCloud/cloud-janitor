@@ -24,6 +24,9 @@ public class Configuration {
     @Inject
     Tasks tasks;
 
+    @Inject
+    RateLimiter rateLimiter;
+
     @ConfigProperty(name = "tt.task", defaultValue = "marvin")
     String taskName;
 
@@ -112,6 +115,7 @@ public class Configuration {
             log.info("Dry run: {}", task);
         }else {
             try {
+                //TODO: Consider not re-executing task
                 task.runSafe();
                 result = task.getResult();
                 if (result == null){
@@ -119,11 +123,18 @@ public class Configuration {
                 }
                 task.debug("Executed {} ({})", task.toString(),
                         task.isWrite() ? "W" : "R");
+                //TODO: General waiter
+                if(task.isWrite()) {
+                    rateLimiter.waitAfterTask(task);
+                }
             } catch (Exception e) {
                 result = Result.failure(task, e);
                 task.error("Error executing {}: {}", task.toString(), e.getMessage());
             }
         }
+
+
+
         var endTime = LocalDateTime.now();
         result.setEndTime(endTime);
         task.setResult(result);

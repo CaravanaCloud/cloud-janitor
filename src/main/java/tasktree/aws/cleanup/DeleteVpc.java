@@ -39,12 +39,13 @@ public class DeleteVpc extends AWSDelete<Vpc> {
                 //VPC Resources
                 new FilterLoadBalancers(vpcId),
                 new FilterVPCEndpoints(vpcId),
-                new FilterSecurityGroupRules(vpcId),
-                new FilterSecurityGroups(vpcId),
                 new FilterNetworkInterfaces(vpcId),
                 new FilterSubnets(vpcId),
                 new FilterInternetGateways(vpcId),
+                new FilterRouteTableRules(vpcId),
                 new FilterRouteTables(vpcId),
+                new FilterSecurityGroupRules(vpcId),
+                new FilterSecurityGroups(vpcId),
                 //TODO: Filter by VPC
                 new FilterAddresses()
         );

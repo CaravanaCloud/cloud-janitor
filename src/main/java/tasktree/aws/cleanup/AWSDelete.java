@@ -5,6 +5,7 @@ import tasktree.Configuration;
 import tasktree.aws.AWSTask;
 
 import java.util.List;
+import java.util.Optional;
 
 public abstract class AWSDelete<T> extends AWSWrite<T> {
     public AWSDelete(T resource){
@@ -22,4 +23,8 @@ public abstract class AWSDelete<T> extends AWSWrite<T> {
     }
 
 
+    @Override
+    public Optional<Long> getWaitAfterRun() {
+        return Optional.of(5_000L);
+    }
 }

@@ -1,0 +1,347 @@
+Info  | RdCoroutineScope          | 12:JobScheduler FJ pool 2/11 | RdCoroutineHost overridden 
+2022-04-02 13:39:24,004 [   2674]   WARN - l.NotificationGroupManagerImpl - Notification group CodeWithMe is already registered (group=com.intellij.notification.NotificationGroup@4f2bd338). Plugin descriptor: PluginDescriptor(name=Code With Me, id=com.jetbrains.codeWithMe, descriptorPath=plugin.xml, path=~/.local/share/JetBrains/Toolbox/apps/IDEA-C/ch-0/213.7172.25/plugins/cwm-plugin, version=213.7172.25, package=null, isBundled=true) 
+2022-04-02 13:39:27,162 [   5832]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-04-02 13:39:28,429 [   7099]   WARN - ctionSystem.impl.ActionUpdater - 217 ms to grab EDT for UndoAction#update (com.intellij.ide.actions.UndoAction) 
+2022-04-02 13:39:29,903 [   8573]   WARN - ctionSystem.impl.ActionUpdater - 300 ms to grab EDT for CWMTelephonyGroup#update (com.jetbrains.rd.platform.codeWithMe.telephony.CWMTelephonyGroup) 
+2022-04-02 13:39:29,904 [   8574]   WARN - ctionSystem.impl.ActionUpdater - 299 ms to grab EDT for TabListAction#update (com.intellij.ide.actions.TabListAction) 
+2022-04-02 13:39:30,495 [   9165]   WARN - ctionSystem.impl.ActionUpdater - 234 ms to grab EDT for CWMTelephonyGroup#update (com.jetbrains.rd.platform.codeWithMe.telephony.CWMTelephonyGroup) 
+2022-04-02 13:39:32,077 [  10747]   WARN - ot.lang.agent.CopilotAgentUtil - node executable not found in $PATH 
+2022-04-02 14:58:02,733 [4721403]   WARN - com.intellij.util.xmlb.Binding - no accessors for org.jetbrains.idea.perforce.perforce.ConnectionId 
+2022-04-02 14:58:04,839 [4723509]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 15:01:29,292 [4927962]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-04-02 15:01:29,296 [4927966]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-04-02 15:03:06,708 [5025378]   WARN - ctionSystem.impl.ActionUpdater - 116 ms to call on EDT NextLessonAction#update (training.actions.NextLessonAction). Use `UpdateInBackground`. 
+2022-04-02 15:03:07,223 [5025893]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-04-02 15:03:30,017 [5048687]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 15:11:11,505 [5510175]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 15:11:53,758 [5552428]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 15:13:42,282 [5660952]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 15:14:23,320 [5701990]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 15:14:29,984 [5708654]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 15:15:49,539 [5788209]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 15:22:56,291 [6214961]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 15:45:38,357 [7577027]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-04-02 15:45:59,446 [7598116]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 17:04:26,934 [12305604]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 17:19:43,511 [13222181]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-04-02 17:20:26,191 [13264861]   WARN - map.impl.IdeKeyEventDispatcher - Action 'Go to Declaration or Usages' (class com.intellij.codeInsight.navigation.actions.GotoDeclarationAction) has become disabled in `beforeActionPerformedUpdate` right after successful `update` 
+2022-04-02 17:23:35,099 [13453769]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 17:23:59,202 [13477872]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-04-02 17:29:13,615 [13792285]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 17:31:47,188 [13945858]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-04-02 17:31:49,747 [13948417]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+Initialize stderr logger, severity=LOGSEVERITY_DISABLE
+2022-04-02 18:42:42,887 [18201557]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 18:48:11,236 [18529906]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:03:56,669 [19475339]  ERROR - ctionSystem.impl.ActionUpdater - update failed for AnAction(com.intellij.ide.actions.CopyTBXReferenceProvider, id=CopyTBXReference) with text=Toolbox URL 
+com.intellij.openapi.diagnostic.RuntimeExceptionWithAttachments: EventQueue.isDispatchThread()=false
+Current thread: Thread[SE-SearchTask-ActionSearchEverywhereContributor,4,main] 1789097256
+SystemEventQueueThread: Thread[AWT-EventQueue-0,6,main] 1227999656
+	at com.intellij.openapi.application.impl.ApplicationImpl.throwThreadAccessException(ApplicationImpl.java:1035)
+	at com.intellij.openapi.application.impl.ApplicationImpl.assertIsDispatchThread(ApplicationImpl.java:1018)
+	at com.intellij.openapi.editor.impl.CaretImpl.validateContext(CaretImpl.java:1314)
+	at com.intellij.openapi.editor.impl.CaretImpl.getSelectionStartPosition(CaretImpl.java:923)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.getSelectionRange(CopyTBXReferenceAction.kt:118)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.getSelectionParameters(CopyTBXReferenceAction.kt:108)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.access$getSelectionParameters(CopyTBXReferenceAction.kt:22)
+	at com.intellij.ide.actions.CopyTBXReferenceAction$getSelectionParameters$1.apply(CopyTBXReferenceAction.kt:99)
+	at com.intellij.ide.actions.CopyTBXReferenceAction$getSelectionParameters$1.apply(CopyTBXReferenceAction.kt:22)
+	at java.base/java.util.stream.IntPipeline$1$1.accept(IntPipeline.java:180)
+	at java.base/java.util.stream.Streams$RangeIntSpliterator.forEachRemaining(Streams.java:104)
+	at java.base/java.util.Spliterator$OfInt.forEachRemaining(Spliterator.java:699)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474)
+	at java.base/java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:913)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:578)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.getSelectionParameters(CopyTBXReferenceAction.kt:100)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.createLink(CopyTBXReferenceAction.kt:85)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.createJetBrainsLink(CopyTBXReferenceAction.kt:64)
+	at com.intellij.ide.actions.CopyTBXReferenceProvider.getQualifiedName(CopyPathProvider.kt:122)
+	at com.intellij.ide.actions.CopyPathProvider.update(CopyPathProvider.kt:29)
+	at com.intellij.openapi.actionSystem.ex.ActionUtil.lambda$performDumbAwareUpdate$0(ActionUtil.java:131)
+	at com.intellij.openapi.actionSystem.ex.ActionUtil.performDumbAwareUpdate(ActionUtil.java:145)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.doUpdate(ActionUpdater.java:637)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.lambda$updateActionReal$7(ActionUpdater.java:129)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.callAction(ActionUpdater.java:173)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.updateActionReal(ActionUpdater.java:130)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.lambda$new$0(ActionUpdater.java:112)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.update(ActionUpdater.java:623)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater$UpdateSessionImpl.presentation(ActionUpdater.java:737)
+	at com.intellij.ide.util.gotoByName.GotoActionModel$ActionWrapper.lambda$new$0(GotoActionModel.java:634)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.insideReadAction(NonBlockingReadActionImpl.java:521)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.lambda$attemptComputation$3(NonBlockingReadActionImpl.java:486)
+	at com.intellij.openapi.application.impl.ApplicationImpl.tryRunReadAction(ApplicationImpl.java:1084)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.lambda$runInReadActionWithWriteActionPriority$0(ProgressIndicatorUtils.java:75)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.runActionAndCancelBeforeWrite(ProgressIndicatorUtils.java:158)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.lambda$runWithWriteActionPriority$1(ProgressIndicatorUtils.java:115)
+	at com.intellij.openapi.progress.ProgressManager.lambda$runProcess$0(ProgressManager.java:57)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$runProcess$2(CoreProgressManager.java:188)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$executeProcessUnderProgress$12(CoreProgressManager.java:624)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.registerIndicatorAndRun(CoreProgressManager.java:698)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.computeUnderProgress(CoreProgressManager.java:646)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.executeProcessUnderProgress(CoreProgressManager.java:623)
+	at com.intellij.openapi.progress.impl.ProgressManagerImpl.executeProcessUnderProgress(ProgressManagerImpl.java:66)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.runProcess(CoreProgressManager.java:175)
+	at com.intellij.openapi.progress.ProgressManager.runProcess(ProgressManager.java:57)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.runWithWriteActionPriority(ProgressIndicatorUtils.java:112)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.runInReadActionWithWriteActionPriority(ProgressIndicatorUtils.java:75)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.attemptComputation(NonBlockingReadActionImpl.java:486)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.executeSynchronously(NonBlockingReadActionImpl.java:421)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl.executeSynchronously(NonBlockingReadActionImpl.java:186)
+	at com.intellij.ide.util.gotoByName.GotoActionModel$ActionWrapper.<init>(GotoActionModel.java:636)
+	at com.intellij.ide.util.gotoByName.GotoActionItemProvider.lambda$processActions$7(GotoActionItemProvider.java:232)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:195)
+	at java.base/java.util.stream.DistinctOps$1$2.accept(DistinctOps.java:175)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:177)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:195)
+	at java.base/java.util.HashMap$KeySpliterator.forEachRemaining(HashMap.java:1621)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474)
+	at java.base/java.util.stream.StreamSpliterators$WrappingSpliterator.forEachRemaining(StreamSpliterators.java:312)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:734)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474)
+	at java.base/java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:913)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:578)
+	at com.intellij.ide.util.gotoByName.GotoActionItemProvider.processItems(GotoActionItemProvider.java:280)
+	at com.intellij.ide.util.gotoByName.GotoActionItemProvider.processActions(GotoActionItemProvider.java:235)
+	at com.intellij.ide.util.gotoByName.GotoActionItemProvider.filterElements(GotoActionItemProvider.java:94)
+	at com.intellij.ide.actions.searcheverywhere.ActionSearchEverywhereContributor.fetchWeightedElements(ActionSearchEverywhereContributor.java:97)
+	at com.intellij.ide.actions.searcheverywhere.MixedResultsSearcher$ContributorSearchTask.run(MixedResultsSearcher.java:177)
+	at com.intellij.util.ConcurrencyUtil.runUnderThreadName(ConcurrencyUtil.java:213)
+	at com.intellij.util.ConcurrencyUtil.lambda$underThreadNameRunnable$3(ConcurrencyUtil.java:201)
+	at com.intellij.openapi.application.impl.ApplicationImpl$1.run(ApplicationImpl.java:263)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:668)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:665)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1.run(Executors.java:665)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+2022-04-02 19:03:56,669 [19475339]  ERROR - ctionSystem.impl.ActionUpdater - update failed for AnAction(com.intellij.ide.actions.CopyTBXReferenceProvider, id=CopyTBXReference) with text=Toolbox URL 
+com.intellij.openapi.diagnostic.RuntimeExceptionWithAttachments: EventQueue.isDispatchThread()=false
+Current thread: Thread[SE-SearchTask-ActionSearchEverywhereContributor,4,main] 1706391510
+SystemEventQueueThread: Thread[AWT-EventQueue-0,6,main] 1227999656
+	at com.intellij.openapi.application.impl.ApplicationImpl.throwThreadAccessException(ApplicationImpl.java:1035)
+	at com.intellij.openapi.application.impl.ApplicationImpl.assertIsDispatchThread(ApplicationImpl.java:1018)
+	at com.intellij.openapi.editor.impl.CaretImpl.validateContext(CaretImpl.java:1314)
+	at com.intellij.openapi.editor.impl.CaretImpl.getSelectionStartPosition(CaretImpl.java:923)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.getSelectionRange(CopyTBXReferenceAction.kt:118)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.getSelectionParameters(CopyTBXReferenceAction.kt:108)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.access$getSelectionParameters(CopyTBXReferenceAction.kt:22)
+	at com.intellij.ide.actions.CopyTBXReferenceAction$getSelectionParameters$1.apply(CopyTBXReferenceAction.kt:99)
+	at com.intellij.ide.actions.CopyTBXReferenceAction$getSelectionParameters$1.apply(CopyTBXReferenceAction.kt:22)
+	at java.base/java.util.stream.IntPipeline$1$1.accept(IntPipeline.java:180)
+	at java.base/java.util.stream.Streams$RangeIntSpliterator.forEachRemaining(Streams.java:104)
+	at java.base/java.util.Spliterator$OfInt.forEachRemaining(Spliterator.java:699)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474)
+	at java.base/java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:913)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:578)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.getSelectionParameters(CopyTBXReferenceAction.kt:100)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.createLink(CopyTBXReferenceAction.kt:85)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.createJetBrainsLink(CopyTBXReferenceAction.kt:64)
+	at com.intellij.ide.actions.CopyTBXReferenceProvider.getQualifiedName(CopyPathProvider.kt:122)
+	at com.intellij.ide.actions.CopyPathProvider.update(CopyPathProvider.kt:29)
+	at com.intellij.openapi.actionSystem.ex.ActionUtil.lambda$performDumbAwareUpdate$0(ActionUtil.java:131)
+	at com.intellij.openapi.actionSystem.ex.ActionUtil.performDumbAwareUpdate(ActionUtil.java:145)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.doUpdate(ActionUpdater.java:637)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.lambda$updateActionReal$7(ActionUpdater.java:129)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.callAction(ActionUpdater.java:173)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.updateActionReal(ActionUpdater.java:130)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.lambda$new$0(ActionUpdater.java:112)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.update(ActionUpdater.java:623)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater$UpdateSessionImpl.presentation(ActionUpdater.java:737)
+	at com.intellij.ide.util.gotoByName.GotoActionModel$ActionWrapper.lambda$new$0(GotoActionModel.java:634)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.insideReadAction(NonBlockingReadActionImpl.java:521)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.lambda$attemptComputation$3(NonBlockingReadActionImpl.java:486)
+	at com.intellij.openapi.application.impl.ApplicationImpl.tryRunReadAction(ApplicationImpl.java:1084)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.lambda$runInReadActionWithWriteActionPriority$0(ProgressIndicatorUtils.java:75)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.runActionAndCancelBeforeWrite(ProgressIndicatorUtils.java:158)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.lambda$runWithWriteActionPriority$1(ProgressIndicatorUtils.java:115)
+	at com.intellij.openapi.progress.ProgressManager.lambda$runProcess$0(ProgressManager.java:57)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$runProcess$2(CoreProgressManager.java:188)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$executeProcessUnderProgress$12(CoreProgressManager.java:624)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.registerIndicatorAndRun(CoreProgressManager.java:698)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.computeUnderProgress(CoreProgressManager.java:646)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.executeProcessUnderProgress(CoreProgressManager.java:623)
+	at com.intellij.openapi.progress.impl.ProgressManagerImpl.executeProcessUnderProgress(ProgressManagerImpl.java:66)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.runProcess(CoreProgressManager.java:175)
+	at com.intellij.openapi.progress.ProgressManager.runProcess(ProgressManager.java:57)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.runWithWriteActionPriority(ProgressIndicatorUtils.java:112)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.runInReadActionWithWriteActionPriority(ProgressIndicatorUtils.java:75)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.attemptComputation(NonBlockingReadActionImpl.java:486)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.executeSynchronously(NonBlockingReadActionImpl.java:421)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl.executeSynchronously(NonBlockingReadActionImpl.java:186)
+	at com.intellij.ide.util.gotoByName.GotoActionModel$ActionWrapper.<init>(GotoActionModel.java:636)
+	at com.intellij.ide.util.gotoByName.GotoActionItemProvider.lambda$processActions$7(GotoActionItemProvider.java:232)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:195)
+	at java.base/java.util.stream.DistinctOps$1$2.accept(DistinctOps.java:175)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:177)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:195)
+	at java.base/java.util.HashMap$KeySpliterator.forEachRemaining(HashMap.java:1621)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474)
+	at java.base/java.util.stream.StreamSpliterators$WrappingSpliterator.forEachRemaining(StreamSpliterators.java:312)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:734)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474)
+	at java.base/java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:913)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:578)
+	at com.intellij.ide.util.gotoByName.GotoActionItemProvider.processItems(GotoActionItemProvider.java:280)
+	at com.intellij.ide.util.gotoByName.GotoActionItemProvider.processActions(GotoActionItemProvider.java:235)
+	at com.intellij.ide.util.gotoByName.GotoActionItemProvider.filterElements(GotoActionItemProvider.java:94)
+	at com.intellij.ide.actions.searcheverywhere.ActionSearchEverywhereContributor.fetchWeightedElements(ActionSearchEverywhereContributor.java:97)
+	at com.intellij.ide.actions.searcheverywhere.MixedResultsSearcher$ContributorSearchTask.run(MixedResultsSearcher.java:177)
+	at com.intellij.util.ConcurrencyUtil.runUnderThreadName(ConcurrencyUtil.java:213)
+	at com.intellij.util.ConcurrencyUtil.lambda$underThreadNameRunnable$3(ConcurrencyUtil.java:201)
+	at com.intellij.openapi.application.impl.ApplicationImpl$1.run(ApplicationImpl.java:263)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:668)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:665)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1.run(Executors.java:665)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+2022-04-02 19:03:56,673 [19475343]  ERROR - ctionSystem.impl.ActionUpdater - IntelliJ IDEA 2021.3.3  Build #IC-213.7172.25 
+2022-04-02 19:03:56,672 [19475342]  ERROR - ctionSystem.impl.ActionUpdater - IntelliJ IDEA 2021.3.3  Build #IC-213.7172.25 
+2022-04-02 19:03:56,678 [19475348]  ERROR - ctionSystem.impl.ActionUpdater - JDK: 11.0.14.1; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o. 
+2022-04-02 19:03:56,678 [19475348]  ERROR - ctionSystem.impl.ActionUpdater - JDK: 11.0.14.1; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o. 
+2022-04-02 19:03:56,678 [19475348]  ERROR - ctionSystem.impl.ActionUpdater - OS: Linux 
+2022-04-02 19:03:56,678 [19475348]  ERROR - ctionSystem.impl.ActionUpdater - OS: Linux 
+2022-04-02 19:03:56,678 [19475348]  ERROR - ctionSystem.impl.ActionUpdater - Last Action: SearchEverywhere 
+2022-04-02 19:03:56,678 [19475348]  ERROR - ctionSystem.impl.ActionUpdater - Last Action: SearchEverywhere 
+2022-04-02 19:03:56,712 [19475382]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-04-02 19:03:56,785 [19475455]  ERROR - ctionSystem.impl.ActionUpdater - update failed for AnAction(com.intellij.ide.actions.CopyTBXReferenceProvider, id=CopyTBXReference) with text=Toolbox URL 
+com.intellij.openapi.diagnostic.RuntimeExceptionWithAttachments: EventQueue.isDispatchThread()=false
+Current thread: Thread[SE-SearchTask-ActionSearchEverywhereContributor,4,main] 954652974
+SystemEventQueueThread: Thread[AWT-EventQueue-0,6,main] 1227999656
+	at com.intellij.openapi.application.impl.ApplicationImpl.throwThreadAccessException(ApplicationImpl.java:1035)
+	at com.intellij.openapi.application.impl.ApplicationImpl.assertIsDispatchThread(ApplicationImpl.java:1018)
+	at com.intellij.openapi.editor.impl.CaretImpl.validateContext(CaretImpl.java:1314)
+	at com.intellij.openapi.editor.impl.CaretImpl.getSelectionStartPosition(CaretImpl.java:923)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.getSelectionRange(CopyTBXReferenceAction.kt:118)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.getSelectionParameters(CopyTBXReferenceAction.kt:108)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.access$getSelectionParameters(CopyTBXReferenceAction.kt:22)
+	at com.intellij.ide.actions.CopyTBXReferenceAction$getSelectionParameters$1.apply(CopyTBXReferenceAction.kt:99)
+	at com.intellij.ide.actions.CopyTBXReferenceAction$getSelectionParameters$1.apply(CopyTBXReferenceAction.kt:22)
+	at java.base/java.util.stream.IntPipeline$1$1.accept(IntPipeline.java:180)
+	at java.base/java.util.stream.Streams$RangeIntSpliterator.forEachRemaining(Streams.java:104)
+	at java.base/java.util.Spliterator$OfInt.forEachRemaining(Spliterator.java:699)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474)
+	at java.base/java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:913)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:578)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.getSelectionParameters(CopyTBXReferenceAction.kt:100)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.createLink(CopyTBXReferenceAction.kt:85)
+	at com.intellij.ide.actions.CopyTBXReferenceAction.createJetBrainsLink(CopyTBXReferenceAction.kt:64)
+	at com.intellij.ide.actions.CopyTBXReferenceProvider.getQualifiedName(CopyPathProvider.kt:122)
+	at com.intellij.ide.actions.CopyPathProvider.update(CopyPathProvider.kt:29)
+	at com.intellij.openapi.actionSystem.ex.ActionUtil.lambda$performDumbAwareUpdate$0(ActionUtil.java:131)
+	at com.intellij.openapi.actionSystem.ex.ActionUtil.performDumbAwareUpdate(ActionUtil.java:145)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.doUpdate(ActionUpdater.java:637)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.lambda$updateActionReal$7(ActionUpdater.java:129)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.callAction(ActionUpdater.java:173)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.updateActionReal(ActionUpdater.java:130)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.lambda$new$0(ActionUpdater.java:112)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater.update(ActionUpdater.java:623)
+	at com.intellij.openapi.actionSystem.impl.ActionUpdater$UpdateSessionImpl.presentation(ActionUpdater.java:737)
+	at com.intellij.ide.util.gotoByName.GotoActionModel$ActionWrapper.lambda$new$0(GotoActionModel.java:634)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.insideReadAction(NonBlockingReadActionImpl.java:521)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.lambda$attemptComputation$3(NonBlockingReadActionImpl.java:486)
+	at com.intellij.openapi.application.impl.ApplicationImpl.tryRunReadAction(ApplicationImpl.java:1084)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.lambda$runInReadActionWithWriteActionPriority$0(ProgressIndicatorUtils.java:75)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.runActionAndCancelBeforeWrite(ProgressIndicatorUtils.java:158)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.lambda$runWithWriteActionPriority$1(ProgressIndicatorUtils.java:115)
+	at com.intellij.openapi.progress.ProgressManager.lambda$runProcess$0(ProgressManager.java:57)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$runProcess$2(CoreProgressManager.java:188)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$executeProcessUnderProgress$12(CoreProgressManager.java:624)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.registerIndicatorAndRun(CoreProgressManager.java:698)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.computeUnderProgress(CoreProgressManager.java:646)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.executeProcessUnderProgress(CoreProgressManager.java:623)
+	at com.intellij.openapi.progress.impl.ProgressManagerImpl.executeProcessUnderProgress(ProgressManagerImpl.java:66)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.runProcess(CoreProgressManager.java:175)
+	at com.intellij.openapi.progress.ProgressManager.runProcess(ProgressManager.java:57)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.runWithWriteActionPriority(ProgressIndicatorUtils.java:112)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.runInReadActionWithWriteActionPriority(ProgressIndicatorUtils.java:75)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.attemptComputation(NonBlockingReadActionImpl.java:486)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.executeSynchronously(NonBlockingReadActionImpl.java:421)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl.executeSynchronously(NonBlockingReadActionImpl.java:186)
+	at com.intellij.ide.util.gotoByName.GotoActionModel$ActionWrapper.<init>(GotoActionModel.java:636)
+	at com.intellij.ide.util.gotoByName.GotoActionItemProvider.lambda$processActions$7(GotoActionItemProvider.java:232)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:195)
+	at java.base/java.util.stream.DistinctOps$1$2.accept(DistinctOps.java:175)
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:177)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:195)
+	at java.base/java.util.HashMap$KeySpliterator.forEachRemaining(HashMap.java:1621)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474)
+	at java.base/java.util.stream.StreamSpliterators$WrappingSpliterator.forEachRemaining(StreamSpliterators.java:312)
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:734)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:484)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474)
+	at java.base/java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:913)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:578)
+	at com.intellij.ide.util.gotoByName.GotoActionItemProvider.processItems(GotoActionItemProvider.java:280)
+	at com.intellij.ide.util.gotoByName.GotoActionItemProvider.processActions(GotoActionItemProvider.java:235)
+	at com.intellij.ide.util.gotoByName.GotoActionItemProvider.filterElements(GotoActionItemProvider.java:94)
+	at com.intellij.ide.actions.searcheverywhere.ActionSearchEverywhereContributor.fetchWeightedElements(ActionSearchEverywhereContributor.java:97)
+	at com.intellij.ide.actions.searcheverywhere.MixedResultsSearcher$ContributorSearchTask.run(MixedResultsSearcher.java:177)
+	at com.intellij.util.ConcurrencyUtil.runUnderThreadName(ConcurrencyUtil.java:213)
+	at com.intellij.util.ConcurrencyUtil.lambda$underThreadNameRunnable$3(ConcurrencyUtil.java:201)
+	at com.intellij.openapi.application.impl.ApplicationImpl$1.run(ApplicationImpl.java:263)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:668)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:665)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1.run(Executors.java:665)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+2022-04-02 19:03:56,786 [19475456]  ERROR - ctionSystem.impl.ActionUpdater - IntelliJ IDEA 2021.3.3  Build #IC-213.7172.25 
+2022-04-02 19:03:56,786 [19475456]  ERROR - ctionSystem.impl.ActionUpdater - JDK: 11.0.14.1; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o. 
+2022-04-02 19:03:56,786 [19475456]  ERROR - ctionSystem.impl.ActionUpdater - OS: Linux 
+2022-04-02 19:03:56,786 [19475456]  ERROR - ctionSystem.impl.ActionUpdater - Last Action: SearchEverywhere 
+2022-04-02 19:04:14,032 [19492702]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:06:09,391 [19608061]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:11:05,151 [19903821]   WARN - ConfigurableExtensionPointUtil - ignore deprecated groupId: language for id: preferences.language.Kotlin.scripting 
+2022-04-02 19:11:07,756 [19906426]   WARN - tions.ex.ConfigurableCardPanel - auto-dispose 'Plugins' id=preferences.pluginManager 
+2022-04-02 19:11:22,246 [19920916]   WARN - ConfigurableExtensionPointUtil - ignore deprecated groupId: language for id: preferences.language.Kotlin.scripting 
+2022-04-02 19:13:29,988 [20048658]   WARN - tions.ex.ConfigurableCardPanel - auto-dispose 'Plugins' id=preferences.pluginManager 
+2022-04-02 19:22:15,923 [20574593]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:30:47,066 [21085736]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-04-02 19:31:22,036 [21120706]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-04-02 19:31:41,657 [21140327]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:39:38,386 [21617056]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:40:16,344 [21655014]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:49:35,309 [22213979]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:50:09,042 [22247712]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:50:22,997 [22261667]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-04-02 19:50:37,525 [22276195]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-04-02 19:51:12,363 [22311033]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:52:57,600 [22416270]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-04-02 19:53:44,400 [22463070]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2022-04-02 19:54:44,551 [22523221]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:56:08,586 [22607256]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:57:15,552 [22674222]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:57:19,345 [22678015]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:57:56,823 [22715493]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:58:20,481 [22739151]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 19:58:50,228 [22768898]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 20:01:39,680 [22938350]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 20:52:29,052 [25987722]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 21:02:04,210 [26562880]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2022-04-02 22:43:48,267 [32666937]  ERROR - terminal.emulator.JediEmulator - Error processing OSC: ESC]777;notify;Command<S>completed;mvn<S>quarkus:dev<S>-Dquarkus.profile=cleanupaws-wetESC\ 
+2022-04-02 22:43:48,267 [32666937]  ERROR - terminal.emulator.JediEmulator - Error processing OSC: ESC]777;precmdESC\ 
+2022-04-02 22:43:54,457 [32673127]  ERROR - terminal.emulator.JediEmulator - Error processing OSC: ESC]777;preexecESC\ 

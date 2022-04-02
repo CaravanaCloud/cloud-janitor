@@ -7,9 +7,12 @@ import tasktree.Result;
 import tasktree.visitor.Visitor;
 
 import javax.inject.Named;
+import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 
@@ -98,12 +101,16 @@ public interface Task extends Runnable{
         return Duration.between(getStartTime(), getEndTime());
     }
 
+    default Optional<Long> getWaitAfterRun(){
+        return Optional.empty();
+    }
+
     default void info(String message, String... args){
-        getLogger().info(message, args);
+        getLogger().info(message, new Object[]{args});
     }
 
     default void error(String message, String... args){
-        getLogger().error(message, args);
+        getLogger().error(message, new Object[]{args});
     }
 
     private Logger getLogger() {
@@ -111,7 +118,7 @@ public interface Task extends Runnable{
     }
 
     default void debug(String message, String... args){
-        getLogger().debug(message, args);
+        getLogger().debug(message, new Object[]{args});
     }
 
 }

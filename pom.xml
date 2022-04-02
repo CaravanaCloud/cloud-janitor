@@ -78,11 +78,6 @@
       <version>${awssdk.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>software.amazon.awssdk</groupId>
-      <artifactId>s3</artifactId>
-      <version>${awssdk.version}</version>
-    </dependency>
 
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
@@ -102,15 +97,29 @@
       <version>${awssdk.version}</version>
     </dependency>
 
+    <!-- Transitive from TM
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>s3</artifactId>
+      <version>${awssdk.version}</version>
+    </dependency>
+    -->
+
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>s3-transfer-manager</artifactId>
-      <version>2.17.123-PREVIEW</version>
+      <version>${awssdk.version}-PREVIEW</version>
     </dependency>
 
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>cloudtrail</artifactId>
+      <version>${awssdk.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>athena</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
 

@@ -31,6 +31,6 @@ public abstract class TaskVisitor implements Visitor {
         var results = resultsMap.values().stream()
                 .flatMap(Collection::stream)
                 .toList();
-        return new ArrayList(results);
+        return new ArrayList<Result>(results);
     }
 }
