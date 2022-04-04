@@ -20,7 +20,7 @@ As an example context, consider the task of cleaning up your AWS account after t
 
 **Easy to Operate** all configuration can be passed as environment variables, as well as other sources supported by quarkus.io.
 
-Task Tree is also built to be easily extensible and contributions are most welcome! 
+Task Tree is also built to be easily extensible and contributions are most welcome! Join our Discord chat at https://caravana.cloud/task-tree
 
 # Executing Task Tree
 
