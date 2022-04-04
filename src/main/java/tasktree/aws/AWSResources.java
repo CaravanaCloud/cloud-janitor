@@ -14,9 +14,7 @@ import software.amazon.awssdk.services.ec2.model.VpcEndpoint;
 import software.amazon.awssdk.services.elasticloadbalancing.model.LoadBalancerDescription;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetGroup;
-import tasktree.aws.cleanup.AWSAccount;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public enum AWSResources {;

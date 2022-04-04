@@ -345,3 +345,5 @@ SystemEventQueueThread: Thread[AWT-EventQueue-0,6,main] 1227999656
 2022-04-02 22:43:48,267 [32666937]  ERROR - terminal.emulator.JediEmulator - Error processing OSC: ESC]777;notify;Command<S>completed;mvn<S>quarkus:dev<S>-Dquarkus.profile=cleanupaws-wetESC\ 
 2022-04-02 22:43:48,267 [32666937]  ERROR - terminal.emulator.JediEmulator - Error processing OSC: ESC]777;precmdESC\ 
 2022-04-02 22:43:54,457 [32673127]  ERROR - terminal.emulator.JediEmulator - Error processing OSC: ESC]777;preexecESC\ 
+2022-04-02 22:44:01,041 [32679711]  ERROR - terminal.emulator.JediEmulator - Error processing OSC: ESC]777;notify;Command<S>completed;./scripts/git-push-all.sh<S>&&<S>./scripts/git-release.sh<S>ESC\ 
+2022-04-02 22:44:01,041 [32679711]  ERROR - terminal.emulator.JediEmulator - Error processing OSC: ESC]777;precmdESC\ 

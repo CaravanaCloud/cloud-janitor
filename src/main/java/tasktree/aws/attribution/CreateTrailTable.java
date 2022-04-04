@@ -5,7 +5,7 @@ import software.amazon.awssdk.services.athena.AthenaClient;
 import software.amazon.awssdk.services.athena.model.*;
 import software.amazon.awssdk.services.athena.paginators.GetQueryResultsIterable;
 import tasktree.aws.AWSClients;
-import tasktree.aws.cleanup.AWSWrite;
+import tasktree.aws.AWSWrite;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
