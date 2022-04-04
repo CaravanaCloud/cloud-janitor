@@ -16,7 +16,7 @@ As an example context, consider the task of cleaning up your AWS account after t
 
 **Flexible Runtime** so it can be used as an executable container, executable jar, native executable, github action or your preferred CI/CD tool.
 
-**Rate Limited** so that API throttling and limits are respected.
+**Rate Limiting** so that API throttling and limits are respected.
 
 **Easy to Operate** all configuration can be passed as environment variables, as well as other sources supported by quarkus.io.
 
