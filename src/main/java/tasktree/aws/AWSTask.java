@@ -26,12 +26,14 @@ public abstract class AWSTask<T>
     protected List<T> resources = new ArrayList<>();
     protected List<Task> subtasks = null;
     protected Region region;
-    protected AWSClients aws = AWSClients.getInstance();
+    protected static final AWSClients aws = AWSClients.getInstance();
     @ConfigProperty(name = "tt.aws.regions", defaultValue = "us-east-1")
     String targetRegions;
     Set<String> targetRegionsSet;
-    @ConfigProperty(name = "tt.aws.cleanup.prefix", defaultValue = "prefix-to-cleanup")
-    String awsCleanupPrefix;
+
+    @ConfigProperty(name = "tt.aws.cleanup.prefix")
+    Optional<String> awsCleanupPrefix;
+
     String resourceDescription = "";
 
     public AWSTask() {
@@ -116,34 +118,15 @@ public abstract class AWSTask<T>
     }
 
     public String getAwsCleanupPrefix() {
-        if (awsCleanupPrefix == null || awsCleanupPrefix.isEmpty()) {
-            log.warn("No cleanup prefix configured.  This is probably a mistake.");
-        }
-        return awsCleanupPrefix;
+        return awsCleanupPrefix.orElse("");
     }
 
     public void setAwsCleanupPrefix(String prefix) {
-        this.awsCleanupPrefix = prefix;
+        this.awsCleanupPrefix = Optional.of(prefix);
     }
 
     public boolean isDryRun() {
-        if (getConfig().isDryRun())
-            return true;
-        else {
-            var unsafe = unsafeConfig();
-            if (unsafe)
-                log.warn("Enforcing dry run due to unsafe configuration.");
-            return false;
-        }
-    }
-
-    private boolean unsafeConfig() {
-        boolean shortPrefix = awsCleanupPrefix == null || (awsCleanupPrefix.length() < MIN_PREFIX_LENGTH);
-        if (shortPrefix) {
-            log.warn("Unsafe configuration: naming prefix too short {}", awsCleanupPrefix);
-            return true;
-        }
-        return false;
+        return getConfig().isDryRun();
     }
 
     public boolean filterRegion(String regionName) {
@@ -239,6 +222,10 @@ public abstract class AWSTask<T>
 
     protected void success() {
         setResult(Result.success(this));
+    }
+
+    protected void success(String key, String value) {
+        setResult(Result.success(this, key, value));
     }
 
     public List<T> getResources() {

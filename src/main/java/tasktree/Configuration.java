@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
+import tasktree.aws.AWSClients;
 import tasktree.spi.Task;
 import tasktree.spi.Tasks;
 import tasktree.visitor.PrintTreeVisitor;
@@ -32,7 +33,6 @@ public class Configuration {
 
     @ConfigProperty(name = "tt.dryRun", defaultValue = "true")
     boolean dryRun;
-
 
     @ConfigProperty(name="tt.waitBeforeRun", defaultValue = "1000")
     long waitBeforeRun;
@@ -121,7 +121,8 @@ public class Configuration {
                 if (result == null){
                     result = Result.success(task);
                 }
-                task.debug("Executed {} ({})", task.toString(),
+                task.debug("Executed {} ({})",
+                        task.toString(),
                         task.isWrite() ? "W" : "R");
                 //TODO: General waiter
                 if(task.isWrite()) {
@@ -133,13 +134,13 @@ public class Configuration {
             }
         }
 
-
-
         var endTime = LocalDateTime.now();
         result.setEndTime(endTime);
         task.setResult(result);
         return result;
     }
 
-
+    public AWSClients aws() {
+        return AWSClients.getInstance();
+    }
 }

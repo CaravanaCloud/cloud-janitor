@@ -5,6 +5,7 @@ import tasktree.spi.Task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class Result{
@@ -13,6 +14,7 @@ public class Result{
     String description;
     LocalDateTime startTime;
     LocalDateTime endTime;
+    Map<String,String> properties;
 
     static final DateTimeFormatter iso = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -20,35 +22,44 @@ public class Result{
                   ResultType type,
                   String description,
                   LocalDateTime start,
-                  LocalDateTime end) {
+                  LocalDateTime end,
+                  Map<String, String> properties) {
         this.taskName = name;
         this.type = type;
         this.description = description;
         this.startTime = start;
-        this.endTime =end;
+        this.endTime = end;
+        this.properties = properties;
     }
 
     private static Result result(Task task,
                                  ResultType type,
                                  String description,
                                  LocalDateTime start,
-                                 LocalDateTime end){
+                                 LocalDateTime end,
+                                 Map<String, String> properties){
         return new Result(task.getName(),
                 type,
                 description,
                 start,
-                end);
+                end,
+                properties);
     }
-    private static Result result(Task task, ResultType type, String description){
+    private static Result result(Task task,
+                                 ResultType type,
+                                 String description,
+                                 Map<String, String> properties){
         return result(task,
                 type,
                 description,
                 task.getStartTime(),
-                task.getEndTime());
+                task.getEndTime(),
+                properties);
     }
 
-    private static Result result(Task task, ResultType type){
-        return result(task, type, task.getDescription());
+    private static Result result(Task task,
+                                 ResultType type){
+        return result(task, type, task.getDescription(), Map.of());
     }
 
     public static Result empty(Task task) {
@@ -64,8 +75,18 @@ public class Result{
         return result(task, ResultType.SUCCESS);
     }
 
+    public static Result success(Task task, String key, String value) {
+        return result(task,
+                ResultType.SUCCESS,
+                task.getDescription(),
+                Map.of(key,value));
+    }
+
     public static Result failure(Task task, Exception e) {
-        return result(task, ResultType.FAILURE, e.getMessage());
+        return result(task,
+                ResultType.FAILURE,
+                e.getMessage(),
+                Map.of());
     }
 
     public static String[] getHeader() {
@@ -74,6 +95,7 @@ public class Result{
                 "type",
                 "description"};
     }
+
 
     public String startTimeISO() {
         return Optional.ofNullable(startTime)
@@ -108,5 +130,9 @@ public class Result{
 
     public LocalDateTime getStartTime() {
         return startTime;
+    }
+
+    public String get(String key) {
+        return properties.get(key);
     }
 }

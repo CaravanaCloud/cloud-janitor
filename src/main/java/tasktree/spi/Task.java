@@ -7,13 +7,10 @@ import tasktree.Result;
 import tasktree.visitor.Visitor;
 
 import javax.inject.Named;
-import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 
 
 public interface Task extends Runnable{
@@ -121,4 +118,6 @@ public interface Task extends Runnable{
         getLogger().debug(message, new Object[]{args});
     }
 
+    String set(String key, String value);
+    String get(String key);
 }

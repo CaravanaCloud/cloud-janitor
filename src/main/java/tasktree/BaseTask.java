@@ -6,9 +6,9 @@ import tasktree.spi.Task;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 @Dependent
@@ -52,6 +52,17 @@ public abstract class BaseTask implements Task {
         return config;
     }
 
+    Map<String, String> properties = new HashMap<>();
+
+    @Override
+    public String get(String key) {
+        return properties.get(key);
+    }
+
+    @Override
+    public String set(String key, String value) {
+        return properties.put(key, value);
+    }
 
     @Override
     public String toString() {

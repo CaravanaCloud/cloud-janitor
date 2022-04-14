@@ -9,13 +9,17 @@ import software.amazon.awssdk.services.elasticloadbalancingv2.ElasticLoadBalanci
 import software.amazon.awssdk.services.route53.Route53Client;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.sts.StsClient;
+import tasktree.Configuration;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
 @Dependent
 public class AWSClients {
+
     static final AWSClients instance = new AWSClients();
     Map<Region, Map<Class<? extends SdkClient>, SdkClient>> clients = new HashMap<>();
 

@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class AWSDelete<T> extends AWSWrite<T> {
+    public AWSDelete(){}
+
     public AWSDelete(T resource){
-        setResources(List.of(resource));;
+        setResources(List.of(resource));
     }
 
     @Override
