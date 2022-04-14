@@ -79,6 +79,6 @@ public class DeleteNetworkInterface extends AWSDelete<NetworkInterface> {
 
     @Override
     public Optional<Long> getWaitAfterRun() {
-        return Optional.of(30_000L);
+        return Optional.of(15_000L);
     }
 }

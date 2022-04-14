@@ -14,7 +14,13 @@ public class DeleteRouteTableRules extends AWSDelete<RouteTable> {
     @Override
     public void cleanup(RouteTable resource) {
         if (! isMainRouteTable(resource)) {
-            deleteRoutes(resource);
+            try {
+                deleteRoutes(resource);
+            }catch (Exception e){
+                log().error("Fail to delete Route Table Rules for {}", resource.routeTableId());
+                log().error(e.getMessage(), e);
+                throw new RuntimeException(e);
+            }
             // deleteRouteTable(resource);
         } else{
             log().debug("Not deleting main route table rules {}", resource.routeTableId());
@@ -35,7 +41,8 @@ public class DeleteRouteTableRules extends AWSDelete<RouteTable> {
         var gatewayId = route.gatewayId();
         if ("local".equals(gatewayId)) return;
         log().debug("Deleting route {}", route.toString());
-        var builder = DeleteRouteRequest.builder()
+        var builder = DeleteRouteRequest
+                .builder()
                 .routeTableId(resource.routeTableId());
         if (route.destinationCidrBlock() != null) {
             builder.destinationCidrBlock(route.destinationCidrBlock());

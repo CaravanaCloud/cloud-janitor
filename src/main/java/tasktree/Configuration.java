@@ -34,17 +34,10 @@ public class Configuration {
     @ConfigProperty(name = "tt.dryRun", defaultValue = "true")
     boolean dryRun;
 
-    @ConfigProperty(name="tt.waitBeforeRun", defaultValue = "1000")
+    @ConfigProperty(name = "tt.waitBeforeRun", defaultValue = "1000")
     long waitBeforeRun;
 
     String[] args;
-
-    private static synchronized ObjectWriter createWriter() {
-        if (writer != null) return writer;
-        //TODO: Filter out properties with $
-        writer = mapper.writer().withDefaultPrettyPrinter();
-        return writer;
-    }
 
 
     public String getTaskName() {
@@ -52,21 +45,14 @@ public class Configuration {
     }
 
 
-    static ObjectWriter writer = createWriter();
-
     @Override
     public String toString() {
-        try {
-            var dump = new HashMap<String, String>() {{
-                put("task", taskName);
-                put("args", String.join(" ",args));
-                put("dryRun", "" + dryRun);
-            }};
-            return writer.writeValueAsString(dump);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return "Configuration{?}";
+        var dump = new HashMap<String, String>() {{
+            put("task", taskName);
+            put("args", String.join(" ", args));
+            put("dryRun", "" + dryRun);
+        }};
+        return dump.toString();
     }
 
     public void parse(String[] args) {
@@ -113,19 +99,19 @@ public class Configuration {
                 && isDryRun()) {
             result = Result.dryRun(task);
             log.info("Dry run: {}", task);
-        }else {
+        } else {
             try {
                 //TODO: Consider not re-executing task
                 task.runSafe();
                 result = task.getResult();
-                if (result == null){
+                if (result == null) {
                     result = Result.success(task);
                 }
                 task.debug("Executed {} ({})",
                         task.toString(),
                         task.isWrite() ? "W" : "R");
                 //TODO: General waiter
-                if(task.isWrite()) {
+                if (task.isWrite()) {
                     rateLimiter.waitAfterTask(task);
                 }
             } catch (Exception e) {

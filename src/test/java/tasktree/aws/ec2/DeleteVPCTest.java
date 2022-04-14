@@ -3,7 +3,6 @@ package tasktree.aws.ec2;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import tasktree.Configuration;
-import tasktree.aws.AWSClients;
 
 import javax.inject.Inject;
 
@@ -11,13 +10,10 @@ import java.util.List;
 
 import static org.awaitility.Awaitility.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static java.time.Duration.*;
 import static java.util.concurrent.TimeUnit.*;
 
 @QuarkusTest
-public class CreateVPCTest {
-    @Inject
-    Configuration config;
+public class DeleteVPCTest {
 
     @Inject
     CreateVPC createVPC;
@@ -32,19 +28,20 @@ public class CreateVPCTest {
     public void testCreateAndDeleteVPC(){
         var vpcId = createVPC();
         awaitCreate(vpcId);
+        assertTrue(vpcExists(vpcId));
         deleteVPC(vpcId);
         awaitDelete(vpcId);
         assertFalse(vpcExists(vpcId));
     }
 
-    private void awaitDelete(String vpcId) {
-        await().atMost(10, SECONDS)
-                .until(() -> ! vpcExists(vpcId));
-    }
-
     private void awaitCreate(String vpcId) {
         await().atMost(10, SECONDS)
                 .until(() -> vpcExists(vpcId));
+    }
+
+    private void awaitDelete(String vpcId) {
+        await().atMost(10, SECONDS)
+                .until(() -> ! vpcExists(vpcId));
     }
 
     private void deleteVPC(String vpcId) {
