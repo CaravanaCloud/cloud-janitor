@@ -40,5 +40,5 @@ jobs:
           path: tasktree.csv
           retention-days: 14
 
-your-project/target/site/surefire-report:
-  html:
+# your-project/target/site/surefire-report:
+
