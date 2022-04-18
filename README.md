@@ -91,14 +91,19 @@ tt:
 
 # Tasks Wishlist:
 - Support more AWS Services on cleanup task
-- Delete AWS resources by tag
-- Delete AWS resources by usage
+- Report/Delete AWS resources by tag
+- Report/Delete AWS resources by usage
+- Parallel Tasks
+- Waiter Tasks
 - Report/Notify usage by attribution ("chargeback")
 - OpenShift Cluster Provisioning and Deployment
 - Fully-automated OpenShift management (Source2Service)
+
 
 # Features Wishlist:
 1. Ansible integration
 2. Kogito-defined tasks
 3. CloudWatch and/or ElasticSearch/Logstash/Kibana for visualization
 
+# Badges
+![](https://github.com/CaravanaCloud/task-tree/workflows/test-prs-to-main/badge.svg)
