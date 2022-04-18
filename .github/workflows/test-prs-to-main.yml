@@ -57,3 +57,9 @@ jobs:
           name: surefire-site
           path: target/site
           retention-days: 14
+
+      - name: Generate JaCoCo Badge
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
+

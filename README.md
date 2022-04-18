@@ -106,4 +106,5 @@ tt:
 3. CloudWatch and/or ElasticSearch/Logstash/Kibana for visualization
 
 # Badges
-![](https://github.com/CaravanaCloud/task-tree/workflows/test-prs-to-main/badge.svg)
+![Tests](https://github.com/CaravanaCloud/task-tree/workflows/test-prs-to-main/badge.svg)
+![Coverage](.github/badges/jacoco.svg)
