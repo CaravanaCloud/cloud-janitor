@@ -27,4 +27,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Test with Maven
-        run: mvn -B test
+        run: mvn -B test surefire-report:report -DskipTests=false
+
+      - name: Debug
+        run: find .
