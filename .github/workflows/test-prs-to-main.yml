@@ -27,7 +27,18 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Test with Maven
+        continue-on-error: true
         run: mvn -B test surefire-report:report -DskipTests=false
 
       - name: Debug
         run: find .
+
+      - name: Upload report
+        uses: actions/upload-artifact@v3
+        with:
+          name: tasktree.csv
+          path: tasktree.csv
+          retention-days: 14
+
+your-project/target/site/surefire-report:
+  html:
