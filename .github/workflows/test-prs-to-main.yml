@@ -22,9 +22,18 @@ jobs:
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
-          path: ~/.m2
+          vpath: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.CC_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.CC_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION}}
+        env:
+          AWS_REGION: us-west-2
 
       - name: Test with Maven
         continue-on-error: true
