@@ -50,3 +50,10 @@ jobs:
           name: surefire-reports
           path: target/surefire-reports
           retention-days: 14
+
+      - name: Upload report
+        uses: actions/upload-artifact@v3
+        with:
+          name: surefire-site
+          path: target/site
+          retention-days: 14
