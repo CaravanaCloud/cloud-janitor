@@ -1,9 +1,9 @@
 package tasktree.aws.ec2;
 
 import software.amazon.awssdk.services.ec2.model.*;
-import tasktree.aws.AWSDelete;
+import tasktree.aws.AWSCleanup;
 
-public class DeleteSecurityGroup extends AWSDelete<SecurityGroup> {
+public class DeleteSecurityGroup extends AWSCleanup<SecurityGroup> {
 
     public DeleteSecurityGroup(SecurityGroup resource) {
         super(resource);

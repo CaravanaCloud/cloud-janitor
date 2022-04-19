@@ -1,12 +1,14 @@
 package tasktree.aws.ec2;
 
+import software.amazon.awssdk.services.ec2.model.DescribeInstancesRequest;
+import software.amazon.awssdk.services.ec2.model.Ec2Exception;
 import software.amazon.awssdk.services.ec2.model.Instance;
 import software.amazon.awssdk.services.ec2.model.TerminateInstancesRequest;
-import tasktree.aws.AWSDelete;
+import tasktree.aws.AWSCleanup;
 
 import java.util.Optional;
 
-public class TerminateInstance extends AWSDelete<Instance> {
+public class TerminateInstance extends AWSCleanup<Instance> {
     public TerminateInstance(Instance instance) {
         super(instance);
     }
@@ -22,19 +24,60 @@ public class TerminateInstance extends AWSDelete<Instance> {
             var ec2 = newEC2Client();
             ec2.terminateInstances(terminateInstance);
             waitForTermination(resource);
-        }else {
-            log().trace("Not terminating instance {} {}",state ,resource);
+        } else {
+            log().trace("Not terminating instance {} {}", state, resource);
         }
     }
 
     private void waitForTermination(Instance resource) {
-        //TODO: Actually check
+        var retries = 5;
+        var wait = false;
+        do {
+            var instance = lookupInstance(resource.instanceId());
+            var state = instance.state().toString();
+            var waitTermination = switch (state) {
+                case "terminated" -> false;
+                default -> true;
+            };
+            retries--;
+            wait = waitTermination && retries > 0;
+            if (wait){
+                log().info("Waiting for termination of {} ({})", instance.instanceId(), instance.state());
+                sleep();
+            }
+        }while(wait);
+    }
+
+    private void sleep() {
         try {
-            log().debug("Waiting instance termination...");
-            Thread.sleep(30_000);
+            Thread.sleep(5_000L);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
+    }
+
+    private Instance lookupInstance(String instanceId) {
+        var ec2 = newEC2Client();
+        var nextToken = (String) null ;
+        try {
+            do {
+                var request = DescribeInstancesRequest.builder().maxResults(6).nextToken(nextToken).build();
+                var response = ec2.describeInstances(request);
+
+                for (var reservation : response.reservations()) {
+                    for (Instance instance : reservation.instances()) {
+                        if(instance.instanceId().equals(instanceId))
+                            return instance;
+                    }
+                }
+                nextToken = response.nextToken();
+            } while (nextToken != null);
+
+        } catch (Ec2Exception e) {
+            System.err.println(e.awsErrorDetails().errorMessage());
+            System.exit(1);
+        }
+        return null;
     }
 
     @Override

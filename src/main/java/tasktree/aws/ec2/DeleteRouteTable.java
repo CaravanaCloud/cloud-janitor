@@ -4,9 +4,9 @@ import software.amazon.awssdk.services.ec2.model.DeleteRouteRequest;
 import software.amazon.awssdk.services.ec2.model.DeleteRouteTableRequest;
 import software.amazon.awssdk.services.ec2.model.Route;
 import software.amazon.awssdk.services.ec2.model.RouteTable;
-import tasktree.aws.AWSDelete;
+import tasktree.aws.AWSCleanup;
 
-public class DeleteRouteTable extends AWSDelete<RouteTable> {
+public class DeleteRouteTable extends AWSCleanup<RouteTable> {
 
     public DeleteRouteTable(RouteTable resource) {
         super(resource);
@@ -16,7 +16,12 @@ public class DeleteRouteTable extends AWSDelete<RouteTable> {
     public void cleanup(RouteTable resource) {
         if (! isMainRouteTable(resource)) {
             //deleteRoutes(resource);
-            deleteRouteTable(resource);
+            try {
+                deleteRouteTable(resource);
+            }catch (Exception ex){
+                log().error("Failed to delete route table", ex);
+                throw new RuntimeException(ex);
+            }
         } else{
             log().debug("Not deleting main route table {}", resource.routeTableId());
         }

@@ -89,12 +89,15 @@ tt:
       prefix: rhnb-
 ```
 
-# Tasks Wishlist:
-- Support more AWS Services on cleanup task
+# Wishlist:
+- Support more/all AWS Services on cleanup task
+- Improve test coverage
 - Report/Delete AWS resources by tag
 - Report/Delete AWS resources by usage
 - Parallel Tasks
 - Waiter Tasks
+- Shell Tasks
+- Cross-Language Tasks through GraalVM / JSR 223
 - Report/Notify usage by attribution ("chargeback")
 - OpenShift Cluster Provisioning and Deployment
 - Fully-automated OpenShift management (Source2Service)

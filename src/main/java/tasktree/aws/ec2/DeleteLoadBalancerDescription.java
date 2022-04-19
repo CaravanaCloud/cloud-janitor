@@ -2,9 +2,9 @@ package tasktree.aws.ec2;
 
 import software.amazon.awssdk.services.elasticloadbalancing.model.DeleteLoadBalancerRequest;
 import software.amazon.awssdk.services.elasticloadbalancing.model.LoadBalancerDescription;
-import tasktree.aws.AWSDelete;
+import tasktree.aws.AWSCleanup;
 
-public class DeleteLoadBalancerDescription extends AWSDelete<LoadBalancerDescription> {
+public class DeleteLoadBalancerDescription extends AWSCleanup<LoadBalancerDescription> {
 
     public DeleteLoadBalancerDescription(LoadBalancerDescription resource) {
         super(resource);

@@ -1,9 +1,9 @@
 package tasktree.aws.ec2;
 
 import software.amazon.awssdk.services.ec2.model.*;
-import tasktree.aws.AWSDelete;
+import tasktree.aws.AWSCleanup;
 
-public class RevokeRules extends AWSDelete<SecurityGroup> {
+public class RevokeRules extends AWSCleanup<SecurityGroup> {
 
     public RevokeRules(SecurityGroup resource) {
         super(resource);

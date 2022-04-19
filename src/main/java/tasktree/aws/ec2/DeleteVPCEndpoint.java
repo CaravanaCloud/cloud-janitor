@@ -2,9 +2,9 @@ package tasktree.aws.ec2;
 
 import software.amazon.awssdk.services.ec2.model.DeleteVpcEndpointsRequest;
 import software.amazon.awssdk.services.ec2.model.VpcEndpoint;
-import tasktree.aws.AWSDelete;
+import tasktree.aws.AWSCleanup;
 
-public class DeleteVPCEndpoint extends AWSDelete<VpcEndpoint> {
+public class DeleteVPCEndpoint extends AWSCleanup<VpcEndpoint> {
     public DeleteVPCEndpoint(VpcEndpoint resource) {
         super(resource);
     }

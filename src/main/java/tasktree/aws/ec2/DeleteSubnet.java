@@ -2,9 +2,9 @@ package tasktree.aws.ec2;
 
 import software.amazon.awssdk.services.ec2.model.DeleteSubnetRequest;
 import software.amazon.awssdk.services.ec2.model.Subnet;
-import tasktree.aws.AWSDelete;
+import tasktree.aws.AWSCleanup;
 
-public class DeleteSubnet extends AWSDelete<Subnet> {
+public class DeleteSubnet extends AWSCleanup<Subnet> {
     public DeleteSubnet(Subnet net) {
         super(net);
     }

@@ -2,9 +2,9 @@ package tasktree.aws.ec2;
 
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.DeleteTargetGroupRequest;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetGroup;
-import tasktree.aws.AWSDelete;
+import tasktree.aws.AWSCleanup;
 
-public class DeleteTargetGroup extends AWSDelete<TargetGroup> {
+public class DeleteTargetGroup extends AWSCleanup<TargetGroup> {
     public DeleteTargetGroup(TargetGroup resource) {
          super(resource);
     }

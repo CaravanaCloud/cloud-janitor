@@ -3,9 +3,9 @@ import software.amazon.awssdk.services.ec2.model.DeleteRouteRequest;
 import software.amazon.awssdk.services.ec2.model.DeleteRouteTableRequest;
 import software.amazon.awssdk.services.ec2.model.Route;
 import software.amazon.awssdk.services.ec2.model.RouteTable;
-import tasktree.aws.AWSDelete;
+import tasktree.aws.AWSCleanup;
 
-public class DeleteRouteTableRules extends AWSDelete<RouteTable> {
+public class DeleteRouteTableRules extends AWSCleanup<RouteTable> {
 
     public DeleteRouteTableRules(RouteTable resource) {
         super(resource);

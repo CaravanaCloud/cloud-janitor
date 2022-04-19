@@ -1,9 +1,9 @@
 package tasktree.aws.ec2;
 
 import software.amazon.awssdk.services.route53.model.*;
-import tasktree.aws.AWSDelete;
+import tasktree.aws.AWSCleanup;
 
-public class DeleteRecord extends AWSDelete<ResourceRecordSet> {
+public class DeleteRecord extends AWSCleanup<ResourceRecordSet> {
     DeleteRecord(ResourceRecordSet rrs){
         super(rrs);
     }

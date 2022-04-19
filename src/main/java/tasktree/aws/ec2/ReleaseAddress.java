@@ -2,9 +2,9 @@ package tasktree.aws.ec2;
 
 import software.amazon.awssdk.services.ec2.model.Address;
 import software.amazon.awssdk.services.ec2.model.ReleaseAddressRequest;
-import tasktree.aws.AWSDelete;
+import tasktree.aws.AWSCleanup;
 
-public class ReleaseAddress extends AWSDelete<Address> {
+public class ReleaseAddress extends AWSCleanup<Address> {
     public ReleaseAddress(Address addr) {
         super(addr);
     }

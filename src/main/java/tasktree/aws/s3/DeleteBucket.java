@@ -1,17 +1,14 @@
 package tasktree.aws.s3;
 
-import com.amazonaws.s3.model.Bucket;
-import software.amazon.awssdk.services.ec2.model.DeleteVpcRequest;
 import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
-import tasktree.aws.AWSDelete;
-import tasktree.aws.ec2.*;
+import tasktree.aws.AWSCleanup;
 import tasktree.spi.Task;
 
 import javax.enterprise.context.Dependent;
 import java.util.stream.Stream;
 
 @Dependent
-public class DeleteBucket extends AWSDelete<String/*BucketName*/> {
+public class DeleteBucket extends AWSCleanup<String/*BucketName*/> {
     public DeleteBucket(){}
 
     public DeleteBucket(String resource) {

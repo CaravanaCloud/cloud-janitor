@@ -3,16 +3,17 @@ package tasktree.aws;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AWSDelete<T> extends AWSWrite<T> {
-    public AWSDelete(){}
+public abstract class AWSCleanup<T> extends AWSWrite<T> {
+    public AWSCleanup(){}
 
-    public AWSDelete(T resource){
+    public AWSCleanup(T resource){
         setResources(List.of(resource));
     }
 
     @Override
     public final void runSafe() {
         resources.forEach(this::cleanup);
+
         success();
     }
 
@@ -25,4 +26,6 @@ public abstract class AWSDelete<T> extends AWSWrite<T> {
     public Optional<Long> getWaitAfterRun() {
         return Optional.of(5_000L);
     }
+
+
 }

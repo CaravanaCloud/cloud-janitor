@@ -1,15 +1,14 @@
 package tasktree.aws.ec2;
 
 import software.amazon.awssdk.services.ec2.model.DeleteVpcRequest;
-import software.amazon.awssdk.services.ec2.model.Vpc;
-import tasktree.aws.AWSDelete;
+import tasktree.aws.AWSCleanup;
 import tasktree.spi.Task;
 
 import javax.enterprise.context.Dependent;
 import java.util.stream.Stream;
 
 @Dependent
-public class DeleteVpc extends AWSDelete<String/*VpcId*/> {
+public class DeleteVpc extends AWSCleanup<String/*VpcId*/> {
 
     public DeleteVpc(){};
 

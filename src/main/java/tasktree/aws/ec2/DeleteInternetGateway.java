@@ -1,9 +1,9 @@
 package tasktree.aws.ec2;
 
 import software.amazon.awssdk.services.ec2.model.*;
-import tasktree.aws.AWSDelete;
+import tasktree.aws.AWSCleanup;
 
-public class DeleteInternetGateway extends AWSDelete<InternetGateway> {
+public class DeleteInternetGateway extends AWSCleanup<InternetGateway> {
 
     public DeleteInternetGateway(InternetGateway resource) {
         super(resource);

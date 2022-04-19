@@ -2,9 +2,9 @@ package tasktree.aws.ec2;
 
 import software.amazon.awssdk.services.ec2.model.DeleteNatGatewayRequest;
 import software.amazon.awssdk.services.ec2.model.NatGateway;
-import tasktree.aws.AWSDelete;
+import tasktree.aws.AWSCleanup;
 
-public class DeleteNATGateway extends AWSDelete<NatGateway> {
+public class DeleteNATGateway extends AWSCleanup<NatGateway> {
     public DeleteNATGateway(NatGateway resource) {
         super(resource);
     }
