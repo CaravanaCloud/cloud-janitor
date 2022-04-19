@@ -16,7 +16,7 @@ public class DeleteLoadBalancerDescription extends AWSCleanup<LoadBalancerDescri
         var request = DeleteLoadBalancerRequest.builder()
                 .loadBalancerName(resource.loadBalancerName())
                 .build();
-        aws.getELBClient(getRegionOrDefault()).deleteLoadBalancer(request);
+        aws().getELBClient(getRegionOrDefault()).deleteLoadBalancer(request);
     }
 
     @Override

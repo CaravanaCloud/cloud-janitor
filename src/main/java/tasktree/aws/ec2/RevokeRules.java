@@ -20,7 +20,7 @@ public class RevokeRules extends AWSCleanup<SecurityGroup> {
         var describeRules = DescribeSecurityGroupRulesRequest
                 .builder()
                 .build();
-        var ec2 = newEC2Client();
+        var ec2 = aws().newEC2Client(getRegion());
         var rules = ec2.describeSecurityGroupRules(describeRules).securityGroupRules();
         rules.forEach(rule -> {
             log().debug("Found security group rule [{}]",rule);

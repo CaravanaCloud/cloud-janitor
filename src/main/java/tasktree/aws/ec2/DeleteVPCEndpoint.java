@@ -15,7 +15,7 @@ public class DeleteVPCEndpoint extends AWSCleanup<VpcEndpoint> {
         var request = DeleteVpcEndpointsRequest.builder()
                 .vpcEndpointIds(resource.vpcEndpointId())
                 .build();
-        newEC2Client().deleteVpcEndpoints(request);
+        aws().newEC2Client(getRegion()).deleteVpcEndpoints(request);
     }
 
     @Override

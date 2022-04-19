@@ -21,7 +21,7 @@ public class TerminateInstance extends AWSCleanup<Instance> {
             var terminateInstance = TerminateInstancesRequest.builder()
                     .instanceIds(resource.instanceId())
                     .build();
-            var ec2 = newEC2Client();
+            var ec2 = aws().newEC2Client(getRegion());
             ec2.terminateInstances(terminateInstance);
             waitForTermination(resource);
         } else {
@@ -57,7 +57,7 @@ public class TerminateInstance extends AWSCleanup<Instance> {
     }
 
     private Instance lookupInstance(String instanceId) {
-        var ec2 = newEC2Client();
+        var ec2 = aws().newEC2Client(getRegion());
         var nextToken = (String) null ;
         try {
             do {

@@ -26,10 +26,7 @@ public abstract class AWSTask<T>
     protected List<T> resources = new ArrayList<>();
     protected List<Task> subtasks = null;
     protected Region region;
-    protected static final AWSClients aws = AWSClients.getInstance();
-    @ConfigProperty(name = "tt.aws.regions", defaultValue = "us-east-1")
-    String targetRegions;
-    Set<String> targetRegionsSet;
+
 
     @ConfigProperty(name = "tt.aws.cleanup.prefix")
     Optional<String> awsCleanupPrefix;
@@ -52,22 +49,8 @@ public abstract class AWSTask<T>
         this.region = region;
     }
 
-    protected S3Client newS3Client() {
-        return aws.newS3Client(getRegionOrDefault());
-    }
-
-    protected Ec2Client newEC2Client() {
-        return aws.newEC2Client(getRegionOrDefault());
-    }
-
     protected Logger log() {
         return LoggerFactory.getLogger(getName());
-    }
-
-    protected CloudTrailClient newCloudTrailClient() {
-        var region = getRegionOrDefault();
-        var client = CloudTrailClient.builder().region(region).build();
-        return client;
     }
 
     @Override
@@ -80,7 +63,6 @@ public abstract class AWSTask<T>
 
     public void addTask(Task task) {
         propagateConfig(task);
-        //getConfig().getTasks().addTask(task);
         getSubtasks().add(task);
     }
 
@@ -88,7 +70,6 @@ public abstract class AWSTask<T>
         task.setConfig(getConfig());
         if (task instanceof AWSTask awstask) {
             var taskName = awstask.getName();
-            awstask.setTargetRegions(targetRegions);
             if (awstask.getRegion() == null) {
                 awstask.setRegion(getRegion());
             }
@@ -97,9 +78,6 @@ public abstract class AWSTask<T>
         return task;
     }
 
-    private void setTargetRegions(String targetRegions) {
-        this.targetRegions = targetRegions;
-    }
 
     public void addAllTasks(List<Task> tasks) {
         addAllTasks(tasks.stream());
@@ -130,25 +108,14 @@ public abstract class AWSTask<T>
     }
 
     public boolean filterRegion(String regionName) {
-        if (targetRegions == null || targetRegions.isEmpty()) {
-            log.warn("Target regions not set [tt.aws.regions], searching all.");
-            return true;
-        } else {
-            var set = getTargetRegionsSet();
-            var filter = set.contains(regionName);
-            return filter;
-        }
-    }
-
-    private Set<String> getTargetRegionsSet() {
-        if (targetRegionsSet == null) {
-            var split = targetRegions.split(",");
-            targetRegionsSet = new HashSet<String>(Arrays.asList(split));
-        }
-        return targetRegionsSet;
+        var targetRegionsSet = getConfig().aws().getTargetRegionsSet();
+        return targetRegionsSet.contains(regionName);
     }
 
     protected Region getRegion(){
+        if (region == null) {
+            return getDefaultRegion();
+        }
         return region;
     }
 
@@ -164,14 +131,7 @@ public abstract class AWSTask<T>
     }
 
     private Region getDefaultRegion() {
-        if (region != null) return region;
-        var regionName = targetRegions.split(",")[0];
-        if (regionName == null || regionName.isEmpty()) {
-            regionName = DEFAULT_REGION.id();
-            log.debug("Using region [{}] as default", region);
-        }
-        var defaultRegion = Region.of(regionName);
-        return defaultRegion;
+        return getConfig().aws().getDefaultRegion();
     }
 
     @PostConstruct
@@ -185,7 +145,7 @@ public abstract class AWSTask<T>
 
 
     protected <T extends SdkClient> T getClient(Class<T> clientClass) {
-        return aws.getClient(getRegionOrDefault(), clientClass);
+        return getConfig().aws().getClient(getRegionOrDefault(), clientClass);
     }
 
     @Override
@@ -240,5 +200,8 @@ public abstract class AWSTask<T>
         Result result = getResult();
         return result == null ? "NULL"
                 : result.getType().toString();
+    }
+    protected AWSClients aws(){
+        return getConfig().aws();
     }
 }

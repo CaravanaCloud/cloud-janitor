@@ -19,7 +19,7 @@ public class DeleteBucket extends AWSCleanup<String/*BucketName*/> {
     public void cleanup(String resource) {
         log().debug("Deleting Bucket [{}]", resource);
         var request = DeleteBucketRequest.builder().bucket(resource).build();
-        newS3Client().deleteBucket(request);
+        aws().newS3Client(getRegion()).deleteBucket(request);
     }
 
     @Override

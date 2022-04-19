@@ -24,7 +24,7 @@ public class FilterInstances extends AWSFilter<Instance> {
 
     @Override
     protected List<Instance> filterResources() {
-        var ec2 = newEC2Client();
+        var ec2 = aws().newEC2Client(getRegion());
         var describeInstances = DescribeInstancesRequest.builder().build();
         var reservations = ec2.describeInstancesPaginator(describeInstances).reservations().stream();
         var instances = reservations.flatMap(reservation -> reservation.instances().stream()).toList();

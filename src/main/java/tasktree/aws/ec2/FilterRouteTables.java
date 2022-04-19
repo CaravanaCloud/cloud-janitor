@@ -25,7 +25,7 @@ public class FilterRouteTables extends AWSFilter<RouteTable> {
     }
 
     protected List<RouteTable> filterResources() {
-        var client = newEC2Client();
+        var client = aws().newEC2Client(getRegionOrDefault());
         var resources = client.describeRouteTables().routeTables();
         var matches = resources.stream().filter(this::match).toList();
         return matches;

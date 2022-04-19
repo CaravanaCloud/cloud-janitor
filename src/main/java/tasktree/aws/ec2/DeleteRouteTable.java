@@ -49,7 +49,7 @@ public class DeleteRouteTable extends AWSCleanup<RouteTable> {
             builder.destinationPrefixListId(route.destinationPrefixListId());
         }
         var request = builder.build();
-        newEC2Client().deleteRoute(request);
+        aws().newEC2Client(getRegion()).deleteRoute(request);
     }
 
     private void deleteRouteTable(RouteTable resource) {
@@ -57,7 +57,7 @@ public class DeleteRouteTable extends AWSCleanup<RouteTable> {
         var request = DeleteRouteTableRequest.builder()
                 .routeTableId(resource.routeTableId())
                 .build();
-        newEC2Client().deleteRouteTable(request);
+        aws().newEC2Client(getRegion()).deleteRouteTable(request);
     }
 
     @Override

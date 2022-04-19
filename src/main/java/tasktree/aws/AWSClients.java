@@ -1,31 +1,34 @@
 package tasktree.aws;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
 import software.amazon.awssdk.core.SdkClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.athena.AthenaClient;
+import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.elasticloadbalancing.ElasticLoadBalancingClient;
 import software.amazon.awssdk.services.elasticloadbalancingv2.ElasticLoadBalancingV2Client;
 import software.amazon.awssdk.services.route53.Route53Client;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.sts.StsClient;
-import tasktree.Configuration;
 
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-@Dependent
+@ApplicationScoped
 public class AWSClients {
-
-    static final AWSClients instance = new AWSClients();
     Map<Region, Map<Class<? extends SdkClient>, SdkClient>> clients = new HashMap<>();
 
-    public static AWSClients getInstance() {
-        return instance;
-    }
+    @ConfigProperty(name = "tt.aws.regions", defaultValue = "us-east-1")
+    String targetRegions;
+
+    @Inject
+    Logger log;
+
+    Set<String> targetRegionsSet;
+    List<Region> targetRegionsList;
 
     @SuppressWarnings("unchecked")
     public <T extends SdkClient> T getClient(Region region, Class<T> clientClass) {
@@ -42,6 +45,32 @@ public class AWSClients {
         }
         return (T) client;
     }
+
+    public List<Region> getTargetRegionsList() {
+        if (targetRegionsList == null) {
+            var split = targetRegions.split(",");
+            targetRegionsList = Arrays.asList(split)
+                    .stream()
+                    .map(Region::of)
+                    .toList();
+        }
+        return targetRegionsList;
+    }
+
+
+    public Set<String> getTargetRegionsSet() {
+        if (targetRegionsSet == null) {
+            var split = targetRegions.split(",");
+            targetRegionsSet = new HashSet<String>(Arrays.asList(split));
+        }
+        if (targetRegionsSet.isEmpty()){
+            targetRegionsSet.add(getDefaultRegion().toString());
+            log.warn("Target regions is empty. Using using default. {}", targetRegionsSet);
+        }
+        return targetRegionsSet;
+    }
+
+
 
     private StsClient newSTSClient(Region region) {
         var sts = StsClient.builder().region(region).build();
@@ -75,4 +104,25 @@ public class AWSClients {
         return AthenaClient.builder().region(region).build();
     }
 
+    public CloudFormationClient newCloudFormationClient(){
+        return CloudFormationClient.builder().region(getDefaultRegion()).build();
+    }
+
+    public Region getDefaultRegion() {
+        var regions = getTargetRegionsList();
+        var region = (Region) null;
+        if (! regions.isEmpty()){
+            region = regions.get(0);
+        }
+        //TODO: Check environment variables / CLI
+        if (region == null) {
+            region = Region.US_EAST_1;
+        }
+        return region;
+    }
+
+
+    public String getTargetRegions() {
+        return targetRegions;
+    }
 }

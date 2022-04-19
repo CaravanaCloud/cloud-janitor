@@ -22,7 +22,7 @@ public class FilterLoadBalancers extends AWSFilter<LoadBalancerDescription> {
 
     @Override
     protected List<LoadBalancerDescription> filterResources() {
-        var elb = aws.getELBClient(getRegionOrDefault());
+        var elb = aws().getELBClient(getRegionOrDefault());
         var resources = elb.describeLoadBalancers().loadBalancerDescriptions();
         var matches = resources.stream().filter(this::match).toList();
         return matches;

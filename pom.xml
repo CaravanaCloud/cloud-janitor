@@ -96,6 +96,12 @@
       <version>${awssdk.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>cloudformation</artifactId>
+      <version>${awssdk.version}</version>
+    </dependency>
+
     <!-- Transitive from TM
     <dependency>
       <groupId>software.amazon.awssdk</groupId>

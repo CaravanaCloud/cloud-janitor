@@ -16,7 +16,7 @@ public class FilterTargetGroups extends AWSFilter<TargetGroup> {
 
     @Override
     protected List<TargetGroup> filterResources() {
-        var elb = aws.getELBClientV2(getRegionOrDefault());
+        var elb = aws().getELBClientV2(getRegionOrDefault());
         var resources = elb.describeTargetGroups().targetGroups();
         var matches = resources.stream().filter(this::match).toList();
         return matches;

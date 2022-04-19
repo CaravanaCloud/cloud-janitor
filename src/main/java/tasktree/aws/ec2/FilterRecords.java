@@ -18,11 +18,11 @@ public class FilterRecords extends AWSFilter<Record> {
     @ConfigProperty(name = "tt.ocp.baseDomain", defaultValue = "redhat.com")
     String baseDomain;
 
-    private Route53Client r53 = aws.newRoute53Client(getRegionOrDefault());
 
 
     @Override
     public void runSafe() {
+        var r53 = aws().newRoute53Client(getRegionOrDefault());
         r53.listHostedZones()
                 .hostedZones()
                 .stream()
@@ -31,6 +31,7 @@ public class FilterRecords extends AWSFilter<Record> {
     }
 
     private void filterRecords(HostedZone hostedZone) {
+        var r53 = aws().newRoute53Client(getRegionOrDefault());
         var listRecords = ListResourceRecordSetsRequest
                 .builder()
                 .hostedZoneId(hostedZone.id())

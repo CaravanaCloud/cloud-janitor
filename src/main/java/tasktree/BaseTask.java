@@ -30,10 +30,6 @@ public abstract class BaseTask implements Task {
         this.config = config;
     }
 
-    public void addTask(Task task) {
-        config.getTasks().addTask(task);
-    }
-
     private static final int DEFAULT_RETRIES = 5;
     int retries = DEFAULT_RETRIES;
 

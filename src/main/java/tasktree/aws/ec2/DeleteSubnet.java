@@ -13,7 +13,7 @@ public class DeleteSubnet extends AWSCleanup<Subnet> {
     public void cleanup(Subnet resource) {
         log().debug("Deleting subnet " + resource.subnetId());
         DeleteSubnetRequest delSub = DeleteSubnetRequest.builder().subnetId(resource.subnetId()).build();
-        newEC2Client().deleteSubnet(delSub);
+        aws().newEC2Client(getRegion()).deleteSubnet(delSub);
     }
 
     @Override

@@ -21,7 +21,7 @@ public class DeleteSecurityGroup extends AWSCleanup<SecurityGroup> {
         var describeRules = DescribeSecurityGroupRulesRequest
                 .builder()
                 .build();
-        var ec2 = newEC2Client();
+        var ec2 = aws().newEC2Client(getRegion());
         var rules = ec2.describeSecurityGroupRules(describeRules).securityGroupRules();
         rules.forEach(rule -> {
             log().debug("Found security group rule [{}]",rule);
@@ -54,7 +54,7 @@ public class DeleteSecurityGroup extends AWSCleanup<SecurityGroup> {
         var request = DeleteSecurityGroupRequest.builder()
                 .groupId(resource.groupId())
                 .build();
-        newEC2Client().deleteSecurityGroup(request);
+        aws().newEC2Client(getRegion()).deleteSecurityGroup(request);
     }
     @Override
     protected String getResourceType() {

@@ -13,7 +13,7 @@ public class ReleaseAddress extends AWSCleanup<Address> {
     public void cleanup(Address resource) {
         log().debug("Releasing address {}", resource.publicIp());
         var request = ReleaseAddressRequest.builder().allocationId(resource.allocationId()).build();
-        newEC2Client().releaseAddress(request);
+        aws().newEC2Client(getRegion()).releaseAddress(request);
     }
 
     @Override

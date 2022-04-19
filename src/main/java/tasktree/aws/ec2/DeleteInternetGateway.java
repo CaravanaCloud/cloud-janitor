@@ -25,7 +25,7 @@ public class DeleteInternetGateway extends AWSCleanup<InternetGateway> {
                 .internetGatewayId(resource.internetGatewayId())
                 .vpcId(att.vpcId())
                 .build();
-        newEC2Client().detachInternetGateway(request);
+        aws().newEC2Client(getRegion()).detachInternetGateway(request);
     }
 
     private void deleteInternetGateway(InternetGateway resource) {
@@ -33,7 +33,7 @@ public class DeleteInternetGateway extends AWSCleanup<InternetGateway> {
         var request = DeleteInternetGatewayRequest.builder()
                 .internetGatewayId(resource.internetGatewayId())
                 .build();
-        newEC2Client().deleteInternetGateway(request);
+        aws().newEC2Client(getRegion()).deleteInternetGateway(request);
     }
 
     @Override

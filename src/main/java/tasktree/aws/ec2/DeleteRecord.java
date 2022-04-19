@@ -21,7 +21,7 @@ public class DeleteRecord extends AWSCleanup<ResourceRecordSet> {
         var request = ChangeResourceRecordSetsRequest.builder()
                 .changeBatch(changes)
                 .build();
-        aws.newRoute53Client(getRegionOrDefault()).changeResourceRecordSets(request);
+        aws().newRoute53Client(getRegionOrDefault()).changeResourceRecordSets(request);
     }
 
     @Override

@@ -23,7 +23,7 @@ public class FilterSecurityGroups extends AWSFilter<SecurityGroup> {
 
     @Override
     protected List<SecurityGroup> filterResources() {
-        var client = newEC2Client();
+        var client = aws().newEC2Client(getRegionOrDefault());;
         var resources = client.describeSecurityGroups().securityGroups();
         var matches = resources.stream().filter(this::match).toList();
         return matches;

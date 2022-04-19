@@ -13,7 +13,7 @@ public class DeleteNATGateway extends AWSCleanup<NatGateway> {
     protected void cleanup(NatGateway resource) {
         log().debug("Deleting {}", resource);
         var deleteNat = DeleteNatGatewayRequest.builder().natGatewayId(resource.natGatewayId()).build();
-        var ec2 = newEC2Client();
+        var ec2 = aws().newEC2Client(getRegion());
         ec2.deleteNatGateway(deleteNat);
     }
 

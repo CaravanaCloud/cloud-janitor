@@ -11,7 +11,7 @@ public class FilterRegions extends AWSFilter<Region> {
 
     @Override
     public List<Region> filterResources() {
-            var regions = aws.newEC2Client(getRegionOrDefault()).describeRegions()
+            var regions = aws().newEC2Client(getRegionOrDefault()).describeRegions()
                     .regions()
                     .stream()
                     .map(software.amazon.awssdk.services.ec2.model.Region::regionName)

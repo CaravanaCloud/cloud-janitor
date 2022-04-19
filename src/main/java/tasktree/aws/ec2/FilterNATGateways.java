@@ -11,7 +11,7 @@ public class FilterNATGateways extends AWSFilter<NatGateway> {
 
     @Override
     protected List<NatGateway> filterResources() {
-        var ec2 = newEC2Client();
+        var ec2 = aws().newEC2Client(getRegion());
         return ec2.describeNatGateways()
                 .natGateways()
                 .stream()

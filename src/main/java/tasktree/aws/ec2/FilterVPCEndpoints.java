@@ -27,7 +27,7 @@ public class FilterVPCEndpoints extends AWSFilter<VpcEndpoint> {
 
     @Override
     protected List<VpcEndpoint> filterResources() {
-        var client = newEC2Client();
+        var client = aws().newEC2Client(getRegion());
         var resources = client.describeVpcEndpoints().vpcEndpoints();
         var matches = resources.stream().filter(this::match).toList();
         return matches;

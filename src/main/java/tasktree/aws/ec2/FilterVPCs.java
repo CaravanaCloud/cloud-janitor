@@ -23,7 +23,7 @@ public class FilterVPCs extends AWSFilter<Vpc> {
     }
 
     private List<Vpc> findAll(){
-        var ec2 = newEC2Client();
+        var ec2 = aws().newEC2Client(getRegion());
         var request = DescribeVpcsRequest.builder().build();
         var resources = ec2.describeVpcs(request).vpcs();
         return resources;

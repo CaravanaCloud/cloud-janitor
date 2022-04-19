@@ -26,7 +26,7 @@ public class FilterNetworkInterfaces extends AWSFilter<NetworkInterface> {
 
     @Override
     protected List<NetworkInterface> filterResources() {
-        var client = newEC2Client();
+        var client = aws().newEC2Client(getRegion());
         var resources = client.describeNetworkInterfaces().networkInterfaces();
         var matches = resources.stream().filter(this::match).toList();
         return matches;

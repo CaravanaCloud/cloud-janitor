@@ -37,20 +37,29 @@ public class DeleteRouteTableRules extends AWSCleanup<RouteTable> {
     }
 
     private void deleteRoute(RouteTable resource, Route route) {
-        log().debug("Found route {}", route);
+        log().debug("Deleting route {}", route);
         var gatewayId = route.gatewayId();
-        if ("local".equals(gatewayId)) return;
-        log().debug("Deleting route {}", route.toString());
+        if ("local".equals(gatewayId)) {
+            log().debug("Refusing to delete local route");
+        };
         var builder = DeleteRouteRequest
                 .builder()
                 .routeTableId(resource.routeTableId());
         if (route.destinationCidrBlock() != null) {
+            log().debug("Using destination cidr block to delete route {}", route);
             builder.destinationCidrBlock(route.destinationCidrBlock());
         }else if (route.destinationPrefixListId() != null) {
+            log().debug("Using destination prefix list id to delete route {}", route);
             builder.destinationPrefixListId(route.destinationPrefixListId());
         }
         var request = builder.build();
-        newEC2Client().deleteRoute(request);
+        try {
+            aws().newEC2Client(getRegion()).deleteRoute(request);
+        }catch (Exception ex){
+            log().error("Failed to delete route {}", route);
+            log().error(ex.getMessage(),ex);
+            throw new RuntimeException(ex);
+        }
     }
 
     private void deleteRouteTable(RouteTable resource) {
@@ -58,7 +67,7 @@ public class DeleteRouteTableRules extends AWSCleanup<RouteTable> {
         var request = DeleteRouteTableRequest.builder()
                 .routeTableId(resource.routeTableId())
                 .build();
-        newEC2Client().deleteRouteTable(request);
+        aws().newEC2Client(getRegion()).deleteRouteTable(request);
     }
 
     @Override

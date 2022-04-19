@@ -19,7 +19,7 @@ public class    FilterAddresses extends AWSFilter<Address> {
 
     @Override
     protected List<Address> filterResources() {
-        var ec2 = newEC2Client();
+        var ec2 = aws().newEC2Client(getRegion());
         var describeAddresses = DescribeAddressesRequest.builder().build();
         var addresses = ec2.describeAddresses(describeAddresses).addresses().stream();
         var matches = addresses.filter(this::match).toList();

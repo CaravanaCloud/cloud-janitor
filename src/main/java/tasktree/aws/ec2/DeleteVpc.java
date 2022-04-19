@@ -22,7 +22,7 @@ public class DeleteVpc extends AWSCleanup<String/*VpcId*/> {
         var request = DeleteVpcRequest.builder()
                 .vpcId(resource)
                 .build();
-        newEC2Client().deleteVpc(request);
+        aws().newEC2Client(getRegion()).deleteVpc(request);
     }
 
     @Override

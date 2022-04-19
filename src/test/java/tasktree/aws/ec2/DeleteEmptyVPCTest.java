@@ -2,7 +2,6 @@ package tasktree.aws.ec2;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
-import tasktree.Configuration;
 
 import javax.inject.Inject;
 
@@ -13,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static java.util.concurrent.TimeUnit.*;
 
 @QuarkusTest
-public class DeleteVPCTest {
+public class DeleteEmptyVPCTest {
 
     @Inject
     CreateVPC createVPC;

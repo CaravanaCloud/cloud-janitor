@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 @ApplicationScoped
+@Deprecated
 public class Tasks {
     static final ServiceLoader<Task> loader = ServiceLoader.load(Task.class);
 

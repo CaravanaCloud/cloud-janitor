@@ -15,7 +15,7 @@ public class DeleteTargetGroup extends AWSCleanup<TargetGroup> {
         var request = DeleteTargetGroupRequest.builder()
                 .targetGroupArn(resource.targetGroupArn())
                 .build();
-        aws.getELBClientV2(getRegionOrDefault()).deleteTargetGroup(request);
+        aws().getELBClientV2(getRegionOrDefault()).deleteTargetGroup(request);
     }
 
     @Override

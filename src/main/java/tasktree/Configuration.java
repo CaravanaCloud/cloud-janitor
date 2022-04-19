@@ -12,7 +12,10 @@ import tasktree.visitor.PrintTreeVisitor;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 
 @ApplicationScoped
@@ -21,9 +24,6 @@ public class Configuration {
 
     @Inject
     Logger log;
-
-    @Inject
-    Tasks tasks;
 
     @Inject
     RateLimiter rateLimiter;
@@ -38,6 +38,9 @@ public class Configuration {
     long waitBeforeRun;
 
     String[] args;
+
+    @Inject
+    AWSClients aws;
 
 
     public String getTaskName() {
@@ -60,11 +63,6 @@ public class Configuration {
         if (args.length > 0) {
             taskName = args[0];
         }
-    }
-
-
-    public Tasks getTasks() {
-        return tasks;
     }
 
     public void waitBeforeRun() {
@@ -126,7 +124,17 @@ public class Configuration {
         return result;
     }
 
-    public AWSClients aws() {
-        return AWSClients.getInstance();
+    public AWSClients aws(){
+        return aws;
+    }
+
+    String executionId;
+
+    public synchronized String getExecutionId() {
+        if (executionId == null){
+            var sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
+            executionId = "tt-"+sdf.format(new Date());
+        }
+        return executionId;
     }
 }

@@ -28,7 +28,7 @@ public class FilterSubnets extends AWSFilter<Subnet> {
 
     @Override
     protected List<Subnet> filterResources() {
-        var ec2 = newEC2Client();
+        var ec2 = aws().newEC2Client(getRegion());
         var describeNets = DescribeSubnetsRequest.builder().build();
         var nets = ec2.describeSubnets(describeNets).subnets().stream();
         var matches = nets.filter(this::match).toList();

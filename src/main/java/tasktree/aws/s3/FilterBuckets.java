@@ -25,7 +25,7 @@ public class FilterBuckets extends AWSFilter<Bucket> {
     }
 
     private List<Bucket> findAll(){
-        var s3 = newS3Client();
+        var s3 = aws().newS3Client(getRegion());
         var request = ListBucketsRequest.builder().build();
         var buckets = s3.listBuckets().buckets();
         if (! getAwsCleanupPrefix().isEmpty()){
