@@ -4,7 +4,7 @@ Cloud Janitor is a tool to automate complex maintenance and troubleshooting task
 
 In cloud computing many responsibilities are shared between the provider and the consumer of services. This tool's goal is to share automations that customers and partners frequently need to build themselves, often with minimal differences.
 
-As an example context, consider the task of cleaning up your AWS account after testing some drafts. Here's how *Task Tree* features can help:
+As an example context, consider the task of cleaning up your AWS account after testing some drafts. Here's how our features can help:
 
 **Resource Filtering** so that only the matched resources are deleted.
 
@@ -22,40 +22,41 @@ As an example context, consider the task of cleaning up your AWS account after t
 
 Task Tree is also built to be easily extensible and contributions are most welcome! Join our Discord chat at https://caravana.cloud/task-tree
 
-# Executing Task Tree
+# Executing Cloud Janitor
 
-Here are a few ways you can execute Task Tree. The default task is called "marvin" and is mostly harmless. It will just print "Don't panic" to the logs.
+Here are a few ways you can execute this project. 
+The default task is called "marvin" and is mostly harmless. It will just print "Don't panic" to the logs.
 
-All mentioned binaries can be found in the [project releases page](https://github.com/CaravanaCloud/task-tree/releases).
+All mentioned binaries can be found in the [project releases page](https://github.com/CaravanaCloud/cloud-janitor/releases).
 
 ## Docker Container
 ```bash
-docker run caravanacloud/task-tree
+docker run caravanacloud/cloud-janitor
 ```
 
 ## Github Action
 ```
-- name: Task Tree
-  uses: CaravanaCloud/task-tree@v1.0.20220324161817
+- name: Cloud Janitor
+  uses: CaravanaCloud/cloud-janitor@v1.0.20220324161817
 ```
 
 ## Executable Jar
 ```bash
-java -jar java -jar tasktree-runner.jar
+java -jar java -jar cloud-janitor.jar
 ```
 
 ## RPM Package
 Install it:
 ```
-rpm -Uvh --force tasktree.rpm
+rpm -Uvh --force cloud-janitor.rpm
 ```
 Add it to your PATH:
 ```
-sudo ln -sf /opt/tasktree/bin/tasktree /usr/local/bin/tt
+sudo ln -sf /opt/cloud-janitor/bin/cloud-janitor /usr/local/bin/cj
 ```
 Run it:
 ```
-tt
+cj
 ```
 
 ## From sources (dev mode)
@@ -109,5 +110,5 @@ tt:
 3. CloudWatch and/or ElasticSearch/Logstash/Kibana for visualization
 
 # Badges
-![Tests](https://github.com/CaravanaCloud/task-tree/workflows/test-prs-to-main/badge.svg)
+![Tests](https://github.com/CaravanaCloud/cloud-janitor/workflows/test-prs-to-main/badge.svg)
 ![Coverage](.github/badges/jacoco.svg)
