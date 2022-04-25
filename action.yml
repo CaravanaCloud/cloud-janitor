@@ -1,5 +1,5 @@
-name: 'Task Tree'
-description: 'Maintenance and Cleanup Tasks for Cloud Computing & Kubernetes'
+name: 'Cloud Janitor'
+description: 'Automating cleanup, maintenance and troubleshooting tasks in Cloud Computing'
 
 runs:
   using: 'docker'

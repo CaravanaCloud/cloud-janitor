@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>caravanacloud</groupId>
-  <artifactId>tasktree</artifactId>
+  <artifactId>cloudjanitor</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <properties>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
@@ -58,12 +58,14 @@
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+
+    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>${jackson.version}</version>
     </dependency>
+    -->
 
     <!-- AWS Clients -->
     <dependency>
@@ -102,20 +104,25 @@
       <version>${awssdk.version}</version>
     </dependency>
 
-    <!-- Transitive from TM
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>s3</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
-    -->
 
+    <!--
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>s3-transfer-manager</artifactId>
       <version>${awssdk.version}-PREVIEW</version>
+      <exclusions>
+        <exclusion>
+          <groupId>software.amazon.awssdk</groupId>
+          <artifactId>s3</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
-
+    -->
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>cloudtrail</artifactId>
@@ -149,7 +156,7 @@
 
   <build>
     <defaultGoal>clean package</defaultGoal>
-    <finalName>tasktree</finalName>
+    <finalName>cloudjanitor</finalName>
     <plugins>
       <plugin>
         <groupId>org.jacoco</groupId>
