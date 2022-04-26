@@ -31,7 +31,7 @@ All mentioned binaries can be found in the [project releases page](https://githu
 
 ## Docker Container
 ```bash
-docker run caravanacloud/cloud-janitor
+docker run --pull=always caravanacloud/cloud-janitor 
 ```
 
 ## Github Action

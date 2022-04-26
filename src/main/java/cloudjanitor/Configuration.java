@@ -21,13 +21,13 @@ public class Configuration {
     @Inject
     RateLimiter rateLimiter;
 
-    @ConfigProperty(name = "tt.task", defaultValue = "marvin")
+    @ConfigProperty(name = "cj.task", defaultValue = "marvin")
     String taskName;
 
-    @ConfigProperty(name = "tt.dryRun", defaultValue = "true")
+    @ConfigProperty(name = "cj.dryRun", defaultValue = "true")
     boolean dryRun;
 
-    @ConfigProperty(name = "tt.waitBeforeRun", defaultValue = "1000")
+    @ConfigProperty(name = "cj.waitBeforeRun", defaultValue = "1000")
     long waitBeforeRun;
 
     String[] args;
@@ -73,7 +73,7 @@ public class Configuration {
 
     public void init(String[] args) {
         parse(args);
-        log.info("TaskTree Configuration: {}", this);
+        log.info("Configuration: {}", this);
         waitBeforeRun();
     }
 

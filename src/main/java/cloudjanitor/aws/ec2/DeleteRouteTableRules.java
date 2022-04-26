@@ -41,6 +41,7 @@ public class DeleteRouteTableRules extends AWSCleanup<RouteTable> {
         var gatewayId = route.gatewayId();
         if ("local".equals(gatewayId)) {
             log().debug("Refusing to delete local route");
+            return;
         };
         var builder = DeleteRouteRequest
                 .builder()

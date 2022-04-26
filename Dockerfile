@@ -1,6 +1,6 @@
 # ARG UBI=ghcr.io/graalvm/graalvm-ce:latest
 # ARG UBI=quay.io/quarkus/ubi-quarkus-native-image:22.0-java17
-ARG UBI=ghcr.io/graalvm/native-image:latest
+ARG UBI=registry.access.redhat.com/ubi8/ubi-minimal
 
 FROM ${UBI} AS build
 COPY . /opt/quarkus-src

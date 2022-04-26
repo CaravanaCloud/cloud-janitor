@@ -21,7 +21,7 @@ import java.util.*;
 public class AWSClients {
     Map<Region, Map<Class<? extends SdkClient>, SdkClient>> clients = new HashMap<>();
 
-    @ConfigProperty(name = "tt.aws.regions", defaultValue = "us-east-1")
+    @ConfigProperty(name = "cj.aws.regions", defaultValue = "us-east-1")
     String targetRegions;
 
     @Inject

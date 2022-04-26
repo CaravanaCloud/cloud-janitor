@@ -25,7 +25,7 @@ public abstract class AWSTask<T>
     protected Region region;
 
 
-    @ConfigProperty(name = "tt.aws.cleanup.prefix")
+    @ConfigProperty(name = "cj.aws.cleanup.prefix")
     Optional<String> awsCleanupPrefix;
 
     String resourceDescription = "";
