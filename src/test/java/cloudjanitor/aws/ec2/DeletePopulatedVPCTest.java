@@ -1,5 +1,6 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.TaskTest;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,16 +14,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-//@QuarkusTest
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DeletePopulatedVPCTest {
-/*
-    @Inject
-    Configuration cfg;
+@QuarkusTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class DeletePopulatedVPCTest extends TaskTest {
 
     @BeforeAll
     public void beforeALl(){
-        var cf = cfg.aws().newCloudFormationClient();
+        var cf = aws().getCloudFormationClient();
         var stackName = getStackName();
         //TODO: Check resources are created
         var createReq = CreateStackRequest.builder()
@@ -67,7 +65,7 @@ public class DeletePopulatedVPCTest {
 
     @AfterAll
     private void afterAll(){
-        var cf = cfg.aws().newCloudFormationClient();
+        var cf = aws().getCloudFormationClient();
         var stackName = getStackName();
         var deleteReq = DeleteStackRequest.builder()
                 .stackName(stackName)
@@ -101,20 +99,11 @@ public class DeletePopulatedVPCTest {
                         }
                     }
                 } else {
-<<<<<<< HEAD
                     System.out.println("Stack not found");
                     waiting = false;
                 }
             }catch(CloudFormationException ex){
                 System.out.println("Failed to describe stack, consider it gone.");
-=======
-                    System.out.println("Stack not found " + stackName);
-                }
-            }catch(CloudFormationException ex){
-                System.out.println("Failed to describe stack, consider it gone. "+ stackName);
-                System.out.println(ex.getMessage());
-                ex.printStackTrace();
->>>>>>> 7b6fe90721dbb0059cfd91e1ce926ed423e44c71
                 waiting = false;
             }
         } while (waiting);
@@ -123,13 +112,13 @@ public class DeletePopulatedVPCTest {
 
     private String getStackName() {
         var simpleName = getSimpleName();
-        var runId = cfg.getExecutionId();
+        var runId = config().getExecutionId();
         var stacKName = runId+"-"+simpleName;
         return stacKName;
     }
 
     private String getSimpleName() {
-        return DeletePopulatedVPCTest.class.getSimpleName();
+        return this.getClass().getSimpleName();
     }
 
     private String templateBody(String templateName) {
@@ -150,5 +139,5 @@ public class DeletePopulatedVPCTest {
         System.out.println("Delete that vpc");
         System.out.println("Verify it's emtpy");
     }
-*/
+
 }

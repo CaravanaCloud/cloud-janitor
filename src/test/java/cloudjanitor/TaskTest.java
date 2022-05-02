@@ -1,5 +1,6 @@
 package cloudjanitor;
 
+import cloudjanitor.aws.AWSClients;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TaskTest {
     @Inject
+    protected AWSClients aws;
+
+    @Inject
     protected Tasks tasks;
 
     @Inject
@@ -21,6 +25,13 @@ public class TaskTest {
     @BeforeAll
     public void disableDryRun(){
         config.setDryRun(false);
+    }
 
+    protected AWSClients aws(){
+        return aws;
+    }
+
+    protected Configuration config(){
+        return config;
     }
 }

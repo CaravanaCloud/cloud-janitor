@@ -50,6 +50,10 @@ public class AWSClients {
         return ec2;
     }
 
+    public CloudFormationClient getCloudFormationClient(){
+        return CloudFormationClient.builder().region(getRegion()).build();
+    }
+
     ///////////////////////////////////////////////////
 
     Map<Region, Map<Class<? extends SdkClient>, SdkClient>> clients = new HashMap<>();
@@ -137,9 +141,6 @@ public class AWSClients {
 
 
 
-    public CloudFormationClient newCloudFormationClient(){
-        return CloudFormationClient.builder().region(getDefaultRegion()).build();
-    }
 
     public String getTargetRegions() {
         return targetRegions;
