@@ -28,7 +28,7 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-      <!-- Ideally, it should import the quarkus-universe-bom instead, so it doesn't have to import this kogito-bom -->
+
       <dependency>
         <groupId>software.amazon.awssdk</groupId>
         <artifactId>bom</artifactId>

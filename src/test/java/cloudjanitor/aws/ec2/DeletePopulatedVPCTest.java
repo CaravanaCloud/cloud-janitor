@@ -101,11 +101,20 @@ public class DeletePopulatedVPCTest {
                         }
                     }
                 } else {
+<<<<<<< HEAD
                     System.out.println("Stack not found");
                     waiting = false;
                 }
             }catch(CloudFormationException ex){
                 System.out.println("Failed to describe stack, consider it gone.");
+=======
+                    System.out.println("Stack not found " + stackName);
+                }
+            }catch(CloudFormationException ex){
+                System.out.println("Failed to describe stack, consider it gone. "+ stackName);
+                System.out.println(ex.getMessage());
+                ex.printStackTrace();
+>>>>>>> 7b6fe90721dbb0059cfd91e1ce926ed423e44c71
                 waiting = false;
             }
         } while (waiting);
