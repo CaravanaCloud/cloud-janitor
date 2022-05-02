@@ -12,7 +12,8 @@ import java.util.stream.Stream;
 
 @Named("cleanup-aws")
 @Dependent
-public class FilterAccount extends AWSFilter<AWSAccount> {
+public class FilterAccount extends AWSFilter {
+    /*
 
     @Override
     protected List<AWSAccount> filterResources() {
@@ -33,5 +34,7 @@ public class FilterAccount extends AWSFilter<AWSAccount> {
     protected String getResourceType() {
         return "AWS Account";
     }
+
+     */
 
 }

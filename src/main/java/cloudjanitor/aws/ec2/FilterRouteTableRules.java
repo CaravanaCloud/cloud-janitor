@@ -7,7 +7,8 @@ import cloudjanitor.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterRouteTableRules extends AWSFilter<RouteTable> {
+public class FilterRouteTableRules extends AWSFilter {
+    /*
     private String vpcId;
 
     public FilterRouteTableRules(String vpcId) {
@@ -41,5 +42,7 @@ public class FilterRouteTableRules extends AWSFilter<RouteTable> {
     protected String getResourceType() {
         return "Route Table";
     }
+
+     */
 }
 

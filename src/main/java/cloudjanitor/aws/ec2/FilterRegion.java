@@ -7,8 +7,9 @@ import cloudjanitor.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterRegion extends AWSFilter<Region> {
-
+public class FilterRegion extends AWSFilter{
+/*
+*
     public FilterRegion(Region region) {
         super(region);
     }
@@ -27,4 +28,5 @@ public class FilterRegion extends AWSFilter<Region> {
     protected String getResourceType() {
         return "Region";
     }
+*/
 }

@@ -8,7 +8,8 @@ import javax.enterprise.context.Dependent;
 import java.util.stream.Stream;
 
 @Dependent
-public class DeleteBucket extends AWSCleanup<String/*BucketName*/> {
+public class DeleteBucket extends AWSCleanup {
+    /*
     public DeleteBucket(){}
 
     public DeleteBucket(String resource) {
@@ -33,4 +34,5 @@ public class DeleteBucket extends AWSCleanup<String/*BucketName*/> {
                 //TODO: Filter Objects, Versions, Delete Markers..
         );
     }
+    BucketName*/
 }

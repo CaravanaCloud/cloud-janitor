@@ -4,7 +4,8 @@ import software.amazon.awssdk.services.ec2.model.DeleteVpcEndpointsRequest;
 import software.amazon.awssdk.services.ec2.model.VpcEndpoint;
 import cloudjanitor.aws.AWSCleanup;
 
-public class DeleteVPCEndpoint extends AWSCleanup<VpcEndpoint> {
+public class DeleteVPCEndpoint extends AWSCleanup {
+    /*
     public DeleteVPCEndpoint(VpcEndpoint resource) {
         super(resource);
     }
@@ -22,4 +23,6 @@ public class DeleteVPCEndpoint extends AWSCleanup<VpcEndpoint> {
     protected String getResourceType() {
         return "VPC Endpoint";
     }
+
+     */
 }

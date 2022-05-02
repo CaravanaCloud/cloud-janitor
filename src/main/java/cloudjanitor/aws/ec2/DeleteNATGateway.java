@@ -4,7 +4,8 @@ import software.amazon.awssdk.services.ec2.model.DeleteNatGatewayRequest;
 import software.amazon.awssdk.services.ec2.model.NatGateway;
 import cloudjanitor.aws.AWSCleanup;
 
-public class DeleteNATGateway extends AWSCleanup<NatGateway> {
+public class DeleteNATGateway extends AWSCleanup {
+    /*
     public DeleteNATGateway(NatGateway resource) {
         super(resource);
     }
@@ -21,4 +22,6 @@ public class DeleteNATGateway extends AWSCleanup<NatGateway> {
     protected String getResourceType() {
         return "NAT Gateway";
     }
+
+     */
 }

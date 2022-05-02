@@ -2,35 +2,87 @@ package cloudjanitor.spi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cloudjanitor.Configuration;
-import cloudjanitor.Result;
-import cloudjanitor.visitor.Visitor;
 
 import javax.inject.Named;
+import javax.swing.text.html.Option;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+/**
+ * A task is a function to be executed, as a basic unit of work.
+ */
+public interface Task {
 
-public interface Task extends Runnable{
-
-    void runSafe();
-    List<Task> getSubtasks();
-
-    Configuration getConfig();
-    void setConfig(Configuration config);
-
-    @Override
-    default void run() {
-        getConfig().runTask(this);
+    /**
+     * The code to be executed by the Task, if considered *safe* by the TaskManager.
+     */
+    default void runSafe(){
+        throw new RuntimeException("Task not implemented");
     }
 
-    default int getRetries(){return 0;};
+    /**
+     * A *write* task is only *safe* to execute if the *dry run* flag is false.
+     */
+    default boolean isWrite(){
+        return true;
+    };
 
-    void retried();
+    /**
+     * Task start time, if started
+     */
+    default Optional<LocalDateTime> getStartTime(){
+        return Optional.empty();
+    }
+
+    default void setStartTime(LocalDateTime localDateTime){
+        throw new RuntimeException("Method not implemented");
+    }
+
+    /**
+    * Task end time, if finished
+     */
+    default Optional<LocalDateTime> getEndTime(){
+        return Optional.empty();
+    }
+
+    default void setEndTime(LocalDateTime localDateTime){
+        throw new RuntimeException("Method not implemented");
+    }
+
+    /**
+     * Elapsed Time between Start and End, if finished
+     */
+    default Optional<Duration> getElapsedTime(){
+        var start = getStartTime();
+        var end = getEndTime();
+        if (start.isPresent() && end.isPresent()){
+            return Optional.of(Duration.between(start.get(),end.get()));
+        }else return Optional.empty();
+    }
+
+    /* Task Chaining */
+    default List<Task> getDependencies(){
+        return List.of();
+    }
+
+    default Map<String, Object> getOutputs(){
+        return Map.of();
+    }
+
+    default Optional<Object> findOutput(String key){
+        return Optional.empty();
+    }
+    default Optional<String> findString(String key) { return Optional.empty(); }
+
+    default Map<String, Object> getErrors(){
+        return Map.of();
+    }
 
 
+    /* Task Naming */
     default String getSimpleName(){
         return getClass().getSimpleName().split("_")[0];
     }
@@ -53,71 +105,11 @@ public interface Task extends Runnable{
         return name;
     }
 
-    String defaultPrefix = "tasktree.";
-    default boolean filter(String root){
-        var className = getClass().getName().toLowerCase();
-        var rootName = root.toLowerCase();
-        var result = className.startsWith(rootName)
-                || className.startsWith(defaultPrefix + rootName);
-        return result;
+    /* Task Throttling */
+    default Optional<Long> getWaitAfterRun() {
+        return Optional.of(1_000L);
     }
 
-    default boolean isWrite(){
-        return true;
-    };
 
-    default void accept(Visitor visitor) {
-        if (! isWrite())
-            visitor.read(this);
-        for(Task child : getSubtasks()) {
-            child.accept(visitor);
-        }
-        if (isWrite())
-            visitor.write(this);
-    }
 
-    default Result getResult(){
-        return Result.empty(this);
-    }
-
-    void setResult(Result result);
-
-    default String getDescription(){
-        return "";
-    }
-
-    default LocalDateTime getStartTime(){
-        return LocalDateTime.now();
-    }
-
-    default LocalDateTime getEndTime(){
-        return LocalDateTime.now();
-    }
-
-    default Duration getElapsedTime(){
-        return Duration.between(getStartTime(), getEndTime());
-    }
-
-    default Optional<Long> getWaitAfterRun(){
-        return Optional.empty();
-    }
-
-    default void info(String message, String... args){
-        getLogger().info(message, new Object[]{args});
-    }
-
-    default void error(String message, String... args){
-        getLogger().error(message, new Object[]{args});
-    }
-
-    private Logger getLogger() {
-        return LoggerFactory.getLogger(getName());
-    }
-
-    default void debug(String message, String... args){
-        getLogger().debug(message, new Object[]{args});
-    }
-
-    String set(String key, String value);
-    String get(String key);
 }

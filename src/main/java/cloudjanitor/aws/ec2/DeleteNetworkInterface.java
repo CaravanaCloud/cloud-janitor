@@ -7,7 +7,8 @@ import cloudjanitor.aws.AWSCleanup;
 
 import java.util.Optional;
 
-public class DeleteNetworkInterface extends AWSCleanup<NetworkInterface> {
+public class DeleteNetworkInterface extends AWSCleanup {
+    /*
 
     public DeleteNetworkInterface(NetworkInterface resource) {
         super(resource);
@@ -81,4 +82,6 @@ public class DeleteNetworkInterface extends AWSCleanup<NetworkInterface> {
     public Optional<Long> getWaitAfterRun() {
         return Optional.of(15_000L);
     }
+
+     */
 }

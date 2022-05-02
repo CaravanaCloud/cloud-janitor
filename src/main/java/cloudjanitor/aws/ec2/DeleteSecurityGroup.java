@@ -3,7 +3,8 @@ package cloudjanitor.aws.ec2;
 import software.amazon.awssdk.services.ec2.model.*;
 import cloudjanitor.aws.AWSCleanup;
 
-public class DeleteSecurityGroup extends AWSCleanup<SecurityGroup> {
+public class DeleteSecurityGroup extends AWSCleanup {
+    /*
 
     public DeleteSecurityGroup(SecurityGroup resource) {
         super(resource);
@@ -60,4 +61,6 @@ public class DeleteSecurityGroup extends AWSCleanup<SecurityGroup> {
     protected String getResourceType() {
         return "Security Group";
     }
+ */
+
 }

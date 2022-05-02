@@ -13,7 +13,8 @@ import javax.inject.Named;
 
 @Named("copy-bucket")
 @Dependent
-public class CopyBucketTask extends AWSWrite<Bucket> {
+public class CopyBucketTask extends AWSWrite {
+    /*
     @ConfigProperty(name = "tt.s3.from.bucket", defaultValue = "??")
     String fromBucket;
 
@@ -52,4 +53,6 @@ public class CopyBucketTask extends AWSWrite<Bucket> {
     private Region getToRegion() {
         return Region.of(toRegion);
     }
+
+     */
 }

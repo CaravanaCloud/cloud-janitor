@@ -4,7 +4,8 @@ import software.amazon.awssdk.services.ec2.model.DeleteSubnetRequest;
 import software.amazon.awssdk.services.ec2.model.Subnet;
 import cloudjanitor.aws.AWSCleanup;
 
-public class DeleteSubnet extends AWSCleanup<Subnet> {
+public class DeleteSubnet extends AWSCleanup {
+    /*
     public DeleteSubnet(Subnet net) {
         super(net);
     }
@@ -20,4 +21,6 @@ public class DeleteSubnet extends AWSCleanup<Subnet> {
     protected String getResourceType() {
         return "Subnet";
     }
+
+     */
 }

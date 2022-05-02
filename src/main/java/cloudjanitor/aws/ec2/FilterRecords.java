@@ -1,23 +1,14 @@
 package cloudjanitor.aws.ec2;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.route53.model.HostedZone;
-import software.amazon.awssdk.services.route53.model.ListResourceRecordSetsRequest;
-import software.amazon.awssdk.services.route53.model.ResourceRecordSet;
 import cloudjanitor.aws.AWSFilter;
 
 import javax.enterprise.context.Dependent;
 
 @Dependent
-public class FilterRecords extends AWSFilter<Record> {
-    long filtered = 0;
-    long matched = 0;
-
+public class FilterRecords extends AWSFilter {
+    /*
     @ConfigProperty(name = "tt.ocp.baseDomain", defaultValue = "redhat.com")
     String baseDomain;
-
-
 
     @Override
     public void runSafe() {
@@ -43,20 +34,11 @@ public class FilterRecords extends AWSFilter<Record> {
         log().debug("Macthed {}/{} records", matched, filtered);
     }
 
-    private void deleteRecord(ResourceRecordSet resourceRecordSet) {
-        addTask(new DeleteRecord(resourceRecordSet));
-    }
+
 
     private boolean matchRecord(ResourceRecordSet rrs) {
         var name = rrs.name();
-        var prefix = getAwsCleanupPrefix();
-        var match = name.startsWith(prefix);
-        if(match) {
-            matched++;
-            log().debug("Found {} {} {} ","ResourceRecordSet", mark(true), name);
-        }
-        filtered++;
-        return match;
+        matchName(name);
     }
 
 
@@ -80,4 +62,6 @@ public class FilterRecords extends AWSFilter<Record> {
     protected String getResourceType() {
         return "Records";
     }
+
+     */
 }

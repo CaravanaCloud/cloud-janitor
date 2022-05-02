@@ -8,7 +8,8 @@ import cloudjanitor.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class    FilterAddresses extends AWSFilter<Address> {
+public class    FilterAddresses extends AWSFilter {
+    /*
 
     private boolean match(Address addr) {
         var prefix = getAwsCleanupPrefix();
@@ -36,4 +37,6 @@ public class    FilterAddresses extends AWSFilter<Address> {
     protected String getResourceType() {
         return "Elastic IPs";
     }
+
+     */
 }

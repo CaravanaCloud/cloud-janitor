@@ -1,100 +1,101 @@
 package cloudjanitor;
 
+import cloudjanitor.spi.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cloudjanitor.spi.Task;
 
 import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Dependent
 public abstract class BaseTask implements Task {
-    static final Logger log = LoggerFactory.getLogger(BaseTask.class);
+    Optional<LocalDateTime> startTime = Optional.empty();
+    Optional<LocalDateTime> endTime = Optional.empty();
 
-    @Inject
-    Configuration config;
+    List<Task> dependencies = new ArrayList<>();
+    Map<String, Object> outputs = new HashMap<>();
+    Map<String, Object> errors = new HashMap<>();
 
-    Result result;
 
-    public BaseTask(){}
-
-    public BaseTask(Configuration config){
-        this.config = config;
-    }
-
-    public void setConfig(Configuration config) {
-        this.config = config;
-    }
-
-    private static final int DEFAULT_RETRIES = 5;
-    int retries = DEFAULT_RETRIES;
-
+    /* Interface Methods */
     @Override
-    public int getRetries() {
-        return retries;
+    public Optional<LocalDateTime> getStartTime() {
+        return startTime;
     }
 
     @Override
-    public void retried() {
-        retries--;
+    public void setStartTime(LocalDateTime localDateTime) {
+        startTime = Optional.ofNullable(localDateTime);
     }
 
     @Override
-    public Configuration getConfig(){
-        return config;
-    }
-
-    Map<String, String> properties = new HashMap<>();
-
-    @Override
-    public String get(String key) {
-        return properties.get(key);
+    public Optional<LocalDateTime> getEndTime() {
+        return endTime;
     }
 
     @Override
-    public String set(String key, String value) {
-        return properties.put(key, value);
+    public void setEndTime(LocalDateTime localDateTime) {
+        this.endTime = Optional.ofNullable(localDateTime);
+    }
+
+    /* Task Chaining */
+
+    @Override
+    public List<Task> getDependencies() {
+        return dependencies;
     }
 
     @Override
-    public String toString() {
-        return asString(getSimpleName());
-    }
-
-    public String asString(String name,
-                           String... extras) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(name);
-        sb.append(" ");
-        var _extras = Stream.of(extras).map(e -> "(%s)".formatted(e)).toList();
-        var __extras = String.join(" ",_extras) ;
-        sb.append(__extras);
-        sb.append(" *"+getRetries());
-        return sb.toString();
+    public Map<String, Object> getOutputs() {
+        return outputs;
     }
 
     @Override
-    public List<Task> getSubtasks(){
-        return List.of();
+    public Map<String, Object> getErrors() {
+        return errors;
     }
 
-    @Override
-    public void runSafe(){
-        config.runTask(this);
+    /* Utility Methods */
+    protected void success(String key, Object value){
+        outputs.put(key, value);
     }
 
-    @Override
-    public Result getResult() {
+    protected void failure(String message) {
+        getErrors().put("message",message);
+    }
+
+    public Optional<Object> findOutput(String key) {
+        var result = Optional.ofNullable(getOutputs().get(key));
+        if (result.isEmpty()){
+            for (Task dep: dependencies){
+                result = dep.findOutput(key);
+                if (result.isPresent()){
+                    return result;
+                }
+            }
+        }
         return result;
     }
 
+    public List findAsList(String key) {
+        return findOutput(key)
+                .map( o -> (List) o)
+                .orElse(List.of());
+    }
+
     @Override
-    public void setResult(Result result) {
-        this.result = result;
+    public Optional<String> findString(String key) {
+        return findOutput(key)
+                .map(o -> o.toString());
+    }
+
+    protected void dependsOn(Task task) {
+        getDependencies().add(task);
+    }
+
+    protected Logger log() {
+        return LoggerFactory.getLogger(getName());
     }
 
 }

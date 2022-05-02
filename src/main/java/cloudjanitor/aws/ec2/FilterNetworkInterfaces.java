@@ -7,7 +7,8 @@ import cloudjanitor.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterNetworkInterfaces extends AWSFilter<NetworkInterface> {
+public class FilterNetworkInterfaces extends AWSFilter {
+    /*
     String vpcId;
 
     public FilterNetworkInterfaces(String vpcId) {
@@ -41,4 +42,6 @@ public class FilterNetworkInterfaces extends AWSFilter<NetworkInterface> {
     protected String getResourceType() {
         return "Network Interface";
     }
+    */
+
 }

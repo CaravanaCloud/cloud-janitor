@@ -58,46 +58,37 @@ public class Configuration {
         }
     }
 
-    public void waitBeforeRun() {
-        waitBeforeRun(null);
-    }
-
-    public void waitBeforeRun(Long wait) {
-        var sleep = wait == null ? waitBeforeRun : wait;
-        try {
-            Thread.sleep(sleep);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void init(String[] args) {
         parse(args);
         log.info("Configuration: {}", this);
-        waitBeforeRun();
+        if(!isDryRun()){
+            await(3000);
+        }
+    }
+
+    private void await(long sleep) {
+        try {
+            Thread.sleep(sleep);
+        } catch (InterruptedException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     public boolean isDryRun() {
         return dryRun;
     }
 
-    public Result runTask(Task task) {
-        waitBeforeRun();
-        var startTime = LocalDateTime.now();
-        var result = (Result) null;
+    //TODO: Consider retries
+    public void runTask(Task task) {
         if (task.isWrite()
                 && isDryRun()) {
-            result = Result.dryRun(task);
-            log.info("Dry run: {}", task);
+            log.debug("Dry run: {}", task);
         } else {
             try {
-                //TODO: Consider not re-executing task
+                task.setStartTime(LocalDateTime.now());
                 task.runSafe();
-                result = task.getResult();
-                if (result == null) {
-                    result = Result.success(task);
-                }
-                task.debug("Executed {} ({})",
+                log.debug("Executed {} ({})",
                         task.toString(),
                         task.isWrite() ? "W" : "R");
                 //TODO: General waiter
@@ -105,15 +96,12 @@ public class Configuration {
                     rateLimiter.waitAfterTask(task);
                 }
             } catch (Exception e) {
-                result = Result.failure(task, e);
-                task.error("Error executing {}: {}", task.toString(), e.getMessage());
+                task.getErrors().put("exception", e.getMessage());
+                log.error("Error executing {}: {}", task.toString(), e.getMessage());
             }
         }
+        task.setEndTime(LocalDateTime.now());
 
-        var endTime = LocalDateTime.now();
-        result.setEndTime(endTime);
-        task.setResult(result);
-        return result;
     }
 
     public AWSClients aws(){
@@ -128,5 +116,9 @@ public class Configuration {
             executionId = "tt-"+sdf.format(new Date());
         }
         return executionId;
+    }
+
+    public void setDryRun(boolean dryRun) {
+        this.dryRun = dryRun;
     }
 }

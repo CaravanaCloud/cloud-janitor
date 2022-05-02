@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 
-public class FilterInstances extends AWSFilter<Instance> {
+public class FilterInstances extends AWSFilter {
+    /*
 
     private boolean match(Instance instance) {
         var match = false;
@@ -41,4 +42,6 @@ public class FilterInstances extends AWSFilter<Instance> {
     protected String getResourceType() {
         return "EC2 Instance";
     }
+
+     */
 }

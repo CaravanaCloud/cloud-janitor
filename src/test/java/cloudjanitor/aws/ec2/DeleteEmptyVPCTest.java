@@ -1,18 +1,24 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.TaskTest;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import software.amazon.awssdk.services.ec2.model.Vpc;
 
 import javax.inject.Inject;
+import javax.swing.text.html.Option;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.awaitility.Awaitility.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static java.util.concurrent.TimeUnit.*;
 
 @QuarkusTest
-public class DeleteEmptyVPCTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class DeleteEmptyVPCTest extends TaskTest {
 
     @Inject
     CreateVPC createVPC;
@@ -21,7 +27,7 @@ public class DeleteEmptyVPCTest {
     FilterVPCs filterVPCs;
 
     @Inject
-    DeleteVpc deleteVpc;
+    DeleteVPCs deleteVpc;
 
     @Test
     public void testCreateAndDeleteVPC(){
@@ -34,32 +40,36 @@ public class DeleteEmptyVPCTest {
     }
 
     private void awaitCreate(String vpcId) {
-        await().atMost(10, SECONDS)
+        await().atMost(30, SECONDS)
                 .until(() -> vpcExists(vpcId));
     }
 
     private void awaitDelete(String vpcId) {
-        await().atMost(10, SECONDS)
+        await().atMost(30, SECONDS)
                 .until(() -> ! vpcExists(vpcId));
     }
 
     private void deleteVPC(String vpcId) {
-        deleteVpc.setResources(List.of(vpcId));
-        deleteVpc.runSafe();
+        deleteVpc.filterVPCs.targetVpcId = Optional.of(vpcId);
+        tasks.runTask(deleteVpc);
     }
 
+    @SuppressWarnings("unchecked")
     private boolean vpcExists(String vpcId) {
-        filterVPCs.set("vpc.id",vpcId);
-        filterVPCs.runSafe();
-        var vpcs = filterVPCs.getResources();
-        var vpcExists = vpcs.size() == 1 && vpcs.get(0).vpcId().equals(vpcId);
-        return vpcExists;
+        filterVPCs.targetVpcId = Optional.of(vpcId);
+        tasks.runTask(filterVPCs);
+        var vpcs = (List<Vpc>) filterVPCs.findAsList("aws.vpc.matches");
+        if (! vpcs.isEmpty()){
+            var vpcExists = vpcs.get(0).vpcId().equals(vpcId);
+            return vpcExists;
+        } return false;
     }
 
     private String createVPC() {
-        createVPC.runSafe();
-        var result = createVPC.getResult();
-        return result.get("vpc.id");
+        var vpcId = tasks
+                .runTask(createVPC)
+                .findString("aws.vpc.id");
+        return vpcId.orElse(null);
     }
 
 }

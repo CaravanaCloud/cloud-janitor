@@ -3,8 +3,8 @@ package cloudjanitor.aws.ec2;
 import software.amazon.awssdk.services.ec2.model.*;
 import cloudjanitor.aws.AWSCleanup;
 
-public class DeleteInternetGateway extends AWSCleanup<InternetGateway> {
-
+public class DeleteInternetGateway extends AWSCleanup {
+    /*
     public DeleteInternetGateway(InternetGateway resource) {
         super(resource);
     }
@@ -42,5 +42,7 @@ public class DeleteInternetGateway extends AWSCleanup<InternetGateway> {
     }
 
 
+
+     */
 }
 

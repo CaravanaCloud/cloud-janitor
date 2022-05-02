@@ -4,7 +4,8 @@ import software.amazon.awssdk.services.elasticloadbalancingv2.model.DeleteTarget
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetGroup;
 import cloudjanitor.aws.AWSCleanup;
 
-public class DeleteTargetGroup extends AWSCleanup<TargetGroup> {
+public class DeleteTargetGroup extends AWSCleanup {
+    /*
     public DeleteTargetGroup(TargetGroup resource) {
          super(resource);
     }
@@ -23,5 +24,5 @@ public class DeleteTargetGroup extends AWSCleanup<TargetGroup> {
         return "Target Group";
     }
 
-
+    */
 }

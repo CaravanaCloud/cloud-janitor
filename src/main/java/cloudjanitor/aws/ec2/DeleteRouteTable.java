@@ -6,8 +6,8 @@ import software.amazon.awssdk.services.ec2.model.Route;
 import software.amazon.awssdk.services.ec2.model.RouteTable;
 import cloudjanitor.aws.AWSCleanup;
 
-public class DeleteRouteTable extends AWSCleanup<RouteTable> {
-
+public class DeleteRouteTable extends AWSCleanup {
+    /*
     public DeleteRouteTable(RouteTable resource) {
         super(resource);
     }
@@ -64,4 +64,6 @@ public class DeleteRouteTable extends AWSCleanup<RouteTable> {
     protected String getResourceType() {
         return "Route Table";
     }
+
+     */
 }

@@ -9,7 +9,8 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 @Dependent
-public class CreateBucket extends AWSWrite<Bucket> {
+public class CreateBucket extends AWSWrite {
+    /*
     @Inject
     AWSClients aws;
 
@@ -25,4 +26,6 @@ public class CreateBucket extends AWSWrite<Bucket> {
         var resp = s3.createBucket(req);
         log().info("Bucket created {}", bucketName);
     }
+
+     */
 }

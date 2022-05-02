@@ -10,7 +10,8 @@ import cloudjanitor.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterSubnets extends AWSFilter<Subnet> {
+public class FilterSubnets extends AWSFilter {
+    /*
     static final Logger log = LoggerFactory.getLogger(FilterInstances.class);
     private String vpcId;
 
@@ -44,5 +45,5 @@ public class FilterSubnets extends AWSFilter<Subnet> {
     protected String getResourceType() {
         return "Subnets";
     }
-
+    */
 }

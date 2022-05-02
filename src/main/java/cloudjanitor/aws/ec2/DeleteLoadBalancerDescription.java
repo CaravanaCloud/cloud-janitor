@@ -4,8 +4,8 @@ import software.amazon.awssdk.services.elasticloadbalancing.model.DeleteLoadBala
 import software.amazon.awssdk.services.elasticloadbalancing.model.LoadBalancerDescription;
 import cloudjanitor.aws.AWSCleanup;
 
-public class DeleteLoadBalancerDescription extends AWSCleanup<LoadBalancerDescription> {
-
+public class DeleteLoadBalancerDescription extends AWSCleanup {
+    /*
     public DeleteLoadBalancerDescription(LoadBalancerDescription resource) {
         super(resource);
     }
@@ -23,4 +23,6 @@ public class DeleteLoadBalancerDescription extends AWSCleanup<LoadBalancerDescri
     protected String getResourceType() {
         return "Classic Load Balancer";
     }
+
+     */
 }

@@ -14,6 +14,7 @@ import static java.util.concurrent.TimeUnit.*;
 
 @QuarkusTest
 public class DeleteBucketTest {
+    /*
     @Inject
     Logger log;
 
@@ -63,4 +64,6 @@ public class DeleteBucketTest {
         log.info("Bucket exists [{}]? {}", bucketName, exists);
         return exists;
     }
+
+     */
 }

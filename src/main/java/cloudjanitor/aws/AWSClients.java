@@ -13,12 +13,45 @@ import software.amazon.awssdk.services.route53.Route53Client;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.sts.StsClient;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.util.*;
 
-@ApplicationScoped
+@Dependent
 public class AWSClients {
+    @ConfigProperty(name = "cj.aws.region", defaultValue = "us-east-1")
+    String awsDefaultRegion;
+
+    private Region region;
+
+    public Region getRegion() {
+        if (region == null){
+            region = getDefaultRegion();
+        }
+        return region;
+    }
+
+    public void setRegion(Region region){
+        this.region = region;
+    }
+
+    protected Region getDefaultRegion(){
+        return Region.of(awsDefaultRegion);
+    }
+    // Clients //
+
+    public StsClient getSTSClient() {
+        var sts = StsClient.builder().region(getRegion()).build();
+        return sts;
+    }
+
+    public Ec2Client getEC2Client(){
+        var ec2 = Ec2Client.builder().region(getRegion()).build();
+        return ec2;
+    }
+
+    ///////////////////////////////////////////////////
+
     Map<Region, Map<Class<? extends SdkClient>, SdkClient>> clients = new HashMap<>();
 
     @ConfigProperty(name = "cj.aws.regions", defaultValue = "us-east-1")
@@ -30,6 +63,7 @@ public class AWSClients {
     Set<String> targetRegionsSet;
     List<Region> targetRegionsList;
 
+
     @SuppressWarnings("unchecked")
     public <T extends SdkClient> T getClient(Region region, Class<T> clientClass) {
         var regionClients = clients.getOrDefault(region, new HashMap<>());
@@ -39,7 +73,7 @@ public class AWSClients {
                 case "S3Client" -> newS3Client(region);
                 case "Route53Client" -> newRoute53Client(region);
                 case "Ec2Client" -> newEC2Client(region);
-                case "StsClient" -> newSTSClient(region);
+                case "StsClient" -> getSTSClient();
                 default -> throw new IllegalArgumentException("Unknown client class: " + clientClass.getSimpleName());
             };
         }
@@ -72,11 +106,6 @@ public class AWSClients {
 
 
 
-    private StsClient newSTSClient(Region region) {
-        var sts = StsClient.builder().region(region).build();
-        return sts;
-    }
-
     public S3Client newS3Client(Region region){
         var s3 = S3Client.builder().region(region).build();
         return s3;
@@ -86,8 +115,10 @@ public class AWSClients {
         return Route53Client.builder().region(region).build();
     }
 
-    public ElasticLoadBalancingV2Client getELBClientV2(Region region) {
-        return ElasticLoadBalancingV2Client.builder().region(region).build();
+    public ElasticLoadBalancingV2Client getELBClientV2() {
+        return ElasticLoadBalancingV2Client.builder()
+                .region(getRegion())
+                .build();
     }
 
     public ElasticLoadBalancingClient getELBClient(Region region) {
@@ -104,25 +135,15 @@ public class AWSClients {
         return AthenaClient.builder().region(region).build();
     }
 
+
+
     public CloudFormationClient newCloudFormationClient(){
         return CloudFormationClient.builder().region(getDefaultRegion()).build();
     }
 
-    public Region getDefaultRegion() {
-        var regions = getTargetRegionsList();
-        var region = (Region) null;
-        if (! regions.isEmpty()){
-            region = regions.get(0);
-        }
-        //TODO: Check environment variables / CLI
-        if (region == null) {
-            region = Region.US_EAST_1;
-        }
-        return region;
-    }
-
-
     public String getTargetRegions() {
         return targetRegions;
     }
+
+
 }

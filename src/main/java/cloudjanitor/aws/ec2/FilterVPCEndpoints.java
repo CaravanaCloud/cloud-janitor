@@ -7,7 +7,8 @@ import cloudjanitor.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterVPCEndpoints extends AWSFilter<VpcEndpoint> {
+public class FilterVPCEndpoints extends AWSFilter {
+    /*
 
     private String vpcId;
 
@@ -42,5 +43,7 @@ public class FilterVPCEndpoints extends AWSFilter<VpcEndpoint> {
     protected String getResourceType() {
         return "VPC Endpoint";
     }
+
+     */
 }
 

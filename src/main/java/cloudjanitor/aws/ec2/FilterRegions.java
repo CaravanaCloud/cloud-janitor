@@ -7,8 +7,8 @@ import cloudjanitor.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterRegions extends AWSFilter<Region> {
-
+public class FilterRegions extends AWSFilter {
+    /*
     @Override
     public List<Region> filterResources() {
             var regions = aws().newEC2Client(getRegionOrDefault()).describeRegions()
@@ -34,4 +34,6 @@ public class FilterRegions extends AWSFilter<Region> {
     protected String getResourceType() {
         return "Regions List";
     }
+    */
 }
+

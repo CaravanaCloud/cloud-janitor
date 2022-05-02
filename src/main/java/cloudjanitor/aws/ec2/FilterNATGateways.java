@@ -7,7 +7,8 @@ import cloudjanitor.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterNATGateways extends AWSFilter<NatGateway> {
+public class FilterNATGateways extends AWSFilter {
+    /*
 
     @Override
     protected List<NatGateway> filterResources() {
@@ -45,4 +46,6 @@ public class FilterNATGateways extends AWSFilter<NatGateway> {
     protected String getResourceType() {
         return "NAT Gateway";
     }
+
+     */
 }

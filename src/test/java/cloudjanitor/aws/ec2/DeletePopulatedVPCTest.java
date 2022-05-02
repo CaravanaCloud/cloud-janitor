@@ -13,10 +13,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-@QuarkusTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//@QuarkusTest
+//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DeletePopulatedVPCTest {
-
+/*
     @Inject
     Configuration cfg;
 
@@ -102,9 +102,11 @@ public class DeletePopulatedVPCTest {
                     }
                 } else {
                     System.out.println("Stack not found");
+                    waiting = false;
                 }
             }catch(CloudFormationException ex){
                 System.out.println("Failed to describe stack, consider it gone.");
+                waiting = false;
             }
         } while (waiting);
         System.out.println("DELETE DONE");
@@ -139,5 +141,5 @@ public class DeletePopulatedVPCTest {
         System.out.println("Delete that vpc");
         System.out.println("Verify it's emtpy");
     }
-
+*/
 }

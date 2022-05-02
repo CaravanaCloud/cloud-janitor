@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Dependent
-public class FilterBuckets extends AWSFilter<Bucket> {
-
+public class FilterBuckets extends AWSFilter {
+    /*
     private boolean matchPrefix(Bucket bucket) {
         var prefix = getAwsCleanupPrefix();
         var match = bucket.name().startsWith(prefix);
@@ -62,5 +62,5 @@ public class FilterBuckets extends AWSFilter<Bucket> {
     protected String getResourceType() {
         return "Bucket";
     }
-
+    */
 }

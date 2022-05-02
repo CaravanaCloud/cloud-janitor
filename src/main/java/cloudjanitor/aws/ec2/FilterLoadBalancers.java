@@ -7,7 +7,8 @@ import cloudjanitor.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterLoadBalancers extends AWSFilter<LoadBalancerDescription> {
+public class FilterLoadBalancers extends AWSFilter {
+    /*
     private String vpcId;
 
     public FilterLoadBalancers(String vpcId) {
@@ -37,5 +38,5 @@ public class FilterLoadBalancers extends AWSFilter<LoadBalancerDescription> {
     protected String getResourceType() {
         return "Classic Load Balancer";
     }
-
+    */
 }

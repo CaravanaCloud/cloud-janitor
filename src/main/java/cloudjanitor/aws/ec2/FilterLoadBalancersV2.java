@@ -7,35 +7,19 @@ import cloudjanitor.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterLoadBalancersV2 extends AWSFilter<LoadBalancer> {
+public class FilterLoadBalancersV2 extends AWSFilter {
 
     private boolean match(LoadBalancer resource) {
-        var prefix = getAwsCleanupPrefix();
-        var match = resource.loadBalancerName().startsWith(prefix);
-        return match;
+        var lbName = resource.loadBalancerName();
+        return matchName(lbName);
     }
 
     @Override
-    protected List<LoadBalancer> filterResources() {
-        var elb = aws().getELBClientV2(getRegionOrDefault());
+    public void runSafe() {
+        var elb = aws().getELBClientV2();
         var resources = elb.describeLoadBalancers().loadBalancers();
         var matches = resources.stream().filter(this::match).toList();
-        return matches;
+        success("elbv2.matches", matches);
     }
 
-
-    @Override
-    protected Stream<Task> mapSubtasks(LoadBalancer lb) {
-        return Stream.of(deleteLoadBalancer(lb));
-    }
-
-
-    private Task deleteLoadBalancer(LoadBalancer resource) {
-        return new DeleteLoadBalancer(resource);
-    }
-
-    @Override
-    protected String getResourceType() {
-        return "Load Balancer V2";
-    }
 }

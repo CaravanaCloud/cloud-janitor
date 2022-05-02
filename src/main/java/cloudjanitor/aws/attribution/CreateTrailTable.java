@@ -14,7 +14,8 @@ import java.util.List;
 
 @Named("create-trail-table")
 @Dependent
-public class CreateTrailTable extends AWSWrite<Void> {
+public class CreateTrailTable extends AWSWrite {
+    /*
     private static final String ATHENA_DEFAULT_DATABASE = "default";
     private static final String ATHENA_OUTPUT_BUCKET = "s3://jufaerma.us-east-1";
     @Inject
@@ -167,4 +168,6 @@ public class CreateTrailTable extends AWSWrite<Void> {
             }
         }
     }
+
+     */
 }

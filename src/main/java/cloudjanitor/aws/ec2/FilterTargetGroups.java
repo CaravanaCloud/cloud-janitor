@@ -7,7 +7,7 @@ import cloudjanitor.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterTargetGroups extends AWSFilter<TargetGroup> {
+public class FilterTargetGroups extends AWSFilter { /*
     private boolean match(TargetGroup resource) {
         var prefix = getAwsCleanupPrefix();
         var match = resource.targetGroupName().startsWith(prefix);
@@ -16,7 +16,7 @@ public class FilterTargetGroups extends AWSFilter<TargetGroup> {
 
     @Override
     protected List<TargetGroup> filterResources() {
-        var elb = aws().getELBClientV2(getRegionOrDefault());
+        var elb = aws().getELBClientV2();
         var resources = elb.describeTargetGroups().targetGroups();
         var matches = resources.stream().filter(this::match).toList();
         return matches;
@@ -31,5 +31,5 @@ public class FilterTargetGroups extends AWSFilter<TargetGroup> {
     protected String getResourceType() {
         return "Target Group";
     }
-
+*/
 }

@@ -7,7 +7,8 @@ import cloudjanitor.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterInternetGateways extends AWSFilter<InternetGateway> {
+public class FilterInternetGateways extends AWSFilter {
+    /*
 
     private String vpcId;
 
@@ -42,5 +43,7 @@ public class FilterInternetGateways extends AWSFilter<InternetGateway> {
     protected String getResourceType() {
         return "Internet Gateways";
     }
+
+     */
 }
 

@@ -7,7 +7,8 @@ import cloudjanitor.spi.Task;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterSecurityGroups extends AWSFilter<SecurityGroup> {
+public class FilterSecurityGroups extends AWSFilter {
+    /*
     private String vpcId;
 
     public FilterSecurityGroups(String vpcId) {
@@ -38,6 +39,6 @@ public class FilterSecurityGroups extends AWSFilter<SecurityGroup> {
     protected String getResourceType() {
         return "Security Group";
     }
-
+    */
 }
 

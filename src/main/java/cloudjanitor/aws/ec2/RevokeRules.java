@@ -3,8 +3,8 @@ package cloudjanitor.aws.ec2;
 import software.amazon.awssdk.services.ec2.model.*;
 import cloudjanitor.aws.AWSCleanup;
 
-public class RevokeRules extends AWSCleanup<SecurityGroup> {
-
+public class RevokeRules extends AWSCleanup {
+    /*
     public RevokeRules(SecurityGroup resource) {
         super(resource);
     }
@@ -52,4 +52,6 @@ public class RevokeRules extends AWSCleanup<SecurityGroup> {
     protected String getResourceType() {
         return "Security Group Rules";
     }
+
+     */
 }

@@ -1,6 +1,6 @@
 package cloudjanitor.aws;
 
-public class AWSWrite<T> extends AWSTask<T> {
+public class AWSWrite extends AWSTask {
     @Override
     public boolean isWrite() {
         return true;

@@ -12,16 +12,13 @@ import javax.inject.Inject;
 
 @Name("create-vpc")
 @Dependent
-public class CreateVPC extends AWSWrite<Vpc> {
-    @Inject
-    AWSClients aws;
-
-    @ConfigProperty(name = "tt.vpc.cidr", defaultValue = "10.0.0.0/24")
+public class CreateVPC extends AWSWrite {
+    @ConfigProperty(name = "cj.aws.vpc.cidr", defaultValue = "10.0.0.0/24")
     String vpcCIDR;
 
     @Override
     public void runSafe() {
-        var ec2 = aws.newEC2Client(getRegionOrDefault());
+        var ec2 = aws().getEC2Client();
         var req = CreateVpcRequest
                 .builder()
                 .cidrBlock(vpcCIDR)
@@ -29,6 +26,6 @@ public class CreateVPC extends AWSWrite<Vpc> {
         var resp = ec2.createVpc(req);
         var vpcId = resp.vpc().vpcId();
         log().info("VPC {} created", vpcId);
-        success("vpc.id", vpcId);
+        success("aws.vpc.id", vpcId);
     }
 }

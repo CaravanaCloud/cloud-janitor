@@ -1,35 +1,43 @@
 package cloudjanitor.aws.ec2;
 
+import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.ec2.model.DeleteVpcRequest;
 import cloudjanitor.aws.AWSCleanup;
-import cloudjanitor.spi.Task;
+import software.amazon.awssdk.services.ec2.model.Vpc;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
-import java.util.stream.Stream;
+import javax.inject.Inject;
+import java.util.List;
 
 @Dependent
-public class DeleteVpc extends AWSCleanup<String/*VpcId*/> {
+public class DeleteVPCs extends AWSCleanup {
 
-    public DeleteVpc(){};
+    @Inject
+    FilterVPCs filterVPCs;
 
-    public DeleteVpc(String resource/*VpcId*/) {
-        super(resource);
+    @PostConstruct
+    public void resolveDependencies(){
+        dependsOn(filterVPCs);
     }
 
     @Override
-    public void cleanup(String resource) {
-        log().debug("Deleting VPC [{}]", resource);
+    public void runSafe() {
+        var vpcs = (List<Vpc>) findAsList("aws.vpc.matches");
+        var ec2 = aws().getEC2Client();
+        vpcs.forEach(vpc -> deleteVPC(ec2, vpc));
+        log().debug("VPCs deleted");
+    }
+
+    private void deleteVPC(Ec2Client ec2, Vpc vpc) {
         var request = DeleteVpcRequest.builder()
-                .vpcId(resource)
+                .vpcId(vpc.vpcId())
                 .build();
-        aws().newEC2Client(getRegion()).deleteVpc(request);
+        ec2.deleteVpc(request);
+        log().debug("Deleted VPC [{}]", vpc);
     }
 
-    @Override
-    protected String getResourceType() {
-        return "VPC";
-    }
-
+    /*
     @Override
     public Stream<Task> mapSubtasks(String vpcId) {
         return Stream.of(
@@ -53,4 +61,5 @@ public class DeleteVpc extends AWSCleanup<String/*VpcId*/> {
                 new FilterInternetGateways(vpcId)
         );
     }
+    */
 }

@@ -8,7 +8,8 @@ import cloudjanitor.aws.AWSCleanup;
 
 import java.util.Optional;
 
-public class TerminateInstance extends AWSCleanup<Instance> {
+public class TerminateInstance extends AWSCleanup {
+    /*
     public TerminateInstance(Instance instance) {
         super(instance);
     }
@@ -89,4 +90,6 @@ public class TerminateInstance extends AWSCleanup<Instance> {
     public Optional<Long> getWaitAfterRun() {
         return Optional.of(30_000L);
     }
+
+     */
 }

@@ -4,7 +4,8 @@ import software.amazon.awssdk.services.ec2.model.Address;
 import software.amazon.awssdk.services.ec2.model.ReleaseAddressRequest;
 import cloudjanitor.aws.AWSCleanup;
 
-public class ReleaseAddress extends AWSCleanup<Address> {
+public class ReleaseAddress extends AWSCleanup {
+    /*
     public ReleaseAddress(Address addr) {
         super(addr);
     }
@@ -21,5 +22,5 @@ public class ReleaseAddress extends AWSCleanup<Address> {
         return "Address";
     }
 
-
+    */
 }
