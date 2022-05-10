@@ -1,0 +1,30 @@
+# gitpod.io/#github.com/CaravanaCloud/cloud-janitor
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - name: Maven Build
+    init: mvn -B org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline
+    command: mvn -B install -DskipTests=true
+
+ports:
+  - port: 5000
+  - port: 8080
+  - port: 13370
+  - port: 13371
+  - port: 13372
+  - port: 13373
+
+vscode:
+  extensions:
+    - vscjava.vscode-java-pack
+    - vscjava.vscode-java-debug
+    - vscjava.vscode-java-dependency
+    - vscjava.vscode-java-test
+    - vscjava.vscode-maven
+    - redhat.java
+    - redhat.fabric8-analytics
+    - ms-azuretools.vscode-docker
+    - esbenp.prettier-vscode
+#    - GitHub.copilot
+
