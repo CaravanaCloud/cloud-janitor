@@ -59,6 +59,10 @@ Run it:
 cj
 ```
 
+## On GitPod
+
+Just visit https://gitpod.io/#github.com/CaravanaCloud/cloud-janitor
+
 ## From sources (dev mode)
 ```
 ./mvnw quarkus:dev
