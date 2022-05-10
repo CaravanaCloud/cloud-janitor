@@ -1,11 +1,6 @@
 Description: Resources for DeletePopulatedVPCTest
 
 Parameters:
-  EnvName:
-    Description: An environment name that is prefixed to resource names
-    Type: String
-    Default: DeletePopulatedVPCTest
-
   VpcCIDR:
     Description: IP range for this VPC
     Type: String
@@ -51,7 +46,7 @@ Resources:
       EnableDnsHostnames: true
       Tags:
         - Key: Name
-          Value: !Ref EnvName
+          Value: !Sub "${AWS::StackName}-vpc"
         - Key: !Sub "kubernetes.io/cluster/${AWS::StackName}EKS"
           Value: "shared"
 
@@ -60,7 +55,7 @@ Resources:
     Properties:
       Tags:
         - Key: Name
-          Value: !Sub "${EnvName}/IGW"
+          Value: !Sub "${AWS::StackName}-igw"
 
   InternetGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
@@ -78,10 +73,10 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: !Sub "${EnvName}/PublicSubnet2"
+          Value: !Sub "${AWS::StackName}-net-pub-1"
         - Key: kubernetes.io/role/elb
           Value: "1"
-        - Key: !Sub "kubernetes.io/cluster/${EnvName}EKS"
+        - Key: !Sub "kubernetes.io/cluster/${AWS::StackName}EKS"
           Value: "shared"
 
   PublicSubnet2:
@@ -94,10 +89,10 @@ Resources:
       MapPublicIpOnLaunch: true
       Tags:
         - Key: Name
-          Value: !Sub "${EnvName}/PublicSubnet2"
+          Value: !Sub "${AWS::StackName}-net-pub-2"
         - Key: kubernetes.io/role/elb
           Value: "1"
-        - Key: !Sub "kubernetes.io/cluster/${EnvName}EKS"
+        - Key: !Sub "kubernetes.io/cluster/${AWS::StackName}EKS"
           Value: "shared"
 
   PrivateSubnet1:
@@ -110,10 +105,10 @@ Resources:
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: !Sub '${AWS::StackName}/PrivateSubnet1'
+          Value: !Sub '${AWS::StackName}-net-pvt-1'
         - Key: kubernetes.io/role/internal-elb
           Value: '1'
-        - Key: !Sub "kubernetes.io/cluster/${EnvName}EKS"
+        - Key: !Sub "kubernetes.io/cluster/${AWS::StackName}EKS"
           Value: "shared"
 
   PrivateSubnet2:
@@ -126,10 +121,10 @@ Resources:
       MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
-          Value: !Sub '${AWS::StackName}/PrivateSubnet2'
+          Value: !Sub '${AWS::StackName}-net-pvt-2'
         - Key: kubernetes.io/role/internal-elb
           Value: '1'
-        - Key: !Sub "kubernetes.io/cluster/${EnvName}EKS"
+        - Key: !Sub "kubernetes.io/cluster/${AWS::StackName}EKS"
           Value: "shared"
 
   NatGateway1EIP:
@@ -139,7 +134,7 @@ Resources:
       Domain: vpc
       Tags:
         - Key: Name
-          Value: !Sub '${AWS::StackName}/NATIP1'
+          Value: !Sub '${AWS::StackName}-igw-vpc'
 
   NatGateway2EIP:
     Type: AWS::EC2::EIP
@@ -148,7 +143,7 @@ Resources:
       Domain: vpc
       Tags:
         - Key: Name
-          Value: !Sub '${AWS::StackName}/NATIP2'
+          Value: !Sub '${AWS::StackName}-eip-nat-2'
 
   NatGateway1:
     Type: AWS::EC2::NatGateway
@@ -157,7 +152,7 @@ Resources:
       SubnetId: !Ref PublicSubnet1
       Tags:
         - Key: Name
-          Value: !Sub '${AWS::StackName}/NAT1'
+          Value: !Sub '${AWS::StackName}-eip-nat-1'
 
   NatGateway2:
     Type: AWS::EC2::NatGateway
@@ -166,7 +161,7 @@ Resources:
       SubnetId: !Ref PublicSubnet2
       Tags:
         - Key: Name
-          Value: !Sub '${AWS::StackName}/NAT2'
+          Value: !Sub '${AWS::StackName}-natgw-2'
 
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
@@ -174,7 +169,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: !Sub '${AWS::StackName}/PublicRouteTable'
+          Value: !Sub '${AWS::StackName}-rtb-pub'
 
   DefaultPublicRoute:
     Type: AWS::EC2::Route
@@ -202,7 +197,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: !Sub '${AWS::StackName}/PrivateRouteTable1'
+          Value: !Sub '${AWS::StackName}-rtb-pvt-1'
 
   DefaultPrivateRoute1:
     Type: AWS::EC2::Route
@@ -223,7 +218,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: !Sub '${AWS::StackName}/PrivateRouteTable2'
+          Value: !Sub '${AWS::StackName}-rtb-pvt-2'
 
   DefaultPrivateRoute2:
     Type: AWS::EC2::Route
@@ -245,7 +240,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: !Sub '${AWS::StackName}/EKSClusterSG'
+          Value: !Sub '${AWS::StackName}-sg-eks-cluster'
 
   EKSNodeSG:
     Type: AWS::EC2::SecurityGroup
@@ -254,8 +249,8 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: !Sub '${AWS::StackName}/EKSNodeSG'
-        - Key: !Sub kubernetes.io/cluster/BC::${EnvName}::VPCID
+          Value: !Sub '${AWS::StackName}-sg-eks-cluster-workers'
+        - Key: !Sub kubernetes.io/cluster/BC::${AWS::StackName}::VPCID
           Value: owned
 
   DatabaseSG:
@@ -265,7 +260,7 @@ Resources:
       VpcId: !Ref VPC
       Tags:
         - Key: Name
-          Value: !Sub '${AWS::StackName}/DatabaseSG'
+          Value: !Sub '${AWS::StackName}-sg-db'
 
 
   # TODO: Fix SG ports
@@ -442,19 +437,19 @@ Outputs:
     Description: Name of the created stack
     Value: !Ref AWS::StackName
     Export:
-      Name: !Sub "BC::${EnvName}::STACK"
+      Name: !Sub "CJ::${AWS::StackName}::STACK"
 
   EKSName:
     Description: Name that the future EKS Cluster must have to match EKS subnet tagging rules
-    Value: !Sub "${EnvName}EKS"
+    Value: !Sub "${AWS::StackName}EKS"
     Export:
-      Name: !Sub "BC::${EnvName}::EKSNAME"
+      Name: !Sub "CJ::${AWS::StackName}::EKSNAME"
 
   VPC:
     Description: A reference to the created VPC
     Value: !Ref VPC
     Export:
-      Name: !Sub "BC::${EnvName}::VPCID"
+      Name: !Sub "CJ::${AWS::StackName}::VPCID"
 
   PublicSubnets:
     Description: The list of the public subnets (YAML style A)
@@ -463,57 +458,57 @@ Outputs:
       - - !Ref PublicSubnet1
         - !Ref PublicSubnet2
     Export:
-      Name: !Sub "BC::${EnvName}::PUBNETS"
+      Name: !Sub "CJ::${AWS::StackName}::PUBNETS"
 
   PrivateSubnets:
     Description: The list of the private subnets (YAML style B)
     Value: !Join [ ",", [ !Ref PrivateSubnet1, !Ref PrivateSubnet2 ]]
     Export:
-      Name: !Sub "BC::${EnvName}::PRIVNETS"
+      Name: !Sub "CJ::${AWS::StackName}::PRIVNETS"
 
   PublicSubnet1:
     Description: A reference to the public subnet in the 1st Availability Zone
     Value: !Ref PublicSubnet1
     Export:
-      Name: !Sub "BC::${EnvName}::PUBNET1"
+      Name: !Sub "CJ::${AWS::StackName}::PUBNET1"
 
   PublicSubnet2:
     Description: A reference to the public subnet in the 2nd Availability Zone
     Value: !Ref PublicSubnet2
     Export:
-      Name: !Sub "BC::${EnvName}::PUBNET2"
+      Name: !Sub "CJ::${AWS::StackName}::PUBNET2"
 
   PrivateSubnet1:
     Description: A reference to the private subnet in the 1st Availability Zone
     Value: !Ref PrivateSubnet1
     Export:
-      Name: !Sub "BC::${EnvName}::PVTNET1"
+      Name: !Sub "CJ::${AWS::StackName}::PVTNET1"
 
   PrivateSubnet2:
     Description: A reference to the private subnet in the 2nd Availability Zone
     Value: !Ref PrivateSubnet2
     Export:
-      Name: !Sub "BC::${EnvName}::PVTNET2"
+      Name: !Sub "CJ::${AWS::StackName}::PVTNET2"
 
   EKSClusterSGId:
     Description: EKS cluster security group id
     Value: !Ref EKSClusterSG
     Export:
-      Name: !Sub "BC::${EnvName}::EKSSGID"
+      Name: !Sub "CJ::${AWS::StackName}::EKSSGID"
 
   EKSNodeSGId:
     Description: EKS cluster security group id
     Value: !Ref EKSNodeSG
     Export:
-      Name: !Sub "BC::${EnvName}::NODESGID"
+      Name: !Sub "CJ::${AWS::StackName}::NODESGID"
 
   DBSGId:
     Description: Database Security Group Id
     Value: !Ref DatabaseSG
     Export:
-      Name: !Sub "BC::${EnvName}::DBSGID"
+      Name: !Sub "CJ::${AWS::StackName}::DBSGID"
 
 # cheat sheet
 
-# aws cloudformation deploy --template-file main.yaml --stack-name "${TF_VAR_env_name}-NETW" --parameter-overrides EnvName=${TF_VAR_env_name}
+# aws cloudformation deploy --template-file main.yaml --stack-name "${TF_VAR_env_name}-NETW" --parameter-overrides AWS::StackName=${TF_VAR_env_name}
 # aws cloudformation delete-stack --stack-name "${TF_VAR_env_name}-NETW"

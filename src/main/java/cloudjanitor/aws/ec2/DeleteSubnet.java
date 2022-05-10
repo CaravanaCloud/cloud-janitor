@@ -4,23 +4,24 @@ import software.amazon.awssdk.services.ec2.model.DeleteSubnetRequest;
 import software.amazon.awssdk.services.ec2.model.Subnet;
 import cloudjanitor.aws.AWSCleanup;
 
+import javax.enterprise.context.Dependent;
+
+@Dependent
 public class DeleteSubnet extends AWSCleanup {
-    /*
-    public DeleteSubnet(Subnet net) {
-        super(net);
+    String subnetId;
+
+    public DeleteSubnet withSubnet(Subnet subnet) {
+        this.subnetId = subnet.subnetId();
+        return this;
     }
 
-    @Override
-    public void cleanup(Subnet resource) {
-        log().debug("Deleting subnet " + resource.subnetId());
-        DeleteSubnetRequest delSub = DeleteSubnetRequest.builder().subnetId(resource.subnetId()).build();
-        aws().newEC2Client(getRegion()).deleteSubnet(delSub);
+    public void runSafe() {
+        DeleteSubnetRequest delSub = DeleteSubnetRequest.builder()
+                .subnetId(subnetId)
+                .build();
+        aws().getEC2Client().deleteSubnet(delSub);
+        log().debug("Deleted subnet " + subnetId);
     }
 
-    @Override
-    protected String getResourceType() {
-        return "Subnet";
-    }
 
-     */
 }

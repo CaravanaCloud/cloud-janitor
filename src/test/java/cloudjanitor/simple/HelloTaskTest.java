@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
-class HelloTaskTest {
+public class HelloTaskTest {
     @Inject
     Tasks tasks;
 

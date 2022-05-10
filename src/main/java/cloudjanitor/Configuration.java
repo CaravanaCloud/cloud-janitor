@@ -18,8 +18,6 @@ public class Configuration {
     @Inject
     Logger log;
 
-    @Inject
-    RateLimiter rateLimiter;
 
     @ConfigProperty(name = "cj.task", defaultValue = "marvin")
     String taskName;
@@ -79,30 +77,6 @@ public class Configuration {
         return dryRun;
     }
 
-    //TODO: Consider retries
-    public void runTask(Task task) {
-        if (task.isWrite()
-                && isDryRun()) {
-            log.debug("Dry run: {}", task);
-        } else {
-            try {
-                task.setStartTime(LocalDateTime.now());
-                task.runSafe();
-                log.debug("Executed {} ({})",
-                        task.toString(),
-                        task.isWrite() ? "W" : "R");
-                //TODO: General waiter
-                if (task.isWrite()) {
-                    rateLimiter.waitAfterTask(task);
-                }
-            } catch (Exception e) {
-                task.getErrors().put("exception", e.getMessage());
-                log.error("Error executing {}: {}", task.toString(), e.getMessage());
-            }
-        }
-        task.setEndTime(LocalDateTime.now());
-
-    }
 
     public AWSClients aws(){
         return aws;
@@ -113,7 +87,7 @@ public class Configuration {
     public synchronized String getExecutionId() {
         if (executionId == null){
             var sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
-            executionId = "tt-"+sdf.format(new Date());
+            executionId = "cj-"+sdf.format(new Date());
         }
         return executionId;
     }

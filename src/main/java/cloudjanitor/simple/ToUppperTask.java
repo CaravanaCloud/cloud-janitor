@@ -1,21 +1,22 @@
 package cloudjanitor.simple;
 
 import cloudjanitor.BaseTask;
+import cloudjanitor.spi.Task;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import java.util.List;
 
 @Dependent
 public class ToUppperTask extends BaseTask {
     @Inject
     HelloTask hello;
 
-    @PostConstruct
-    public void resolveDependencies(){
-        dependsOn(hello);
+    @Override
+    public List<Task> getDependencies() {
+        return List.of(hello);
     }
-
 
     @Override
     public void runSafe() {

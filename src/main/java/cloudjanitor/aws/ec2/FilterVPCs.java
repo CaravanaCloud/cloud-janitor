@@ -20,6 +20,10 @@ public class FilterVPCs extends AWSFilter {
     public void runSafe() {
         var vpcs = filterResources();
         success("aws.vpc.matches", vpcs);
+        log().debug("VPCs filtered region={} target={} found={}",
+                aws().getRegion(),
+                targetVpcId.orElse(""),
+                vpcs.size());
     }
 
     private boolean matchVPCId(Vpc vpc){
@@ -48,5 +52,9 @@ public class FilterVPCs extends AWSFilter {
             matches = matches.filter(this::matchName);
         var result= matches.toList();
         return result;
+    }
+
+    public void setTargetVPC(String vpcId) {
+        targetVpcId  = Optional.of(vpcId);
     }
 }

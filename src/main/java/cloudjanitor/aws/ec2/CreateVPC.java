@@ -24,8 +24,9 @@ public class CreateVPC extends AWSWrite {
                 .cidrBlock(vpcCIDR)
                 .build();
         var resp = ec2.createVpc(req);
-        var vpcId = resp.vpc().vpcId();
-        log().info("VPC {} created", vpcId);
+        var vpc = resp.vpc();
+        var vpcId = vpc.vpcId();
         success("aws.vpc.id", vpcId);
+        log().debug("VPC {}/{} created", aws().getRegion(), vpcId);
     }
 }

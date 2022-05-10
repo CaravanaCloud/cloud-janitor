@@ -14,7 +14,7 @@ public class RateLimiter {
         if (waitAfterRun.isPresent()){
             try {
                 var sleep = waitAfterRun.get();
-                log.debug("Waiting {} after {}",sleep,task);
+                log.trace("Waiting {} after {}",sleep,task);
                 Thread.sleep(sleep);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

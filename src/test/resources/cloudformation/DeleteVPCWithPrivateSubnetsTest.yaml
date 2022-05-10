@@ -1,0 +1,81 @@
+Description: CloudFormation Template for CloudJanitor Testing
+
+Parameters:
+  VpcCIDR:
+    Description: IP range for this VPC
+    Type: String
+    Default: 10.0.0.0/16
+
+  PrivateSubnet1CIDR:
+    Description: IP range for the private subnet in the first Availability Zone
+    Type: String
+    Default: 10.0.2.0/24
+
+  PrivateSubnet2CIDR:
+    Description: IP range for the private subnet in the second Availability Zone
+    Type: String
+    Default: 10.0.4.0/24
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    DeletionPolicy: Delete
+    Properties:
+      CidrBlock: !Ref VpcCIDR
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-vpc"
+
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    DeletionPolicy: Delete
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
+      CidrBlock: !Ref PrivateSubnet1CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-net-pvt-1'
+        - Key: kubernetes.io/role/internal-elb
+          Value: '1'
+        - Key: !Sub "kubernetes.io/cluster/${AWS::StackName}EKS"
+          Value: "shared"
+
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    DeletionPolicy: Delete
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      CidrBlock: !Ref PrivateSubnet2CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-net-pvt-2'
+        - Key: kubernetes.io/role/internal-elb
+          Value: '1'
+        - Key: !Sub "kubernetes.io/cluster/${AWS::StackName}EKS"
+          Value: "shared"
+
+
+Outputs:
+  VPC:
+    Description: A reference to the created VPC
+    Value: !Ref VPC
+    Export:
+      Name: !Sub "CJ::${AWS::StackName}::VPCID"
+
+  PrivateSubnets:
+    Description: The list of the private subnets (YAML style B)
+    Value: !Join [ ",", [ !Ref PrivateSubnet1, !Ref PrivateSubnet2 ]]
+
+  PrivateSubnet1:
+    Description: A reference to the private subnet in the 1st Availability Zone
+    Value: !Ref PrivateSubnet1
+
+  PrivateSubnet2:
+    Description: A reference to the private subnet in the 2nd Availability Zone
+    Value: !Ref PrivateSubnet2

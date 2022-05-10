@@ -7,43 +7,38 @@ import software.amazon.awssdk.services.ec2.model.Subnet;
 import cloudjanitor.aws.AWSFilter;
 import cloudjanitor.spi.Task;
 
+import javax.enterprise.context.Dependent;
 import java.util.List;
 import java.util.stream.Stream;
-
+@Dependent
 public class FilterSubnets extends AWSFilter {
-    /*
-    static final Logger log = LoggerFactory.getLogger(FilterInstances.class);
-    private String vpcId;
+    String vpcId;
 
-    public FilterSubnets(String vpcId) {
+    public Task withVpcId(String vpcId) {
         this.vpcId = vpcId;
+        return this;
     }
+
 
     private boolean match(Subnet net) {
-        var prefix = getAwsCleanupPrefix();
-        var match = net.tags().stream()
-                .anyMatch(tag -> tag.key().equals("Name") && tag.value().startsWith(prefix));
-        log.trace("Found Subnet {} {}", mark(match), net);
-        return match;
+        if (vpcId != null) {
+            return net.vpcId().equals(vpcId);
+        }else if (hasFilterPrefix()){
+            var match = net.tags()
+                    .stream()
+                    .anyMatch(tag ->
+                            tag.key().equals("Name") && matchName(tag.value()));
+            return match;
+        }else return true;
     }
 
+
     @Override
-    protected List<Subnet> filterResources() {
+    public void runSafe() {
         var ec2 = aws().newEC2Client(getRegion());
         var describeNets = DescribeSubnetsRequest.builder().build();
         var nets = ec2.describeSubnets(describeNets).subnets().stream();
         var matches = nets.filter(this::match).toList();
-        return matches;
+        success("aws.subnet.matches",matches);
     }
-
-    @Override
-    protected Stream<Task> mapSubtasks(Subnet subnet) {
-        return Stream.of(new DeleteSubnet(subnet));
-    }
-
-    @Override
-    protected String getResourceType() {
-        return "Subnets";
-    }
-    */
 }

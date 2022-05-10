@@ -1,35 +1,45 @@
-package cloudjanitor.aws.ec2;
+package cloudjanitor;
 
-import cloudjanitor.TaskTest;
-import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.slf4j.Logger;
 import software.amazon.awssdk.services.cloudformation.model.*;
-import cloudjanitor.Configuration;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+import static org.junit.jupiter.api.Assertions.*;
 
-@QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class DeletePopulatedVPCTest extends TaskTest {
+public class CloudFormationTest extends TaskTest{
+    @Inject
+    Logger log;
+
+    String stackName;
 
     @BeforeAll
     public void beforeALl(){
+        createStack();
+    }
+
+    @AfterAll
+    private void afterAll(){
+        deleteStack();
+    }
+
+    protected void createStack(){
+        log.info("Creating stack {} on {}", getStackName(), aws().getRegion());
         var cf = aws().getCloudFormationClient();
         var stackName = getStackName();
-        //TODO: Check resources are created
         var createReq = CreateStackRequest.builder()
                 .stackName(getStackName())
                 .capabilities(Capability.CAPABILITY_IAM)
                 .templateBody(templateBody(getSimpleName()))
                 .build();
         var stackId = cf.createStack(createReq).stackId();
-        System.out.println("Stack ID "+stackId);
         var waiting = false;
         do {
             var describeReq = DescribeStacksRequest
@@ -42,10 +52,10 @@ public class DeletePopulatedVPCTest extends TaskTest {
                 var stack = stacks.get(0);
                 var status = stack.stackStatus().toString();
                 waiting = switch(status) {
-                   case "CREATE_COMPLETE",
-                           "CREATE_FAILED",
-                           "ROLLBACK_COMPLETE" -> false;
-                   default -> true;
+                    case "CREATE_COMPLETE",
+                            "CREATE_FAILED",
+                            "ROLLBACK_COMPLETE" -> false;
+                    default -> true;
                 };
                 System.out.println("Stack "+stackName+" is "+status);
                 if (waiting){
@@ -63,8 +73,38 @@ public class DeletePopulatedVPCTest extends TaskTest {
         System.out.println("CREATE DONE");
     }
 
-    @AfterAll
-    private void afterAll(){
+    protected String getStackName() {
+        if (stackName == null) {
+            var simpleName = getSimpleName();
+            var runId = config().getExecutionId();
+            stackName = simpleName+"-"+runId;
+        }
+        return stackName;
+    }
+
+    private String templateBody(String templateName) {
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        var resourceName = "cloudformation/"+templateName+".yaml";
+        InputStream is = classloader.getResourceAsStream(resourceName);
+        if(is == null){
+            fail("Resource not found: "+resourceName);
+            throw new RuntimeException("Resource not found: "+resourceName);
+        }else {
+            String body = null;
+            try {
+                body = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return body;
+        }
+    }
+
+    private String getSimpleName() {
+        return this.getClass().getSimpleName();
+    }
+
+    protected void deleteStack(){
         var cf = aws().getCloudFormationClient();
         var stackName = getStackName();
         var deleteReq = DeleteStackRequest.builder()
@@ -110,34 +150,34 @@ public class DeletePopulatedVPCTest extends TaskTest {
         System.out.println("DELETE DONE");
     }
 
-    private String getStackName() {
-        var simpleName = getSimpleName();
-        var runId = config().getExecutionId();
-        var stacKName = runId+"-"+simpleName;
-        return stacKName;
-    }
-
-    private String getSimpleName() {
-        return this.getClass().getSimpleName();
-    }
-
-    private String templateBody(String templateName) {
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        var resourceName = "cloudformation/"+templateName+".yaml";
-        InputStream is = classloader.getResourceAsStream(resourceName);
-        String body = null;
-        try {
-            body = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    protected Optional<String> output(String name) {
+        var cf = aws().getCloudFormationClient();
+        var stackName = getStackName();
+        var req = DescribeStacksRequest.builder()
+                .stackName(stackName)
+                .build();
+        var stacks = cf.describeStacks(req).stacks();
+        if (! stacks.isEmpty()) {
+            var stack = stacks.get(0);
+            var outs =
+                    stack.outputs()
+                            .stream()
+                            .toList();
+            var out = outs.stream()
+                            .filter(output -> output.outputKey().equals(name))
+                            .map(output -> output.outputValue())
+                            .findAny();
+            return out;
         }
-        return body;
+        return Optional.empty();
     }
 
-    @Test
-    public void testDeletePopulatedVPC(){
-        System.out.println("Delete that vpc");
-        System.out.println("Verify it's emtpy");
+    protected String getOutput(String name) {
+        var out = output(name);
+        if (out.isEmpty()){
+            fail("Expected output name " + name + " not found in stack "+getStackName());
+        }
+        return out.orElseThrow();
     }
 
 }

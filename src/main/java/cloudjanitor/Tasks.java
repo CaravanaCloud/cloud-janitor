@@ -7,6 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 
 @ApplicationScoped
 public class Tasks {
@@ -18,6 +19,10 @@ public class Tasks {
 
     @Inject
     Configuration config;
+
+    @Inject
+    RateLimiter rateLimiter;
+
 
     public void run(String[] args) {
         var taskName = config.getTaskName();
@@ -35,7 +40,7 @@ public class Tasks {
     public Task runTask(Task task) {
         var dependencies = task.getDependencies();
         dependencies.forEach(this::runTask);
-        config.runTask(task);
+        runSingle(task);
         return task;
     }
 
@@ -49,4 +54,29 @@ public class Tasks {
             return null;
         }
     }
+
+    //TODO: Consider retries
+    public void runSingle(Task task) {
+        if (task.isWrite()
+                && config.isDryRun()) {
+            log.trace("Dry run: {}", task);
+        } else {
+            try {
+                task.setStartTime(LocalDateTime.now());
+                task.runSafe();
+                log.trace("Executed {} ({})",
+                        task.toString(),
+                        task.isWrite() ? "W" : "R");
+                //TODO: General waiter
+                if (task.isWrite()) {
+                    rateLimiter.waitAfterTask(task);
+                }
+            } catch (Exception e) {
+                task.getErrors().put("exception", e.getMessage());
+                log.error("Error executing {}: {}", task.toString(), e.getMessage());
+            }
+        }
+        task.setEndTime(LocalDateTime.now());
+    }
+
 }

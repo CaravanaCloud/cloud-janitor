@@ -23,4 +23,9 @@ public abstract class AWSFilter extends AWSTask {
         return name.startsWith(awsFilterPrefix.get());
     }
 
+
+    protected boolean hasFilterPrefix() {
+        return !awsFilterPrefix.isEmpty();
+    }
+
 }

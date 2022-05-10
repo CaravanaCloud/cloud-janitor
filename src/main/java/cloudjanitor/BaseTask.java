@@ -5,15 +5,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Dependent
 public abstract class BaseTask implements Task {
+    @Inject
+    protected Tasks tasks;
+
     Optional<LocalDateTime> startTime = Optional.empty();
     Optional<LocalDateTime> endTime = Optional.empty();
-
-    List<Task> dependencies = new ArrayList<>();
     Map<String, Object> outputs = new HashMap<>();
     Map<String, Object> errors = new HashMap<>();
 
@@ -42,11 +44,6 @@ public abstract class BaseTask implements Task {
     /* Task Chaining */
 
     @Override
-    public List<Task> getDependencies() {
-        return dependencies;
-    }
-
-    @Override
     public Map<String, Object> getOutputs() {
         return outputs;
     }
@@ -68,7 +65,7 @@ public abstract class BaseTask implements Task {
     public Optional<Object> findOutput(String key) {
         var result = Optional.ofNullable(getOutputs().get(key));
         if (result.isEmpty()){
-            for (Task dep: dependencies){
+            for (Task dep: getDependencies()){
                 result = dep.findOutput(key);
                 if (result.isPresent()){
                     return result;
@@ -90,12 +87,15 @@ public abstract class BaseTask implements Task {
                 .map(o -> o.toString());
     }
 
-    protected void dependsOn(Task task) {
-        getDependencies().add(task);
-    }
 
     protected Logger log() {
-        return LoggerFactory.getLogger(getName());
+        return LoggerFactory.getLogger(getClass().getName());
     }
 
+    @Override
+    public String toString() {
+        return  "%s ".formatted(
+                getSimpleName());
+
+    }
 }

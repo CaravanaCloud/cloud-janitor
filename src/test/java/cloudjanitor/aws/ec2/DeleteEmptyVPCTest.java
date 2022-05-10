@@ -7,7 +7,6 @@ import org.junit.jupiter.api.TestInstance;
 import software.amazon.awssdk.services.ec2.model.Vpc;
 
 import javax.inject.Inject;
-import javax.swing.text.html.Option;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,11 +26,13 @@ public class DeleteEmptyVPCTest extends TaskTest {
     FilterVPCs filterVPCs;
 
     @Inject
-    DeleteVPCs deleteVpc;
+    CleanupVPCs deleteVpc;
 
     @Test
     public void testCreateAndDeleteVPC(){
         var vpcId = createVPC();
+        if(vpcId == null)
+            fail("Failed to create VPC");
         awaitCreate(vpcId);
         assertTrue(vpcExists(vpcId));
         deleteVPC(vpcId);
