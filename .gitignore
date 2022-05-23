@@ -33,3 +33,6 @@ hs_err_pid*
 
 target
 tasktree.csv
+
+cloud-janitor.html
+cloud-janitor.csv

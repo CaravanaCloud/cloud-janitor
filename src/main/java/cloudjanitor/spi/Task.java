@@ -1,10 +1,8 @@
 package cloudjanitor.spi;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import cloudjanitor.Logs;
 
 import javax.inject.Named;
-import javax.swing.text.html.Option;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -110,6 +108,10 @@ public interface Task {
         return Optional.of(1_000L);
     }
 
-
+    /* Logging */
+    default String getLoggerName() {
+        var name = getClass().getName();
+        return Logs.loggerName(name);
+    }
 
 }

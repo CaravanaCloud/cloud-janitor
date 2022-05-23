@@ -54,8 +54,13 @@ public abstract class BaseTask implements Task {
     }
 
     /* Utility Methods */
+    @Deprecated
     protected void success(String key, Object value){
         outputs.put(key, value);
+    }
+
+    protected void success(Output output, Object value){
+        outputs.put(output.name(), value);
     }
 
     protected void failure(String message) {
@@ -89,7 +94,7 @@ public abstract class BaseTask implements Task {
 
 
     protected Logger log() {
-        return LoggerFactory.getLogger(getClass().getName());
+        return LoggerFactory.getLogger(getLoggerName());
     }
 
     @Override

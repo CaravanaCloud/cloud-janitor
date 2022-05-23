@@ -1,5 +1,6 @@
 package cloudjanitor;
 
+import cloudjanitor.reporting.Reporting;
 import cloudjanitor.spi.Task;
 import org.slf4j.Logger;
 
@@ -8,6 +9,8 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Stream;
 
 @ApplicationScoped
 public class Tasks {
@@ -23,18 +26,35 @@ public class Tasks {
     @Inject
     RateLimiter rateLimiter;
 
+    @Inject
+    Reporting reporting;
 
     public void run(String[] args) {
         var taskName = config.getTaskName();
-        runByName(taskName);
+        var matches = lookupTasks(taskName);
+        runAll(matches);
+        report(matches);
     }
 
-    private void runByName(String taskName) {
+    private void report(List<Task> matches) {
+        try {
+            reporting.report(matches);
+        }catch (Exception ex){
+            ex.printStackTrace();
+            log.error("Reporting failed", ex);
+        }
+    }
+
+    private void runAll(List<Task> matches) {
+        matches.forEach(this::runTask);
+    }
+
+    private List<Task> lookupTasks(String taskName) {
         log.debug("Looking up task "+taskName);
-        bm.getBeans(taskName)
+        return bm.getBeans(taskName)
                 .stream()
                 .map(this::fromBean)
-                .forEach(this::runTask);
+                .toList();
     }
 
     public Task runTask(Task task) {

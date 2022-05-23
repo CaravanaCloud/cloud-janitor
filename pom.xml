@@ -11,7 +11,7 @@
     <maven.compiler.source>17</maven.compiler.source>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-    <quarkus.platform.version>2.8.0.Final</quarkus.platform.version>
+    <quarkus.platform.version>2.9.1.Final</quarkus.platform.version>
     <kogito-quarkus.version>1.16.1.Final</kogito-quarkus.version>
     <awssdk.version>2.17.176</awssdk.version>
     <jackson.version>2.13.2.2</jackson.version>
@@ -44,15 +44,18 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
     </dependency>
+
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-config-yaml</artifactId>
     </dependency>
+
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
@@ -148,11 +151,17 @@
       <artifactId>commons-csv</artifactId>
       <version>1.9.0</version>
     </dependency>
+
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
       <version>4.2.0</version>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-qute</artifactId>
     </dependency>
   </dependencies>
 
