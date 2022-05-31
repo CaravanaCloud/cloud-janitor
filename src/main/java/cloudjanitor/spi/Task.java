@@ -5,9 +5,12 @@ import cloudjanitor.Logs;
 import javax.inject.Named;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A task is a function to be executed, as a basic unit of work.
@@ -114,4 +117,30 @@ public interface Task {
         return Logs.loggerName(name);
     }
 
+    default String getStartTimeFmt(){
+        return getStartTime()
+                .map(startTime -> getDateFormat().format(startTime))
+                .orElse("?");
+    }
+
+    DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+    default DateTimeFormatter getDateFormat(){
+        return dateTimeFormat;
+    }
+
+    default String getDurationFmt(){
+        return getElapsedTime()
+                .map(duration -> {
+                    var secs = duration.getSeconds();
+                    if (secs > 0) return String.format("%ds", secs);
+                    else return String.format("0.%03ds", duration.toMillis());
+                })
+                .orElse("?");
+    }
+
+    default String getClassName(){
+        return getClass().getName().split("_")[0];
+    }
+
+    default boolean isSuccess
 }

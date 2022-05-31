@@ -2,9 +2,29 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Report {now}</title>
+        <title>Cloud Janitor Report</title>
     </head>
     <body>
-        <h1>Report {now}</h1>
+        <h1>Cloud Janitor Report</h1>
+        <p>
+            Execution date: {tasks.startTimeFmt}
+        </p>
+        <h2>Tasks</h2>
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th>Start Time</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#for task in tasks.history}
+                <tr>
+                    <td> {task.startTimeFmt} + {task.durationFmt} </td>
+                    <td> {task.className} </td>
+                </tr>
+                {/for}
+            </tbody>
+        </table>
     </body>
 </html>

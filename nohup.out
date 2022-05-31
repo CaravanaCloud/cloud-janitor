@@ -408,3 +408,21 @@ Caused by: org.jetbrains.mvstore.MVStoreException: The file is locked: /home/fae
 	at com.intellij.util.SVGLoader$SvgCache.<clinit>(SVGLoader.java:81)
 	... 21 more
 Already running
+Info  | RdCoroutineScope          | 14:JobScheduler FJ pool 3/11 | RdCoroutineHost overridden 
+2022-05-31 17:29:52,233 [   1776]   WARN - #c.i.n.i.NotificationGroupManagerImpl - Notification group CodeWithMe is already registered (group=com.intellij.notification.NotificationGroup@183da064). Plugin descriptor: PluginDescriptor(name=Code With Me, id=com.jetbrains.codeWithMe, descriptorPath=plugin.xml, path=~/.local/share/JetBrains/Toolbox/apps/IDEA-C/ch-0/221.5591.52/plugins/cwm-plugin, version=221.5591.52, package=null, isBundled=true)
+Info  | RdCoroutineScope          | 11:JobScheduler FJ pool 1/11 | RdCoroutineHost overridden 
+2022-05-31 17:30:00,763 [   1924]   WARN - #c.i.n.i.NotificationGroupManagerImpl - Notification group CodeWithMe is already registered (group=com.intellij.notification.NotificationGroup@3dc1cc9c). Plugin descriptor: PluginDescriptor(name=Code With Me, id=com.jetbrains.codeWithMe, descriptorPath=plugin.xml, path=~/.local/share/JetBrains/Toolbox/apps/IDEA-C/ch-0/221.5591.52/plugins/cwm-plugin, version=221.5591.52, package=null, isBundled=true)
+2022-05-31 17:30:05,488 [   6649]   WARN - #c.a.t.i.a.AvdManagerConnection - No Android SDK Found
+2022-05-31 17:30:07,050 [   8211]   WARN - #c.i.o.a.i.ActionUpdater - 556 ms to grab EDT for CWMTelephonyGroup#update (com.jetbrains.rd.platform.codeWithMe.telephony.CWMTelephonyGroup)
+2022-05-31 17:30:07,053 [   8214]   WARN - #c.i.o.a.i.ActionUpdater - 563 ms to grab EDT for #update (com.intellij.codeInsight.actions.ReaderModeActionProvider$createAction$1)
+2022-05-31 17:30:07,480 [   8641]   WARN - #c.i.o.a.i.ActionUpdater - 425 ms to grab EDT for StatusAction#update (com.intellij.openapi.editor.impl.EditorMarkupModelImpl$StatusAction)
+2022-05-31 17:30:07,481 [   8642]   WARN - #c.i.o.a.i.ActionUpdater - 429 ms to grab EDT for CodeWithMeUsersAction#update (com.jetbrains.rd.platform.codeWithMe.toolbar.CodeWithMeUsersAction)
+2022-05-31 17:30:08,303 [   9464]   WARN - #c.i.o.a.i.ActionUpdater - 821 ms to grab EDT for #update (com.intellij.openapi.editor.impl.EditorMarkupModelImpl$1)
+2022-05-31 17:30:08,305 [   9466]   WARN - #c.i.o.a.i.ActionUpdater - 821 ms to grab EDT for CWMHostShowPopupAction#update (com.jetbrains.rdserver.toolbar.CWMHostShowPopupAction)
+2022-05-31 17:30:17,740 [  18901]   WARN - #c.i.o.o.e.ConfigurableExtensionPointUtil - ignore deprecated groupId: language for id: preferences.language.Kotlin.scripting
+2022-05-31 17:30:39,854 [  41015]   WARN - #c.i.o.o.e.ConfigurableCardPanel - auto-dispose 'Plugins' id=preferences.pluginManager
+2022-05-31 17:30:40,455 [  41616]   WARN - #c.i.u.x.Binding - no accessors for scala.collection.immutable.Seq
+2022-05-31 17:30:40,800 [  41961]   WARN - #c.i.u.x.Binding - no accessors for org.jetbrains.idea.perforce.perforce.ConnectionId
+2022-05-31 17:37:32,483 [ 453644]   WARN - #o.j.k.i.s.r.KotlinCompilerReferenceIndexStorage - kotlin-data-container is not found
+2022-05-31 17:39:55,873 [ 597034]   WARN - #c.g.c.l.CopilotPsiUtil - findBlockEnd failed after 5 attempts
+2022-05-31 17:39:55,874 [ 597035]   WARN - #c.g.c.l.CopilotPsiUtil - findBlockEnd failed after 5 attempts

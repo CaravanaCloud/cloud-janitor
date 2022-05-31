@@ -9,11 +9,15 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
 @ApplicationScoped
 public class Tasks {
+    static final LocalDateTime startTime = LocalDateTime.now();
+
     @Inject
     Logger log;
 
@@ -29,16 +33,18 @@ public class Tasks {
     @Inject
     Reporting reporting;
 
+    List<Task> history = new ArrayList<>();
+
     public void run(String[] args) {
         var taskName = config.getTaskName();
         var matches = lookupTasks(taskName);
         runAll(matches);
-        report(matches);
+        report();
     }
 
-    private void report(List<Task> matches) {
+    private void report() {
         try {
-            reporting.report(matches);
+            reporting.report(this);
         }catch (Exception ex){
             ex.printStackTrace();
             log.error("Reporting failed", ex);
@@ -77,6 +83,7 @@ public class Tasks {
 
     //TODO: Consider retries
     public void runSingle(Task task) {
+        history.add(task);
         if (task.isWrite()
                 && config.isDryRun()) {
             log.trace("Dry run: {}", task);
@@ -98,5 +105,10 @@ public class Tasks {
         }
         task.setEndTime(LocalDateTime.now());
     }
-
+    public List<Task> getHistory() {
+        return new ArrayList<>(history);
+    }
+    public String getStartTimeFmt() {
+        return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(startTime);
+    }
 }
