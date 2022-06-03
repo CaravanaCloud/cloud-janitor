@@ -19,8 +19,8 @@ import java.util.*;
 
 @Dependent
 public class AWSClients {
-    @ConfigProperty(name = "cj.aws.region", defaultValue = "us-east-1")
-    String awsDefaultRegion;
+    @Inject
+    AWSConfiguration awsConfig;
 
     private Region region;
 
@@ -36,7 +36,7 @@ public class AWSClients {
     }
 
     protected Region getDefaultRegion(){
-        return Region.of(awsDefaultRegion);
+        return Region.of(awsConfig.defaultRegion());
     }
     // Clients //
 

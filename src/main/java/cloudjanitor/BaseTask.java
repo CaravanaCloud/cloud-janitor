@@ -1,6 +1,7 @@
 package cloudjanitor;
 
 import cloudjanitor.spi.Task;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,10 +13,15 @@ import java.util.*;
 @Dependent
 public abstract class BaseTask implements Task {
     @Inject
-    protected Tasks tasks;
+    Tasks tasks;
+
+    @Inject
+    Configuration config;
 
     Optional<LocalDateTime> startTime = Optional.empty();
     Optional<LocalDateTime> endTime = Optional.empty();
+
+    //TODO: Map<String, String> inputs = new HashMap<>();
     Map<String, Object> outputs = new HashMap<>();
     Map<String, Object> errors = new HashMap<>();
 
@@ -54,7 +60,6 @@ public abstract class BaseTask implements Task {
     }
 
     /* Utility Methods */
-    @Deprecated
     protected void success(String key, Object value){
         outputs.put(key, value);
     }
@@ -102,5 +107,13 @@ public abstract class BaseTask implements Task {
         return  "%s ".formatted(
                 getSimpleName());
 
+    }
+
+    public Configuration getConfig() {
+        return config;
+    }
+
+    public void runTask(Task task){
+        tasks.runTask(task);
     }
 }

@@ -2,6 +2,7 @@ package cloudjanitor;
 
 import cloudjanitor.aws.AWSClients;
 import io.quarkus.test.junit.QuarkusTest;
+import org.eclipse.microprofile.config.ConfigProvider;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -25,7 +26,7 @@ public class TaskTest {
 
     @BeforeAll
     public void disableDryRun(){
-        config.setDryRun(false);
+        //TODO: config.dryRun(false);
     }
 
     protected AWSClients aws(){

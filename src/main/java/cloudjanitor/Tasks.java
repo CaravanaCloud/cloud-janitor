@@ -1,5 +1,6 @@
 package cloudjanitor;
 
+import cloudjanitor.aws.AWSClients;
 import cloudjanitor.reporting.Reporting;
 import cloudjanitor.spi.Task;
 import org.slf4j.Logger;
@@ -8,9 +9,11 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -36,7 +39,7 @@ public class Tasks {
     List<Task> history = new ArrayList<>();
 
     public void run(String[] args) {
-        var taskName = config.getTaskName();
+        var taskName = config.taskName();
         var matches = lookupTasks(taskName);
         runAll(matches);
         report();
@@ -85,7 +88,7 @@ public class Tasks {
     public void runSingle(Task task) {
         history.add(task);
         if (task.isWrite()
-                && config.isDryRun()) {
+                && config.dryRun()) {
             log.trace("Dry run: {}", task);
         } else {
             try {
@@ -111,4 +114,39 @@ public class Tasks {
     public String getStartTimeFmt() {
         return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(startTime);
     }
+
+    public Configuration getConfig() {
+        return config;
+    }
+
+    String[] args;
+
+
+    @Inject
+    AWSClients aws;
+
+
+    public void init(String[] args) {
+        log.info("Configuration: {}", config);
+        log.info("Args: {}", args);
+        if(!config.dryRun()){
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private String executionId;
+
+    public synchronized String getExecutionId() {
+        if (executionId == null){
+            var sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
+            executionId = "cj-"+sdf.format(new Date());
+        }
+        return executionId;
+    }
+
+
 }

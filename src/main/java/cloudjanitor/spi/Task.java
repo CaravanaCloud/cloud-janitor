@@ -142,5 +142,7 @@ public interface Task {
         return getClass().getName().split("_")[0];
     }
 
-    default boolean isSuccess
+    default boolean isSuccess(){
+        return getErrors().isEmpty();
+    }
 }

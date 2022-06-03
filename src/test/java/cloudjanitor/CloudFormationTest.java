@@ -76,7 +76,7 @@ public class CloudFormationTest extends TaskTest{
     protected String getStackName() {
         if (stackName == null) {
             var simpleName = getSimpleName();
-            var runId = config().getExecutionId();
+            var runId = tasks.getExecutionId();
             stackName = simpleName+"-"+runId;
         }
         return stackName;

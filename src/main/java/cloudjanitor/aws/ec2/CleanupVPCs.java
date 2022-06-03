@@ -32,7 +32,7 @@ public class CleanupVPCs extends AWSCleanup {
         var delVpc = create(deleteVPC)
                 .withVPC(vpc);
         //TODO: Consider submit() runTask()
-        tasks.runTask(delVpc);
+        runTask(delVpc);
     }
 
     @Override

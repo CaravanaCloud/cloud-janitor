@@ -20,6 +20,6 @@ public class HelloTaskTest {
     public void testHello(){
         tasks.runTask(helloTask);
         var message = helloTask.findString("message");
-        assertEquals("hello world", message.get());
+        assertEquals("hello world!", message.get());
     }
 }

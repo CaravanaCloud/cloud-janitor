@@ -33,7 +33,7 @@ public class CleanupSubnets extends AWSCleanup {
 
     private void deleteSubnet(Subnet subnet) {
         var delSubnet = create(deleteSubnet).withSubnet(subnet);
-        tasks.runTask(delSubnet);
+        runTask(delSubnet);
     }
 
     public CleanupSubnets withVpcId(String vpcId) {

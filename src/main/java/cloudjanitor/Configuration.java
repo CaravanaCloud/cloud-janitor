@@ -1,5 +1,9 @@
 package cloudjanitor;
 
+import io.quarkus.runtime.annotations.StaticInitSafe;
+import io.smallrye.config.ConfigMapping;
+import io.smallrye.config.WithDefault;
+import io.smallrye.config.WithName;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import cloudjanitor.aws.AWSClients;
@@ -11,88 +15,24 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
-@ApplicationScoped
-public class Configuration {
+@ConfigMapping(prefix = "cj")
+@StaticInitSafe
+public interface Configuration {
 
-    @Inject
-    Logger log;
+    @WithDefault("marvin")
+    @WithName("task")
+    String taskName();
 
+    @WithName("dryRun")
+    @WithDefault("true")
+    boolean dryRun();
 
-    @ConfigProperty(name = "cj.task", defaultValue = "marvin")
-    String taskName;
+    @WithName("waitBeforeRun")
+    @WithDefault("1000")
+    long waitBeforeRun();
+    @WithName("inputs")
+    Map<String, String> inputs();
 
-    @ConfigProperty(name = "cj.dryRun", defaultValue = "true")
-    boolean dryRun;
-
-    @ConfigProperty(name = "cj.waitBeforeRun", defaultValue = "1000")
-    long waitBeforeRun;
-
-    String[] args;
-
-    @Inject
-    AWSClients aws;
-
-
-    public String getTaskName() {
-        return taskName;
-    }
-
-
-    @Override
-    public String toString() {
-        var dump = new HashMap<String, String>() {{
-            put("task", taskName);
-            put("args", String.join(" ", args));
-            put("dryRun", "" + dryRun);
-        }};
-        return dump.toString();
-    }
-
-    public void parse(String[] args) {
-        this.args = args;
-        if (args.length > 0) {
-            taskName = args[0];
-        }
-    }
-
-
-    public void init(String[] args) {
-        parse(args);
-        log.info("Configuration: {}", this);
-        if(!isDryRun()){
-            await(3000);
-        }
-    }
-
-    private void await(long sleep) {
-        try {
-            Thread.sleep(sleep);
-        } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
-        }
-    }
-
-    public boolean isDryRun() {
-        return dryRun;
-    }
-
-
-    public AWSClients aws(){
-        return aws;
-    }
-
-    String executionId;
-
-    public synchronized String getExecutionId() {
-        if (executionId == null){
-            var sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
-            executionId = "cj-"+sdf.format(new Date());
-        }
-        return executionId;
-    }
-
-    public void setDryRun(boolean dryRun) {
-        this.dryRun = dryRun;
-    }
 }
