@@ -1,6 +1,6 @@
 package cloudjanitor.aws.sts;
 
-import cloudjanitor.Output;
+import static cloudjanitor.Output.*;
 import cloudjanitor.aws.AWSClients;
 import cloudjanitor.aws.AWSFilter;
 import org.slf4j.Logger;
@@ -20,7 +20,7 @@ public class GetCallerIdentityTask extends AWSFilter {
     public void runSafe() {
         var sts = aws().getSTSClient();
         var account = sts.getCallerIdentity().account();
-        success(Output.AWS_ACCOUNT,account);
+        success(AWS.Account, account);
         log.info("Found AWS Account {}", account);
     }
 }

@@ -1,5 +1,6 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Output;
 import cloudjanitor.TaskTest;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
@@ -59,7 +60,7 @@ public class DeleteEmptyVPCTest extends TaskTest {
     private boolean vpcExists(String vpcId) {
         filterVPCs.targetVpcId = Optional.of(vpcId);
         tasks.runTask(filterVPCs);
-        var vpcs = (List<Vpc>) filterVPCs.findAsList("aws.vpc.matches");
+        var vpcs = filterVPCs.findAsList(Output.AWS.VPCMatch, Vpc.class);
         if (! vpcs.isEmpty()){
             var vpcExists = vpcs.get(0).vpcId().equals(vpcId);
             return vpcExists;
@@ -69,7 +70,7 @@ public class DeleteEmptyVPCTest extends TaskTest {
     private String createVPC() {
         var vpcId = tasks
                 .runTask(createVPC)
-                .findString("aws.vpc.id");
+                .findString(Output.AWS.VPCId);
         return vpcId.orElse(null);
     }
 

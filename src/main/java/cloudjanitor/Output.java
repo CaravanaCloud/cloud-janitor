@@ -1,13 +1,22 @@
 package cloudjanitor;
 
 import cloudjanitor.spi.Task;
+import software.amazon.awssdk.services.ec2.model.Subnet;
+import software.amazon.awssdk.services.ec2.model.Vpc;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
 
-import java.util.Optional;
+public interface Output {
+    enum Sample implements Output{
+        Message, UpperMessage
+        ;
+    }
 
-public enum Output {
-    AWS_ACCOUNT;
-
-    public Optional<String> findString(Task task){
-        return task.findString(this.name());
+    enum AWS implements Output{
+        Account,
+        VPCMatch,
+        SubnetMatch,
+        ELBV2Match, 
+        VPCId
+        ;
     }
 }

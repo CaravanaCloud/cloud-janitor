@@ -10,14 +10,14 @@ import javax.inject.Inject;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
-public class GetCallerIdentityTest extends TaskTest {
+public class GetCallerIdentityTaskTest extends TaskTest {
     @Inject
     GetCallerIdentityTask getCaller;
 
     @Test
     public void testGetCaller(){
         tasks.runTask(getCaller);
-        var account = getCaller.findString(Output.AWS_ACCOUNT.name());
+        var account = getCaller.findString(Output.AWS.Account);
         assertNotNull(account);
         assertFalse(account.isEmpty());
     }

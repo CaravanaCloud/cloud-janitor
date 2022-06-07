@@ -1,6 +1,7 @@
 package cloudjanitor;
 
 import cloudjanitor.aws.ec2.DeleteEmptyVPCTest;
+import cloudjanitor.aws.ec2.DeleteVPCWithPrivateSubnetsTest;
 import cloudjanitor.aws.sts.GetCallerIdentityTask;
 import cloudjanitor.simple.HelloTask;
 import cloudjanitor.simple.HelloTaskTest;
@@ -11,7 +12,8 @@ import cloudjanitor.simple.ToUppperTaskTest;
  * This class suggests an order to learn how Cloud Janitor works by reading the tests.
  * Really, it does not do anything else.
  */
-public class LearnableOrder {
+@SuppressWarnings("all")
+public class LearningFromTests {
     Class[] simpleTasks = new Class[]{
             HelloTaskTest.class,
             ToUppperTaskTest.class
@@ -26,6 +28,6 @@ public class LearnableOrder {
     };
 
     Class[] populatedTests = {
-            DeleteEmptyVPCTest.class
+            DeleteVPCWithPrivateSubnetsTest.class
     };
 }

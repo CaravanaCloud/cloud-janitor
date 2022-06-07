@@ -1,6 +1,7 @@
 package cloudjanitor.aws.ec2;
 
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
+import cloudjanitor.Output;
 import cloudjanitor.aws.AWSFilter;
 import cloudjanitor.spi.Task;
 
@@ -19,7 +20,7 @@ public class FilterLoadBalancersV2 extends AWSFilter {
         var elb = aws().getELBClientV2();
         var resources = elb.describeLoadBalancers().loadBalancers();
         var matches = resources.stream().filter(this::match).toList();
-        success("elbv2.matches", matches);
+        success(Output.AWS.ELBV2Match, matches);
     }
 
 }

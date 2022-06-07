@@ -1,16 +1,15 @@
 package cloudjanitor.spi;
 
 import cloudjanitor.Logs;
+import cloudjanitor.Output;
 
 import javax.inject.Named;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 /**
  * A task is a function to be executed, as a basic unit of work.
@@ -69,14 +68,14 @@ public interface Task {
         return List.of();
     }
 
-    default Map<String, Object> getOutputs(){
+    default Map<Output, Object> getOutputs(){
         return Map.of();
     }
 
-    default Optional<Object> findOutput(String key){
+    default Optional<Object> findOutput(Output key){
         return Optional.empty();
     }
-    default Optional<String> findString(String key) { return Optional.empty(); }
+    default Optional<String> findString(Output key) { return Optional.empty(); }
 
     default Map<String, Object> getErrors(){
         return Map.of();

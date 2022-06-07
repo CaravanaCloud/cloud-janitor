@@ -3,6 +3,7 @@ package cloudjanitor.aws.ec2;
 import cloudjanitor.aws.AWSTask;
 import cloudjanitor.spi.Task;
 import software.amazon.awssdk.services.ec2.Ec2Client;
+import cloudjanitor.Output;
 import cloudjanitor.aws.AWSCleanup;
 import software.amazon.awssdk.services.ec2.model.Vpc;
 
@@ -24,7 +25,7 @@ public class CleanupVPCs extends AWSCleanup {
 
     @Override
     public void runSafe() {
-        var vpcs = (List<Vpc>) findAsList("aws.vpc.matches");
+        var vpcs = findAsList(Output.AWS.VPCMatch, Vpc.class);
         vpcs.forEach(this::deleteVPC);
     }
 

@@ -4,12 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.services.ec2.model.DescribeSubnetsRequest;
 import software.amazon.awssdk.services.ec2.model.Subnet;
+import cloudjanitor.Output;
 import cloudjanitor.aws.AWSFilter;
 import cloudjanitor.spi.Task;
 
 import javax.enterprise.context.Dependent;
 import java.util.List;
 import java.util.stream.Stream;
+
 @Dependent
 public class FilterSubnets extends AWSFilter {
     String vpcId;
@@ -39,6 +41,6 @@ public class FilterSubnets extends AWSFilter {
         var describeNets = DescribeSubnetsRequest.builder().build();
         var nets = ec2.describeSubnets(describeNets).subnets().stream();
         var matches = nets.filter(this::match).toList();
-        success("aws.subnet.matches",matches);
+        success(Output.AWS.SubnetMatch, matches);
     }
 }

@@ -1,6 +1,7 @@
 package cloudjanitor.simple;
 
 import cloudjanitor.BaseTask;
+import cloudjanitor.Output;
 import cloudjanitor.spi.Task;
 
 import javax.annotation.PostConstruct;
@@ -22,11 +23,11 @@ public class ToUppperTask extends BaseTask {
 
     @Override
     public void runSafe() {
-        var message = findString("message");
+        var message = findString(Output.Sample.Message);
         if(message.isPresent()){
             var upper_message = message.get().toUpperCase();
             log().info("Your capitalized message is: {}", upper_message);
-            success("upper_message", upper_message);
+            success(Output.Sample.UpperMessage, upper_message);
         }else{
             failure("message not found");
         }

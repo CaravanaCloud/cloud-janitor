@@ -1,5 +1,6 @@
 package cloudjanitor.simple;
 
+import cloudjanitor.Output;
 import cloudjanitor.Tasks;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ public class ToUppperTaskTest {
     @Test
     public void testUpMessage(){
         tasks.runTask(toUpper);
-        var message = toUpper.findString("upper_message");
+        var message = toUpper.findString(Output.Sample.UpperMessage);
         assertEquals("HELLO WORLD!", message.get());
     }
 }

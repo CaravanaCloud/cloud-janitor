@@ -1,5 +1,6 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Output;
 import cloudjanitor.aws.AWSCleanup;
 import cloudjanitor.spi.Task;
 import software.amazon.awssdk.services.ec2.model.Subnet;
@@ -27,7 +28,7 @@ public class CleanupSubnets extends AWSCleanup {
 
     @Override
     public void runSafe() {
-        var subnets = (List<Subnet>) findAsList("aws.subnet.matches");
+        var subnets = findAsList(Output.AWS.SubnetMatch, Subnet.class);
         subnets.forEach(this::deleteSubnet);
     }
 

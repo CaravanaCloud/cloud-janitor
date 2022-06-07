@@ -3,6 +3,7 @@ package cloudjanitor.aws.ec2;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import software.amazon.awssdk.services.ec2.model.DescribeVpcsRequest;
 import software.amazon.awssdk.services.ec2.model.Vpc;
+import cloudjanitor.Output;
 import cloudjanitor.aws.AWSFilter;
 import cloudjanitor.spi.Task;
 
@@ -19,7 +20,7 @@ public class FilterVPCs extends AWSFilter {
     @Override
     public void runSafe() {
         var vpcs = filterResources();
-        success("aws.vpc.matches", vpcs);
+        success(Output.AWS.VPCMatch, vpcs);
         log().debug("VPCs filtered region={} target={} found={}",
                 aws().getRegion(),
                 targetVpcId.orElse(""),

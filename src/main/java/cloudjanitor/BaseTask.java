@@ -1,7 +1,6 @@
 package cloudjanitor;
 
 import cloudjanitor.spi.Task;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +21,7 @@ public abstract class BaseTask implements Task {
     Optional<LocalDateTime> endTime = Optional.empty();
 
     //TODO: Map<String, String> inputs = new HashMap<>();
-    Map<String, Object> outputs = new HashMap<>();
+    Map<Output, Object> outputs = new HashMap<>();
     Map<String, Object> errors = new HashMap<>();
 
 
@@ -50,7 +49,7 @@ public abstract class BaseTask implements Task {
     /* Task Chaining */
 
     @Override
-    public Map<String, Object> getOutputs() {
+    public Map<Output, Object> getOutputs() {
         return outputs;
     }
 
@@ -60,19 +59,15 @@ public abstract class BaseTask implements Task {
     }
 
     /* Utility Methods */
-    protected void success(String key, Object value){
-        outputs.put(key, value);
-    }
-
     protected void success(Output output, Object value){
-        outputs.put(output.name(), value);
+        outputs.put(output, value);
     }
 
     protected void failure(String message) {
         getErrors().put("message",message);
     }
 
-    public Optional<Object> findOutput(String key) {
+    public Optional<Object> findOutput(Output key) {
         var result = Optional.ofNullable(getOutputs().get(key));
         if (result.isEmpty()){
             for (Task dep: getDependencies()){
@@ -85,14 +80,15 @@ public abstract class BaseTask implements Task {
         return result;
     }
 
-    public List findAsList(String key) {
+    @SuppressWarnings("unchecked")
+    public <T> List<T> findAsList(Output key, Class<T> valueClass) {
         return findOutput(key)
-                .map( o -> (List) o)
+                .map(o -> (List<T>) o) 
                 .orElse(List.of());
     }
 
     @Override
-    public Optional<String> findString(String key) {
+    public Optional<String> findString(Output key) {
         return findOutput(key)
                 .map(o -> o.toString());
     }

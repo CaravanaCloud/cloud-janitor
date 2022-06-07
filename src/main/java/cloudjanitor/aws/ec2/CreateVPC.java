@@ -4,8 +4,11 @@ import jdk.jfr.Name;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import software.amazon.awssdk.services.ec2.model.CreateVpcRequest;
 import software.amazon.awssdk.services.ec2.model.Vpc;
+import cloudjanitor.Output;
 import cloudjanitor.aws.AWSClients;
 import cloudjanitor.aws.AWSWrite;
+
+import java.util.zip.ZipEntry;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -26,7 +29,8 @@ public class CreateVPC extends AWSWrite {
         var resp = ec2.createVpc(req);
         var vpc = resp.vpc();
         var vpcId = vpc.vpcId();
-        success("aws.vpc.id", vpcId);
+        success(Output.AWS.VPCId, vpcId);
+        
         log().debug("VPC {}/{} created", aws().getRegion(), vpcId);
     }
 }

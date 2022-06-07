@@ -1,6 +1,8 @@
 package cloudjanitor.simple;
 
 import cloudjanitor.BaseTask;
+import cloudjanitor.Output;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
@@ -16,7 +18,7 @@ public class HelloTask extends BaseTask {
         String message = getConfig()
                 .inputs()
                 .getOrDefault("message", "hello world!");
-        success("message", message);
+        success(Output.Sample.Message, message);
     }
 
     @Override
