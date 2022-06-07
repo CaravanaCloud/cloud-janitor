@@ -20,9 +20,9 @@ public abstract class BaseTask implements Task {
     Optional<LocalDateTime> startTime = Optional.empty();
     Optional<LocalDateTime> endTime = Optional.empty();
 
-    //TODO: Map<String, String> inputs = new HashMap<>();
+    Map<Input, Object> inputs = new HashMap<>();
     Map<Output, Object> outputs = new HashMap<>();
-    Map<String, Object> errors = new HashMap<>();
+    Map<Errors, Object> errors = new HashMap<>();
 
 
     /* Interface Methods */
@@ -54,7 +54,7 @@ public abstract class BaseTask implements Task {
     }
 
     @Override
-    public Map<String, Object> getErrors() {
+    public Map<Errors, Object> getErrors() {
         return errors;
     }
 
@@ -64,14 +64,14 @@ public abstract class BaseTask implements Task {
     }
 
     protected void failure(String message) {
-        getErrors().put("message",message);
+        getErrors().put(Errors.Message ,message);
     }
 
-    public Optional<Object> findOutput(Output key) {
+    public Optional<Object> output(Output key) {
         var result = Optional.ofNullable(getOutputs().get(key));
         if (result.isEmpty()){
             for (Task dep: getDependencies()){
-                result = dep.findOutput(key);
+                result = dep.output(key);
                 if (result.isPresent()){
                     return result;
                 }
@@ -82,14 +82,14 @@ public abstract class BaseTask implements Task {
 
     @SuppressWarnings("unchecked")
     public <T> List<T> findAsList(Output key, Class<T> valueClass) {
-        return findOutput(key)
+        return output(key)
                 .map(o -> (List<T>) o) 
                 .orElse(List.of());
     }
 
     @Override
-    public Optional<String> findString(Output key) {
-        return findOutput(key)
+    public Optional<String> outputString(Output key) {
+        return output(key)
                 .map(o -> o.toString());
     }
 
@@ -111,5 +111,20 @@ public abstract class BaseTask implements Task {
 
     public void runTask(Task task){
         tasks.runTask(task);
+    }
+
+    @Override
+    public Map<Input, Object> getInputs(){
+        return inputs;
+    }
+
+    public Optional<String> inputString(Input key){
+        var value = getInputs().get(key);
+        return Optional.ofNullable(value)
+            .map(o -> o.toString());
+    }
+
+    public Object input(Input key, Object value) {
+        return inputs.put(key, value);
     }
 }

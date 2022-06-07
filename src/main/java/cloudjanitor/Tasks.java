@@ -102,7 +102,7 @@ public class Tasks {
                     rateLimiter.waitAfterTask(task);
                 }
             } catch (Exception e) {
-                task.getErrors().put("exception", e.getMessage());
+                task.getErrors().put(Errors.Message, e.getMessage());
                 log.error("Error executing {}: {}", task.toString(), e.getMessage());
             }
         }

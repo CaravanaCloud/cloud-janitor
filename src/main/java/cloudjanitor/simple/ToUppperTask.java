@@ -23,7 +23,7 @@ public class ToUppperTask extends BaseTask {
 
     @Override
     public void runSafe() {
-        var message = findString(Output.Sample.Message);
+        var message = outputString(Output.Sample.Message);
         if(message.isPresent()){
             var upper_message = message.get().toUpperCase();
             log().info("Your capitalized message is: {}", upper_message);

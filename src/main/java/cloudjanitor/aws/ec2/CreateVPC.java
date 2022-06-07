@@ -4,6 +4,7 @@ import jdk.jfr.Name;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import software.amazon.awssdk.services.ec2.model.CreateVpcRequest;
 import software.amazon.awssdk.services.ec2.model.Vpc;
+import cloudjanitor.Input;
 import cloudjanitor.Output;
 import cloudjanitor.aws.AWSClients;
 import cloudjanitor.aws.AWSWrite;
@@ -16,15 +17,15 @@ import javax.inject.Inject;
 @Name("create-vpc")
 @Dependent
 public class CreateVPC extends AWSWrite {
-    @ConfigProperty(name = "cj.aws.vpc.cidr", defaultValue = "10.0.0.0/24")
-    String vpcCIDR;
+    private static final String DEFAULT_CIDR = "10.0.0.0/16";
 
     @Override
     public void runSafe() {
         var ec2 = aws().getEC2Client();
         var req = CreateVpcRequest
                 .builder()
-                .cidrBlock(vpcCIDR)
+                .cidrBlock(inputString(Input.AWS.VpcCIDR)
+                    .orElse(DEFAULT_CIDR))
                 .build();
         var resp = ec2.createVpc(req);
         var vpc = resp.vpc();

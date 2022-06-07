@@ -17,7 +17,7 @@ public class GetCallerIdentityTaskTest extends TaskTest {
     @Test
     public void testGetCaller(){
         tasks.runTask(getCaller);
-        var account = getCaller.findString(Output.AWS.Account);
+        var account = getCaller.outputString(Output.AWS.Account);
         assertNotNull(account);
         assertFalse(account.isEmpty());
     }

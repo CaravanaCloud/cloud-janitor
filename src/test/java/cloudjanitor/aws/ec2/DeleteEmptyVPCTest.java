@@ -1,10 +1,14 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Input;
 import cloudjanitor.Output;
 import cloudjanitor.TaskTest;
+import io.quarkus.logging.Log;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.slf4j.Logger;
+
 import software.amazon.awssdk.services.ec2.model.Vpc;
 
 import javax.inject.Inject;
@@ -19,7 +23,9 @@ import static java.util.concurrent.TimeUnit.*;
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DeleteEmptyVPCTest extends TaskTest {
-
+    @Inject
+    Logger log;
+    
     @Inject
     CreateVPC createVPC;
 
@@ -52,13 +58,13 @@ public class DeleteEmptyVPCTest extends TaskTest {
     }
 
     private void deleteVPC(String vpcId) {
-        deleteVpc.filterVPCs.targetVpcId = Optional.of(vpcId);
+        deleteVpc.filterVPCs.input(Input.AWS.TargetVpcId, vpcId);
         tasks.runTask(deleteVpc);
     }
 
     @SuppressWarnings("unchecked")
     private boolean vpcExists(String vpcId) {
-        filterVPCs.targetVpcId = Optional.of(vpcId);
+        filterVPCs.input(Input.AWS.TargetVpcId, vpcId);
         tasks.runTask(filterVPCs);
         var vpcs = filterVPCs.findAsList(Output.AWS.VPCMatch, Vpc.class);
         if (! vpcs.isEmpty()){
@@ -70,8 +76,11 @@ public class DeleteEmptyVPCTest extends TaskTest {
     private String createVPC() {
         var vpcId = tasks
                 .runTask(createVPC)
-                .findString(Output.AWS.VPCId);
-        return vpcId.orElse(null);
+                .outputString(Output.AWS.VPCId);
+        if (vpcId.isEmpty()) fail();
+        var result = vpcId.get();
+        log.debug("Created VPC {}", result);
+        return vpcId.get();
     }
 
 }

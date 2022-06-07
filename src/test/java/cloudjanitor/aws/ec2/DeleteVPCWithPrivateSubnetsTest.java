@@ -27,8 +27,8 @@ public class DeleteVPCWithPrivateSubnetsTest extends CloudFormationTest {
     public void test(){
         var vpcId = getOutput("VPC");
         cleanupVPC(vpcId);
-        var resources = filterVPCs(vpcId);
-        assertTrue(resources.isEmpty());
+        var vpcMatch = filterVPCs(vpcId);
+        assertTrue(vpcMatch.isEmpty());
     }
 
     private List<Vpc> filterVPCs(String vpcId) {

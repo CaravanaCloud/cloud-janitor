@@ -1,5 +1,7 @@
 package cloudjanitor.spi;
 
+import cloudjanitor.Errors;
+import cloudjanitor.Input;
 import cloudjanitor.Logs;
 import cloudjanitor.Output;
 
@@ -68,16 +70,20 @@ public interface Task {
         return List.of();
     }
 
+    default Map<Input, Object> getInputs(){
+        return Map.of();
+    }
+
     default Map<Output, Object> getOutputs(){
         return Map.of();
     }
 
-    default Optional<Object> findOutput(Output key){
+    default Optional<Object> output(Output key){
         return Optional.empty();
     }
-    default Optional<String> findString(Output key) { return Optional.empty(); }
+    default Optional<String> outputString(Output key) { return Optional.empty(); }
 
-    default Map<String, Object> getErrors(){
+    default Map<Errors, Object> getErrors(){
         return Map.of();
     }
 

@@ -18,7 +18,7 @@ public class CleanupAWS extends AWSFilter {
 
     @Override
     public void runSafe() {
-        var account = getCaller.findString(Output.AWS.Account);
+        var account = getCaller.outputString(Output.AWS.Account);
         if(account.isPresent()){
             log().info("Cleanup AWS Account {}.", account.get());
         }else{

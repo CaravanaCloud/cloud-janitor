@@ -20,7 +20,7 @@ public class HelloTaskTest {
     @Test
     public void testHello(){
         tasks.runTask(helloTask);
-        var message = helloTask.findString(Output.Sample.Message);
+        var message = helloTask.outputString(Output.Sample.Message);
         assertEquals("hello world!", message.get());
     }
 }

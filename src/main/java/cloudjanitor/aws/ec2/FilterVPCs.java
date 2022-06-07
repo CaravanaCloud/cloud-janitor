@@ -3,6 +3,7 @@ package cloudjanitor.aws.ec2;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import software.amazon.awssdk.services.ec2.model.DescribeVpcsRequest;
 import software.amazon.awssdk.services.ec2.model.Vpc;
+import cloudjanitor.Input;
 import cloudjanitor.Output;
 import cloudjanitor.aws.AWSFilter;
 import cloudjanitor.spi.Task;
@@ -10,12 +11,9 @@ import cloudjanitor.spi.Task;
 import javax.enterprise.context.Dependent;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Dependent
 public class FilterVPCs extends AWSFilter {
-    @ConfigProperty(name = "cj.aws.vpc.id")
-    Optional<String> targetVpcId;
 
     @Override
     public void runSafe() {
@@ -23,12 +21,18 @@ public class FilterVPCs extends AWSFilter {
         success(Output.AWS.VPCMatch, vpcs);
         log().debug("VPCs filtered region={} target={} found={}",
                 aws().getRegion(),
-                targetVpcId.orElse(""),
+                getTargetVpcId().orElse("???"),
                 vpcs.size());
     }
 
     private boolean matchVPCId(Vpc vpc){
-        return vpc.vpcId().equals(targetVpcId.get());
+        return vpc.vpcId().equals(getTargetVpcId().get());
+    }
+
+    private Optional<String> getTargetVpcId() {
+        var targetVpcId = inputString(Input.AWS.TargetVpcId);
+        log().info("--- INPUT VPC ID", targetVpcId.orElse("-- NULL --") );
+        return (targetVpcId);
     }
 
     private boolean matchName(Vpc vpc) {
@@ -47,7 +51,7 @@ public class FilterVPCs extends AWSFilter {
 
     protected List<Vpc> filterResources() {
         var matches = findAll().stream();
-        if (targetVpcId.isPresent())
+        if (getTargetVpcId().isPresent())
             matches = matches.filter(this::matchVPCId);
         if (awsFilterPrefix.isPresent())
             matches = matches.filter(this::matchName);
@@ -56,6 +60,6 @@ public class FilterVPCs extends AWSFilter {
     }
 
     public void setTargetVPC(String vpcId) {
-        targetVpcId  = Optional.of(vpcId);
+        getInputs().put(Input.AWS.TargetVpcId, vpcId);
     }
 }
