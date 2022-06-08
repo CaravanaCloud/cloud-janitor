@@ -2,30 +2,37 @@
 
 Cloud Janitor is a tool to automate complex maintenance and troubleshooting tasks in cloud computing. It's built considering the security and flexibility requirements found in operating real-world production workloads.
 
-In cloud computing many responsibilities are shared between the provider and the consumer of services. This tool's goal is to share automations that customers and partners frequently need to build themselves, often with minimal differences.
+In cloud computing, many responsibilities are shared between the provider and the consumer of services. This tool's goal is to share automations that customers and partners frequently need to build themselves, often with minimal differences.
 
-As an example context, consider the task of cleaning up your AWS account after testing some drafts. Here's how our features can help:
+A key automation in this context is "cleaning up" an AWS account, for example. That will be a bit different in each environment, but it's all about filtering and deleting (or replacing) resources. Here's how our features can help:
 
-**Resource Filtering** so that only the matched resources are deleted.
+**Easy to Run and Configure** - All settings are exposed as environment variables and code can run as executable, jar, container, github action or your preferred CI/CD tool.
 
-**Defensive Defaults** so that resources are only deleted when you disable the "dry run" flag.
+**Defensive Defaults** - No writes are executed unless the "dry run" setting is explicitly disabled.
 
-**Dependency Resolution** so that deletes are cascaded to dependent resources.
+**Resource Filtering** - Only the matched resources, and their dependents, are deleted.
 
-**Logs & Reporting** so that you have a record of invocations and their results for queries and visualization.
+**Logs & Reporting** - Keep a record of invocations and their results for queries, visualization and audits.
 
-**Flexible Runtime** so it can be used as an executable container, executable jar, native executable, github action or your preferred CI/CD tool.
+**Rate Limiting** - API limits and throttling are respected with backoffs.
 
-**Rate Limiting** so that API throttling and limits are respected.
+Cloud Janitor is also built to be easily extensible and contributions are most welcome!
 
-**Easy to Operate** all configuration can be passed as environment variables, as well as other sources supported by quarkus.io.
+# Cloud Janitor on GitPod
 
-Cloud Janitor is also built to be easily extensible and contributions are most welcome! Join our Discord chat at https://caravana.cloud/cloud-janitor
+This repository contains the gitpod configuration to start your development instance with Java, Quarkus, AWS CLI and all tools that you need to code.
+
+Start you gitpod worspace by visiting https://gitpod.io/#github.com/CaravanaCloud/cloud-janitor
+
+Once your workspace is running use the command ```aws configure``` to setup your AWS account authentication. You can also use gitpod environment variables or dotfiles for that purpose. Check that authentication is correct with the command ```aws sts get-caller-identity```
+
+You can run cloud-janitor in development mode by executing ```quarkus dev```, ```mvn quarkus:dev``` or simply running the class ```cloudjanitor.Main```. The default task is called "marvin" and is mostly harmless. It will just log the most important reminder: "Don't panic" :) 
+
+Ready to start janitoring? Check the ```LearningFromTests``` class for some examples.  
 
 # Executing Cloud Janitor
 
-Here are a few ways you can execute this project. 
-The default task is called "marvin" and is mostly harmless. It will just print "Don't panic" to the logs.
+Here are multiple ways you can execute this project. 
 
 All mentioned binaries can be found in the [project releases page](https://github.com/CaravanaCloud/cloud-janitor/releases).
 
@@ -52,16 +59,12 @@ rpm -Uvh --force cloud-janitor.rpm
 ```
 Add it to your PATH:
 ```
-sudo ln -sf /opt/cloud-janitor/bin/cloud-janitor /usr/local/bin/cj
+sudo ln -sf /opt/cloud-janitor/bin/cloud-janitor /usr/local/bin/cloud-janitor
 ```
 Run it:
 ```
-cj
+cloud-janitor
 ```
-
-## On GitPod
-
-Just visit https://gitpod.io/#github.com/CaravanaCloud/cloud-janitor
 
 ## From sources (dev mode)
 ```
@@ -106,12 +109,9 @@ tt:
 - Report/Notify usage by attribution ("chargeback")
 - OpenShift Cluster Provisioning and Deployment
 - Fully-automated OpenShift management (Source2Service)
-
-
-# Features Wishlist:
-1. Ansible integration
-2. Kogito-defined tasks
-3. CloudWatch and/or ElasticSearch/Logstash/Kibana for visualization
+- Ansible integration
+- Kogito-defined tasks
+- CloudWatch and/or ElasticSearch/Logstash/Kibana for visualization
 
 # Badges
 ![Tests](https://github.com/CaravanaCloud/cloud-janitor/workflows/test-prs-to-main/badge.svg)
