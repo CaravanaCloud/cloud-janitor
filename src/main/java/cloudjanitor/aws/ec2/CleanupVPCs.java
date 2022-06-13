@@ -25,7 +25,7 @@ public class CleanupVPCs extends AWSCleanup {
 
     @Override
     public void runSafe() {
-        var vpcs = findAsList(Output.AWS.VPCMatch, Vpc.class);
+        var vpcs = outputList(Output.AWS.VPCMatch, Vpc.class);
         vpcs.forEach(this::deleteVPC);
     }
 
@@ -39,6 +39,10 @@ public class CleanupVPCs extends AWSCleanup {
     @Override
     public List<Task> getDependencies() {
         return List.of(filterVPCs);
+    }
+
+    public void setTargetVPC(String vpcId) {
+        filterVPCs.setTargetVPC(vpcId);
     }
 
     /*

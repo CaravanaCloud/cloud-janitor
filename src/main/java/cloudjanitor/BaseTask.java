@@ -81,7 +81,7 @@ public abstract class BaseTask implements Task {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> List<T> findAsList(Output key, Class<T> valueClass) {
+    public <T> List<T> outputList(Output key, Class<T> valueClass) {
         return output(key)
                 .map(o -> (List<T>) o) 
                 .orElse(List.of());

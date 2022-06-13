@@ -28,7 +28,7 @@ public class CleanupSubnets extends AWSCleanup {
 
     @Override
     public void runSafe() {
-        var subnets = findAsList(Output.AWS.SubnetMatch, Subnet.class);
+        var subnets = outputList(Output.AWS.SubnetMatch, Subnet.class);
         subnets.forEach(this::deleteSubnet);
     }
 

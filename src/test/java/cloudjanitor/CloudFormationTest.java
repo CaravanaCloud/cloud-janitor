@@ -4,6 +4,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
+
+import cloudjanitor.aws.ec2.CleanupVPCs;
+import cloudjanitor.aws.ec2.FilterVPCs;
 import software.amazon.awssdk.services.cloudformation.model.*;
 
 import javax.inject.Inject;
@@ -12,6 +15,8 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
+import software.amazon.awssdk.services.ec2.model.Vpc;
+import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CloudFormationTest extends TaskTest{
@@ -19,6 +24,13 @@ public class CloudFormationTest extends TaskTest{
     Logger log;
 
     String stackName;
+
+    @Inject
+    CleanupVPCs cleanupVPCs;
+
+    @Inject
+    FilterVPCs filterVPCs;
+
 
     @BeforeAll
     public void beforeALl(){
@@ -179,5 +191,21 @@ public class CloudFormationTest extends TaskTest{
         }
         return out.orElseThrow();
     }
+
+    protected List<Vpc> filterVPCs(String vpcId) {
+        filterVPCs.setTargetVPC(vpcId);
+        tasks.runTask(filterVPCs);
+        var matches = filterVPCs.outputList(Output.AWS.VPCMatch, Vpc.class);
+        log.debug("filterVPCs {} finished", vpcId);
+        return matches;
+    }
+
+    protected void cleanupVPC(String vpcId) {
+        cleanupVPCs.setTargetVPC(vpcId);
+        tasks.runTask(cleanupVPCs);
+        log.debug("cleanupVPC {} finished",vpcId);
+    }
+
+
 
 }
