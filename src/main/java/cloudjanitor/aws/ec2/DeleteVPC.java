@@ -1,5 +1,6 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Input;
 import cloudjanitor.aws.AWSWrite;
 import cloudjanitor.spi.Task;
 import software.amazon.awssdk.services.ec2.model.DeleteVpcRequest;
@@ -8,6 +9,8 @@ import software.amazon.awssdk.services.ec2.model.Vpc;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.util.List;
+
+import static cloudjanitor.Input.AWS.TargetVpcId;
 
 @Dependent
 public class DeleteVPC extends AWSWrite {
@@ -32,6 +35,6 @@ public class DeleteVPC extends AWSWrite {
 
     @Override
     public List<Task> getDependencies() {
-        return List.of(cleanupSubnets.withVpcId(vpcId));
+        return List.of(cleanupSubnets.input(TargetVpcId, vpcId));
     }
 }

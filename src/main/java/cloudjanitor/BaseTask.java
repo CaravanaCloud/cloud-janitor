@@ -118,13 +118,18 @@ public abstract class BaseTask implements Task {
         return inputs;
     }
 
-    public Optional<String> inputString(Input key){
-        var value = getInputs().get(key);
-        return Optional.ofNullable(value)
-            .map(o -> o.toString());
+    public String inputString(Input key){
+        return inputString(key, null);
     }
 
-    public Object input(Input key, Object value) {
-        return inputs.put(key, value);
+    public String inputString(Input key, String defaultValue){
+        var val = getInputs().get(key);
+        if (val != null) return val.toString();
+        else return defaultValue;
+    }
+
+    public Task input(Input key, Object value) {
+        inputs.put(key, value);
+        return this;
     }
 }

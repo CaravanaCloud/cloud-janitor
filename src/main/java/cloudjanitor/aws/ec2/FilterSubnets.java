@@ -1,5 +1,6 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Input;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.services.ec2.model.DescribeSubnetsRequest;
@@ -14,15 +15,10 @@ import java.util.stream.Stream;
 
 @Dependent
 public class FilterSubnets extends AWSFilter {
-    String vpcId;
-
-    public Task withVpcId(String vpcId) {
-        this.vpcId = vpcId;
-        return this;
-    }
 
 
     private boolean match(Subnet net) {
+        var vpcId = inputString(Input.AWS.TargetVpcId);
         if (vpcId != null) {
             return net.vpcId().equals(vpcId);
         }else if (hasFilterPrefix()){

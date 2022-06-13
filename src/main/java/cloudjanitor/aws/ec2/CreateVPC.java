@@ -24,8 +24,7 @@ public class CreateVPC extends AWSWrite {
         var ec2 = aws().getEC2Client();
         var req = CreateVpcRequest
                 .builder()
-                .cidrBlock(inputString(Input.AWS.VpcCIDR)
-                    .orElse(DEFAULT_CIDR))
+                .cidrBlock(inputString(Input.AWS.VpcCIDR, DEFAULT_CIDR))
                 .build();
         var resp = ec2.createVpc(req);
         var vpc = resp.vpc();

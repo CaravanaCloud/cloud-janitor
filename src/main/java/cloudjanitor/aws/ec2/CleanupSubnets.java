@@ -1,5 +1,6 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Input;
 import cloudjanitor.Output;
 import cloudjanitor.aws.AWSCleanup;
 import cloudjanitor.spi.Task;
@@ -11,10 +12,10 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.List;
 
+import static cloudjanitor.Input.AWS.TargetVpcId;
+
 @Dependent
 public class CleanupSubnets extends AWSCleanup {
-    String vpcId;
-
     @Inject
     FilterSubnets filterSubnets;
 
@@ -23,7 +24,7 @@ public class CleanupSubnets extends AWSCleanup {
 
     @Override
     public List<Task> getDependencies() {
-        return List.of(filterSubnets.withVpcId(vpcId));
+        return List.of(filterSubnets.input(TargetVpcId, inputString(TargetVpcId)));
     }
 
     @Override
@@ -35,10 +36,5 @@ public class CleanupSubnets extends AWSCleanup {
     private void deleteSubnet(Subnet subnet) {
         var delSubnet = create(deleteSubnet).withSubnet(subnet);
         runTask(delSubnet);
-    }
-
-    public CleanupSubnets withVpcId(String vpcId) {
-        this.vpcId = vpcId;
-        return this;
     }
 }
