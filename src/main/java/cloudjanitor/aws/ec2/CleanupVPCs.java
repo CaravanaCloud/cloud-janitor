@@ -1,5 +1,6 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Input;
 import cloudjanitor.aws.AWSTask;
 import cloudjanitor.spi.Task;
 import software.amazon.awssdk.services.ec2.Ec2Client;
@@ -13,6 +14,8 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.List;
 
+import static cloudjanitor.Output.AWS.*;
+
 @Dependent
 public class CleanupVPCs extends AWSCleanup {
 
@@ -25,13 +28,13 @@ public class CleanupVPCs extends AWSCleanup {
 
     @Override
     public void runSafe() {
-        var vpcs = outputList(Output.AWS.VPCMatch, Vpc.class);
+        var vpcs = outputList(VPCMatch, Vpc.class);
         vpcs.forEach(this::deleteVPC);
     }
 
     private void deleteVPC(Vpc vpc) {
         var delVpc = create(deleteVPC)
-                .withVPC(vpc);
+                .input(Input.AWS.TargetVpcId, vpc.vpcId());
         //TODO: Consider submit() runTask()
         runTask(delVpc);
     }

@@ -132,4 +132,8 @@ public abstract class BaseTask implements Task {
         inputs.put(key, value);
         return this;
     }
+
+    public Object input(Input key) {
+        return inputs.get(key);
+    }
 }

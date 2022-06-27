@@ -135,32 +135,32 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnet2
 
-  InstanceSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Allow http to client host
-      VpcId: !Ref VPC
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
-      SecurityGroupEgress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0
+#  InstanceSecurityGroup:
+#    Type: AWS::EC2::SecurityGroup
+#    Properties:
+#      GroupDescription: Allow http to client host
+#      VpcId: !Ref VPC
+#      SecurityGroupIngress:
+#        - IpProtocol: tcp
+#          FromPort: 80
+#          ToPort: 80
+#          CidrIp: 0.0.0.0/0
+#      SecurityGroupEgress:
+#        - IpProtocol: tcp
+#          FromPort: 80
+#          ToPort: 80
+#          CidrIp: 0.0.0.0/0
 
-  SampleInstance: 
-    Type: AWS::EC2::Instance
-    Properties: 
-      ImageId: !Ref LatestAmiId
-      NetworkInterfaces: 
-        - AssociatePublicIpAddress: "true"
-          DeviceIndex: "0"
-          GroupSet: 
-            - !Ref InstanceSecurityGroup
-          SubnetId: !Ref PublicSubnet1
+#  SampleInstance:
+#      Type: AWS::EC2::Instance
+#    Properties:
+#      ImageId: !Ref LatestAmiId
+#      NetworkInterfaces:
+#        - AssociatePublicIpAddress: "true"
+#          DeviceIndex: "0"
+#          GroupSet:
+#            - !Ref InstanceSecurityGroup
+#          SubnetId: !Ref PublicSubnet1
 
 Outputs:
   VPC:

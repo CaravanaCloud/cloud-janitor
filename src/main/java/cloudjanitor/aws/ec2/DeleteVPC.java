@@ -8,19 +8,24 @@ import software.amazon.awssdk.services.ec2.model.Vpc;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import java.lang.annotation.Target;
 import java.util.List;
 
 import static cloudjanitor.Input.AWS.TargetVpcId;
 
 @Dependent
 public class DeleteVPC extends AWSWrite {
-    String vpcId;
 
     @Inject
     CleanupSubnets cleanupSubnets;
 
+    @Inject
+    CleanupRouteTables cleanRouteTables;
+
+
     @Override
     public void runSafe() {
+        var vpcId = inputString(TargetVpcId);
         var request = DeleteVpcRequest.builder()
                 .vpcId(vpcId)
                 .build();
@@ -28,13 +33,12 @@ public class DeleteVPC extends AWSWrite {
         log().debug("Deleted VPC {}/{}", getRegion(), vpcId);
     }
 
-    public DeleteVPC withVPC(Vpc vpc) {
-        this.vpcId = vpc.vpcId();
-        return this;
-    }
 
     @Override
     public List<Task> getDependencies() {
-        return List.of(cleanupSubnets.input(TargetVpcId, vpcId));
+        return List.of(
+                cleanupSubnets.input(TargetVpcId, input(TargetVpcId)),
+                cleanRouteTables.input(TargetVpcId, input(TargetVpcId))
+        );
     }
 }
