@@ -1,14 +1,11 @@
 package cloudjanitor.aws.ec2;
 
-import cloudjanitor.Input;
 import cloudjanitor.aws.AWSWrite;
 import cloudjanitor.spi.Task;
 import software.amazon.awssdk.services.ec2.model.DeleteVpcRequest;
-import software.amazon.awssdk.services.ec2.model.Vpc;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import java.lang.annotation.Target;
 import java.util.List;
 
 import static cloudjanitor.Input.AWS.TargetVpcId;
@@ -20,8 +17,10 @@ public class DeleteVPC extends AWSWrite {
     CleanupSubnets cleanupSubnets;
 
     @Inject
-    CleanupRouteTables cleanRouteTables;
+    DeleteRouteTables cleanRouteTables;
 
+    @Inject
+    DeleteInternetGateways deleteInternetGateways;
 
     @Override
     public void runSafe() {
@@ -29,7 +28,7 @@ public class DeleteVPC extends AWSWrite {
         var request = DeleteVpcRequest.builder()
                 .vpcId(vpcId)
                 .build();
-        aws().getEC2Client().deleteVpc(request);
+        aws().ec2().deleteVpc(request);
         log().debug("Deleted VPC {}/{}", getRegion(), vpcId);
     }
 
@@ -37,8 +36,9 @@ public class DeleteVPC extends AWSWrite {
     @Override
     public List<Task> getDependencies() {
         return List.of(
-                cleanupSubnets.input(TargetVpcId, input(TargetVpcId)),
-                cleanRouteTables.input(TargetVpcId, input(TargetVpcId))
+                cleanupSubnets.withInput(TargetVpcId, inputString(TargetVpcId)),
+                cleanRouteTables.withInput(TargetVpcId, inputString(TargetVpcId)),
+                deleteInternetGateways.withInput(TargetVpcId, inputString(TargetVpcId))
         );
     }
 }

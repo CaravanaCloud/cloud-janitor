@@ -45,7 +45,7 @@ public class AWSClients {
         return sts;
     }
 
-    public Ec2Client getEC2Client(){
+    public Ec2Client ec2(){
         var ec2 = Ec2Client.builder().region(getRegion()).build();
         return ec2;
     }
@@ -146,5 +146,8 @@ public class AWSClients {
         return targetRegions;
     }
 
+    public AWSConfiguration config(){
+        return awsConfig;
+    }
 
 }

@@ -61,6 +61,7 @@ public abstract class BaseTask implements Task {
     /* Utility Methods */
     protected void success(Output output, Object value){
         outputs.put(output, value);
+        log().debug("{} / {} := {}", toString(), output.toString(), value.toString());
     }
 
     protected void failure(String message) {
@@ -128,12 +129,28 @@ public abstract class BaseTask implements Task {
         else return defaultValue;
     }
 
-    public Task input(Input key, Object value) {
+    public Task withInput(Input key, Object value) {
         inputs.put(key, value);
         return this;
     }
 
-    public Object input(Input key) {
+    public Object withInput(Input key) {
         return inputs.get(key);
+    }
+
+    public Optional<Object> input(Input key){
+        return Optional.ofNullable(inputs.get(key));
+    }
+
+    public <T> Optional<T> input(Input key, Class<T> clazz){
+        return (Optional<T>) Optional.ofNullable(inputs.get(key));
+    }
+    
+    public <T> T getInput(Input key, Class<T> inputClass){
+        return (T) input(key).get();
+    }
+
+    public String matchMark(boolean match){
+        return match ? "X" : "O";
     }
 }

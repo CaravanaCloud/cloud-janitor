@@ -3,7 +3,6 @@ package cloudjanitor.aws.ec2;
 import cloudjanitor.Input;
 import cloudjanitor.Output;
 import cloudjanitor.TaskTest;
-import io.quarkus.logging.Log;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -12,9 +11,6 @@ import org.slf4j.Logger;
 import software.amazon.awssdk.services.ec2.model.Vpc;
 
 import javax.inject.Inject;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.awaitility.Awaitility.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,13 +54,13 @@ public class DeleteEmptyVPCTest extends TaskTest {
     }
 
     private void deleteVPC(String vpcId) {
-        deleteVpc.filterVPCs.input(Input.AWS.TargetVpcId, vpcId);
+        deleteVpc.filterVPCs.withInput(Input.AWS.TargetVpcId, vpcId);
         tasks.runTask(deleteVpc);
     }
 
     @SuppressWarnings("unchecked")
     private boolean vpcExists(String vpcId) {
-        filterVPCs.input(Input.AWS.TargetVpcId, vpcId);
+        filterVPCs.withInput(Input.AWS.TargetVpcId, vpcId);
         tasks.runTask(filterVPCs);
         var vpcs = filterVPCs.outputList(Output.AWS.VPCMatch, Vpc.class);
         if (! vpcs.isEmpty()){

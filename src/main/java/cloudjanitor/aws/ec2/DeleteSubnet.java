@@ -19,7 +19,7 @@ public class DeleteSubnet extends AWSCleanup {
         DeleteSubnetRequest delSub = DeleteSubnetRequest.builder()
                 .subnetId(subnetId)
                 .build();
-        aws().getEC2Client().deleteSubnet(delSub);
+        aws().ec2().deleteSubnet(delSub);
         log().debug("Deleted subnet " + subnetId);
     }
 

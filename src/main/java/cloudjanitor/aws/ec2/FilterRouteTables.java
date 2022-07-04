@@ -1,47 +1,48 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Input;
+import cloudjanitor.Output;
 import software.amazon.awssdk.services.ec2.model.RouteTable;
 import cloudjanitor.aws.AWSFilter;
 import cloudjanitor.spi.Task;
 
+import javax.enterprise.context.Dependent;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FilterRouteTables extends AWSFilter {
-    /*
-    private String vpcId;
+import static cloudjanitor.Output.AWS.RouteTablesMatch;
 
-    public FilterRouteTables(String vpcId) {
-        this.vpcId = vpcId;
-    }
+@Dependent
+public class FilterRouteTables extends AWSFilter {
 
     private boolean match(RouteTable resource) {
-        var prefix = getAwsCleanupPrefix();
-        var match = resource.vpcId().equals(vpcId);
-        match = match || resource.tags().stream()
-                .anyMatch(tag -> tag.key().equals("Name")
-                        && tag.value().startsWith(prefix));
-        log().trace("Found Route Table {} {}", mark(match), resource);
+        var match = true;
+
+        var vpcId = input(Input.AWS.TargetVpcId);
+        if (vpcId.isPresent()){
+            var matchVpcId = resource.vpcId();
+            var targetVpcId = vpcId.get().toString();
+            var vpcMatch = matchVpcId.equals(targetVpcId);
+            match = match && vpcMatch;
+        }
+
+        var prefix = aws().config().filterPrefix();
+        if(prefix.isPresent()){
+            var prefixMatch = resource.tags().stream()
+                    .anyMatch(tag -> tag.key().equals("Name")
+                            && tag.value().startsWith(prefix.get()));
+            match = match && prefixMatch;
+        }
+        log().trace("Found Route Table {} {}", matchMark(match), resource);
         return match;
     }
 
-    protected List<RouteTable> filterResources() {
-        var client = aws().newEC2Client(getRegionOrDefault());
-        var resources = client.describeRouteTables().routeTables();
+    @Override
+    public void runSafe() {
+        var ec2 = aws().ec2();
+        var resources = ec2.describeRouteTables().routeTables();
         var matches = resources.stream().filter(this::match).toList();
-        return matches;
+        success(RouteTablesMatch, matches);
     }
-
-    @Override
-    protected Stream<Task> mapSubtasks(RouteTable resource) {
-        return Stream.of(new DeleteRouteTable(resource));
-    }
-
-    @Override
-    protected String getResourceType() {
-        return "Route Table";
-    }
-
-     */
 }
 

@@ -1,11 +1,9 @@
 package cloudjanitor.aws.ec2;
 
-import cloudjanitor.Input;
 import cloudjanitor.Output;
 import cloudjanitor.aws.AWSCleanup;
 import cloudjanitor.spi.Task;
 import software.amazon.awssdk.services.ec2.model.Subnet;
-import software.amazon.awssdk.services.ec2.model.Vpc;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
@@ -24,7 +22,7 @@ public class CleanupSubnets extends AWSCleanup {
 
     @Override
     public List<Task> getDependencies() {
-        return List.of(filterSubnets.input(TargetVpcId, inputString(TargetVpcId)));
+        return List.of(filterSubnets.withInput(TargetVpcId, inputString(TargetVpcId)));
     }
 
     @Override

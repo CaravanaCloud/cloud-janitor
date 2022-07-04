@@ -16,7 +16,7 @@ public interface Output {
         VPCMatch,
         SubnetMatch,
         ELBV2Match, 
-        VPCId
-        ;
+        VPCId,
+        InternetGatewayMatch, RouteTablesMatch;
     }
 }

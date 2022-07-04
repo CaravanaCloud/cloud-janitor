@@ -8,12 +8,17 @@ import cloudjanitor.CloudFormationTest;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-public class DeleteVPCWithPubInstance extends CloudFormationTest {
+public class DeleteVPCWithRouteTables extends CloudFormationTest {
     @Test
     public void test(){
         var vpcId = getOutput("VPC");
         cleanupVPC(vpcId);
         var vpcMatch = filterVPCs(vpcId);
         assertTrue(vpcMatch.isEmpty());
+    }
+
+    @Override
+    protected boolean keepStackAfterTest() {
+        return true;
     }
 }

@@ -1,15 +1,33 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Output;
+import cloudjanitor.aws.AWSWrite;
+import cloudjanitor.spi.Task;
 import software.amazon.awssdk.services.ec2.model.*;
 import cloudjanitor.aws.AWSCleanup;
 
-public class DeleteInternetGateway extends AWSCleanup {
-    /*
-    public DeleteInternetGateway(InternetGateway resource) {
-        super(resource);
-    }
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+import java.util.List;
+
+import static cloudjanitor.Output.AWS.InternetGatewayMatch;
+
+@Dependent
+public class DeleteInternetGateways extends AWSWrite {
+
+    @Inject
+    FilterInternetGateways filterIGWs;
 
     @Override
+    public List<Task> getDependencies() {
+        return List.of(filterIGWs);
+    }
+
+    public void runSafe(){
+        var igws = filterIGWs.outputList(InternetGatewayMatch, InternetGateway.class);
+        igws.forEach(this::cleanup);
+    }
+
     public void cleanup(InternetGateway resource) {
         deleteAttachments(resource);
         deleteInternetGateway(resource);
@@ -36,13 +54,5 @@ public class DeleteInternetGateway extends AWSCleanup {
         aws().newEC2Client(getRegion()).deleteInternetGateway(request);
     }
 
-    @Override
-    protected String getResourceType() {
-        return "Internet Gateway";
-    }
-
-
-
-     */
 }
 
