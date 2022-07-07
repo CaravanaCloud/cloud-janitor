@@ -1,46 +1,48 @@
 package cloudjanitor.aws.ec2;
 
-import software.amazon.awssdk.services.ec2.model.IpPermission;
-import software.amazon.awssdk.services.ec2.model.SecurityGroup;
+import cloudjanitor.Input;
+import cloudjanitor.Output;
+import cloudjanitor.aws.model.IpPermissionModel;
+import software.amazon.awssdk.services.ec2.model.*;
 import cloudjanitor.aws.AWSFilter;
 import cloudjanitor.spi.Task;
 
+import javax.enterprise.context.Dependent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static cloudjanitor.Input.AWS.TargetVpcId;
+import static cloudjanitor.Output.AWS.SecurityGroupRulesMatch;
+
+@Dependent
 public class FilterSecurityGroupRules extends AWSFilter {
-    /*
-    private String vpcId;
-
-    public FilterSecurityGroupRules(String vpcId) {
-        this.vpcId = vpcId;
-    }
-
-    private boolean match(IpPermission resource) {
-        return true;
-    }
 
     @Override
-    protected List<SecurityGroup> filterResources() {
-        var client = aws().newEC2Client(getRegion());
-        var resources = client.describeSecurityGroups().securityGroups();
-        var matches = resources.stream().filter(this::matchVPC);
-        return matches.toList();
+    public void apply() {
+        var ec2 = aws().ec2();
+        var resources = ec2.describeSecurityGroups().securityGroups();
+        var matches = resources.stream().filter(this::matchVPC).toList();
+        var rules = new ArrayList<SecurityGroupRule>();
+        for (SecurityGroup sg: matches) {
+            var req = DescribeSecurityGroupRulesRequest
+                    .builder()
+                    .filters(filter("group-id", sg.groupId()))
+                    .build();
+            var newRules = ec2.describeSecurityGroupRules(req).securityGroupRules();
+            rules.addAll(newRules);
+        }
+        log().debug("Matched {} security group rules", rules.size());
+        success(SecurityGroupRulesMatch, rules);
     }
 
     private boolean matchVPC(SecurityGroup securityGroup) {
-        return vpcId.equals(securityGroup.vpcId());
+        var match = true;
+        var vpcId = inputString(TargetVpcId);
+        if (vpcId.isPresent()){
+            match = match && vpcId.get().equals(securityGroup.vpcId());
+        }
+        return match;
     }
-
-    @Override
-    protected Stream<Task> mapSubtasks(SecurityGroup resource) {
-        return Stream.of(new RevokeRules(resource));
-    }
-
-    @Override
-    protected String getResourceType() {
-        return "Security Group Rules";
-    }
-    */
 }
 

@@ -15,12 +15,12 @@ public class CleanupRegion extends AWSFilter {
     CleanupVPCs deleteVPCs;
 
     @Override
-    public List<Task> getDependencies() {
-        return List.of(deleteVPCs);
+    public Task getDependency() {
+        return deleteVPCs;
     }
 
     @Override
-    public void runSafe() {
+    public void apply() {
         log().info("Region cleaned up "+aws().getRegion());
     }
 }

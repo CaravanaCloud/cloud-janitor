@@ -1,14 +1,13 @@
 package cloudjanitor.aws.ec2;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.Test;
-
 import cloudjanitor.CloudFormationTest;
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
-public class DeleteVPCWithRouteTables extends CloudFormationTest {
+public class DeleteVPCWithInstanceTest extends CloudFormationTest {
     @Test
     public void test(){
         var vpcId = getOutput("VPC");
@@ -17,8 +16,4 @@ public class DeleteVPCWithRouteTables extends CloudFormationTest {
         assertTrue(vpcMatch.isEmpty());
     }
 
-    @Override
-    protected boolean keepStackAfterTest() {
-        return true;
-    }
 }

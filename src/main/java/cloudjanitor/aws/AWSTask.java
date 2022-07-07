@@ -6,6 +6,7 @@ import software.amazon.awssdk.core.SdkClient;
 import software.amazon.awssdk.regions.Region;
 import cloudjanitor.BaseTask;
 import cloudjanitor.spi.Task;
+import software.amazon.awssdk.services.ec2.model.Filter;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Instance;
@@ -37,5 +38,9 @@ public abstract class AWSTask
 
     protected Region getRegion(){
         return aws().getRegion();
+    }
+
+    protected Filter filter(String filterName, String filterValue) {
+        return Filter.builder().name(filterName).values(filterValue).build();
     }
 }

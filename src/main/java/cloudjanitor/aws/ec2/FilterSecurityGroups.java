@@ -1,44 +1,31 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Input;
+import cloudjanitor.Output;
 import software.amazon.awssdk.services.ec2.model.SecurityGroup;
 import cloudjanitor.aws.AWSFilter;
-import cloudjanitor.spi.Task;
 
-import java.util.List;
-import java.util.stream.Stream;
+import javax.enterprise.context.Dependent;
 
+@Dependent
 public class FilterSecurityGroups extends AWSFilter {
-    /*
-    private String vpcId;
-
-    public FilterSecurityGroups(String vpcId) {
-        this.vpcId = vpcId;
+    @Override
+    public void apply() {
+        var ec2 = aws().ec2();
+        var resources = ec2.describeSecurityGroups().securityGroups();
+        var matches = resources.stream().filter(this::match).toList();
+        success(Output.AWS.SecurityGroupsMatch, matches);
     }
 
-    private boolean match(SecurityGroup resource) {
-        var notDefault = ! resource.groupName().equals("default");
-        var targetVPC = resource.vpcId().equals(vpcId);
-        var match = notDefault && targetVPC;
+    private boolean match(SecurityGroup securityGroup) {
+        var match = !"default".equals(securityGroup.groupName());
+
+        var vpcId = inputString(Input.AWS.TargetVpcId);
+        if (vpcId.isPresent()){
+            match = match && vpcId.get().equals(securityGroup.vpcId());
+        }
+
         return match;
     }
-
-    @Override
-    protected List<SecurityGroup> filterResources() {
-        var client = aws().newEC2Client(getRegionOrDefault());;
-        var resources = client.describeSecurityGroups().securityGroups();
-        var matches = resources.stream().filter(this::match).toList();
-        return matches;
-    }
-
-    @Override
-    protected Stream<Task> mapSubtasks(SecurityGroup resource) {
-        return Stream.of(new DeleteSecurityGroup(resource));
-    }
-
-    @Override
-    protected String getResourceType() {
-        return "Security Group";
-    }
-    */
 }
 

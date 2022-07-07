@@ -19,7 +19,7 @@ public class HelloTaskTest {
 
     @Test
     public void testHello(){
-        tasks.runTask(helloTask);
+        tasks.submit(helloTask);
         var message = helloTask.outputString(Output.Sample.Message);
         assertEquals("hello world!", message.get());
     }

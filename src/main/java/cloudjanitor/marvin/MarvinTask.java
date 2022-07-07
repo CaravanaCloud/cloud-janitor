@@ -14,7 +14,7 @@ public class MarvinTask extends ReadTask {
     Logger log;
 
     @Override
-    public void runSafe() {
+    public void apply() {
         log.warn("Don't Panic!");
     }
 }

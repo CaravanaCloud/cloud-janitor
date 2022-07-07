@@ -14,7 +14,7 @@ public class HelloTask extends BaseTask {
     @Inject
     Logger log;
     @Override
-    public void runSafe() {
+    public void apply() {
         String message = getConfig()
                 .inputs()
                 .getOrDefault("message", "hello world!");

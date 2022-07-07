@@ -14,7 +14,7 @@ import static cloudjanitor.Input.AWS.TargetVpcId;
 public class DeleteVPC extends AWSWrite {
 
     @Inject
-    CleanupSubnets cleanupSubnets;
+    DeleteSubnets cleanupSubnets;
 
     @Inject
     DeleteRouteTables cleanRouteTables;
@@ -22,9 +22,18 @@ public class DeleteVPC extends AWSWrite {
     @Inject
     DeleteInternetGateways deleteInternetGateways;
 
+    @Inject
+    TerminateInstances terminateInstances;
+
+    @Inject
+    DeleteSecurityGroupRules deleteSecurityGroupRules;
+
+    @Inject
+    DeleteSecurityGroups deleteSecurityGroups;
+
     @Override
-    public void runSafe() {
-        var vpcId = inputString(TargetVpcId);
+    public void apply() {
+        var vpcId = getInputString(TargetVpcId);
         var request = DeleteVpcRequest.builder()
                 .vpcId(vpcId)
                 .build();
@@ -35,10 +44,15 @@ public class DeleteVPC extends AWSWrite {
 
     @Override
     public List<Task> getDependencies() {
-        return List.of(
-                cleanupSubnets.withInput(TargetVpcId, inputString(TargetVpcId)),
-                cleanRouteTables.withInput(TargetVpcId, inputString(TargetVpcId)),
-                deleteInternetGateways.withInput(TargetVpcId, inputString(TargetVpcId))
+        return delegate(
+                terminateInstances,
+                deleteSecurityGroupRules,
+                deleteSecurityGroups,
+                cleanupSubnets,
+                cleanRouteTables,
+                deleteInternetGateways
         );
     }
+
+
 }

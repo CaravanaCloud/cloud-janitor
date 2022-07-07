@@ -17,6 +17,6 @@ public interface Output {
         SubnetMatch,
         ELBV2Match, 
         VPCId,
-        InternetGatewayMatch, RouteTablesMatch;
+        InternetGatewayMatch, RouteTablesMatch, InstancesMatch, SecurityGroupRulesMatch, IpPermissionsMatch, SecurityGroupsMatch;
     }
 }

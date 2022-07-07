@@ -16,7 +16,7 @@ public class FilterLoadBalancersV2 extends AWSFilter {
     }
 
     @Override
-    public void runSafe() {
+    public void apply() {
         var elb = aws().getELBClientV2();
         var resources = elb.describeLoadBalancers().loadBalancers();
         var matches = resources.stream().filter(this::match).toList();

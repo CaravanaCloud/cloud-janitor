@@ -8,6 +8,7 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Stream;
 
 @Dependent
 public abstract class BaseTask implements Task {
@@ -64,7 +65,11 @@ public abstract class BaseTask implements Task {
         log().debug("{} / {} := {}", toString(), output.toString(), value.toString());
     }
 
-    protected void failure(String message) {
+    protected void success(){
+        log().debug("Task success(): {}", toString());
+    }
+
+    protected void error(String message) {
         getErrors().put(Errors.Message ,message);
     }
 
@@ -110,8 +115,8 @@ public abstract class BaseTask implements Task {
         return config;
     }
 
-    public void runTask(Task task){
-        tasks.runTask(task);
+    public void submit(Task task){
+        tasks.submit(task);
     }
 
     @Override
@@ -119,11 +124,11 @@ public abstract class BaseTask implements Task {
         return inputs;
     }
 
-    public String inputString(Input key){
-        return inputString(key, null);
+    public String getInputString(Input key){
+        return getInputString(key, null);
     }
 
-    public String inputString(Input key, String defaultValue){
+    public String getInputString(Input key, String defaultValue){
         var val = getInputs().get(key);
         if (val != null) return val.toString();
         else return defaultValue;
@@ -131,6 +136,11 @@ public abstract class BaseTask implements Task {
 
     public Task withInput(Input key, Object value) {
         inputs.put(key, value);
+        return this;
+    }
+
+    public Task withInputs(Map<Input, Object> inputs) {
+        this.inputs = inputs;
         return this;
     }
 
@@ -142,10 +152,12 @@ public abstract class BaseTask implements Task {
         return Optional.ofNullable(inputs.get(key));
     }
 
+    @SuppressWarnings("unchecked")
     public <T> Optional<T> input(Input key, Class<T> clazz){
         return (Optional<T>) Optional.ofNullable(inputs.get(key));
     }
-    
+
+    @SuppressWarnings("unchecked")
     public <T> T getInput(Input key, Class<T> inputClass){
         return (T) input(key).get();
     }
@@ -153,4 +165,19 @@ public abstract class BaseTask implements Task {
     public String matchMark(boolean match){
         return match ? "X" : "O";
     }
+
+    public List<Task> delegate(Task... tasks) {
+        return Stream.of(tasks)
+                .map(t -> t.withInputs(getInputs()))
+                .toList();
+    }
+
+    public Optional<String> inputString(Input key){
+        return input(key).map(o -> o.toString());
+    }
+
+    public Object output(Output key, Object value){
+        return outputs.put(key, value);
+    }
+
 }

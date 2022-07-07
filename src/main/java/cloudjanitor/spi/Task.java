@@ -21,7 +21,7 @@ public interface Task {
     /**
      * The code to be executed by the Task, if considered *safe* by the TaskManager.
      */
-    default void runSafe(){
+    default void apply(){
         throw new RuntimeException("Task not implemented");
     }
 
@@ -67,12 +67,22 @@ public interface Task {
 
     /* Task Chaining */
     default List<Task> getDependencies(){
-        return List.of();
+        var dep = getDependency();
+        if (dep != null)
+            return List.of(dep);
+        else
+            return List.of();
+    }
+
+    default Task getDependency(){
+        return null;
     }
 
     default Map<Input, Object> getInputs(){
         return Map.of();
     }
+
+    default Task withInputs(Map<Input, Object> inputs){ return this; }
 
     default Map<Output, Object> getOutputs(){
         return Map.of();

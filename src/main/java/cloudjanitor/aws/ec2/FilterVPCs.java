@@ -13,7 +13,7 @@ import java.util.List;
 public class FilterVPCs extends AWSFilter {
 
     @Override
-    public void runSafe() {
+    public void apply() {
         var vpcs = filterResources();
         success(Output.AWS.VPCMatch, vpcs);
         log().debug("VPCs filtered region={} target={} found={}",
@@ -27,7 +27,7 @@ public class FilterVPCs extends AWSFilter {
     }
 
     private String getTargetVpcId() {
-        var targetVpcId = inputString(Input.AWS.TargetVpcId);
+        var targetVpcId = getInputString(Input.AWS.TargetVpcId);
         return targetVpcId;
     }
 

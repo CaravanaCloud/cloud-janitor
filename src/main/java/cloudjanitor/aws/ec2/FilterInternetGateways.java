@@ -38,7 +38,7 @@ public class FilterInternetGateways extends AWSFilter {
     }
 
     @Override
-    public void runSafe() {
+    public void apply() {
         var client = aws().newEC2Client(getRegion());
         var resources = client.describeInternetGateways().internetGateways();
         var matches = resources.stream().filter(this::match).toList();

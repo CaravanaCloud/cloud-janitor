@@ -3,10 +3,7 @@ package cloudjanitor.aws.ec2;
 import cloudjanitor.Input;
 import cloudjanitor.Output;
 import cloudjanitor.aws.AWSWrite;
-import cloudjanitor.aws.AWSWrite;
 import cloudjanitor.spi.Task;
-import software.amazon.awssdk.services.ec2.model.DescribeRouteTablesRequest;
-import software.amazon.awssdk.services.ec2.model.Filter;
 import software.amazon.awssdk.services.ec2.model.RouteTable;
 
 import javax.enterprise.context.Dependent;
@@ -26,19 +23,17 @@ public class DeleteRouteTables extends AWSWrite {
 
     @Override
     public List<Task> getDependencies() {
-        return List.of(
-                filterRouteTables.withInput(TargetVpcId, inputString(TargetVpcId)));
+        return delegate(filterRouteTables);
     }
 
     @Override
-    public void runSafe() {
+    public void apply() {
         var routeTables = filterRouteTables.outputList(Output.AWS.RouteTablesMatch, RouteTable.class);
         routeTables.forEach(this::deleteRouteTable);
     }
 
-
     private void deleteRouteTable(RouteTable routeTable) {
         var delRoute = delRouteTable.get().withInput(Input.AWS.RouteTable, routeTable);
-        runTask(delRoute);
+        submit(delRoute);
     }
 }

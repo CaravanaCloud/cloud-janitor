@@ -15,7 +15,7 @@ public class DeleteRouteTable extends AWSCleanup {
 
 
     @Override
-    public void runSafe() {
+    public void apply() {
         RouteTable resource = getInput(Input.AWS.RouteTable, RouteTable.class);
         if (! isMainRouteTable(resource)) {
             deleteRoutes(resource);

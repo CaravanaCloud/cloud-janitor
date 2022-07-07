@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import software.amazon.awssdk.services.ec2.model.Vpc;
@@ -58,16 +59,22 @@ public class CloudFormationTest extends TaskTest{
                 .build();
         var stackId = cf.createStack(createReq).stackId();
         var waiting = false;
+        var status = "";
         do {
             var describeReq = DescribeStacksRequest
                     .builder()
                     .stackName(stackName)
                     .build();
-            var stacks = cf.describeStacks(describeReq)
-                    .stacks();
+            var stacks =(List<Stack>) new ArrayList<Stack>();
+            try {
+                stacks = cf.describeStacks(describeReq).stacks();
+            }catch (Exception e){
+                //TODO: awaitility this
+                log.warn("Failed to describe stack..");
+            }
             if (! stacks.isEmpty()){
                 var stack = stacks.get(0);
-                var status = stack.stackStatus().toString();
+                status = stack.stackStatus().toString();
                 waiting = switch(status) {
                     case "CREATE_COMPLETE",
                             "CREATE_FAILED",
@@ -87,6 +94,9 @@ public class CloudFormationTest extends TaskTest{
                 System.out.println("Stack not found");
             }
         } while (waiting);
+        if ("ROLLBACK_COMPLETE".equals(status)){
+            fail("Stack failed to create");
+        }
         System.out.println("CREATE DONE");
     }
 
@@ -199,7 +209,7 @@ public class CloudFormationTest extends TaskTest{
 
     protected List<Vpc> filterVPCs(String vpcId) {
         filterVPCs.setTargetVPC(vpcId);
-        tasks.runTask(filterVPCs);
+        tasks.submit(filterVPCs);
         var matches = filterVPCs.outputList(Output.AWS.VPCMatch, Vpc.class);
         log.debug("filterVPCs {} finished", vpcId);
         return matches;
@@ -207,7 +217,7 @@ public class CloudFormationTest extends TaskTest{
 
     protected void cleanupVPC(String vpcId) {
         cleanupVPCs.setTargetVPC(vpcId);
-        tasks.runTask(cleanupVPCs);
+        tasks.submit(cleanupVPCs);
         log.debug("cleanupVPC {} finished",vpcId);
     }
 

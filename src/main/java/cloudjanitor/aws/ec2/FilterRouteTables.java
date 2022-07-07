@@ -38,7 +38,7 @@ public class FilterRouteTables extends AWSFilter {
     }
 
     @Override
-    public void runSafe() {
+    public void apply() {
         var ec2 = aws().ec2();
         var resources = ec2.describeRouteTables().routeTables();
         var matches = resources.stream().filter(this::match).toList();

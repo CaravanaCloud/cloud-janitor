@@ -17,7 +17,7 @@ public class GetCallerIdentityTask extends AWSFilter {
     AWSClients aws;
 
     @Override
-    public void runSafe() {
+    public void apply() {
         var sts = aws().getSTSClient();
         var account = sts.getCallerIdentity().account();
         success(AWS.Account, account);

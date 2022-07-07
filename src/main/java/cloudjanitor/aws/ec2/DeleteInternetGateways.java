@@ -19,11 +19,11 @@ public class DeleteInternetGateways extends AWSWrite {
     FilterInternetGateways filterIGWs;
 
     @Override
-    public List<Task> getDependencies() {
-        return List.of(filterIGWs);
+    public Task getDependency() {
+        return filterIGWs;
     }
 
-    public void runSafe(){
+    public void apply(){
         var igws = filterIGWs.outputList(InternetGatewayMatch, InternetGateway.class);
         igws.forEach(this::cleanup);
     }

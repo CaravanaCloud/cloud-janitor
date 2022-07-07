@@ -15,7 +15,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Stream;
 
 @ApplicationScoped
 public class Tasks {
@@ -55,7 +54,7 @@ public class Tasks {
     }
 
     private void runAll(List<Task> matches) {
-        matches.forEach(this::runTask);
+        matches.forEach(this::submit);
     }
 
     private List<Task> lookupTasks(String taskName) {
@@ -66,9 +65,9 @@ public class Tasks {
                 .toList();
     }
 
-    public Task runTask(Task task) {
+    public Task submit(Task task) {
         var dependencies = task.getDependencies();
-        dependencies.forEach(this::runTask);
+        dependencies.forEach(this::submit);
         runSingle(task);
         return task;
     }
@@ -93,7 +92,7 @@ public class Tasks {
         } else {
             try {
                 task.setStartTime(LocalDateTime.now());
-                task.runSafe();
+                task.apply();
                 log.trace("Executed {} ({})",
                         task.toString(),
                         task.isWrite() ? "W" : "R");

@@ -15,7 +15,7 @@ public class DeleteSubnet extends AWSCleanup {
         return this;
     }
 
-    public void runSafe() {
+    public void apply() {
         DeleteSubnetRequest delSub = DeleteSubnetRequest.builder()
                 .subnetId(subnetId)
                 .build();
