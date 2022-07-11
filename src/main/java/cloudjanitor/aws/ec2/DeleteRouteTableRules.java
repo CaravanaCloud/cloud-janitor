@@ -1,29 +1,30 @@
 package cloudjanitor.aws.ec2;
+
+import cloudjanitor.Input;
+import cloudjanitor.aws.AWSWrite;
 import software.amazon.awssdk.services.ec2.model.DeleteRouteRequest;
 import software.amazon.awssdk.services.ec2.model.DeleteRouteTableRequest;
 import software.amazon.awssdk.services.ec2.model.Route;
 import software.amazon.awssdk.services.ec2.model.RouteTable;
-import cloudjanitor.aws.AWSCleanup;
 
-public class DeleteRouteTableRules extends AWSCleanup {
-    /*
-    public DeleteRouteTableRules(RouteTable resource) {
-        super(resource);
-    }
+import javax.enterprise.context.Dependent;
 
+@Dependent
+public class DeleteRouteTableRules extends AWSWrite {
     @Override
-    public void cleanup(RouteTable resource) {
-        if (! isMainRouteTable(resource)) {
+    public void apply() {
+        var rtb = getInput(Input.AWS.TargetRouteTable, RouteTable.class);
+        if (! isMainRouteTable(rtb)) {
             try {
-                deleteRoutes(resource);
+                deleteRoutes(rtb);
             }catch (Exception e){
-                log().error("Fail to delete Route Table Rules for {}", resource.routeTableId());
+                log().error("Fail to delete Route Table Rules for {}", rtb.routeTableId());
                 log().error(e.getMessage(), e);
                 throw new RuntimeException(e);
             }
             // deleteRouteTable(resource);
         } else{
-            log().debug("Not deleting main route table rules {}", resource.routeTableId());
+            log().debug("Not deleting main route table rules {}", rtb.routeTableId());
         }
     }
 
@@ -55,7 +56,7 @@ public class DeleteRouteTableRules extends AWSCleanup {
         }
         var request = builder.build();
         try {
-            aws().newEC2Client(getRegion()).deleteRoute(request);
+            aws().ec2().deleteRoute(request);
         }catch (Exception ex){
             log().error("Failed to delete route {}", route);
             log().error(ex.getMessage(),ex);
@@ -68,13 +69,6 @@ public class DeleteRouteTableRules extends AWSCleanup {
         var request = DeleteRouteTableRequest.builder()
                 .routeTableId(resource.routeTableId())
                 .build();
-        aws().newEC2Client(getRegion()).deleteRouteTable(request);
+        aws().ec2().deleteRouteTable(request);
     }
-
-    @Override
-    protected String getResourceType() {
-        return "Route Table Rules";
-    }
-
-     */
 }

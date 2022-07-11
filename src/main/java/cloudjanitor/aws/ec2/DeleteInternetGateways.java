@@ -1,14 +1,11 @@
 package cloudjanitor.aws.ec2;
 
-import cloudjanitor.Output;
 import cloudjanitor.aws.AWSWrite;
 import cloudjanitor.spi.Task;
 import software.amazon.awssdk.services.ec2.model.*;
-import cloudjanitor.aws.AWSCleanup;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import java.util.List;
 
 import static cloudjanitor.Output.AWS.InternetGatewayMatch;
 
@@ -38,12 +35,12 @@ public class DeleteInternetGateways extends AWSWrite {
     }
 
     private void deleteAttachment(InternetGateway resource, InternetGatewayAttachment att) {
-        log().debug("Detaching {}",att);
+        log().debug("Detaching InternetGatewayAttachment {} from {}", att, resource);
         var request = DetachInternetGatewayRequest.builder()
                 .internetGatewayId(resource.internetGatewayId())
                 .vpcId(att.vpcId())
                 .build();
-        aws().newEC2Client(getRegion()).detachInternetGateway(request);
+        aws().ec2(getRegion()).detachInternetGateway(request);
     }
 
     private void deleteInternetGateway(InternetGateway resource) {
@@ -51,7 +48,7 @@ public class DeleteInternetGateways extends AWSWrite {
         var request = DeleteInternetGatewayRequest.builder()
                 .internetGatewayId(resource.internetGatewayId())
                 .build();
-        aws().newEC2Client(getRegion()).deleteInternetGateway(request);
+        aws().ec2(getRegion()).deleteInternetGateway(request);
     }
 
 }

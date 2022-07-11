@@ -18,7 +18,7 @@ public class FilterSecurityGroups extends AWSFilter {
     }
 
     private boolean match(SecurityGroup securityGroup) {
-        var match = !"default".equals(securityGroup.groupName());
+        var match = ! "default".equals(securityGroup.groupName());
 
         var vpcId = inputString(Input.AWS.TargetVpcId);
         if (vpcId.isPresent()){

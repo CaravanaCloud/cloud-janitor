@@ -1,38 +1,20 @@
 package cloudjanitor.aws.s3;
 
+import cloudjanitor.Input;
+import cloudjanitor.aws.AWSWrite;
 import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
-import cloudjanitor.aws.AWSCleanup;
-import cloudjanitor.spi.Task;
 
 import javax.enterprise.context.Dependent;
-import java.util.stream.Stream;
 
 @Dependent
-public class DeleteBucket extends AWSCleanup {
-    /*
-    public DeleteBucket(){}
-
-    public DeleteBucket(String resource) {
-        super(resource);
-    }
+public class DeleteBucket extends AWSWrite {
 
     @Override
-    public void cleanup(String resource) {
+    public void apply() {
+        var resource = getInputString(Input.AWS.TargetBucketName);
         log().debug("Deleting Bucket [{}]", resource);
         var request = DeleteBucketRequest.builder().bucket(resource).build();
-        aws().newS3Client(getRegion()).deleteBucket(request);
+        aws().s3().deleteBucket(request);
     }
 
-    @Override
-    protected String getResourceType() {
-        return "Bucket";
-    }
-
-    @Override
-    public Stream<Task> mapSubtasks(String bucketName) {
-        return Stream.of(
-                //TODO: Filter Objects, Versions, Delete Markers..
-        );
-    }
-    BucketName*/
 }

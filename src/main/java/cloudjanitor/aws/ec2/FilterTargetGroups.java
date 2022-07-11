@@ -1,35 +1,32 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Output;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetGroup;
 import cloudjanitor.aws.AWSFilter;
 import cloudjanitor.spi.Task;
 
-import java.util.List;
+import javax.enterprise.context.Dependent;
 import java.util.stream.Stream;
 
-public class FilterTargetGroups extends AWSFilter { /*
+import static cloudjanitor.Output.AWS.TargetGroupsMatch;
+
+@Dependent
+public class FilterTargetGroups extends AWSFilter {
     private boolean match(TargetGroup resource) {
-        var prefix = getAwsCleanupPrefix();
-        var match = resource.targetGroupName().startsWith(prefix);
+        var prefix = aws().config().filterPrefix();
+        var match = true;
+        if (prefix.isPresent()) {
+            match = resource.targetGroupName().startsWith(prefix.get());
+        }
         return match;
     }
 
     @Override
-    protected List<TargetGroup> filterResources() {
-        var elb = aws().getELBClientV2();
+    public void apply() {
+        var elb = aws().elbv2();
         var resources = elb.describeTargetGroups().targetGroups();
         var matches = resources.stream().filter(this::match).toList();
-        return matches;
+        success(TargetGroupsMatch, matches);
     }
 
-    @Override
-    public Stream<Task> mapSubtasks(TargetGroup resource) {
-        return Stream.of(new DeleteTargetGroup(resource));
-    }
-
-    @Override
-    protected String getResourceType() {
-        return "Target Group";
-    }
-*/
 }

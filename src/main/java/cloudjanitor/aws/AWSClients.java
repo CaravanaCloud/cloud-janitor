@@ -46,15 +46,19 @@ public class AWSClients {
     }
 
     public Ec2Client ec2(){
-        var ec2 = Ec2Client.builder().region(getRegion()).build();
+        return ec2(getRegion());
+    }
+
+    public Ec2Client ec2(Region region){
+        var ec2 = Ec2Client.builder().region(region).build();
         return ec2;
     }
 
-    public CloudFormationClient getCloudFormationClient(){
+
+    public CloudFormationClient cloudFormation(){
         return CloudFormationClient.builder().region(getRegion()).build();
     }
 
-    ///////////////////////////////////////////////////
 
     Map<Region, Map<Class<? extends SdkClient>, SdkClient>> clients = new HashMap<>();
 
@@ -74,9 +78,9 @@ public class AWSClients {
         var client = regionClients.get(clientClass);
         if (client == null) {
             client = switch (clientClass.getSimpleName()) {
-                case "S3Client" -> newS3Client(region);
-                case "Route53Client" -> newRoute53Client(region);
-                case "Ec2Client" -> newEC2Client(region);
+                case "S3Client" -> s3(region);
+                case "Route53Client" -> route53();
+                case "Ec2Client" -> ec2(region);
                 case "StsClient" -> getSTSClient();
                 default -> throw new IllegalArgumentException("Unknown client class: " + clientClass.getSimpleName());
             };
@@ -110,41 +114,36 @@ public class AWSClients {
 
 
 
-    public S3Client newS3Client(Region region){
-        var s3 = S3Client.builder().region(region).build();
+    public S3Client s3(){
+        return s3(getRegion());
+    }
+
+    public S3Client s3(Region region){
+        var s3 = S3Client.builder().region(getRegion()).build();
         return s3;
     }
 
-    public Route53Client newRoute53Client(Region region) {
-        return Route53Client.builder().region(region).build();
+    public Route53Client route53() {
+        return Route53Client.builder().region(Region.AWS_GLOBAL).build();
     }
 
-    public ElasticLoadBalancingV2Client getELBClientV2() {
+    public ElasticLoadBalancingV2Client elbv2() {
         return ElasticLoadBalancingV2Client.builder()
                 .region(getRegion())
                 .build();
     }
 
-    public ElasticLoadBalancingClient getELBClient(Region region) {
+    public ElasticLoadBalancingClient elb() {
         return ElasticLoadBalancingClient.builder()
-                .region(region)
+                .region(getRegion())
                 .build();
     }
 
-    public Ec2Client newEC2Client(Region region) {
-        return Ec2Client.builder().region(region).build();
+
+    public AthenaClient athena() {
+        return AthenaClient.builder().region(getRegion()).build();
     }
 
-    public AthenaClient newAthenaClient(Region region) {
-        return AthenaClient.builder().region(region).build();
-    }
-
-
-
-
-    public String getTargetRegions() {
-        return targetRegions;
-    }
 
     public AWSConfiguration config(){
         return awsConfig;

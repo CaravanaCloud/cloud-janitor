@@ -50,7 +50,7 @@ public class CloudFormationTest extends TaskTest{
 
     protected void createStack(){
         log.info("Creating stack {} on {}", getStackName(), aws().getRegion());
-        var cf = aws().getCloudFormationClient();
+        var cf = aws().cloudFormation();
         var stackName = getStackName();
         var createReq = CreateStackRequest.builder()
                 .stackName(getStackName())
@@ -132,7 +132,7 @@ public class CloudFormationTest extends TaskTest{
     }
 
     protected void deleteStack(){
-        var cf = aws().getCloudFormationClient();
+        var cf = aws().cloudFormation();
         var stackName = getStackName();
         var deleteReq = DeleteStackRequest.builder()
                 .stackName(stackName)
@@ -178,7 +178,7 @@ public class CloudFormationTest extends TaskTest{
     }
 
     protected Optional<String> output(String name) {
-        var cf = aws().getCloudFormationClient();
+        var cf = aws().cloudFormation();
         var stackName = getStackName();
         var req = DescribeStacksRequest.builder()
                 .stackName(stackName)

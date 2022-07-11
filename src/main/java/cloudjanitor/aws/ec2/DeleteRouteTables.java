@@ -11,8 +11,6 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.List;
 
-import static cloudjanitor.Input.AWS.TargetVpcId;
-
 @Dependent
 public class DeleteRouteTables extends AWSWrite {
     @Inject
@@ -22,7 +20,7 @@ public class DeleteRouteTables extends AWSWrite {
     Instance<DeleteRouteTable> delRouteTable;
 
     @Override
-    public List<Task> getDependencies() {
+    public Task getDependency() {
         return delegate(filterRouteTables);
     }
 

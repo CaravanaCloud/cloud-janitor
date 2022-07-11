@@ -1,11 +1,17 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Input;
+import cloudjanitor.aws.AWSWrite;
 import software.amazon.awssdk.services.route53.model.*;
-import cloudjanitor.aws.AWSCleanup;
 
-public class DeleteRecord extends AWSCleanup {
-    /*
-    public void cleanup(ResourceRecordSet resource) {
+import javax.enterprise.context.Dependent;
+
+@Dependent
+public class DeleteRecord extends AWSWrite {
+
+    @Override
+    public void apply() {
+        var resource = getInput(Input.AWS.ResourceRecordSet, ResourceRecordSet.class);
         log().debug("Deleting record {}", resource);
         var change = Change.builder()
                 .resourceRecordSet(resource)
@@ -17,7 +23,6 @@ public class DeleteRecord extends AWSCleanup {
         var request = ChangeResourceRecordSetsRequest.builder()
                 .changeBatch(changes)
                 .build();
-        aws().newRoute53Client(getRegionOrDefault()).changeResourceRecordSets(request);
+        aws().route53().changeResourceRecordSets(request);
     }
-    */
 }

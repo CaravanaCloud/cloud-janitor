@@ -28,7 +28,7 @@ public class DeleteSecurityGroups extends AWSWrite {
     @Override
     public void apply() {
         var groups = filterGroups.outputList(SecurityGroupsMatch, SecurityGroup.class);
-        log().debug("Deleting {} security groups", groups.size());
+        log().debug("Deleting {} security groups ", groups.size());
         groups.forEach(this::deleteGroup);
     }
 

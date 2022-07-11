@@ -30,7 +30,7 @@ public class TerminateInstances extends AWSWrite {
     }
 
     public void terminate(Instance instance){
-        log().debug("Terminating instance {}", instance);
+        log().debug("Terminating instance {} ", instance);
         var terminateInstance = TerminateInstancesRequest.builder()
                 .instanceIds(instance.instanceId())
                 .build();

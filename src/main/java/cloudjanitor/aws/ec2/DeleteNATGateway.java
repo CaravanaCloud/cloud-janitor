@@ -1,27 +1,21 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Input;
+import cloudjanitor.aws.AWSWrite;
 import software.amazon.awssdk.services.ec2.model.DeleteNatGatewayRequest;
-import software.amazon.awssdk.services.ec2.model.NatGateway;
-import cloudjanitor.aws.AWSCleanup;
 
-public class DeleteNATGateway extends AWSCleanup {
-    /*
-    public DeleteNATGateway(NatGateway resource) {
-        super(resource);
-    }
+import javax.enterprise.context.Dependent;
+
+@Dependent
+public class DeleteNATGateway extends AWSWrite {
 
     @Override
-    protected void cleanup(NatGateway resource) {
-        log().debug("Deleting {}", resource);
-        var deleteNat = DeleteNatGatewayRequest.builder().natGatewayId(resource.natGatewayId()).build();
-        var ec2 = aws().newEC2Client(getRegion());
+    public void apply() {
+        var natGatewayId = getInputString(Input.AWS.TargetNatGatewayId);
+        log().debug("Deleting {}", natGatewayId);
+        var deleteNat = DeleteNatGatewayRequest.builder().natGatewayId(natGatewayId).build();
+        var ec2 = aws().ec2();
         ec2.deleteNatGateway(deleteNat);
+        success();
     }
-
-    @Override
-    protected String getResourceType() {
-        return "NAT Gateway";
-    }
-
-     */
 }

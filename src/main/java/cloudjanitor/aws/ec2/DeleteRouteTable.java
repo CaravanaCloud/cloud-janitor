@@ -1,17 +1,17 @@
 package cloudjanitor.aws.ec2;
 
 import cloudjanitor.Input;
+import cloudjanitor.aws.AWSWrite;
 import software.amazon.awssdk.services.ec2.model.DeleteRouteRequest;
 import software.amazon.awssdk.services.ec2.model.DeleteRouteTableRequest;
 import software.amazon.awssdk.services.ec2.model.Route;
 import software.amazon.awssdk.services.ec2.model.RouteTable;
-import cloudjanitor.aws.AWSCleanup;
 
 import javax.enterprise.context.Dependent;
 
 
 @Dependent
-public class DeleteRouteTable extends AWSCleanup {
+public class DeleteRouteTable extends AWSWrite {
 
 
     @Override
@@ -63,6 +63,6 @@ public class DeleteRouteTable extends AWSCleanup {
         var request = DeleteRouteTableRequest.builder()
                 .routeTableId(resource.routeTableId())
                 .build();
-        aws().newEC2Client(getRegion()).deleteRouteTable(request);
+        aws().ec2(getRegion()).deleteRouteTable(request);
     }
 }

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 
+import static cloudjanitor.Output.AWS.Account;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
@@ -16,8 +17,8 @@ public class GetCallerIdentityTaskTest extends TaskTest {
 
     @Test
     public void testGetCaller(){
-        tasks.submit(getCaller);
-        var account = getCaller.outputString(Output.AWS.Account);
+        submit(getCaller);
+        var account = getCaller.outputString(Account);
         assertNotNull(account);
         assertFalse(account.isEmpty());
     }

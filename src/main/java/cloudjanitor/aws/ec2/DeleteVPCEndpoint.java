@@ -1,28 +1,22 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Input;
+import cloudjanitor.aws.AWSWrite;
 import software.amazon.awssdk.services.ec2.model.DeleteVpcEndpointsRequest;
 import software.amazon.awssdk.services.ec2.model.VpcEndpoint;
-import cloudjanitor.aws.AWSCleanup;
 
-public class DeleteVPCEndpoint extends AWSCleanup {
-    /*
-    public DeleteVPCEndpoint(VpcEndpoint resource) {
-        super(resource);
-    }
+import javax.enterprise.context.Dependent;
+
+@Dependent
+public class DeleteVPCEndpoint extends AWSWrite {
 
     @Override
-    public void cleanup(VpcEndpoint resource) {
+    public void apply() {
+        var resource = getInput(Input.AWS.TargetVPCEndpoint, VpcEndpoint.class);
         log().info("Deleting vpc endpoint {}", resource.vpcEndpointId());
         var request = DeleteVpcEndpointsRequest.builder()
                 .vpcEndpointIds(resource.vpcEndpointId())
                 .build();
-        aws().newEC2Client(getRegion()).deleteVpcEndpoints(request);
+        aws().ec2().deleteVpcEndpoints(request);
     }
-
-    @Override
-    protected String getResourceType() {
-        return "VPC Endpoint";
-    }
-
-     */
 }

@@ -25,6 +25,6 @@ public class CreateVPC extends AWSWrite {
         var vpcId = vpc.vpcId();
         success(Output.AWS.VPCId, vpcId);
         
-        log().debug("VPC {}/{} created", aws().getRegion(), vpcId);
+        log().debug("VPC {} / {} created", aws().getRegion(), vpcId);
     }
 }

@@ -166,10 +166,14 @@ public abstract class BaseTask implements Task {
         return match ? "X" : "O";
     }
 
-    public List<Task> delegate(Task... tasks) {
+    public List<Task> delegateAll(Task... tasks) {
         return Stream.of(tasks)
                 .map(t -> t.withInputs(getInputs()))
                 .toList();
+    }
+
+    public Task delegate(Task task){
+        return task.withInputs(getInputs());
     }
 
     public Optional<String> inputString(Input key){

@@ -1,49 +1,42 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Output;
 import software.amazon.awssdk.services.ec2.model.VpcEndpoint;
 import cloudjanitor.aws.AWSFilter;
 import cloudjanitor.spi.Task;
 
-import java.util.List;
+import javax.enterprise.context.Dependent;
 import java.util.stream.Stream;
 
+import static cloudjanitor.Input.AWS.TargetVpcId;
+import static cloudjanitor.Output.AWS.VPCEndpointsMatch;
+
+@Dependent
 public class FilterVPCEndpoints extends AWSFilter {
-    /*
-
-    private String vpcId;
-
-    public FilterVPCEndpoints(String vpcId) {
-        this.vpcId = vpcId;
-    }
 
     private boolean match(VpcEndpoint resource) {
-        var prefix = getAwsCleanupPrefix();
-        var match = resource.vpcId().equals(vpcId);
-        match = match || resource.tags().stream()
-                .anyMatch(tag -> tag.key().equals("Name")
-                        && tag.value().startsWith(prefix));
-        log().trace("Found VPC Endpoint {} {}", mark(match), resource);
+        var vpcId = inputString(TargetVpcId);
+        var match = true;
+        if (vpcId.isPresent()){
+            match = match && resource.vpcId().equals(vpcId.get());
+        }
+        var prefix = aws().config().filterPrefix();
+            if (prefix.isPresent()) {
+                match = match || resource.tags().stream()
+                        .anyMatch(tag -> tag.key().equals("Name")
+                                && tag.value().startsWith(prefix.get()));
+            }
+        log().trace("Found VPC Endpoint {} {}", matchMark(match), resource);
         return match;
     }
 
     @Override
-    protected List<VpcEndpoint> filterResources() {
-        var client = aws().newEC2Client(getRegion());
+    public void apply() {
+        var client = aws().ec2();
         var resources = client.describeVpcEndpoints().vpcEndpoints();
         var matches = resources.stream().filter(this::match).toList();
-        return matches;
+        success(VPCEndpointsMatch, matches);
     }
 
-    @Override
-    protected Stream<Task> mapSubtasks(VpcEndpoint resource) {
-        return Stream.of(new DeleteVPCEndpoint(resource));
-    }
-
-    @Override
-    protected String getResourceType() {
-        return "VPC Endpoint";
-    }
-
-     */
 }
 

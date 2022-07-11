@@ -1,16 +1,12 @@
 package cloudjanitor;
 
 import cloudjanitor.aws.AWSClients;
+import cloudjanitor.spi.Task;
 import io.quarkus.test.junit.QuarkusTest;
-import org.eclipse.microprofile.config.ConfigProvider;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import software.amazon.awssdk.regions.Region;
 
 import javax.inject.Inject;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -35,5 +31,9 @@ public class TaskTest {
 
     protected Configuration config(){
         return config;
+    }
+
+    protected Task submit(Task task){
+        return tasks.submit(task);
     }
 }

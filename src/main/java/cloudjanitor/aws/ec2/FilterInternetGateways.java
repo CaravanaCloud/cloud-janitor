@@ -1,14 +1,10 @@
 package cloudjanitor.aws.ec2;
 
 import cloudjanitor.Input;
-import cloudjanitor.Output;
 import software.amazon.awssdk.services.ec2.model.InternetGateway;
 import cloudjanitor.aws.AWSFilter;
-import cloudjanitor.spi.Task;
 
 import javax.enterprise.context.Dependent;
-import java.util.List;
-import java.util.stream.Stream;
 
 import static cloudjanitor.Output.AWS.*;
 
@@ -39,7 +35,7 @@ public class FilterInternetGateways extends AWSFilter {
 
     @Override
     public void apply() {
-        var client = aws().newEC2Client(getRegion());
+        var client = aws().ec2(getRegion());
         var resources = client.describeInternetGateways().internetGateways();
         var matches = resources.stream().filter(this::match).toList();
         success(InternetGatewayMatch, matches);

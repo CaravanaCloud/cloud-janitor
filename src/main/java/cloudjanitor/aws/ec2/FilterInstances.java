@@ -48,6 +48,7 @@ public class FilterInstances extends AWSFilter {
         var reservations = ec2.describeInstancesPaginator(describeInstances).reservations().stream();
         var instances = reservations.flatMap(reservation -> reservation.instances().stream()).toList();
         var matches = instances.stream().filter(this::match).toList();
+        log().debug("Matched {}/{} instances on {}", instances.size(), matches.size(), getRegion());
         success(InstancesMatch, matches);
     }
 }

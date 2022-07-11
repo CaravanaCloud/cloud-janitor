@@ -19,9 +19,9 @@ public class CleanupAWS extends AWSFilter {
     public void apply() {
         var account = getCallerIdentityTask.outputString(Output.AWS.Account);
         if(account.isPresent()){
-            log().info("Cleanup AWS Account {}.", account.get());
+            log().info("Cleanup AWS Account {}", account.get());
         }else{
-            log().warn("Could not find AWS account to cleanup.");
+            log().warn("Could not find AWS account to cleanup");
         }
     }
 

@@ -31,6 +31,9 @@ public class DeleteVPC extends AWSWrite {
     @Inject
     DeleteSecurityGroups deleteSecurityGroups;
 
+    @Inject
+    DeleteLoadBalancers deleteLoadBalancers;
+
     @Override
     public void apply() {
         var vpcId = getInputString(TargetVpcId);
@@ -44,8 +47,9 @@ public class DeleteVPC extends AWSWrite {
 
     @Override
     public List<Task> getDependencies() {
-        return delegate(
+        return delegateAll(
                 terminateInstances,
+                deleteLoadBalancers,
                 deleteSecurityGroupRules,
                 deleteSecurityGroups,
                 cleanupSubnets,

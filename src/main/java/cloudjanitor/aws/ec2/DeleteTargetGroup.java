@@ -1,28 +1,23 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Input;
+import cloudjanitor.aws.AWSWrite;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.DeleteTargetGroupRequest;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetGroup;
-import cloudjanitor.aws.AWSCleanup;
 
-public class DeleteTargetGroup extends AWSCleanup {
-    /*
-    public DeleteTargetGroup(TargetGroup resource) {
-         super(resource);
-    }
+import javax.enterprise.context.Dependent;
+
+@Dependent
+public class DeleteTargetGroup extends AWSWrite {
 
     @Override
-    public void cleanup(TargetGroup resource) {
+    public void apply() {
+        var resource = getInput(Input.AWS.TargetTargetGroup, TargetGroup.class);
         log().debug("Deleting Target group {}", resource.targetGroupArn());
         var request = DeleteTargetGroupRequest.builder()
                 .targetGroupArn(resource.targetGroupArn())
                 .build();
-        aws().getELBClientV2(getRegionOrDefault()).deleteTargetGroup(request);
+        aws().elbv2().deleteTargetGroup(request);
     }
 
-    @Override
-    protected String getResourceType() {
-        return "Target Group";
-    }
-
-    */
 }

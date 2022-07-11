@@ -1,37 +1,36 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.aws.AWSWrite;
 import software.amazon.awssdk.services.ec2.model.DeleteNetworkInterfaceRequest;
 import software.amazon.awssdk.services.ec2.model.DescribeNetworkInterfacesRequest;
 import software.amazon.awssdk.services.ec2.model.NetworkInterface;
-import cloudjanitor.aws.AWSCleanup;
 
-import java.util.Optional;
+import javax.enterprise.context.Dependent;
 
-public class DeleteNetworkInterface extends AWSCleanup {
-    /*
+import static cloudjanitor.Input.AWS.TargetNetworkInterface;
 
-    public DeleteNetworkInterface(NetworkInterface resource) {
-        super(resource);
-    }
+@Dependent
+public class DeleteNetworkInterface extends AWSWrite {
 
     @Override
-    public void cleanup(NetworkInterface resource) {
-        var eniId = resource.networkInterfaceId();
-        if(canDelete(resource))
+    public void apply() {
+        var eni = getInput(TargetNetworkInterface , NetworkInterface.class);
+        var eniId = eni.networkInterfaceId();
+        if(canDelete(eni))
             try {
                 log().debug("Deleting ENI {} {}", eniId,
-                        name(resource),
-                        resource.status());
+                        name(eni),
+                        eni.status());
                 var request = DeleteNetworkInterfaceRequest.builder()
-                        .networkInterfaceId(resource.networkInterfaceId())
+                        .networkInterfaceId(eni.networkInterfaceId())
                         .build();
-                aws().newEC2Client(getRegion()).deleteNetworkInterface(request);
+                aws().ec2().deleteNetworkInterface(request);
             } catch (Exception ex){
                 log().error("Failed to delete ENI {}", eniId);
                 throw new RuntimeException(ex);
             }
         else{
-            log().debug("ENI {} can't be deleted", resource.networkInterfaceId());
+            log().debug("ENI {} can't be deleted", eni.networkInterfaceId());
         }
     }
 
@@ -50,7 +49,7 @@ public class DeleteNetworkInterface extends AWSCleanup {
                 .networkInterfaceIds(resource.networkInterfaceId())
                 .build();
         try{
-            var describe = aws().newEC2Client(getRegion())
+            var describe = aws().ec2(getRegion())
                     .describeNetworkInterfaces(req)
                     .networkInterfaces();
             if (! describe.isEmpty()){
@@ -73,15 +72,4 @@ public class DeleteNetworkInterface extends AWSCleanup {
 
     }
 
-    @Override
-    protected String getResourceType() {
-        return "Network Interface";
-    }
-
-    @Override
-    public Optional<Long> getWaitAfterRun() {
-        return Optional.of(15_000L);
-    }
-
-     */
 }

@@ -1,26 +1,22 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Input;
+import cloudjanitor.aws.AWSWrite;
 import software.amazon.awssdk.services.ec2.model.Address;
 import software.amazon.awssdk.services.ec2.model.ReleaseAddressRequest;
-import cloudjanitor.aws.AWSCleanup;
 
-public class ReleaseAddress extends AWSCleanup {
-    /*
-    public ReleaseAddress(Address addr) {
-        super(addr);
-    }
+import javax.enterprise.context.Dependent;
+
+@Dependent
+public class ReleaseAddress extends AWSWrite {
 
     @Override
-    public void cleanup(Address resource) {
-        log().debug("Releasing address {}", resource.publicIp());
-        var request = ReleaseAddressRequest.builder().allocationId(resource.allocationId()).build();
-        aws().newEC2Client(getRegion()).releaseAddress(request);
+    public void apply() {
+        var resource = input(Input.AWS.Address, Address.class);
+        log().debug("Releasing address {}", resource.get().publicIp());
+        var request = ReleaseAddressRequest.builder().allocationId(resource.get().allocationId()).build();
+        aws().ec2().releaseAddress(request);
+        success();
     }
 
-    @Override
-    protected String getResourceType() {
-        return "Address";
-    }
-
-    */
 }

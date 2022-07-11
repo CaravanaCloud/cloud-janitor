@@ -1,7 +1,7 @@
 package cloudjanitor.aws.ec2;
 
 import cloudjanitor.Output;
-import cloudjanitor.aws.AWSCleanup;
+import cloudjanitor.aws.AWSWrite;
 import cloudjanitor.spi.Task;
 import org.awaitility.core.ConditionTimeoutException;
 import software.amazon.awssdk.services.ec2.model.*;
@@ -11,7 +11,6 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.List;
 
-import static cloudjanitor.Input.AWS.TargetVpcId;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static software.amazon.awssdk.services.ec2.model.InstanceStateName.RUNNING;
@@ -19,7 +18,7 @@ import static software.amazon.awssdk.services.ec2.model.InstanceStateName.SHUTTI
 import static org.awaitility.Awaitility.*;
 
 @Dependent
-public class DeleteSubnets extends AWSCleanup {
+public class DeleteSubnets extends AWSWrite {
     @Inject
     FilterSubnets filterSubnets;
 
@@ -27,7 +26,7 @@ public class DeleteSubnets extends AWSCleanup {
     Instance<DeleteSubnet> deleteSubnet;
 
     @Override
-    public List<Task> getDependencies() {
+    public Task getDependency() {
         return delegate(filterSubnets);
     }
 

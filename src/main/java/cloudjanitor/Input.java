@@ -4,6 +4,6 @@ public interface Input {
     enum AWS implements Input{
         TargetVpcId,
         VpcCIDR,
-        RouteTable;
+        RouteTable, TargetLoadBalancerArn, TargetLoadBalancerName, TargetNatGatewayId, TargetNetworkInterfaceId, TargetNetworkInterface, ResourceRecordSet, TargetRouteTable, TargetTargetGroup, TargetVPCEndpoint, Address, TargetBucketName;
     }
 }

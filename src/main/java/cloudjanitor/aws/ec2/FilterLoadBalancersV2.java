@@ -3,11 +3,10 @@ package cloudjanitor.aws.ec2;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
 import cloudjanitor.Output;
 import cloudjanitor.aws.AWSFilter;
-import cloudjanitor.spi.Task;
 
-import java.util.List;
-import java.util.stream.Stream;
+import javax.enterprise.context.Dependent;
 
+@Dependent
 public class FilterLoadBalancersV2 extends AWSFilter {
 
     private boolean match(LoadBalancer resource) {
@@ -17,7 +16,7 @@ public class FilterLoadBalancersV2 extends AWSFilter {
 
     @Override
     public void apply() {
-        var elb = aws().getELBClientV2();
+        var elb = aws().elbv2();
         var resources = elb.describeLoadBalancers().loadBalancers();
         var matches = resources.stream().filter(this::match).toList();
         success(Output.AWS.ELBV2Match, matches);

@@ -1,24 +1,19 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Input;
+import cloudjanitor.aws.AWSWrite;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.DeleteLoadBalancerRequest;
-import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
-import cloudjanitor.aws.AWSCleanup;
 
-public class DeleteLoadBalancer extends AWSCleanup {
-    /*
-
-    public DeleteLoadBalancer(LoadBalancer resource) {
-        super(resource);
-    }
+public class DeleteLoadBalancer extends AWSWrite {
 
     @Override
-    public void cleanup(LoadBalancer resource) {
-        log().info("Deleting ELBV2 {}", resource.loadBalancerArn());
+    public void apply() {
+        var albArn = getInput(Input.AWS.TargetLoadBalancerArn, String.class);
+        log().info("Deleting ELBV2 {}", albArn);
         var request = DeleteLoadBalancerRequest.builder()
-                .loadBalancerArn(resource.loadBalancerArn())
+                .loadBalancerArn(albArn)
                 .build();
-        aws().getELBClientV2().deleteLoadBalancer(request);
+        aws().elbv2().deleteLoadBalancer(request);
+        success();
     }
-
-     */
 }

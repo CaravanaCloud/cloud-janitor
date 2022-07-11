@@ -1,13 +1,13 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.aws.AWSWrite;
 import software.amazon.awssdk.services.ec2.model.DeleteSubnetRequest;
 import software.amazon.awssdk.services.ec2.model.Subnet;
-import cloudjanitor.aws.AWSCleanup;
 
 import javax.enterprise.context.Dependent;
 
 @Dependent
-public class DeleteSubnet extends AWSCleanup {
+public class DeleteSubnet extends AWSWrite {
     String subnetId;
 
     public DeleteSubnet withSubnet(Subnet subnet) {

@@ -1,4 +1,4 @@
-package cloudjanitor.aws.ec2;
+package cloudjanitor.aws.route53;
 
 import cloudjanitor.aws.AWSFilter;
 

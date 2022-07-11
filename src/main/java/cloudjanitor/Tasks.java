@@ -127,7 +127,7 @@ public class Tasks {
 
     public void init(String[] args) {
         log.info("Configuration: {}", config);
-        log.info("Args: {}", args);
+        log.info("Args: {}", String.join(",", args));
         if(!config.dryRun()){
             try {
                 Thread.sleep(3000);
