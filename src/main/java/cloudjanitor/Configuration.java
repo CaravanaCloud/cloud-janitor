@@ -11,6 +11,7 @@ import cloudjanitor.spi.Task;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -34,5 +35,16 @@ public interface Configuration {
     long waitBeforeRun();
     @WithName("inputs")
     Map<String, String> inputs();
+
+    default Path getApplicationPath(){
+        var home = System.getProperty("user.home");
+        var homePath = Path.of(home);
+        var appPath = homePath.resolve(".cj");
+        var appDir = appPath.toFile();
+        if (! appDir.exists()){
+            appDir.mkdirs();
+        }
+        return appPath;
+    }
 
 }
