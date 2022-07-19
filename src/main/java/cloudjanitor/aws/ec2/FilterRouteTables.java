@@ -1,14 +1,10 @@
 package cloudjanitor.aws.ec2;
 
 import cloudjanitor.Input;
-import cloudjanitor.Output;
 import software.amazon.awssdk.services.ec2.model.RouteTable;
 import cloudjanitor.aws.AWSFilter;
-import cloudjanitor.spi.Task;
 
 import javax.enterprise.context.Dependent;
-import java.util.List;
-import java.util.stream.Stream;
 
 import static cloudjanitor.Output.AWS.RouteTablesMatch;
 
@@ -18,7 +14,7 @@ public class FilterRouteTables extends AWSFilter {
     private boolean match(RouteTable resource) {
         var match = true;
 
-        var vpcId = input(Input.AWS.TargetVpcId);
+        var vpcId = inputAs(Input.AWS.TargetVpcId);
         if (vpcId.isPresent()){
             var matchVpcId = resource.vpcId();
             var targetVpcId = vpcId.get().toString();

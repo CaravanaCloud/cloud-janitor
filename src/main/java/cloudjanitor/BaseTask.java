@@ -60,9 +60,8 @@ public abstract class BaseTask implements Task {
     }
 
     /* Utility Methods */
-    protected void success(Output output, Object value){
-        outputs.put(output, value);
-        log().debug("{} / {} := {}", toString(), output.toString(), value.toString());
+    protected void success(Output key, Object value){
+        output(key, value);
     }
 
     protected void success(){
@@ -70,6 +69,7 @@ public abstract class BaseTask implements Task {
     }
 
     protected void error(String message) {
+        log().error("Failed to create data bucket");
         getErrors().put(Errors.Message ,message);
     }
 
@@ -148,18 +148,23 @@ public abstract class BaseTask implements Task {
         return inputs.get(key);
     }
 
-    public Optional<Object> input(Input key){
+    public Optional<Object> inputAs(Input key){
         return Optional.ofNullable(inputs.get(key));
     }
 
     @SuppressWarnings("unchecked")
-    public <T> Optional<T> input(Input key, Class<T> clazz){
+    public <T> Optional<T> inputAs(Input key, Class<T> clazz){
         return (Optional<T>) Optional.ofNullable(inputs.get(key));
     }
 
     @SuppressWarnings("unchecked")
+    public <T> Optional<T> outputAs(Output key, Class<T> clazz){
+        return (Optional<T>) Optional.ofNullable(outputs.get(key));
+    }
+
+    @SuppressWarnings("unchecked")
     public <T> T getInput(Input key, Class<T> inputClass){
-        return (T) input(key).get();
+        return (T) inputAs(key).get();
     }
 
     public String matchMark(boolean match){
@@ -177,11 +182,24 @@ public abstract class BaseTask implements Task {
     }
 
     public Optional<String> inputString(Input key){
-        return input(key).map(o -> o.toString());
+        return inputAs(key).map(o -> o.toString());
     }
 
     public Object output(Output key, Object value){
-        return outputs.put(key, value);
+        if (value instanceof Optional<?> opt){
+            if(opt.isPresent()){
+                value = opt.get();
+            }else{
+                value = null;
+            }
+        }
+        if (value != null) {
+            log().trace("{} / {} := {}", toString(), key.toString(), value.toString());
+            return outputs.put(key, value);
+        } else return null;
     }
 
+    public String getOutputString(Output key){
+        return output(key).map(o -> o.toString()).get();
+    }
 }

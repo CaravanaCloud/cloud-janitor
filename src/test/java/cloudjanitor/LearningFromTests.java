@@ -2,7 +2,9 @@ package cloudjanitor;
 
 import cloudjanitor.aws.ec2.DeleteEmptyVPCTest;
 import cloudjanitor.aws.ec2.DeleteVPCWithPrivateSubnetsTest;
+import cloudjanitor.aws.ec2.DeleteVPCWithRouteTablesTest;
 import cloudjanitor.aws.sts.GetCallerIdentityTask;
+import cloudjanitor.marvin.MarvinTask;
 import cloudjanitor.simple.HelloTask;
 import cloudjanitor.simple.HelloTaskTest;
 import cloudjanitor.simple.ToUppperTask;
@@ -15,6 +17,7 @@ import cloudjanitor.simple.ToUppperTaskTest;
 @SuppressWarnings("all")
 public class LearningFromTests {
     Class[] simpleTasks = new Class[]{
+            MarvinTask.class,
             HelloTaskTest.class,
             ToUppperTaskTest.class
     };
@@ -28,6 +31,7 @@ public class LearningFromTests {
     };
 
     Class[] populatedTests = {
-            DeleteVPCWithPrivateSubnetsTest.class
+            DeleteVPCWithPrivateSubnetsTest.class,
+            DeleteVPCWithRouteTablesTest.class
     };
 }

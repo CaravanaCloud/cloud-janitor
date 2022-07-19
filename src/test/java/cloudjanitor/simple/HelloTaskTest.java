@@ -21,6 +21,7 @@ public class HelloTaskTest {
     public void testHello(){
         tasks.submit(helloTask);
         var message = helloTask.outputString(Output.Sample.Message);
+        assertTrue(message.isPresent());
         assertEquals("hello world!", message.get());
     }
 }
