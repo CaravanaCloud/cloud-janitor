@@ -12,6 +12,8 @@ A key automation in this context is "cleaning up" an AWS account, for example. T
 
 **Resource Filtering** - Only the matched resources, and their dependents, are deleted.
 
+**Simple to customize and extend** - Take custom actions, such as scale down or notify, instead of delete.
+
 **Logs & Reporting** - Keep a record of invocations and their results for queries, visualization and audits.
 
 **Rate Limiting** - API limits and throttling are respected with backoffs.
