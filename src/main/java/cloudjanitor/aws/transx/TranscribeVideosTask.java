@@ -52,7 +52,7 @@ public class TranscribeVideosTask extends AWSWrite {
     public void apply() {
         var files = filterFiles.outputList(FilesMatch, Path.class);
         log().debug("Found {} videos to transcribe: {}", files.size(), files);
-        files.stream().forEach(this::transcribe);
+        files.stream().parallel().forEach(this::transcribe);
     }
 
     private void transcribe(Path path) {
@@ -78,7 +78,7 @@ public class TranscribeVideosTask extends AWSWrite {
     }
 
     private void awaitTranscribe(Transcription tc) {
-            await().atMost(5, MINUTES)
+            await().atMost(10, MINUTES)
                     .pollInterval(getPollInterval(), SECONDS)
                     .until(() -> transcriptionCompleted(tc));
     }

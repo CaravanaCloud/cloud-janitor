@@ -41,3 +41,6 @@ cloud-janitor.csv
 
 .env
 .env
+
+data/test-samples/transcribe/*.srt
+

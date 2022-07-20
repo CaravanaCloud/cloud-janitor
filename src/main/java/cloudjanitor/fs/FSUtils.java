@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FSUtils {
@@ -67,8 +69,10 @@ public class FSUtils {
         var extension = Optional.of("mp4");
         var dataDirMatch = filterLocalFiles(getDataDir(), extension);
         var videosDirMatch = filterLocalFiles(getVideosDir(), extension);
-        var currentDir = filterLocalFiles(getCurrentDir(), extension);
-        return Stream.concat(dataDirMatch.stream(), videosDirMatch.stream()).toList();
+        var currentDirMatch = filterLocalFiles(getCurrentDir(), extension);
+        return Stream.of(dataDirMatch, videosDirMatch, currentDirMatch)
+                .flatMap(Collection::stream)
+                .toList();
     }
 
     private static Path getCurrentDir() {
