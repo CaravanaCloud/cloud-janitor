@@ -30,7 +30,15 @@ Once your workspace is running use the command ```aws configure``` to setup your
 
 You can run cloud-janitor in development mode by executing ```quarkus dev```, ```mvn quarkus:dev``` or simply running the class ```cloudjanitor.Main```. The default task is called "marvin" and is mostly harmless. It will just log the most important reminder: "Don't panic" :) 
 
-Ready to start janitoring? Check the ```LearningFromTests``` class for some examples.  
+Ready to start janitoring? Check the ```LearningFromTests``` class for some examples.
+
+# Contribute to Cloud Janitor
+
+Yes, we need your help :)
+
+Besides that, contributing to cloud janitor is a great way to learn Java and AWS. We are glad to help you gest started and build upon this repository as you'd like.
+
+We have a weekly office-hours session to work together, do join the [event on google calendar](https://calendar.google.com/event?action=TEMPLATE&tmeid=NDVxZGo5bTAwYWdqNmRwMGNkc2ZqOHF0cmtfMjAyMjA3MjZUMTYwMDAwWiBqdWxpb0BjYXJhdmFuYS5jbG91ZA&tmsrc=julio%40caravana.cloud&scp=ALL)
 
 # Executing Cloud Janitor
 
