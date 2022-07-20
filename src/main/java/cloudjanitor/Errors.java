@@ -2,6 +2,8 @@ package cloudjanitor;
 
 public interface Errors {
 
-    Errors Message = null;
-        
+    enum Type implements Errors {
+        Message,
+        Exception
+    }
 }

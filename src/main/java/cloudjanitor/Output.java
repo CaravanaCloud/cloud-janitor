@@ -1,11 +1,11 @@
 package cloudjanitor;
 
-import cloudjanitor.spi.Task;
-import software.amazon.awssdk.services.ec2.model.Subnet;
-import software.amazon.awssdk.services.ec2.model.Vpc;
-import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
-
 public interface Output {
+    enum Local implements Output {
+        FilesMatch
+
+    }
+
     enum Sample implements Output{
         Message, UpperMessage
         ;
@@ -17,6 +17,6 @@ public interface Output {
         SubnetMatch,
         ELBV2Match, 
         VPCId,
-        InternetGatewayMatch, RouteTablesMatch, InstancesMatch, SecurityGroupRulesMatch, IpPermissionsMatch, SecurityGroupsMatch, LoadBalancerMatch, AddressMatch, LBDescriptionMatch, NatGatewaysMatch, NetworkINterfacesMatch, RegionMatches, RouteTableRulesMatch, TargetGroupsMatch, VPCEndpointsMatch, Bucket;
+        InternetGatewayMatch, RouteTablesMatch, InstancesMatch, SecurityGroupRulesMatch, IpPermissionsMatch, SecurityGroupsMatch, LoadBalancerMatch, AddressMatch, LBDescriptionMatch, NatGatewaysMatch, NetworkINterfacesMatch, RegionMatches, RouteTableRulesMatch, TargetGroupsMatch, VPCEndpointsMatch, S3Bucket;
     }
 }

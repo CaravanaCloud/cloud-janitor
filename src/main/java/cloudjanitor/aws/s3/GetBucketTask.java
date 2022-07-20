@@ -2,7 +2,6 @@ package cloudjanitor.aws.s3;
 
 import cloudjanitor.Output;
 import cloudjanitor.aws.AWSTask;
-import software.amazon.awssdk.services.s3.model.Bucket;
 import software.amazon.awssdk.services.s3.model.ListBucketsRequest;
 
 import javax.enterprise.context.Dependent;
@@ -24,7 +23,7 @@ public class GetBucketTask extends AWSTask {
                 .findAny();
         if (match.isPresent()){
             log().debug("Found bucket {}", bucketName);
-            success(Output.AWS.Bucket, match.get());
+            success(Output.AWS.S3Bucket, match.get());
         }else{
             log().debug("Bucket not found");
             success();

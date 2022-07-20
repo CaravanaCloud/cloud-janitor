@@ -19,7 +19,7 @@ class GetDataBucketTest extends TaskTest {
     @Test
     public void testGetDataBucket(){
         submit(getDataBucket);
-        var bucket = getDataBucket.outputAs(Output.AWS.Bucket, Bucket.class);
+        var bucket = getDataBucket.outputAs(Output.AWS.S3Bucket, Bucket.class);
         assertTrue(bucket.isPresent());
         log().debug("Got data bucket {}", bucket.get().name());
     }

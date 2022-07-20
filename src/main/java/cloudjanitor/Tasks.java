@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static cloudjanitor.Errors.Type.Message;
+
 @ApplicationScoped
 public class Tasks {
     static final LocalDateTime startTime = LocalDateTime.now();
@@ -58,11 +60,12 @@ public class Tasks {
     }
 
     private List<Task> lookupTasks(String taskName) {
-        log.debug("Looking up task "+taskName);
-        return bm.getBeans(taskName)
+        var tasks = bm.getBeans(taskName)
                 .stream()
                 .map(this::fromBean)
                 .toList();
+        log.info("Loaded {} tasks with name {} ", tasks.size(), taskName);
+        return tasks;
     }
 
     public Task submit(Task task) {
@@ -88,7 +91,7 @@ public class Tasks {
         history.add(task);
         if (task.isWrite()
                 && config.dryRun()) {
-            log.trace("Dry run: {}", task);
+            log.warn("Refusing to write on dry-run: {}", task);
         } else {
             try {
                 task.setStartTime(LocalDateTime.now());
@@ -101,7 +104,7 @@ public class Tasks {
                     rateLimiter.waitAfterTask(task);
                 }
             } catch (Exception e) {
-                task.getErrors().put(Errors.Message, e.getMessage());
+                task.getErrors().put(Message, e.getMessage());
                 log.error("Error executing {}: {}", task.toString(), e.getMessage());
             }
         }

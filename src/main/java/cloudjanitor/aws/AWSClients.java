@@ -12,6 +12,8 @@ import software.amazon.awssdk.services.elasticloadbalancingv2.ElasticLoadBalanci
 import software.amazon.awssdk.services.route53.Route53Client;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.sts.StsClient;
+import software.amazon.awssdk.services.transcribe.TranscribeClient;
+import software.amazon.awssdk.transfer.s3.S3TransferManager;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -40,7 +42,7 @@ public class AWSClients {
     }
     // Clients //
 
-    public StsClient getSTSClient() {
+    public StsClient sts() {
         var sts = StsClient.builder().region(getRegion()).build();
         return sts;
     }
@@ -81,7 +83,7 @@ public class AWSClients {
                 case "S3Client" -> s3(region);
                 case "Route53Client" -> route53();
                 case "Ec2Client" -> ec2(region);
-                case "StsClient" -> getSTSClient();
+                case "StsClient" -> sts();
                 default -> throw new IllegalArgumentException("Unknown client class: " + clientClass.getSimpleName());
             };
         }
@@ -114,8 +116,24 @@ public class AWSClients {
 
 
 
+    public S3TransferManager s3tx(){
+        var tx = S3TransferManager
+                .builder()
+                .s3ClientConfiguration(c -> c.region(getRegion()))
+                .build();
+        return tx;
+    }
     public S3Client s3(){
         return s3(getRegion());
+    }
+
+    public TranscribeClient transcribe(){
+        return transcribe(getRegion());
+    }
+
+    private TranscribeClient transcribe(Region region) {
+        var transcribe = TranscribeClient.builder().region(getRegion()).build();
+        return transcribe;
     }
 
     public S3Client s3(Region region){

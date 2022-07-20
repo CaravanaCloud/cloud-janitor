@@ -1,6 +1,5 @@
 package cloudjanitor.aws.s3;
 
-import cloudjanitor.Errors;
 import cloudjanitor.Input;
 import cloudjanitor.Output;
 import cloudjanitor.aws.AWSWrite;
@@ -34,14 +33,14 @@ public class GetDataBucket extends AWSWrite {
         Optional<Bucket> bucket = getBucket(bucketName);
         if (bucket.isPresent()){
             log().debug("Found data bucket {}", bucket.get().name());
-            success(Output.AWS.Bucket, bucket);
+            success(Output.AWS.S3Bucket, bucket);
         }else {
             log().debug("Data bucket not found {}. Creating...", bucketName);
             submit(createBucket.withInput(Input.AWS.TargetBucketName, bucketName));
             log().debug("Checking if bucket was created");
             bucket = getBucket(bucketName);
             if (bucket.isPresent()){
-                success(Output.AWS.Bucket, bucket);
+                success(Output.AWS.S3Bucket, bucket);
             }else {
                 error("Failed to create data bucket");
             }
@@ -51,7 +50,7 @@ public class GetDataBucket extends AWSWrite {
 
     private Optional<Bucket> getBucket(String bucketName) {
         submit(getBucket.withInput(Input.AWS.TargetBucketName, bucketName));
-        var bucket  = getBucket.outputAs(Output.AWS.Bucket, Bucket.class);
+        var bucket  = getBucket.outputAs(Output.AWS.S3Bucket, Bucket.class);
         return bucket;
     }
 

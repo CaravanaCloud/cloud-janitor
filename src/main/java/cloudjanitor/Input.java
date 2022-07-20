@@ -1,6 +1,11 @@
 package cloudjanitor;
 
 public interface Input {
+    enum  Local implements Input{
+        FileExtension
+
+    }
+
     enum AWS implements Input{
         TargetVpcId,
         VpcCIDR,

@@ -113,7 +113,6 @@
       <version>${awssdk.version}</version>
     </dependency>
 
-    <!--
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>s3-transfer-manager</artifactId>
@@ -125,7 +124,7 @@
         </exclusion>
       </exclusions>
     </dependency>
-    -->
+
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>cloudtrail</artifactId>
@@ -135,6 +134,12 @@
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>athena</artifactId>
+      <version>${awssdk.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>transcribe</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
 

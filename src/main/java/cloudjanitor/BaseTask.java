@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static cloudjanitor.Errors.*;
+import static cloudjanitor.Errors.Type.Message;
+
 @Dependent
 public abstract class BaseTask implements Task {
     @Inject
@@ -69,8 +72,13 @@ public abstract class BaseTask implements Task {
     }
 
     protected void error(String message) {
-        log().error("Failed to create data bucket");
-        getErrors().put(Errors.Message ,message);
+        log().error(message);
+        getErrors().put(Message ,message);
+    }
+
+    protected void error(Exception ex) {
+        log().error(ex.getMessage(), ex);
+        getErrors().put(Type.Exception , ex);
     }
 
     public Optional<Object> output(Output key) {
