@@ -34,11 +34,14 @@ Ready to start janitoring? Check the ```LearningFromTests``` class for some exam
 
 # Contribute to Cloud Janitor
 
-Yes, we need your help :)
+Yes, we need your help and would love to work with you :)
 
 Besides that, contributing to cloud janitor is a great way to learn Java and AWS. We are glad to help you gest started and build upon this repository as you'd like.
 
-We have a weekly office-hours session to work together, do join the [event on google calendar](https://calendar.google.com/event?action=TEMPLATE&tmeid=NDVxZGo5bTAwYWdqNmRwMGNkc2ZqOHF0cmtfMjAyMjA3MjZUMTYwMDAwWiBqdWxpb0BjYXJhdmFuYS5jbG91ZA&tmsrc=julio%40caravana.cloud&scp=ALL)
+We favor asynchronous communication, so the best ways to get in touch would be through our [Discord Channel](https://discord.gg/TGzJK4rmRR)
+
+Also, we have a weekly office-hours session to work together, do join the [event on google calendar](https://calendar.google.com/event?action=TEMPLATE&tmeid=NDVxZGo5bTAwYWdqNmRwMGNkc2ZqOHF0cmtfMjAyMjA3MjZUMTYwMDAwWiBqdWxpb0BjYXJhdmFuYS5jbG91ZA&tmsrc=julio%40caravana.cloud&scp=ALL)
+
 
 # Executing Cloud Janitor
 
