@@ -1,4 +1,4 @@
-    # Cloud Janitor
+# Cloud Janitor
 
 Cloud Janitor is a tool to automate complex maintenance and troubleshooting tasks in cloud computing. It's built considering the security and flexibility requirements found in operating real-world production workloads.
 
