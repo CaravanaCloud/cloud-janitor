@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.text.html.Option;
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,22 +47,33 @@ public class FSUtils {
     }
 
     public static List<Path> filterLocalFiles(Path dir, Optional<String> extension) {
-        log.debug("Starting visitor on {}", dir);
-        var visitor = new FilterVisitor(extension);
-        try{
-            Files.walkFileTree(dir, visitor);
-        }catch (IOException e){
-            log.error(e.getMessage(), e);
+        if(dir.toFile().exists()){
+            log.debug("Starting visitor on {}", dir);
+            var visitor = new FilterVisitor(extension);
+            try{
+                Files.walkFileTree(dir, visitor);
+            }catch (IOException e){
+                log.error(e.getMessage(), e);
+            }
+            var results = visitor.getResults();
+            return  results;
+        }else{
+            log.debug("Directory does not exist, visitor not started. {}", dir);
+            return List.of();
         }
-        var results = visitor.getResults();
-        return  results;
     }
 
     public static List<Path> filterLocalVideos(){
         var extension = Optional.of("mp4");
         var dataDirMatch = filterLocalFiles(getDataDir(), extension);
         var videosDirMatch = filterLocalFiles(getVideosDir(), extension);
+        var currentDir = filterLocalFiles(getCurrentDir(), extension);
         return Stream.concat(dataDirMatch.stream(), videosDirMatch.stream()).toList();
+    }
+
+    private static Path getCurrentDir() {
+        Path userPath = Paths.get(System.getProperty("user.dir"));
+        return userPath;
     }
 
     public static Path getDataDir() {

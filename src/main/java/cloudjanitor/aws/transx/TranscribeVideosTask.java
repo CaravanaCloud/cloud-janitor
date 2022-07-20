@@ -52,7 +52,7 @@ public class TranscribeVideosTask extends AWSWrite {
     public void apply() {
         var files = filterFiles.outputList(FilesMatch, Path.class);
         log().debug("Found {} videos to transcribe: {}", files.size(), files);
-        files.stream().parallel().forEach(this::transcribe);
+        files.stream().forEach(this::transcribe);
     }
 
     private void transcribe(Path path) {

@@ -1,4 +1,4 @@
-# Cloud Janitor
+    # Cloud Janitor
 
 Cloud Janitor is a tool to automate complex maintenance and troubleshooting tasks in cloud computing. It's built considering the security and flexibility requirements found in operating real-world production workloads.
 
@@ -98,7 +98,11 @@ tt:
     cleanup:
       prefix: rhnb-
 ```
-
+## Transcribe Videos
+By default, .mp4 files are loaded from $HOME\.cj and $HOME\Videos
+```
+docker run --pull=always -e CJ_TASK=aws-transcribe-videos -e CJ_DRYRUN=false caravanacloud/cloud-janitor:latest
+```
 # Wishlist:
 - Support more/all AWS Services on cleanup task
 - Improve test coverage
