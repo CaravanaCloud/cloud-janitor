@@ -38,8 +38,6 @@ public class TranscribeVideosTask extends AWSWrite {
 
     static final String prefix = "transcribe/";
 
-
-
     @Override
     public List<Task> getDependencies() {
         return List.of(

@@ -17,7 +17,6 @@ import java.util.Optional;
  * A task is a function to be executed, as a basic unit of work.
  */
 public interface Task {
-
     /**
      * The code to be executed by the Task, if considered *safe* by the TaskManager.
      */
@@ -30,8 +29,9 @@ public interface Task {
      */
     default boolean isWrite(){
         return true;
-    };
+    }
 
+    default void init(){}
     /**
      * Task start time, if started
      */

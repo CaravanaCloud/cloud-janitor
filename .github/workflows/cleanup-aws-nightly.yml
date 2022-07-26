@@ -21,8 +21,8 @@ jobs:
       - name: Verify AWS Authentication
         run: aws sts get-caller-identity
 
-      - name: Task Tree
-        uses: CaravanaCloud/task-tree@v1.0.20220404210504
+      - name: Cloud Janitor
+        uses: CaravanaCloud/cloud-janitor@v1.0.20220404210504
         env:
           TT_TASK: cleanup-aws
           TT_DRYRUN: false

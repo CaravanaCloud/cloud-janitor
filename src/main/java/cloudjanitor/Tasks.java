@@ -68,7 +68,9 @@ public class Tasks {
         return tasks;
     }
 
+    //TODO: Consider cycles
     public Task submit(Task task) {
+        task.init();
         var dependencies = task.getDependencies();
         dependencies.forEach(this::submit);
         runSingle(task);
@@ -87,6 +89,7 @@ public class Tasks {
     }
 
     //TODO: Consider retries
+    //TODO: Consider thread synchronization
     public void runSingle(Task task) {
         history.add(task);
         if (task.isWrite()

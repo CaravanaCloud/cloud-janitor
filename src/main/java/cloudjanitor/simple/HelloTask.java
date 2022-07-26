@@ -15,6 +15,7 @@ public class HelloTask extends BaseTask {
     Logger log;
     @Override
     public void apply() {
+        //TODO: update to new input api
         String message = getConfig()
                 .inputs()
                 .getOrDefault("message", "hello world!");

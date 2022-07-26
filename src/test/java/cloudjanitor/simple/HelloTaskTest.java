@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 
+import static cloudjanitor.Output.Sample.Message;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
@@ -20,7 +21,7 @@ public class HelloTaskTest {
     @Test
     public void testHello(){
         tasks.submit(helloTask);
-        var message = helloTask.outputString(Output.Sample.Message);
+        var message = helloTask.outputString(Message);
         assertTrue(message.isPresent());
         assertEquals("hello world!", message.get());
     }
