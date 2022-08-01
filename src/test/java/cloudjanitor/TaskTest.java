@@ -1,12 +1,15 @@
 package cloudjanitor;
 
 import cloudjanitor.aws.AWSClients;
+import cloudjanitor.aws.DefaultAWSIdentity;
 import cloudjanitor.spi.Task;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
+import software.amazon.awssdk.regions.Region;
 
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
 @QuarkusTest
@@ -14,9 +17,6 @@ import javax.inject.Inject;
 public class TaskTest {
     @Inject
     Logger log;
-
-    @Inject
-    protected AWSClients aws;
 
     @Inject
     protected Tasks tasks;
@@ -34,7 +34,9 @@ public class TaskTest {
     }
 
     protected AWSClients aws(){
-        return aws;
+        var id = DefaultAWSIdentity.of();
+        var region = config.aws().defaultRegion();
+        return AWSClients.of(config.aws(), id, Region.of(region));
     }
 
     protected Configuration config(){

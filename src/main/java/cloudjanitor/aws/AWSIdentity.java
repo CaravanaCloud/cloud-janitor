@@ -11,7 +11,7 @@ public abstract class AWSIdentity {
 
     public abstract AwsCredentialsProvider toCredentialsProvider();
 
-    public AWSIdentity withCallerIdentiy(Optional<CallerIdentity> callerId) {
+    public AWSIdentity withCallerIdentity(Optional<CallerIdentity> callerId) {
         this.callerId = callerId;
         return this;
     }
@@ -21,7 +21,8 @@ public abstract class AWSIdentity {
     }
 
     public String getAccountName() {
-        return callerId.map(CallerIdentity::getAccountName).orElse("? unknown account ?");
+        var name = callerId.map(CallerIdentity::getAccountName).orElse("? account ?");
+        return name;
     }
 
 }

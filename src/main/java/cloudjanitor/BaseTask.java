@@ -116,9 +116,10 @@ public class BaseTask implements Task {
         logger().error(fmt(message), args);
     }
 
-    protected void fail(String message) {
+    protected RuntimeException fail(String message) {
         error(message);
         getErrors().put(Message ,message);
+        return new RuntimeException(message);
     }
 
     private String fmt(String message) {

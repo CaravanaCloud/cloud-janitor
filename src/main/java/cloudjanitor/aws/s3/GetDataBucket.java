@@ -3,6 +3,7 @@ package cloudjanitor.aws.s3;
 import cloudjanitor.Input;
 import cloudjanitor.Output;
 import cloudjanitor.aws.AWSWrite;
+import cloudjanitor.aws.sts.CallerIdentity;
 import cloudjanitor.aws.sts.GetCallerIdentityTask;
 import cloudjanitor.spi.Task;
 import software.amazon.awssdk.services.s3.model.Bucket;
@@ -56,10 +57,15 @@ public class GetDataBucket extends AWSWrite {
 
     private String getDataBucketName() {
         var prefix = "cj";
-        var accountId = getCallerId.getOutputString(Output.AWS.CallerIdentity);
-        var region = getRegion();
-        var bucketName = "%s-%s-%s".formatted(prefix, accountId, region);
-        return bucketName;
+        var callerId = getCallerId.outputAs(Output.AWS.CallerIdentity, CallerIdentity.class);
+        if (callerId.isEmpty()){
+            throw fail("Could not find data bucket without caller id");
+        } else {
+            var accountId = callerId.get().accountId();
+            var region = getRegion();
+            var bucketName = "%s-%s-%s".formatted(prefix, accountId, region);
+            return bucketName;
+        }
     }
 
 }

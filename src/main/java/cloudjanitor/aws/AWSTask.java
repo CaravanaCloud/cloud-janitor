@@ -2,11 +2,15 @@ package cloudjanitor.aws;
 
 import cloudjanitor.Input;
 import cloudjanitor.LogConstants;
+import cloudjanitor.Output;
+import cloudjanitor.aws.sts.CallerIdentity;
+import cloudjanitor.aws.sts.GetCallerIdentityTask;
 import software.amazon.awssdk.regions.Region;
 import cloudjanitor.BaseTask;
 import software.amazon.awssdk.services.ec2.model.Filter;
 
 import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
 import java.util.List;
 
 import static cloudjanitor.Input.AWS.Identity;
@@ -32,10 +36,26 @@ public abstract class AWSTask
             return awsId;
         }
         else{
-            warn("No identity for task");
-            return null;
+            logger().warn("Could not load identity from task input. Using default AWS Identity...");
+            var defaultId = LoadDefaultAWSIdentity();
+            return defaultId;
         }
     }
+
+    @Inject
+    Instance<GetCallerIdentityTask> getCallerIdInstance;
+
+    private AWSIdentity LoadDefaultAWSIdentity() {
+        var id = DefaultAWSIdentity.of();
+        var callerIdTask = (BaseTask) getCallerIdInstance.get()
+                .withInput(Identity, id);
+        submit(callerIdTask);
+        var callerId = callerIdTask.outputAs(Output.AWS.CallerIdentity, CallerIdentity.class);
+        id = id.withCallerIdentity(callerId);
+        setIdentity(id);
+        return id;
+    }
+
     protected void setIdentity(AWSIdentity id){
         getInputs().put(Identity, id);
     }
@@ -70,9 +90,18 @@ public abstract class AWSTask
     }
 
     private List<String> getContext() {
-        return List.of("aws",
-            getAccountName(),
-                getRegionName());
+        var id = getIdentity();
+        if (id != null){
+            String acctName = getAccountName();
+            String region = getRegionName();
+            if (acctName == null || region == null){
+                System.out.println("");
+            }
+            return List.of("aws",
+                    acctName,
+                    region);
+        }
+        else return List.of("aws");
     }
 
     private String getAccountName() {
@@ -83,13 +112,12 @@ public abstract class AWSTask
     }
 
     private String lookupAccountName() {
-        var identityIn = inputAs(Identity, AWSIdentity.class);
-        if (identityIn.isEmpty()){
+        var identityIn = getIdentity();
+        if (identityIn == null){
             System.out.println("Could not find AWS identity for task");
-            return null;
+            return "? unknown account id ?";
         }else{
-            var identity = identityIn.get();
-            return identity.getAccountName();
+            return identityIn.getAccountName();
         }
     }
 

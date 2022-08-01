@@ -16,4 +16,5 @@ public class DeleteVPCWithRouteTablesTest extends CloudFormationTest {
         var vpcMatch = filterVPCs(vpcId);
         assertTrue(vpcMatch.isEmpty());
     }
+
 }

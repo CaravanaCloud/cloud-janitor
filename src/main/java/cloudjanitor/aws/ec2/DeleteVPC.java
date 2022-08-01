@@ -20,7 +20,7 @@ public class DeleteVPC extends AWSWrite {
     DeleteRouteTables cleanRouteTables;
 
     @Inject
-    DeleteInternetGateways deleteInternetGateways;
+    DeleteInternetGateways  deleteInternetGateways;
 
     @Inject
     TerminateInstances terminateInstances;

@@ -40,11 +40,11 @@ public class CloudFormationTest extends TaskTest{
 
     @AfterAll
     private void afterAll(){
-        if (!keepStackAfterTest())
+        if (!retainStackAfterTest())
             deleteStack();
     }
 
-    protected boolean keepStackAfterTest() {
+    protected boolean retainStackAfterTest() {
         return false;
     }
 
