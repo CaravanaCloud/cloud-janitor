@@ -13,7 +13,7 @@ public class ReleaseAddress extends AWSWrite {
     @Override
     public void apply() {
         var resource = inputAs(Input.AWS.Address, Address.class);
-        log().debug("Releasing address {}", resource.get().publicIp());
+        debug("Releasing address {}", resource.get().publicIp());
         var request = ReleaseAddressRequest.builder().allocationId(resource.get().allocationId()).build();
         aws().ec2().releaseAddress(request);
         success();

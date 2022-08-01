@@ -23,8 +23,9 @@ public class CleanupVPCs extends AWSTask {
 
     @Override
     public void apply() {
+        var id = getIdentity();
         var vpcs = outputList(VPCMatch, Vpc.class);
-        log().info("Matched {} VPCs for cleanup on {}", vpcs.size(), getRegion());
+        info("Matched {} VPCs for cleanup on {}", vpcs.size(), getRegion());
         vpcs.forEach(this::deleteVPC);
     }
 

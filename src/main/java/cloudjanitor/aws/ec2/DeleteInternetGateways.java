@@ -35,7 +35,7 @@ public class DeleteInternetGateways extends AWSWrite {
     }
 
     private void deleteAttachment(InternetGateway resource, InternetGatewayAttachment att) {
-        log().debug("Detaching InternetGatewayAttachment {} from {}", att, resource);
+        debug("Detaching InternetGatewayAttachment {} from {}", att, resource);
         var request = DetachInternetGatewayRequest.builder()
                 .internetGatewayId(resource.internetGatewayId())
                 .vpcId(att.vpcId())
@@ -44,7 +44,7 @@ public class DeleteInternetGateways extends AWSWrite {
     }
 
     private void deleteInternetGateway(InternetGateway resource) {
-        log().debug("Deleting internet gateway {}", resource.internetGatewayId());
+        debug("Deleting internet gateway {}", resource.internetGatewayId());
         var request = DeleteInternetGatewayRequest.builder()
                 .internetGatewayId(resource.internetGatewayId())
                 .build();

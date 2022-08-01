@@ -1,5 +1,6 @@
 package cloudjanitor;
 
+import cloudjanitor.aws.AWSConfiguration;
 import io.quarkus.runtime.annotations.StaticInitSafe;
 import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithDefault;
@@ -35,6 +36,10 @@ public interface Configuration {
     long waitBeforeRun();
     @WithName("inputs")
     Map<String, String> inputs();
+
+    @WithName("aws")
+    AWSConfiguration aws();
+
 
     default Path getApplicationPath(){
         var home = System.getProperty("user.home");

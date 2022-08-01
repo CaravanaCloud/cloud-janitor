@@ -18,6 +18,6 @@ public class CreateBucketTask extends AWSWrite {
                 .bucket(bucketName)
                 .build();
         var resp = s3.createBucket(req);
-        log().info("Bucket created {}", bucketName);
+        info("Bucket created {}", bucketName);
     }
 }

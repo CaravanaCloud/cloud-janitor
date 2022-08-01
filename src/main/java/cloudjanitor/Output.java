@@ -8,15 +8,14 @@ public interface Output {
 
     enum Sample implements Output{
         Message, UpperMessage
-        ;
     }
 
     enum AWS implements Output{
-        Account,
+        CallerIdentity,
         VPCMatch,
         SubnetMatch,
         ELBV2Match, 
         VPCId,
-        InternetGatewayMatch, RouteTablesMatch, InstancesMatch, SecurityGroupRulesMatch, IpPermissionsMatch, SecurityGroupsMatch, LoadBalancerMatch, AddressMatch, LBDescriptionMatch, NatGatewaysMatch, NetworkINterfacesMatch, RegionMatches, RouteTableRulesMatch, TargetGroupsMatch, VPCEndpointsMatch, S3Bucket;
+        InternetGatewayMatch, RouteTablesMatch, InstancesMatch, SecurityGroupRulesMatch, IpPermissionsMatch, SecurityGroupsMatch, LoadBalancerMatch, AddressMatch, LBDescriptionMatch, NatGatewaysMatch, NetworkINterfacesMatch, RegionMatches, RouteTableRulesMatch, TargetGroupsMatch, VPCEndpointsMatch, S3Bucket, Identities
     }
 }

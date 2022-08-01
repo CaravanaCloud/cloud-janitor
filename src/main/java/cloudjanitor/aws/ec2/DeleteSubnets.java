@@ -9,7 +9,6 @@ import software.amazon.awssdk.services.ec2.model.*;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import java.util.List;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -42,7 +41,7 @@ public class DeleteSubnets extends AWSWrite {
             var delSubnet = create(deleteSubnet).withSubnet(subnet);
             submit(delSubnet);
         }catch (ConditionTimeoutException ex) {
-            error("Failed to empty subnet for cleanup in time." + subnet.subnetId());
+            fail("Failed to empty subnet for cleanup in time." + subnet.subnetId());
         }
     }
 
@@ -65,7 +64,7 @@ public class DeleteSubnets extends AWSWrite {
                 .filter( state -> RUNNING.equals(state) || SHUTTING_DOWN.equals(state))
                 .findAny()
                 .isPresent();
-        log().debug("Active instances in subnet {}? {}", subnet.subnetId(), activeInstances);
+        debug("Active instances in subnet {}? {}", subnet.subnetId(), activeInstances);
         return ! activeInstances;
     }
 }

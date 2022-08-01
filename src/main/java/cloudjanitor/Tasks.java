@@ -71,11 +71,16 @@ public class Tasks {
     //TODO: Consider cycles
     public Task submit(Task task) {
         task.init();
+        var thisInputs = task.getInputs();
         var dependencies = task.getDependencies();
-        dependencies.forEach(this::submit);
+        dependencies.forEach(d -> {
+            d.getInputs().putAll(thisInputs);
+            submit(d);
+        });
         runSingle(task);
         return task;
     }
+
 
     private Task fromBean(Bean<?> bean) {
         var ctx = bm.createCreationalContext(bean);
@@ -100,7 +105,7 @@ public class Tasks {
                 task.setStartTime(LocalDateTime.now());
                 task.apply();
                 log.trace("Executed {} ({})",
-                        task.toString(),
+                        task,
                         task.isWrite() ? "W" : "R");
                 //TODO: General waiter
                 if (task.isWrite()) {
@@ -108,7 +113,8 @@ public class Tasks {
                 }
             } catch (Exception e) {
                 task.getErrors().put(Message, e.getMessage());
-                log.error("Error executing {}: {}", task.toString(), e.getMessage());
+                log.error("Error executing {}: {}", task, e.getMessage());
+                e.printStackTrace();
             }
         }
         task.setEndTime(LocalDateTime.now());
@@ -125,11 +131,6 @@ public class Tasks {
     }
 
     String[] args;
-
-
-    @Inject
-    AWSClients aws;
-
 
     public void init(String[] args) {
         log.info("Configuration: {}", config);

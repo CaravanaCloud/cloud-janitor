@@ -24,7 +24,7 @@ public class FilterNetworkInterfaces extends AWSFilter {
                     .anyMatch(tag -> tag.key().equals("Name")
                             && tag.value().startsWith(prefix.get()));
         }
-        log().trace("Found Network Interface {} {}", matchMark(match), resource);
+        trace("Found Network Interface {} {}", matchMark(match), resource);
         return match;
     }
 

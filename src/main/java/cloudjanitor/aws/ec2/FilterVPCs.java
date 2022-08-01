@@ -16,7 +16,7 @@ public class FilterVPCs extends AWSFilter {
     public void apply() {
         var vpcs = filterResources();
         success(Output.AWS.VPCMatch, vpcs);
-        log().debug("VPCs filtered region={} target={} found={} ",
+        debug("VPCs filtered region={} target={} found={} ",
                 aws().getRegion(),
                 getTargetVpcId(),
                 vpcs.size());

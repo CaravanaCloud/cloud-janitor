@@ -20,7 +20,7 @@ public class DeleteSubnet extends AWSWrite {
                 .subnetId(subnetId)
                 .build();
         aws().ec2().deleteSubnet(delSub);
-        log().debug("Deleted subnet " + subnetId);
+        debug("Deleted subnet " + subnetId);
     }
 
 

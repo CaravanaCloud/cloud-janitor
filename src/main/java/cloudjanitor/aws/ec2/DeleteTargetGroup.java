@@ -13,7 +13,7 @@ public class DeleteTargetGroup extends AWSWrite {
     @Override
     public void apply() {
         var resource = getInput(Input.AWS.TargetTargetGroup, TargetGroup.class);
-        log().debug("Deleting Target group {}", resource.targetGroupArn());
+        debug("Deleting Target group {}", resource.targetGroupArn());
         var request = DeleteTargetGroupRequest.builder()
                 .targetGroupArn(resource.targetGroupArn())
                 .build();

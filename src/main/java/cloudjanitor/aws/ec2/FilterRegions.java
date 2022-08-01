@@ -9,6 +9,8 @@ import javax.enterprise.context.Dependent;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static cloudjanitor.Output.AWS.RegionMatches;
+
 @Dependent
 public class FilterRegions extends AWSFilter {
 
@@ -24,7 +26,8 @@ public class FilterRegions extends AWSFilter {
                     .filter(this::filterRegion)
                     .map(Region::of)
                     .toList();
-            success(Output.AWS.RegionMatches, matches);
+        info("Matched {}/{} regions. {}", matches.size(), regions.size(), matches);
+        success(RegionMatches, matches);
     }
 
     private boolean filterRegion(String region) {

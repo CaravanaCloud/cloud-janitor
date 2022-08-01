@@ -22,7 +22,7 @@ public class FilterRouteTableRules extends AWSFilter {
                     .anyMatch(tag -> tag.key().equals("Name")
                             && tag.value().startsWith(prefix.get()));
         }
-        log().trace("Found Route Table {} {}", matchMark(match), resource);
+        trace("Found Route Table {} {}", matchMark(match), resource);
         return match;
     }
 

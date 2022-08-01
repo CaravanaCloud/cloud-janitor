@@ -29,7 +29,7 @@ public class FilterInternetGateways extends AWSFilter {
              match = match && vpcMatch;
         }
 
-        log().trace("Found Internet Gateway {} {}", matchMark(match), resource);
+        trace("Found Internet Gateway {} {}", matchMark(match), resource);
         return match;
     }
 

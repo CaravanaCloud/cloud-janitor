@@ -2,14 +2,12 @@ package cloudjanitor.aws;
 
 import io.quarkus.runtime.annotations.StaticInitSafe;
 import io.smallrye.config.ConfigMapping;
-import io.smallrye.config.WithDefault;
 import io.smallrye.config.WithName;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.List;
 import java.util.Optional;
 
-@ConfigMapping(prefix = "cj.aws")
+@ConfigMapping
 @StaticInitSafe
 public interface AWSConfiguration {
     default String defaultRegion(){
@@ -26,4 +24,7 @@ public interface AWSConfiguration {
 
     @WithName("regions")
     Optional<List<String>> regions();
+
+    @WithName("roles")
+    Optional<List<AWSRoleConfig>> roles();
 }

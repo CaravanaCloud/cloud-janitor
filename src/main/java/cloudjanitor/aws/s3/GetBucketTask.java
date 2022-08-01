@@ -22,10 +22,10 @@ public class GetBucketTask extends AWSTask {
                 .filter(b -> bucketName.equals(b.name()))
                 .findAny();
         if (match.isPresent()){
-            log().debug("Found bucket {}", bucketName);
+            debug("Found bucket {}", bucketName);
             success(Output.AWS.S3Bucket, match.get());
         }else{
-            log().debug("Bucket not found");
+            debug("Bucket not found");
             success();
         }
     }

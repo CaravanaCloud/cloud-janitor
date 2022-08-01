@@ -11,7 +11,7 @@
     <maven.compiler.source>17</maven.compiler.source>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-    <quarkus.platform.version>2.10.0.Final</quarkus.platform.version>
+    <quarkus.platform.version>2.11.1.Final</quarkus.platform.version>
     <kogito-quarkus.version>1.16.1.Final</kogito-quarkus.version>
     <awssdk.version>2.17.219</awssdk.version>
     <jackson.version>2.13.2.2</jackson.version>
@@ -71,6 +71,12 @@
     -->
 
     <!-- AWS Clients -->
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>iam</artifactId>
+      <version>${awssdk.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>sts</artifactId>
@@ -143,6 +149,11 @@
       <version>${awssdk.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>translate</artifactId>
+      <version>${awssdk.version}</version>
+    </dependency>
     <!--
     <dependency>
       <groupId>software.amazon.awssdk</groupId>

@@ -12,7 +12,7 @@ public class DeleteRecord extends AWSWrite {
     @Override
     public void apply() {
         var resource = getInput(Input.AWS.ResourceRecordSet, ResourceRecordSet.class);
-        log().debug("Deleting record {}", resource);
+        debug("Deleting record {}", resource);
         var change = Change.builder()
                 .resourceRecordSet(resource)
                 .action(ChangeAction.DELETE)

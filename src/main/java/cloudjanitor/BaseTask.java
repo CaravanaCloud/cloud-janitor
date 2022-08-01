@@ -12,9 +12,8 @@ import java.util.stream.Stream;
 
 import static cloudjanitor.Errors.*;
 import static cloudjanitor.Errors.Type.Message;
-
 @Dependent
-public abstract class BaseTask implements Task {
+public class BaseTask implements Task {
     @Inject
     Tasks tasks;
 
@@ -28,8 +27,14 @@ public abstract class BaseTask implements Task {
     Map<Output, Object> outputs = new HashMap<>();
     Map<Errors, Object> errors = new HashMap<>();
 
+    /* Submits a delegate task for execution */
+    public Task submit(Task delegate){
+        delegate.getInputs().putAll(getInputs());
+        return tasks.submit(delegate);
+    }
 
-    /* Interface Methods */
+
+    /* Task Interface Methods */
     @Override
     public Optional<LocalDateTime> getStartTime() {
         return startTime;
@@ -50,36 +55,7 @@ public abstract class BaseTask implements Task {
         this.endTime = Optional.ofNullable(localDateTime);
     }
 
-    /* Task Chaining */
-
-    @Override
-    public Map<Output, Object> getOutputs() {
-        return outputs;
-    }
-
-    @Override
-    public Map<Errors, Object> getErrors() {
-        return errors;
-    }
-
-    /* Utility Methods */
-    protected void success(Output key, Object value){
-        output(key, value);
-    }
-
-    protected void success(){
-        log().debug("Task success(): {}", toString());
-    }
-
-    protected void error(String message) {
-        log().error(message);
-        getErrors().put(Message ,message);
-    }
-
-    protected void error(Exception ex) {
-        log().error(ex.getMessage(), ex);
-        getErrors().put(Type.Exception , ex);
-    }
+    /* Input, Output and Errors */
 
     public Optional<Object> output(Output key) {
         var result = Optional.ofNullable(getOutputs().get(key));
@@ -97,7 +73,7 @@ public abstract class BaseTask implements Task {
     @SuppressWarnings("unchecked")
     public <T> List<T> outputList(Output key, Class<T> valueClass) {
         return output(key)
-                .map(o -> (List<T>) o) 
+                .map(o -> (List<T>) o)
                 .orElse(List.of());
     }
 
@@ -107,8 +83,72 @@ public abstract class BaseTask implements Task {
                 .map(o -> o.toString());
     }
 
+    @Override
+    public Map<Output, Object> getOutputs() {
+        return outputs;
+    }
 
-    protected Logger log() {
+    @Override
+    public Map<Errors, Object> getErrors() {
+        return errors;
+    }
+
+    protected void success(Output key, Object value){
+        output(key, value);
+    }
+
+    protected void success(){
+        trace("Task success(): {}", this);
+    }
+
+    /* Logging Shortcuts */
+    protected void info(String message, Object... args){
+        logger().info(fmt(message), args);
+    }
+    protected void trace(String message, Object... args){
+        logger().trace(fmt(message), args);
+    }
+    protected void debug(String message, Object... args){
+        logger().debug(fmt(message), args);
+    }
+
+    protected void error(String message, Object... args){
+        logger().error(fmt(message), args);
+    }
+
+    protected void fail(String message) {
+        error(message);
+        getErrors().put(Message ,message);
+    }
+
+    private String fmt(String message) {
+        return getContextString() + getContextSeparator() + message;
+    }
+
+    protected String getContextString() {
+        return "";
+    }
+
+    private String getContextSeparator() {
+        return " || ";
+    }
+
+    protected void fail(Exception ex) {
+        logger().error(ex.getMessage(), ex);
+        ex.printStackTrace();
+        getErrors().put(Type.Exception , ex);
+    }
+
+    protected void warn(String message, Object... args) {
+        logger().warn(fmt(message), args);
+    }
+    protected void warn(Exception ex, String message, Object... args) {
+        warn(ex.getMessage());
+        warn(fmt(message), args);
+    }
+
+
+    protected Logger logger() {
         return LoggerFactory.getLogger(getLoggerName());
     }
 
@@ -123,9 +163,6 @@ public abstract class BaseTask implements Task {
         return config;
     }
 
-    public void submit(Task task){
-        tasks.submit(task);
-    }
 
     @Override
     public Map<Input, Object> getInputs(){
@@ -189,6 +226,13 @@ public abstract class BaseTask implements Task {
         return task.withInputs(getInputs());
     }
 
+    public void submitAll(Task... delegates){
+        Stream.of(delegates).forEach(this::submit);
+    }
+    public void submitAll(List<Task> delegates){
+        delegates.stream().forEach(this::submit);
+    }
+
     public Optional<String> inputString(Input key){
         return inputAs(key).map(o -> o.toString());
     }
@@ -202,12 +246,17 @@ public abstract class BaseTask implements Task {
             }
         }
         if (value != null) {
-            log().trace("{} / {} := {}", toString(), key.toString(), value.toString());
+            trace("{} / {} := {}", toString(), key.toString(), value.toString());
             return outputs.put(key, value);
         } else return null;
     }
 
     public String getOutputString(Output key){
         return output(key).map(o -> o.toString()).get();
+    }
+
+    @Override
+    public boolean isWrite() {
+        return false;
     }
 }

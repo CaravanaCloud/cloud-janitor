@@ -32,17 +32,17 @@ public class GetDataBucket extends AWSWrite {
         var bucketName = getDataBucketName();
         Optional<Bucket> bucket = getBucket(bucketName);
         if (bucket.isPresent()){
-            log().debug("Found data bucket {}", bucket.get().name());
+            debug("Found data bucket {}", bucket.get().name());
             success(Output.AWS.S3Bucket, bucket);
         }else {
-            log().debug("Data bucket not found {}. Creating...", bucketName);
+            debug("Data bucket not found {}. Creating...", bucketName);
             submit(createBucket.withInput(Input.AWS.TargetBucketName, bucketName));
-            log().debug("Checking if bucket was created");
+            debug("Checking if bucket was created");
             bucket = getBucket(bucketName);
             if (bucket.isPresent()){
                 success(Output.AWS.S3Bucket, bucket);
             }else {
-                error("Failed to create data bucket");
+                fail("Failed to create data bucket");
             }
         }
 
@@ -56,7 +56,7 @@ public class GetDataBucket extends AWSWrite {
 
     private String getDataBucketName() {
         var prefix = "cj";
-        var accountId = getCallerId.getOutputString(Output.AWS.Account);
+        var accountId = getCallerId.getOutputString(Output.AWS.CallerIdentity);
         var region = getRegion();
         var bucketName = "%s-%s-%s".formatted(prefix, accountId, region);
         return bucketName;

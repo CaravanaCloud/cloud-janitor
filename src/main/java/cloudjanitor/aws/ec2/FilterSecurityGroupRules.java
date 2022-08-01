@@ -32,7 +32,7 @@ public class FilterSecurityGroupRules extends AWSFilter {
             var newRules = ec2.describeSecurityGroupRules(req).securityGroupRules();
             rules.addAll(newRules);
         }
-        log().debug("Matched {} security group rules ", rules.size());
+        debug("Matched {} security group rules ", rules.size());
         success(SecurityGroupRulesMatch, rules);
     }
 

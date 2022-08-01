@@ -29,7 +29,7 @@ public class FilterRouteTables extends AWSFilter {
                             && tag.value().startsWith(prefix.get()));
             match = match && prefixMatch;
         }
-        log().trace("Found Route Table {} {}  ", matchMark(match), resource);
+        trace("Found Route Table {} {}  ", matchMark(match), resource);
         return match;
     }
 

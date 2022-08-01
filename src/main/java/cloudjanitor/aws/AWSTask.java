@@ -1,46 +1,102 @@
 package cloudjanitor.aws;
 
+import cloudjanitor.Input;
 import cloudjanitor.LogConstants;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import software.amazon.awssdk.core.SdkClient;
 import software.amazon.awssdk.regions.Region;
 import cloudjanitor.BaseTask;
-import cloudjanitor.spi.Task;
 import software.amazon.awssdk.services.ec2.model.Filter;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-import java.util.*;
+import java.util.List;
+
+import static cloudjanitor.Input.AWS.Identity;
 
 public abstract class AWSTask
         extends BaseTask
         implements LogConstants {
 
-    @Inject
-    AWSClients aws;
-
-    public void setRegion(Region region) {
-        aws.setRegion(region);
-    }
+    private String accountName;
+    private String regionName;
 
     public AWSClients aws(){
-        return aws;
+        var identity = getIdentity();
+        var config = getConfig().aws();
+        var region = getRegion();
+        return AWSClients.of(config, identity, region);
     }
+
+    protected AWSIdentity getIdentity() {
+        var id = inputAs(Identity, AWSIdentity.class);
+        if (id.isPresent()){
+            var awsId = id.get();
+            return awsId;
+        }
+        else{
+            warn("No identity for task");
+            return null;
+        }
+    }
+    protected void setIdentity(AWSIdentity id){
+        getInputs().put(Identity, id);
+    }
+
 
     protected <T> T create(Instance<T> instance){
         var result = instance.get();
-        if (result instanceof AWSTask awsTask){
-            awsTask.setRegion(aws().getRegion());
-        }
         return result;
     }
 
     protected Region getRegion(){
-        return aws().getRegion();
+        var regionIn = inputAs(Input.AWS.TargetRegion, Region.class);
+        if (regionIn.isEmpty()){
+            var regionName = getConfig().aws().defaultRegion();
+            return Region.of(regionName);
+        }
+        return regionIn.get();
     }
 
     protected Filter filter(String filterName, String filterValue) {
         return Filter.builder().name(filterName).values(filterValue).build();
+    }
+
+    @Override
+    public boolean isWrite() {
+        return false;
+    }
+
+    @Override
+    protected String getContextString() {
+        return String.join(" - ", getContext());
+    }
+
+    private List<String> getContext() {
+        return List.of("aws",
+            getAccountName(),
+                getRegionName());
+    }
+
+    private String getAccountName() {
+        if(accountName == null){
+            accountName = lookupAccountName();
+        }
+        return accountName;
+    }
+
+    private String lookupAccountName() {
+        var identityIn = inputAs(Identity, AWSIdentity.class);
+        if (identityIn.isEmpty()){
+            System.out.println("Could not find AWS identity for task");
+            return null;
+        }else{
+            var identity = identityIn.get();
+            return identity.getAccountName();
+        }
+    }
+
+    private String getRegionName() {
+        if (regionName == null){
+            regionName = aws().getRegion().toString();
+        }
+        return regionName;
     }
 }

@@ -4,6 +4,7 @@ import cloudjanitor.Errors;
 import cloudjanitor.Input;
 import cloudjanitor.Logs;
 import cloudjanitor.Output;
+import cloudjanitor.aws.sts.CallerIdentity;
 
 import javax.inject.Named;
 import java.time.Duration;
@@ -160,4 +161,5 @@ public interface Task {
     default boolean isSuccess(){
         return getErrors().isEmpty();
     }
+
 }

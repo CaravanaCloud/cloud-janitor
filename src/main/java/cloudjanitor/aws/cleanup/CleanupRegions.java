@@ -1,7 +1,8 @@
-package cloudjanitor.aws;
+package cloudjanitor.aws.cleanup;
 
 import cloudjanitor.Input;
 import cloudjanitor.Output;
+import cloudjanitor.aws.AWSTask;
 import cloudjanitor.aws.cleanup.CleanupRegion;
 import cloudjanitor.aws.ec2.FilterRegions;
 import cloudjanitor.spi.Task;
@@ -29,9 +30,7 @@ public class CleanupRegions extends AWSTask {
     @Override
     public void apply() {
         var regions = filterRegions.outputList(Output.AWS.RegionMatches, Region.class);
-        var matches = regions.stream().filter(this::filterRegion).toList();
-        log().info("Matched {}/{} regions. {}", matches.size(), regions.size(), matches);
-        var tasks = matches.stream().map(this::mapTask);
+        var tasks = regions.stream().map(this::mapTask);
         tasks.forEach(this::submit);
     }
 

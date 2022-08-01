@@ -26,7 +26,7 @@ public class FilterVPCEndpoints extends AWSFilter {
                         .anyMatch(tag -> tag.key().equals("Name")
                                 && tag.value().startsWith(prefix.get()));
             }
-        log().trace("Found VPC Endpoint {} {}", matchMark(match), resource);
+        trace("Found VPC Endpoint {} {}", matchMark(match), resource);
         return match;
     }
 

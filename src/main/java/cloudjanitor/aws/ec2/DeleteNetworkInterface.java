@@ -18,7 +18,7 @@ public class DeleteNetworkInterface extends AWSWrite {
         var eniId = eni.networkInterfaceId();
         if(canDelete(eni))
             try {
-                log().debug("Deleting ENI {} {}", eniId,
+                debug("Deleting ENI {} {}", eniId,
                         name(eni),
                         eni.status());
                 var request = DeleteNetworkInterfaceRequest.builder()
@@ -26,11 +26,11 @@ public class DeleteNetworkInterface extends AWSWrite {
                         .build();
                 aws().ec2().deleteNetworkInterface(request);
             } catch (Exception ex){
-                log().error("Failed to delete ENI {}", eniId);
+                error("Failed to delete ENI {}", eniId);
                 throw new RuntimeException(ex);
             }
         else{
-            log().debug("ENI {} can't be deleted", eni.networkInterfaceId());
+            debug("ENI {} can't be deleted", eni.networkInterfaceId());
         }
     }
 
@@ -55,18 +55,18 @@ public class DeleteNetworkInterface extends AWSWrite {
             if (! describe.isEmpty()){
                 var eni = describe.get(0);
                 var status = eni.status().toString();
-                log().debug("ENI {} still exists with status {}", eni.networkInterfaceId(), status);
+                debug("ENI {} still exists with status {}", eni.networkInterfaceId(), status);
                 boolean result = switch (status) {
                     case "detaching" -> false;
                     default -> true;
                 };
                 return result;
             }else{
-                log().debug("ENI {} no longer exists.", resource.networkInterfaceId());
+                debug("ENI {} no longer exists.", resource.networkInterfaceId());
                 return false;
             }
         }catch (Exception ex) {
-            log().debug("Failed to describe ENI {}, assuming it no longer exists.", resource.networkInterfaceId());
+            debug("Failed to describe ENI {}, assuming it no longer exists.", resource.networkInterfaceId());
             return false;
         }
 

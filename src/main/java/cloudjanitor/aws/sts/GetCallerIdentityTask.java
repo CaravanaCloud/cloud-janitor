@@ -1,26 +1,38 @@
 package cloudjanitor.aws.sts;
 
-import static cloudjanitor.Output.*;
-import cloudjanitor.aws.AWSClients;
+import cloudjanitor.Output;
 import cloudjanitor.aws.AWSFilter;
-import org.slf4j.Logger;
 
 import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
+import java.util.Optional;
 
 @Dependent
 public class GetCallerIdentityTask extends AWSFilter {
-    @Inject
-    Logger log;
-
-    @Inject
-    AWSClients aws;
-
     @Override
     public void apply() {
+        var accountId = lookupAccountId();
+        var accountAlias = lookupAccountAlias(accountId);
+        var callerId = new CallerIdentity(accountId, accountAlias);
+        trace("GetCallerIdentity {}", callerId);
+        success(Output.AWS.CallerIdentity, callerId);
+    }
+
+    private Optional<String> lookupAccountAlias(String accountId) {
+        var iam = aws().iam();
+        var aliases = iam.listAccountAliases().accountAliases();
+        if (aliases.isEmpty()){
+            return Optional.empty();
+        }else{
+            var aliasesStr = String.join(",", aliases);
+            info("Found alias for account {}: {}", accountId, aliasesStr);
+            return Optional.of(aliasesStr);
+        }
+    }
+
+    private String lookupAccountId() {
         var sts = aws().sts();
-        var account = sts.getCallerIdentity().account();
-        success(AWS.Account, account);
-        log.info("Found AWS Account {}", account);
+        var resp = sts.getCallerIdentity();
+        var accountId = resp.account();
+        return accountId;
     }
 }

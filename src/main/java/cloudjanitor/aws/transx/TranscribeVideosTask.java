@@ -49,7 +49,7 @@ public class TranscribeVideosTask extends AWSWrite {
     @Override
     public void apply() {
         var files = filterFiles.outputList(FilesMatch, Path.class);
-        log().debug("Found {} videos to transcribe: {}", files.size(), files);
+        debug("Found {} videos to transcribe: {}", files.size(), files);
         files.stream().parallel().forEach(this::transcribe);
     }
 
@@ -60,7 +60,7 @@ public class TranscribeVideosTask extends AWSWrite {
         requestTranscribe(tc);
         awaitTranscribe(tc);
         download(tc);
-        log().debug("Transcription completed {}", tc);
+        debug("Transcription completed {}", tc);
     }
 
     private void download(Transcription tc) {
@@ -72,7 +72,7 @@ public class TranscribeVideosTask extends AWSWrite {
                         .getObjectRequest(req -> req.bucket(tc.bucketName)
                                 .key(tc.getOutputSrtKey())));
         download.completionFuture().join();
-        log().debug("Transcription downloaded. {}", srtPath.toAbsolutePath().toString());
+        debug("Transcription downloaded. {}", srtPath.toAbsolutePath().toString());
     }
 
     private void awaitTranscribe(Transcription tc) {
@@ -99,7 +99,7 @@ public class TranscribeVideosTask extends AWSWrite {
         var job = aws().transcribe().getTranscriptionJob(req).transcriptionJob();
         var completionTime = job.completionTime();
         var completed = completionTime != null;
-        log().debug("Waiting for transcription to complete. Completed {} ? {}" , tc.transcriptionJobName(), completed);
+        debug("Waiting for transcription to complete. Completed {} ? {}" , tc.transcriptionJobName(), completed);
         tc.transcriptionJob = job;
         return completed;
     }
@@ -121,7 +121,7 @@ public class TranscribeVideosTask extends AWSWrite {
                 .build();
         var job = transcribe.startTranscriptionJob(req).transcriptionJob();
         tc.transcriptionJob = job;
-        log().info("Transcription job started {}", job.transcriptionJobName());
+        info("Transcription job started {}", job.transcriptionJobName());
     }
 
 
@@ -137,7 +137,7 @@ public class TranscribeVideosTask extends AWSWrite {
         var objUrl = "s3://%s/%s%s".formatted(bucketName, prefix, objKey);
         tc.bucketName = bucketName;
         tc.sourceKey = objKey;
-        log().debug("Uploaded {} as {} ", path, objUrl);
+        debug("Uploaded {} as {} ", path, objUrl);
     }
 
     static class Transcription {

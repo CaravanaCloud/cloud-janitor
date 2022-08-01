@@ -31,12 +31,12 @@ public class DeleteSecurityGroupRules extends AWSWrite {
            var req = RevokeSecurityGroupEgressRequest.builder().groupId(sgr.groupId())
                     .securityGroupRuleIds(sgr.securityGroupRuleId()).build();
            aws().ec2().revokeSecurityGroupEgress(req);
-           log().debug("Deleted security group rule egress {}/{}", sgr.groupId(), sgr.securityGroupRuleId());
+           debug("Deleted security group rule egress {}/{}", sgr.groupId(), sgr.securityGroupRuleId());
         }else {
             var req = RevokeSecurityGroupIngressRequest.builder().groupId(sgr.groupId())
                     .securityGroupRuleIds(sgr.securityGroupRuleId()).build();
             aws().ec2().revokeSecurityGroupIngress(req);
-            log().debug("Deleted security group rule ingress {}/{}", sgr.groupId(), sgr.securityGroupRuleId());
+            debug("Deleted security group rule ingress {}/{}", sgr.groupId(), sgr.securityGroupRuleId());
         }
     }
 

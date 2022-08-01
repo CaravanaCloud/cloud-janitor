@@ -16,11 +16,6 @@ public class CleanupRegion extends AWSFilter {
     @Inject
     CleanupVPCs cleanupVPCs;
 
-    public void init(){
-        var region = getInput(Input.AWS.TargetRegion, Region.class);
-        setRegion(region);
-    }
-
     @Override
     public List<Task> getDependencies() {
         return List.of(cleanupVPCs);
@@ -29,6 +24,6 @@ public class CleanupRegion extends AWSFilter {
     @Override
     public void apply() {
         var region = getInput(Input.AWS.TargetRegion, Region.class);
-        log().info("Region cleaned up "+region);
+        info("Region cleaned up "+region);
     }
 }

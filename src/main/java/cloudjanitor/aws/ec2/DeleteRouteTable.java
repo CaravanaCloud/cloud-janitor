@@ -22,11 +22,11 @@ public class DeleteRouteTable extends AWSWrite {
             try {
                 deleteRouteTable(resource);
             }catch (Exception ex){
-                log().error("Failed to delete route table", ex);
+                error("Failed to delete route table", ex);
                 throw new RuntimeException(ex);
             }
         } else{
-            log().debug("Not deleting main route table {}", resource.routeTableId());
+            debug("Not deleting main route table {}", resource.routeTableId());
         }
     }
 
@@ -42,7 +42,7 @@ public class DeleteRouteTable extends AWSWrite {
     private void deleteRoute(RouteTable resource, Route route) {
         var gatewayId = route.gatewayId();
         if ("local".equals(gatewayId)) {
-            log().debug("Not deleting local route {} / {}", resource.routeTableId(), route.toString());
+            debug("Not deleting local route {} / {}", resource.routeTableId(), route.toString());
             return;
         }else{
             var builder = DeleteRouteRequest.builder()
@@ -54,12 +54,12 @@ public class DeleteRouteTable extends AWSWrite {
             }
             var request = builder.build();
             aws().ec2().deleteRoute(request);
-            log().debug("Deleted route {} / {}", resource.routeTableId(), route.toString());
+            debug("Deleted route {} / {}", resource.routeTableId(), route.toString());
         }
     }
 
     private void deleteRouteTable(RouteTable resource) {
-        log().debug("Deleting route table {}", resource.routeTableId());
+        debug("Deleting route table {}", resource.routeTableId());
         var request = DeleteRouteTableRequest.builder()
                 .routeTableId(resource.routeTableId())
                 .build();
