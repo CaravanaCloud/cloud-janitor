@@ -43,7 +43,6 @@
               --main-class cloud-janitor.Main \
               --java-options '--enable-preview' \
               --type rpm \
-              --linux-app-release "${PKG_VERSION}" \ 
               --verbose
 
         - name: Debug
@@ -56,7 +55,7 @@
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
             tag_name: ${{ github.ref }}
-            release_name: Release ${{ github.ref }}
+            release_name: cloud-janitor release ${{ github.ref }}
             draft: false
             prerelease: false
 
