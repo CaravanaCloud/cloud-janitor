@@ -30,6 +30,9 @@
             MVN_FLAGS: -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
           run: ./mvnw $MVN_FLAGS package
 
+        - name: Debug fs
+          run: find .
+
         - name: Build RPM
           run: |
             jpackage --input "/target/binary/lib/" \
