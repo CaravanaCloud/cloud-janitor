@@ -14,7 +14,7 @@ public class FilterRouteTables extends AWSFilter {
     private boolean match(RouteTable resource) {
         var match = true;
 
-        var vpcId = inputAs(Input.AWS.TargetVpcId);
+        var vpcId = inputAs(Input.AWS.targetVPCId);
         if (vpcId.isPresent()){
             var matchVpcId = resource.vpcId();
             var targetVpcId = vpcId.get().toString();

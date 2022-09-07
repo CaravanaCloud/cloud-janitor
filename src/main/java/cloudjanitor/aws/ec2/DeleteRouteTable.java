@@ -2,10 +2,7 @@ package cloudjanitor.aws.ec2;
 
 import cloudjanitor.Input;
 import cloudjanitor.aws.AWSWrite;
-import software.amazon.awssdk.services.ec2.model.DeleteRouteRequest;
-import software.amazon.awssdk.services.ec2.model.DeleteRouteTableRequest;
-import software.amazon.awssdk.services.ec2.model.Route;
-import software.amazon.awssdk.services.ec2.model.RouteTable;
+import software.amazon.awssdk.services.ec2.model.*;
 
 import javax.enterprise.context.Dependent;
 
@@ -16,7 +13,7 @@ public class DeleteRouteTable extends AWSWrite {
 
     @Override
     public void apply() {
-        RouteTable resource = getInput(Input.AWS.RouteTable, RouteTable.class);
+        RouteTable resource = getInput(Input.AWS.routeTable, RouteTable.class);
         if (! isMainRouteTable(resource)) {
             deleteRoutes(resource);
             try {
@@ -53,8 +50,13 @@ public class DeleteRouteTable extends AWSWrite {
                 builder.destinationPrefixListId(route.destinationPrefixListId());
             }
             var request = builder.build();
-            aws().ec2().deleteRoute(request);
-            debug("Deleted route {} / {}", resource.routeTableId(), route.toString());
+            try {
+                aws().ec2().deleteRoute(request);
+                debug("Deleted route {} / {}", resource.routeTableId(), route.toString());
+            }catch (Ec2Exception ex){
+                error("Failed to delete route {} / {}", resource.routeTableId(), route.toString());
+                fail(ex);
+            }
         }
     }
 

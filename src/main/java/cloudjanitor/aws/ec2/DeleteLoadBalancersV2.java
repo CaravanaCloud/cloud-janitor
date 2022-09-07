@@ -1,5 +1,6 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Output;
 import cloudjanitor.aws.AWSTask;
 import cloudjanitor.spi.Task;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
@@ -8,15 +9,16 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import static cloudjanitor.Input.AWS.TargetLoadBalancerArn;
-import static cloudjanitor.Output.AWS.LoadBalancerMatch;
+import static cloudjanitor.Input.AWS.targetLoadBalancerArn;
+import static cloudjanitor.Output.AWS.ELBV2Match;
+
 @Dependent
-public class DeleteLoadBalancers extends AWSTask {
+public class DeleteLoadBalancersV2 extends AWSTask {
     @Inject
-    FilterLoadBalancers filterLoadBalancer;
+    FilterLoadBalancersV2 filterLoadBalancer;
 
     @Inject
-    Instance<DeleteLoadBalancer> deleteLoadBalancerInstance;
+    Instance<DeleteLoadBalancerV2> deleteLoadBalancerInstance;
     @Override
     public Task getDependency() {
         return delegate(filterLoadBalancer);
@@ -24,14 +26,14 @@ public class DeleteLoadBalancers extends AWSTask {
 
     @Override
     public void apply() {
-        var lbs = filterLoadBalancer.outputList(LoadBalancerMatch, LoadBalancer.class);
+        var lbs = filterLoadBalancer.outputList(ELBV2Match, LoadBalancer.class);
         lbs.stream().forEach(this::deleteLoadBalancer);
     }
 
     private void deleteLoadBalancer(LoadBalancer loadBalancer) {
         var delLbTask = deleteLoadBalancerInstance
                 .get()
-                .withInput(TargetLoadBalancerArn, loadBalancer.loadBalancerArn());
+                .withInput(targetLoadBalancerArn, loadBalancer.loadBalancerArn());
         submit(delLbTask);
     }
 }

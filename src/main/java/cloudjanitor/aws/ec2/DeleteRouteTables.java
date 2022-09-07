@@ -9,7 +9,6 @@ import software.amazon.awssdk.services.ec2.model.RouteTable;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import java.util.List;
 
 @Dependent
 public class DeleteRouteTables extends AWSWrite {
@@ -31,7 +30,7 @@ public class DeleteRouteTables extends AWSWrite {
     }
 
     private void deleteRouteTable(RouteTable routeTable) {
-        var delRoute = delRouteTable.get().withInput(Input.AWS.RouteTable, routeTable);
+        var delRoute = delRouteTable.get().withInput(Input.AWS.routeTable, routeTable);
         submit(delRoute);
     }
 }

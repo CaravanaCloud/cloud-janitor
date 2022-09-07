@@ -6,7 +6,6 @@ import cloudjanitor.aws.ec2.CleanupVPCs;
 import cloudjanitor.spi.Task;
 import software.amazon.awssdk.regions.Region;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.util.List;
@@ -23,7 +22,7 @@ public class CleanupRegion extends AWSFilter {
 
     @Override
     public void apply() {
-        var region = getInput(Input.AWS.TargetRegion, Region.class);
+        var region = getInput(Input.AWS.targetRegion, Region.class);
         info("Region cleaned up "+region);
     }
 }

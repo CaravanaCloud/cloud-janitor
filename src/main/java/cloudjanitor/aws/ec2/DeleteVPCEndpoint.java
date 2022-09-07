@@ -12,7 +12,7 @@ public class DeleteVPCEndpoint extends AWSWrite {
 
     @Override
     public void apply() {
-        var resource = getInput(Input.AWS.TargetVPCEndpoint, VpcEndpoint.class);
+        var resource = getInput(Input.AWS.targetVPCEndpoint, VpcEndpoint.class);
         info("Deleting vpc endpoint {}", resource.vpcEndpointId());
         var request = DeleteVpcEndpointsRequest.builder()
                 .vpcEndpointIds(resource.vpcEndpointId())

@@ -24,7 +24,7 @@ public class GetCallerIdentityTask extends AWSFilter {
             return Optional.empty();
         }else{
             var aliasesStr = String.join(",", aliases);
-            info("Found alias for account {}: {}", accountId, aliasesStr);
+            logger().info("Found alias for account {}: {}", accountId, aliasesStr);
             return Optional.of(aliasesStr);
         }
     }

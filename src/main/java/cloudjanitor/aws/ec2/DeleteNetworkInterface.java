@@ -7,14 +7,14 @@ import software.amazon.awssdk.services.ec2.model.NetworkInterface;
 
 import javax.enterprise.context.Dependent;
 
-import static cloudjanitor.Input.AWS.TargetNetworkInterface;
+import static cloudjanitor.Input.AWS.targetNetworkInterface;
 
 @Dependent
 public class DeleteNetworkInterface extends AWSWrite {
 
     @Override
     public void apply() {
-        var eni = getInput(TargetNetworkInterface , NetworkInterface.class);
+        var eni = getInput(targetNetworkInterface, NetworkInterface.class);
         var eniId = eni.networkInterfaceId();
         if(canDelete(eni))
             try {

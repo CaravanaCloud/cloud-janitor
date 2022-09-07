@@ -136,8 +136,11 @@ public class BaseTask implements Task {
 
     protected void fail(Exception ex) {
         logger().error(ex.getMessage(), ex);
-        ex.printStackTrace();
+        if( Configuration.PRINT_STACK_TRACE){
+            ex.printStackTrace();
+        }
         getErrors().put(Type.Exception , ex);
+        throw new RuntimeException(ex);
     }
 
     protected void warn(String message, Object... args) {
@@ -175,9 +178,7 @@ public class BaseTask implements Task {
     }
 
     public String getInputString(Input key, String defaultValue){
-        var val = getInputs().get(key);
-        if (val != null) return val.toString();
-        else return defaultValue;
+        return inputAs(key, String.class).orElse(defaultValue);
     }
 
     public Task withInput(Input key, Object value) {
@@ -195,12 +196,18 @@ public class BaseTask implements Task {
     }
 
     public Optional<Object> inputAs(Input key){
-        return Optional.ofNullable(inputs.get(key));
+        if (key == null) return Optional.empty();
+        var value = inputs.get(key);
+        if (value == null) {
+            var configInputs = getConfig().inputs();
+            value = configInputs.get(key.toString());
+        }
+        return Optional.ofNullable(value);
     }
 
     @SuppressWarnings("unchecked")
     public <T> Optional<T> inputAs(Input key, Class<T> clazz){
-        return (Optional<T>) Optional.ofNullable(inputs.get(key));
+        return (Optional<T>) inputAs(key);
     }
 
     @SuppressWarnings("unchecked")

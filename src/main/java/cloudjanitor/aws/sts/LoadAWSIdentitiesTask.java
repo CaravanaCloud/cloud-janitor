@@ -44,7 +44,7 @@ public class LoadAWSIdentitiesTask extends AWSTask {
         var task = (GetCallerIdentityTask) submit(
                 callerIdTaskInstance
                         .get()
-                        .withInput(Input.AWS.Identity, awsIdentity));
+                        .withInput(Input.AWS.identity, awsIdentity));
         var callerId = task.outputAs(CallerIdentity, cloudjanitor.aws.sts.CallerIdentity.class);
         awsIdentity.withCallerIdentity(callerId);
         return awsIdentity;

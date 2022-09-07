@@ -3,6 +3,7 @@ package cloudjanitor.aws.ec2;
 import cloudjanitor.Input;
 import cloudjanitor.aws.AWSWrite;
 import software.amazon.awssdk.services.ec2.model.Address;
+import software.amazon.awssdk.services.ec2.model.DisassociateAddressRequest;
 import software.amazon.awssdk.services.ec2.model.ReleaseAddressRequest;
 
 import javax.enterprise.context.Dependent;
@@ -12,9 +13,19 @@ public class ReleaseAddress extends AWSWrite {
 
     @Override
     public void apply() {
-        var resource = inputAs(Input.AWS.Address, Address.class);
-        debug("Releasing address {}", resource.get().publicIp());
-        var request = ReleaseAddressRequest.builder().allocationId(resource.get().allocationId()).build();
+        var eip = getInput(Input.AWS.address, Address.class);
+        debug("Releasing address {}", eip.publicIp());
+        var associationId = eip.associationId();
+        if (associationId != null && !associationId.isEmpty()) {
+            debug("Disassociating address {} from {}", eip.publicIp(), associationId);
+            var disassociateRequest = DisassociateAddressRequest.builder()
+                    .associationId(associationId)
+                    .build();
+            aws().ec2().disassociateAddress(disassociateRequest);
+        }
+        var request = ReleaseAddressRequest.builder()
+                .allocationId(eip.allocationId())
+                .build();
         aws().ec2().releaseAddress(request);
         success();
     }

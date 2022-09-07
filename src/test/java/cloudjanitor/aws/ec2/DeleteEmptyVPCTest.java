@@ -54,13 +54,13 @@ public class DeleteEmptyVPCTest extends TaskTest {
     }
 
     private void deleteVPC(String vpcId) {
-        deleteVpc.filterVPCs.withInput(Input.AWS.TargetVpcId, vpcId);
+        deleteVpc.filterVPCs.withInput(Input.AWS.targetVPCId, vpcId);
         tasks.submit(deleteVpc);
     }
 
     @SuppressWarnings("unchecked")
     private boolean vpcExists(String vpcId) {
-        filterVPCs.withInput(Input.AWS.TargetVpcId, vpcId);
+        filterVPCs.withInput(Input.AWS.targetVPCId, vpcId);
         tasks.submit(filterVPCs);
         var vpcs = filterVPCs.outputList(Output.AWS.VPCMatch, Vpc.class);
         if (! vpcs.isEmpty()){

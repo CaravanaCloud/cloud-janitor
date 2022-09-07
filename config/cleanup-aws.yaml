@@ -1,4 +1,4 @@
-tt:
+cj:
   task: cleanup-aws
   dryRun: true
   ocp:

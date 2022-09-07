@@ -1,20 +1,18 @@
 package cloudjanitor.aws.ec2;
 
 import cloudjanitor.Input;
-import cloudjanitor.Output;
 import software.amazon.awssdk.services.ec2.model.NetworkInterface;
 import cloudjanitor.aws.AWSFilter;
-import cloudjanitor.spi.Task;
 
-import java.util.stream.Stream;
+import javax.enterprise.context.Dependent;
 
 import static cloudjanitor.Output.AWS.NetworkINterfacesMatch;
-
+@Dependent
 public class FilterNetworkInterfaces extends AWSFilter {
 
     private boolean match(NetworkInterface resource) {
         var match = true;
-        var vpcId = inputString(Input.AWS.TargetVpcId);
+        var vpcId = inputString(Input.AWS.targetVPCId);
         if (vpcId.isPresent()){
             match = match && resource.vpcId().equals(vpcId);
         }
@@ -33,6 +31,7 @@ public class FilterNetworkInterfaces extends AWSFilter {
         var client = aws().ec2();
         var resources = client.describeNetworkInterfaces().networkInterfaces();
         var matches = resources.stream().filter(this::match).toList();
+        debug("Matched {}/{} network interfaces",  matches.size(), resources.size());
         success(NetworkINterfacesMatch,  matches);
     }
 }

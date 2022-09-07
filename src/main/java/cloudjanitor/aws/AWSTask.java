@@ -13,9 +13,9 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.List;
 
-import static cloudjanitor.Input.AWS.Identity;
+import static cloudjanitor.Input.AWS.identity;
 
-public abstract class AWSTask
+public abstract class   AWSTask
         extends BaseTask
         implements LogConstants {
 
@@ -30,13 +30,13 @@ public abstract class AWSTask
     }
 
     protected AWSIdentity getIdentity() {
-        var id = inputAs(Identity, AWSIdentity.class);
+        var id = inputAs(identity, AWSIdentity.class);
         if (id.isPresent()){
             var awsId = id.get();
             return awsId;
         }
         else{
-            logger().warn("Could not load identity from task input. Using default AWS Identity...");
+            logger().info("Loading default AWS Identity for task.");
             var defaultId = LoadDefaultAWSIdentity();
             return defaultId;
         }
@@ -48,7 +48,7 @@ public abstract class AWSTask
     private AWSIdentity LoadDefaultAWSIdentity() {
         var id = DefaultAWSIdentity.of();
         var callerIdTask = (BaseTask) getCallerIdInstance.get()
-                .withInput(Identity, id);
+                .withInput(identity, id);
         submit(callerIdTask);
         var callerId = callerIdTask.outputAs(Output.AWS.CallerIdentity, CallerIdentity.class);
         id = id.withCallerIdentity(callerId);
@@ -57,7 +57,7 @@ public abstract class AWSTask
     }
 
     protected void setIdentity(AWSIdentity id){
-        getInputs().put(Identity, id);
+        getInputs().put(identity, id);
     }
 
 
@@ -67,7 +67,7 @@ public abstract class AWSTask
     }
 
     protected Region getRegion(){
-        var regionIn = inputAs(Input.AWS.TargetRegion, Region.class);
+        var regionIn = inputAs(Input.AWS.targetRegion, Region.class);
         if (regionIn.isEmpty()){
             var regionName = getConfig().aws().defaultRegion();
             return Region.of(regionName);

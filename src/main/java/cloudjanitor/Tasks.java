@@ -99,7 +99,7 @@ public class Tasks {
         history.add(task);
         if (task.isWrite()
                 && config.dryRun()) {
-            log.warn("Refusing to write on dry-run: {}", task);
+            log.warn("[dry-run] Rejecting write task: {}", task);
         } else {
             try {
                 task.setStartTime(LocalDateTime.now());

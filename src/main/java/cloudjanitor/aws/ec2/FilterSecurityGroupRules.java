@@ -1,18 +1,12 @@
 package cloudjanitor.aws.ec2;
 
-import cloudjanitor.Input;
-import cloudjanitor.Output;
-import cloudjanitor.aws.model.IpPermissionModel;
 import software.amazon.awssdk.services.ec2.model.*;
 import cloudjanitor.aws.AWSFilter;
-import cloudjanitor.spi.Task;
 
 import javax.enterprise.context.Dependent;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
 
-import static cloudjanitor.Input.AWS.TargetVpcId;
+import static cloudjanitor.Input.AWS.targetVPCId;
 import static cloudjanitor.Output.AWS.SecurityGroupRulesMatch;
 
 @Dependent
@@ -38,7 +32,7 @@ public class FilterSecurityGroupRules extends AWSFilter {
 
     private boolean matchVPC(SecurityGroup securityGroup) {
         var match = true;
-        var vpcId = inputString(TargetVpcId);
+        var vpcId = inputString(targetVPCId);
         if (vpcId.isPresent()){
             match = match && vpcId.get().equals(securityGroup.vpcId());
         }

@@ -11,12 +11,12 @@ public class DeleteLoadBalancerDescription extends AWSWrite {
 
     @Override
     public void apply() {
-        var elbName = getInputString(Input.AWS.TargetLoadBalancerName);
+        var elbName = getInputString(Input.AWS.targetLoadBalancerName);
         debug("Deleting Classic ELB {}", elbName);
         var request = DeleteLoadBalancerRequest.builder()
                 .loadBalancerName(elbName)
                 .build();
-        aws().elb().deleteLoadBalancer(request);
+        aws().elbv1().deleteLoadBalancer(request);
         success();
     }
 }

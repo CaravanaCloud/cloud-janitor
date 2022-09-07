@@ -2,7 +2,6 @@ package cloudjanitor.reporting;
 
 import cloudjanitor.Configuration;
 import cloudjanitor.Tasks;
-import cloudjanitor.spi.Task;
 import io.quarkus.qute.Location;
 import io.quarkus.qute.Template;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -10,8 +9,10 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 @ApplicationScoped
@@ -29,6 +30,37 @@ public class Reporting {
 
 
     public void report(Tasks tasks) {
+        copyReportTemplate();
+//        replaceTemplateVariables();
+//        sucess();
+    }
+
+    private void copyReportTemplate() {
+        var templateName = config.templateName();
+        var filesToCopy = lookupFilesToCopy(templateName);
+        var reportsPath = config.getReportsPath();
+        log.debug("Copying {} files from template", filesToCopy.size());
+    }
+    public List<String> lookupFilesToCopy(String templateName){
+        var basePath = "cj-templates";
+        var templatePath = templateName;
+        var descriptorPath = "/%s/%s/%s".formatted(basePath, templatePath, "cj-template.txt");
+        try (var in = getClass().getClassLoader().getResourceAsStream(descriptorPath)) {
+            if (in == null) {
+                return List.of();
+            }
+            var reader = new BufferedReader(
+                    new InputStreamReader(in, StandardCharsets.UTF_8));
+            var lines = reader.lines().toList();
+            return lines;
+        } catch (IOException e) {
+            log.error("Error reading file " + descriptorPath, e);
+        }
+        return List.of();
+    }
+
+
+    public void oldReport(Tasks tasks) {
         String result = report
                 .data("tasks", tasks)
                 .render();

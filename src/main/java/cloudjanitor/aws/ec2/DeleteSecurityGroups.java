@@ -10,8 +10,8 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static cloudjanitor.Output.AWS.SecurityGroupsMatch;
-import static java.util.concurrent.TimeUnit.MINUTES;
-import static java.util.concurrent.TimeUnit.SECONDS;
+import static cloudjanitor.Utils.msToStr;
+import static java.util.concurrent.TimeUnit.*;
 import static org.awaitility.Awaitility.*;
 
 @Dependent
@@ -51,9 +51,11 @@ public class DeleteSecurityGroups extends AWSWrite {
     }
 
     private void waitUntilEmpty(SecurityGroup sg) {
-        debug("Waiting until sg is empty {}", sg.groupId());
-        await().atMost(10, MINUTES)
-                    .pollInterval(15, SECONDS)
+        var atMost = getConfig().largeAtMostTimeoutMs();
+        var pollInterval = getConfig().mediumPollIntervalMs();
+        debug("Waiting until sg is empty {} ({}|{}).", sg.groupId(), msToStr(pollInterval), msToStr(atMost));
+        await().atMost(atMost, MILLISECONDS)
+                    .pollInterval(pollInterval, MILLISECONDS)
                     .until(() -> isEmpty(sg));
 
     }

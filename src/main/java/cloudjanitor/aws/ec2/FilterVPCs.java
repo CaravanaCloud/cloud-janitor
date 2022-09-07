@@ -16,10 +16,6 @@ public class FilterVPCs extends AWSFilter {
     public void apply() {
         var vpcs = filterResources();
         success(Output.AWS.VPCMatch, vpcs);
-        debug("VPCs filtered region={} target={} found={} ",
-                aws().getRegion(),
-                getTargetVpcId(),
-                vpcs.size());
     }
 
     private boolean matchVPCId(Vpc vpc){
@@ -27,7 +23,7 @@ public class FilterVPCs extends AWSFilter {
     }
 
     private String getTargetVpcId() {
-        var targetVpcId = getInputString(Input.AWS.TargetVpcId);
+        var targetVpcId = getInputString(Input.AWS.targetVPCId);
         return targetVpcId;
     }
 
@@ -46,17 +42,19 @@ public class FilterVPCs extends AWSFilter {
     }
 
     protected List<Vpc> filterResources() {
-        var matches = findAll().stream();
+        var resources = findAll();
+        var matches = resources.stream();
         if (getTargetVpcId() != null)
             matches = matches.filter(this::matchVPCId);
         var prefix = aws().config().filterPrefix();
         if (prefix.isPresent())
             matches = matches.filter(this::matchName);
         var result= matches.toList();
+        debug("Matched {}/{} VPCs",  result.size(), resources.size());
         return result;
     }
 
     public void setTargetVPC(String vpcId) {
-        getInputs().put(Input.AWS.TargetVpcId, vpcId);
+        getInputs().put(Input.AWS.targetVPCId, vpcId);
     }
 }

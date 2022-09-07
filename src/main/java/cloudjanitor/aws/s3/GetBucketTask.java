@@ -6,13 +6,13 @@ import software.amazon.awssdk.services.s3.model.ListBucketsRequest;
 
 import javax.enterprise.context.Dependent;
 
-import static cloudjanitor.Input.AWS.TargetBucketName;
+import static cloudjanitor.Input.AWS.targetBucketName;
 
 @Dependent
 public class GetBucketTask extends AWSTask {
     @Override
     public void apply() {
-        var bucketName = getInputString(TargetBucketName);
+        var bucketName = getInputString(targetBucketName);
         var s3 = aws().s3();
         var req = ListBucketsRequest.builder().build();
         var buckets = s3.listBuckets(req).buckets();

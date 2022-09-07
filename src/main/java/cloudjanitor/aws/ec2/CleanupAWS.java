@@ -2,12 +2,8 @@ package cloudjanitor.aws.ec2;
 
 import cloudjanitor.BaseTask;
 import cloudjanitor.Input;
-import cloudjanitor.Output;
-import cloudjanitor.aws.AWSFilter;
 import cloudjanitor.aws.AWSIdentity;
 import cloudjanitor.aws.DefaultAWSIdentity;
-import cloudjanitor.aws.cleanup.CleanupRegions;
-import cloudjanitor.aws.sts.GetCallerIdentityTask;
 import cloudjanitor.aws.sts.LoadAWSIdentitiesTask;
 import cloudjanitor.spi.Task;
 
@@ -16,7 +12,7 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static cloudjanitor.Input.AWS.Identity;
+import static cloudjanitor.Input.AWS.identity;
 import static cloudjanitor.Output.AWS.Identities;
 
 @Named("cleanup-aws")
@@ -30,7 +26,7 @@ public class CleanupAWS extends BaseTask {
 
     private void setDefaultIdentity() {
         var identity = DefaultAWSIdentity.of();
-        getInputs().put(Identity, identity);
+        getInputs().put(Input.AWS.identity, identity);
     }
 
     @Override
@@ -43,7 +39,7 @@ public class CleanupAWS extends BaseTask {
 
     private Task toTask(AWSIdentity awsIdentity) {
         return cleanupAWSIdentityInstance.get()
-                .withInput(Identity, awsIdentity);
+                .withInput(identity, awsIdentity);
     }
 
     @Override

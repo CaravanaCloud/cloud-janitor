@@ -11,13 +11,16 @@
     <maven.compiler.source>17</maven.compiler.source>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-    <quarkus.platform.version>2.11.1.Final</quarkus.platform.version>
+    <quarkus.platform.version>2.11.3.Final</quarkus.platform.version>
     <kogito-quarkus.version>1.16.1.Final</kogito-quarkus.version>
     <awssdk.version>2.17.239</awssdk.version>
     <jackson.version>2.13.2.2</jackson.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <skipTests>true</skipTests>
+    <!-- -->
+    <app.main.class>cloudjanitor.Main</app.main.class>
+
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -178,11 +181,12 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-qute</artifactId>
     </dependency>
+
+
   </dependencies>
 
   <build>
     <defaultGoal>clean compile quarkus:dev</defaultGoal>
-    <finalName>cloudjanitor</finalName>
     <plugins>
       <plugin>
         <groupId>org.jacoco</groupId>
@@ -238,7 +242,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
-        <version>3.0.0</version>
+        <version>3.1.0</version>
         <executions>
           <execution>
             <goals>
@@ -247,7 +251,70 @@
           </execution>
         </executions>
         <configuration>
-          <mainClass>cloudjanitor.Main</mainClass>
+          <mainClass>${app.main.class}</mainClass>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+        <version>2.1.0</version>
+        <configuration>
+          <assembleDirectory>${project.build.directory}/binary</assembleDirectory>
+          <repositoryLayout>flat</repositoryLayout>
+          <repositoryName>lib</repositoryName>
+          <programs>
+            <program>
+              <mainClass>${app.main.class}</mainClass>
+              <id>cloud-janitor</id>
+            </program>
+          </programs>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-distribution</id>
+            <phase>package</phase>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.jreleaser</groupId>
+        <artifactId>jreleaser-maven-plugin</artifactId>
+        <version>1.2.0</version>
+        <configuration>
+          <jreleaser>
+            <project>
+              <description>Automating cleanup, maintenance and troubleshooting tasks in Cloud Computing</description>
+              <java>
+                <mainClass>${app.main.class}</mainClass>
+              </java>
+              <copyright>2022 COPYLEFT</copyright>
+            </project>
+            <release>
+              <github>
+                <owner>CaravanaCloud</owner>
+                <overwrite>true</overwrite>
+              </github>
+            </release>
+            <distributions>
+              <app>
+                <artifacts>
+                  <artifact>
+                    <path>
+                      ${app.distribution.directory}/${project.artifactId}-${project.version}.zip
+                    </path>
+                  </artifact>
+                  <artifact>
+                    <path>
+                      ${app.distribution.directory}/${project.artifactId}-${project.version}.tar.gz
+                    </path>
+                  </artifact>
+                </artifacts>
+              </app>
+            </distributions>
+          </jreleaser>
         </configuration>
       </plugin>
     </plugins>

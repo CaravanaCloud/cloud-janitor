@@ -1,6 +1,8 @@
 package cloudjanitor.aws.ec2;
 
+import cloudjanitor.Input;
 import cloudjanitor.Output;
+import cloudjanitor.aws.AWSTask;
 import cloudjanitor.aws.AWSWrite;
 import cloudjanitor.spi.Task;
 import software.amazon.awssdk.services.ec2.model.RevokeSecurityGroupEgressRequest;
@@ -8,13 +10,16 @@ import software.amazon.awssdk.services.ec2.model.RevokeSecurityGroupIngressReque
 import software.amazon.awssdk.services.ec2.model.SecurityGroupRule;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 @Dependent
-public class DeleteSecurityGroupRules extends AWSWrite {
+public class DeleteSecurityGroupRules extends AWSTask {
     @Inject
     FilterSecurityGroupRules filterRules;
 
+    @Inject
+    Instance<DeleteSecurityGroupRuleTask> deleteRuleInstance;
     @Override
     public Task getDependency() {
         return filterRules;
@@ -27,17 +32,9 @@ public class DeleteSecurityGroupRules extends AWSWrite {
     }
 
     private void deleteRule(SecurityGroupRule sgr) {
-        if (sgr.isEgress()){
-           var req = RevokeSecurityGroupEgressRequest.builder().groupId(sgr.groupId())
-                    .securityGroupRuleIds(sgr.securityGroupRuleId()).build();
-           aws().ec2().revokeSecurityGroupEgress(req);
-           debug("Deleted security group rule egress {}/{}", sgr.groupId(), sgr.securityGroupRuleId());
-        }else {
-            var req = RevokeSecurityGroupIngressRequest.builder().groupId(sgr.groupId())
-                    .securityGroupRuleIds(sgr.securityGroupRuleId()).build();
-            aws().ec2().revokeSecurityGroupIngress(req);
-            debug("Deleted security group rule ingress {}/{}", sgr.groupId(), sgr.securityGroupRuleId());
-        }
+        var deleteRule = deleteRuleInstance.get()
+                .withInput(Input.AWS.securityGroupRule, sgr);
+        submit(deleteRule);
     }
 
 }

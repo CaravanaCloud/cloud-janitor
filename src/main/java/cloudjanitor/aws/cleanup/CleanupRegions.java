@@ -1,9 +1,7 @@
 package cloudjanitor.aws.cleanup;
 
-import cloudjanitor.Input;
 import cloudjanitor.Output;
 import cloudjanitor.aws.AWSTask;
-import cloudjanitor.aws.cleanup.CleanupRegion;
 import cloudjanitor.aws.ec2.FilterRegions;
 import cloudjanitor.spi.Task;
 import software.amazon.awssdk.regions.Region;
@@ -12,7 +10,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import static cloudjanitor.Input.AWS.TargetRegion;
+import static cloudjanitor.Input.AWS.targetRegion;
 
 @Dependent
 public class CleanupRegions extends AWSTask {
@@ -36,7 +34,7 @@ public class CleanupRegions extends AWSTask {
 
     private Task mapTask(Region region) {
         var task = cleanupRegionInstance.get()
-                .withInput(TargetRegion, region);
+                .withInput(targetRegion, region);
         return task;
     }
 

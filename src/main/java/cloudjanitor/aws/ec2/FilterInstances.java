@@ -1,15 +1,11 @@
 package cloudjanitor.aws.ec2;
 
 import cloudjanitor.Input;
-import cloudjanitor.Output;
 import software.amazon.awssdk.services.ec2.model.DescribeInstancesRequest;
 import software.amazon.awssdk.services.ec2.model.Instance;
 import cloudjanitor.aws.AWSFilter;
-import cloudjanitor.spi.Task;
 
 import javax.enterprise.context.Dependent;
-import java.util.List;
-import java.util.stream.Stream;
 
 import static cloudjanitor.Output.AWS.InstancesMatch;
 
@@ -25,7 +21,7 @@ public class FilterInstances extends AWSFilter {
 
         if (terminated) return false;
 
-        var vpcId = inputString(Input.AWS.TargetVpcId);
+        var vpcId = inputString(Input.AWS.targetVPCId);
         if (vpcId.isPresent()){
             var vpcMatch = vpcId.get().equals(instance.vpcId());
             match = match && vpcMatch;
@@ -48,7 +44,7 @@ public class FilterInstances extends AWSFilter {
         var reservations = ec2.describeInstancesPaginator(describeInstances).reservations().stream();
         var instances = reservations.flatMap(reservation -> reservation.instances().stream()).toList();
         var matches = instances.stream().filter(this::match).toList();
-        debug("Matched {}/{} instances on {}", instances.size(), matches.size(), getRegion());
+        debug("Matched {}/{} instances",  matches.size(), instances.size());
         success(InstancesMatch, matches);
     }
 }

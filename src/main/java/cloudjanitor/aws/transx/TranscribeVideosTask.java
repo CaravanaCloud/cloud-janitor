@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static cloudjanitor.Input.Local.FileExtension;
+import static cloudjanitor.Input.Local.fileExtension;
 import static cloudjanitor.Output.AWS.S3Bucket;
 import static cloudjanitor.Output.Local.FilesMatch;
 
@@ -41,7 +41,7 @@ public class TranscribeVideosTask extends AWSWrite {
     @Override
     public List<Task> getDependencies() {
         return List.of(
-                filterFiles.withInput(FileExtension, "mp4"),
+                filterFiles.withInput(fileExtension, "mp4"),
                 getDataBucket
         );
     }

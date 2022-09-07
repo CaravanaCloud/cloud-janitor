@@ -1,11 +1,8 @@
 package cloudjanitor.aws;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
-import software.amazon.awssdk.core.SdkClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.athena.AthenaClient;
 import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
@@ -19,7 +16,6 @@ import software.amazon.awssdk.services.sts.StsClient;
 import software.amazon.awssdk.services.transcribe.TranscribeClient;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
 
-import javax.inject.Inject;
 import java.util.*;
 
 public class AWSClients {
@@ -149,15 +145,15 @@ public class AWSClients {
                 .build();
     }
 
-    public ElasticLoadBalancingV2Client elbv2() {
-        return ElasticLoadBalancingV2Client.builder()
+    public ElasticLoadBalancingClient elbv1() {
+        return ElasticLoadBalancingClient.builder()
                 .region(getRegion())
                 .credentialsProvider(getCredentialsProvider())
                 .build();
     }
 
-    public ElasticLoadBalancingClient elb() {
-        return ElasticLoadBalancingClient.builder()
+    public ElasticLoadBalancingV2Client elbv2() {
+        return ElasticLoadBalancingV2Client.builder()
                 .region(getRegion())
                 .credentialsProvider(getCredentialsProvider())
                 .build();
@@ -177,5 +173,6 @@ public class AWSClients {
     public AwsCredentialsProvider getCredentialsProvider() {
         return id.toCredentialsProvider();
     }
+
 
 }

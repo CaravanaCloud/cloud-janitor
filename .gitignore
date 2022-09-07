@@ -43,4 +43,4 @@ cloud-janitor.csv
 .env
 
 data/test-samples/transcribe/*.srt
-
+config/application.yaml

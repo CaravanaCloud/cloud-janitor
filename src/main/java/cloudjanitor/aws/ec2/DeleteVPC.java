@@ -8,7 +8,7 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.util.List;
 
-import static cloudjanitor.Input.AWS.TargetVpcId;
+import static cloudjanitor.Input.AWS.targetVPCId;
 
 @Dependent
 public class DeleteVPC extends AWSWrite {
@@ -23,7 +23,7 @@ public class DeleteVPC extends AWSWrite {
     DeleteInternetGateways  deleteInternetGateways;
 
     @Inject
-    TerminateInstances terminateInstances;
+    TerminateInstancesTask terminateInstances;
 
     @Inject
     DeleteSecurityGroupRules deleteSecurityGroupRules;
@@ -32,11 +32,26 @@ public class DeleteVPC extends AWSWrite {
     DeleteSecurityGroups deleteSecurityGroups;
 
     @Inject
-    DeleteLoadBalancers deleteLoadBalancers;
+    DeleteLoadBalancersV2 deleteLoadBalancersV2;
+
+    @Inject
+    DeleteLoadBalancersV1 deleteLoadBalancersV1;
+
+    @Inject
+    DeleteNetworkInterfaces deleteNetworkInterfaces;
+
+    @Inject
+    ReleaseAddresses deleteAddresses;
+
+    @Inject
+    DeleteNATGateways deleteNATGateways;
+
+    @Inject
+    DeleteVPCEndpoints deleteVPCEndpoints;
 
     @Override
     public void apply() {
-        var vpcId = getInputString(TargetVpcId);
+        var vpcId = getInputString(targetVPCId);
         var request = DeleteVpcRequest.builder()
                 .vpcId(vpcId)
                 .build();
@@ -49,7 +64,12 @@ public class DeleteVPC extends AWSWrite {
     public List<Task> getDependencies() {
         return delegateAll(
                 terminateInstances,
-                deleteLoadBalancers,
+                deleteLoadBalancersV2,
+                deleteLoadBalancersV1,
+                deleteNATGateways,
+                deleteVPCEndpoints,
+                deleteAddresses,
+                deleteNetworkInterfaces,
                 deleteSecurityGroupRules,
                 deleteSecurityGroups,
                 cleanupSubnets,

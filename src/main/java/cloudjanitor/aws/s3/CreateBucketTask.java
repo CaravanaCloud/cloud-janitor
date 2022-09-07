@@ -1,19 +1,17 @@
 package cloudjanitor.aws.s3;
 
-import cloudjanitor.Input;
-import cloudjanitor.Output;
 import cloudjanitor.aws.AWSWrite;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 
 import javax.enterprise.context.Dependent;
 
-import static cloudjanitor.Input.AWS.TargetBucketName;
+import static cloudjanitor.Input.AWS.targetBucketName;
 
 @Dependent
 public class CreateBucketTask extends AWSWrite {
     public void  apply(){
         var s3 = aws().s3();
-        var bucketName = getInputString(TargetBucketName);
+        var bucketName = getInputString(targetBucketName);
         if (! isValidBucketName(bucketName)){
             fail("Invalid bucket name " + bucketName);
         }else {

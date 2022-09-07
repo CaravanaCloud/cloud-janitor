@@ -21,7 +21,7 @@ public abstract class AWSIdentity {
     }
 
     public String getAccountName() {
-        var name = callerId.map(CallerIdentity::getAccountName).orElse("? account ?");
+        var name = callerId.map(CallerIdentity::getAccountName).orElse(" ");
         return name;
     }
 

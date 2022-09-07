@@ -25,13 +25,12 @@ public class CleanupVPCs extends AWSTask {
     public void apply() {
         var id = getIdentity();
         var vpcs = outputList(VPCMatch, Vpc.class);
-        info("Matched {} VPCs for cleanup on {}", vpcs.size(), getRegion());
         vpcs.forEach(this::deleteVPC);
     }
 
     private void deleteVPC(Vpc vpc) {
         var delVpc = create(deleteVPC)
-                .withInput(Input.AWS.TargetVpcId, vpc.vpcId());
+                .withInput(Input.AWS.targetVPCId, vpc.vpcId());
         submit(delVpc);
     }
 
@@ -44,29 +43,4 @@ public class CleanupVPCs extends AWSTask {
         filterVPCs.setTargetVPC(vpcId);
     }
 
-    /*
-    @Override
-    public Stream<Task> mapSubtasks(String vpcId) {
-        return Stream.of(
-                //TODO: Filter by VPC
-                new FilterLoadBalancersV2(),
-                new FilterTargetGroups(),
-                new FilterNATGateways(),
-                new FilterInstances(),
-                //VPC Resources
-                new FilterLoadBalancers(vpcId),
-                new FilterVPCEndpoints(vpcId),
-                new FilterNetworkInterfaces(vpcId),
-                new FilterRouteTableRules(vpcId),
-                new FilterRouteTables(vpcId),
-                new FilterInternetGateways(vpcId),
-                new FilterSecurityGroupRules(vpcId),
-                new FilterSecurityGroups(vpcId),
-                //TODO: Filter by VPC
-                new FilterAddresses(),
-                new FilterSubnets(vpcId),
-                new FilterInternetGateways(vpcId)
-        );
-    }
-    */
 }

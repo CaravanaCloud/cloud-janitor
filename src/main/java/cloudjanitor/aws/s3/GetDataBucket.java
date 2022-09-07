@@ -37,7 +37,7 @@ public class GetDataBucket extends AWSWrite {
             success(Output.AWS.S3Bucket, bucket);
         }else {
             debug("Data bucket not found {}. Creating...", bucketName);
-            submit(createBucket.withInput(Input.AWS.TargetBucketName, bucketName));
+            submit(createBucket.withInput(Input.AWS.targetBucketName, bucketName));
             debug("Checking if bucket was created");
             bucket = getBucket(bucketName);
             if (bucket.isPresent()){
@@ -50,7 +50,7 @@ public class GetDataBucket extends AWSWrite {
     }
 
     private Optional<Bucket> getBucket(String bucketName) {
-        submit(getBucket.withInput(Input.AWS.TargetBucketName, bucketName));
+        submit(getBucket.withInput(Input.AWS.targetBucketName, bucketName));
         var bucket  = getBucket.outputAs(Output.AWS.S3Bucket, Bucket.class);
         return bucket;
     }
