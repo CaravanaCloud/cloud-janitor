@@ -35,7 +35,7 @@
 
         - name: Build RPM
           run: |
-            jpackage --input "/target/binary/lib/" \
+            jpackage --input "target/binary/lib/" \
               --app-version "${PKG_VERSION}" \
               --name CloudJanitor \
               --main-jar "cloudjanitor-1.0.0-SNAPSHOT.jar" \
