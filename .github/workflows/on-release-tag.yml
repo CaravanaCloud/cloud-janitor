@@ -11,6 +11,7 @@
     GRAALVM_JAVA: 'java17'
     GRAALVM_ARCH: 'amd64'
     PKG_VERSION: "1.0"
+    MVN_FLAGS: "-B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
 
   jobs:
     create-release:
@@ -26,20 +27,20 @@
             arch: ${{ env.GRAALVM_ARCH }}
 
         - name: Build uberjar
-          env:
-            MVN_FLAGS: -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
           run: ./mvnw $MVN_FLAGS package
+          env:
+            QUARKUS_PACKAGE_TYPE: uber-jar
 
         - name: Debug fs
           run: find .
 
         - name: Build RPM
           run: |
-            jpackage --input "target/binary/lib/" \
+            jpackage --input "target/" \
               --app-version "${PKG_VERSION}" \
-              --name CloudJanitor \
-              --main-jar "cloudjanitor-1.0.0-SNAPSHOT.jar" \
-              --main-class cloudjanitor.Main \
+              --name "cloud-janitor" \
+              --main-jar "cloud-janitor.jar" \
+              --main-class cloud-janitor.Main \
               --type rpm \
               --java-options '--enable-preview' \
               --verbose
