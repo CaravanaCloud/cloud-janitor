@@ -28,15 +28,14 @@
         - name: Build uberjar
           env:
             MVN_FLAGS: -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
-            QUARKUS_PACKAGE_TYPE: uber-jar
           run: ./mvnw $MVN_FLAGS package
 
         - name: Build RPM
           run: |
-            jpackage --input target/ \
+            jpackage --input "/target/binary/lib/" \
               --app-version "${PKG_VERSION}" \
               --name CloudJanitor \
-              --main-jar cloudjanitor.jar \
+              --main-jar "cloudjanitor-1.0.0-SNAPSHOT.jar" \
               --main-class cloudjanitor.Main \
               --type rpm \
               --java-options '--enable-preview' \

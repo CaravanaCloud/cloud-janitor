@@ -1,6 +1,5 @@
 package cloudjanitor;
 
-import cloudjanitor.aws.AWSClients;
 import cloudjanitor.reporting.Reporting;
 import cloudjanitor.spi.Task;
 import org.slf4j.Logger;
@@ -40,6 +39,7 @@ public class Tasks {
     List<Task> history = new ArrayList<>();
 
     public void run(String[] args) {
+        log.trace("Tasks.run()",args);
         var taskName = config.taskName();
         var matches = lookupTasks(taskName);
         runAll(matches);
@@ -89,7 +89,7 @@ public class Tasks {
             return task;
         }else{
             log.error("Bean {} is not a Task", bean);
-            return null;
+            throw new IllegalArgumentException("Bean is not a task");
         }
     }
 
