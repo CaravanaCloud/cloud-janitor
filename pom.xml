@@ -201,6 +201,7 @@
 
   <build>
     <defaultGoal>clean compile quarkus:dev</defaultGoal>
+    <finalName>cloud-janitor</finalName>
 
     <plugins>
       <plugin>
@@ -214,8 +215,8 @@
                 <description>Cloud Janitor</description>
               </project>
               <distributions>
-                <app>
-                  <type>SINGLE_JAR</type>
+                <cloud-janitor>
+                  <type>JAVA_BINARY</type>
                   <stereotype>CLI</stereotype>
                   <brew>
                     <enabled>true</enabled>
@@ -224,11 +225,11 @@
                   <artifacts>
                     <artifact>
                       <path>
-                        target/${project.artifactId}-${project.version}-dist.zip
+                        target/${project.artifactId}.zip
                       </path>
                     </artifact>
                   </artifacts>
-                </app>
+                </cloud-janitor>
               </distributions>
             </jreleaser>
         </configuration>
@@ -317,6 +318,7 @@
           <mainClass>${app.main.class}</mainClass>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -332,6 +334,7 @@
         </executions>
         -->
         <configuration>
+          <appendAssemblyId>false</appendAssemblyId>
           <descriptors>
             <descriptor>src/assembly/dist.xml</descriptor>
           </descriptors>

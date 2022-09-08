@@ -1,4 +1,6 @@
 # mvn clean package appassembler:assemble assembly:single jreleaser:full-release
+# brew tap CaravanaCloud/tap
+# TODO: brew install cloud-janitor
 project:
   name: cloud-janitor
   version: 1.0.1
