@@ -50,6 +50,9 @@ public interface Configuration {
     @WithName("ocp")
     OCPConfiguration ocp();
 
+    @WithName("report")
+    ReportConfiguration report();
+
     default Path getApplicationPath(){
         var home = System.getProperty("user.home");
         var homePath = Path.of(home);

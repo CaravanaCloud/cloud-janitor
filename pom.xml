@@ -4,7 +4,19 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>caravanacloud</groupId>
   <artifactId>cloud-janitor</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.20220907d</version>
+
+  <description>
+    Automating cleanup, maintenance and troubleshooting tasks in Cloud Computing
+  </description>
+
+  <url>https://github.com/CaravanaCloud/cloud-janitor</url>
+
+  <organization>
+    <name>Caravana Cloud</name>
+    <url>http://caravana.cloud</url>
+  </organization>
+
   <properties>
     <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
     <maven.compiler.target>17</maven.compiler.target>
@@ -12,16 +24,18 @@
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
     <quarkus.platform.version>2.11.3.Final</quarkus.platform.version>
+    <quarkus.package.type>fast-jar</quarkus.package.type>
     <kogito-quarkus.version>1.16.1.Final</kogito-quarkus.version>
-    <awssdk.version>2.17.239</awssdk.version>
+    <awssdk.version>2.17.269</awssdk.version>
     <jackson.version>2.13.2.2</jackson.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <skipTests>true</skipTests>
-    <!-- -->
+
     <app.main.class>cloudjanitor.Main</app.main.class>
 
   </properties>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -187,7 +201,53 @@
 
   <build>
     <defaultGoal>clean compile quarkus:dev</defaultGoal>
+
     <plugins>
+      <plugin>
+        <groupId>org.jreleaser</groupId>
+        <artifactId>jreleaser-maven-plugin</artifactId>
+        <version>1.2.0</version>
+          <configuration>
+            <jreleaser>
+              <project>
+                <copyright>copyleft</copyright>
+                <description>Cloud Janitor</description>
+              </project>
+              <distributions>
+                <app>
+                  <type>SINGLE_JAR</type>
+                  <stereotype>CLI</stereotype>
+                  <brew>
+                    <enabled>true</enabled>
+                    <active>ALWAYS</active>
+                  </brew>
+                  <artifacts>
+                    <artifact>
+                      <path>
+                        target/${project.artifactId}-${project.version}-dist.zip
+                      </path>
+                    </artifact>
+                  </artifacts>
+                </app>
+              </distributions>
+            </jreleaser>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+        <version>2.1.0</version>
+        <configuration>
+          <programs>
+            <program>
+              <mainClass>${app.main.class}</mainClass>
+              <id>cloud-janitor</id>
+            </program>
+          </programs>
+        </configuration>
+      </plugin>
+
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
@@ -217,6 +277,7 @@
           </compilerArgs>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>${quarkus.platform.group-id}</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
@@ -229,6 +290,7 @@
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${surefire-plugin.version}</version>
@@ -239,6 +301,7 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
@@ -254,6 +317,27 @@
           <mainClass>${app.main.class}</mainClass>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.4.2</version>
+        <!--
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        -->
+        <configuration>
+          <descriptors>
+            <descriptor>src/assembly/dist.xml</descriptor>
+          </descriptors>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
   <profiles>

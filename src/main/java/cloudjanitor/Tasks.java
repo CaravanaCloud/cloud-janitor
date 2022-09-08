@@ -47,8 +47,9 @@ public class Tasks {
     }
 
     private void report() {
-        try {
-            reporting.report(this);
+        if (config.report().enabled())
+            try {
+                reporting.report(this);
         }catch (Exception ex){
             ex.printStackTrace();
             log.error("Reporting failed", ex);
