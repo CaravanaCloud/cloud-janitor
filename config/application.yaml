@@ -1,0 +1,4 @@
+cj:
+  task: hello
+  inputs:
+      message: hello world!

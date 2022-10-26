@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>caravanacloud</groupId>
   <artifactId>cloud-janitor</artifactId>
-  <version>1.0.20220907d</version>
+  <version>1.0.20222610-085529</version>
 
   <description>
     Automating cleanup, maintenance and troubleshooting tasks in Cloud Computing
@@ -23,16 +23,15 @@
     <maven.compiler.source>17</maven.compiler.source>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-    <quarkus.platform.version>2.11.3.Final</quarkus.platform.version>
+    <quarkus.platform.version>2.13.3.Final</quarkus.platform.version>
     <quarkus.package.type>fast-jar</quarkus.package.type>
-    <kogito-quarkus.version>1.16.1.Final</kogito-quarkus.version>
     <awssdk.version>2.17.269</awssdk.version>
     <jackson.version>2.13.2.2</jackson.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <skipTests>true</skipTests>
 
-    <app.main.class>cloudjanitor.Main</app.main.class>
+    <app.main.class>cj.Main</app.main.class>
 
   </properties>
 

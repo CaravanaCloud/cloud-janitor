@@ -1,0 +1,29 @@
+package cj.simple;
+
+import cj.BaseTask;
+import cj.Output;
+
+import org.slf4j.Logger;
+
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+
+@Dependent
+public class HelloTask extends BaseTask {
+    @Inject
+    Logger log;
+    @Override
+    public void apply() {
+        //TODO: update to new input api
+        String message = getConfig()
+                .inputs()
+                .getOrDefault("message", "hello world!");
+        success(Output.Sample.Message, message);
+    }
+
+    @Override
+    public boolean isWrite() {
+        return false;
+    }
+
+}
