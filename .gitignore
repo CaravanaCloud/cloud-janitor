@@ -40,7 +40,7 @@ cloud-janitor.csv
 .cloud-janitor.csv
 
 .env
-.env
+.envrc
 
 data/test-samples/transcribe/*.srt
 config/application-old.yaml

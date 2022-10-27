@@ -1,40 +1,31 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>caravanacloud</groupId>
   <artifactId>cloud-janitor</artifactId>
-  <version>1.0.20222610-085529</version>
-
-  <description>
-    Automating cleanup, maintenance and troubleshooting tasks in Cloud Computing
-  </description>
-
+  <version>1.1.20222710-155616</version>
+  <description>Automating cleanup, maintenance and troubleshooting tasks in Cloud Computing</description>
   <url>https://github.com/CaravanaCloud/cloud-janitor</url>
-
   <organization>
     <name>Caravana Cloud</name>
     <url>http://caravana.cloud</url>
   </organization>
-
   <properties>
-    <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
-    <maven.compiler.target>17</maven.compiler.target>
+    <app.main.class>cj.Main</app.main.class>
+    <awssdk.version>2.17.269</awssdk.version>
+    <jackson.version>2.13.2.2</jackson.version>
     <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <quarkus.package.type>fast-jar</quarkus.package.type>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
     <quarkus.platform.version>2.13.3.Final</quarkus.platform.version>
-    <quarkus.package.type>fast-jar</quarkus.package.type>
-    <awssdk.version>2.17.269</awssdk.version>
-    <jackson.version>2.13.2.2</jackson.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <skipTests>true</skipTests>
-
-    <app.main.class>cj.Main</app.main.class>
-
+    <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
   </properties>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -44,7 +35,6 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-
       <dependency>
         <groupId>software.amazon.awssdk</groupId>
         <artifactId>bom</artifactId>
@@ -54,87 +44,69 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
     </dependency>
-
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-config-yaml</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-picocli</artifactId>
+    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
     </dependency>
-
-    <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
-    -->
-
-    <!-- AWS Clients -->
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>iam</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
-
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>sts</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
-
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>ec2</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
-
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>elasticloadbalancingv2</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
-
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>elasticloadbalancing</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
-
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>route53</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
-
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>cloudformation</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
-
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>s3</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
-
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>s3-transfer-manager</artifactId>
@@ -146,94 +118,79 @@
         </exclusion>
       </exclusions>
     </dependency>
-
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>cloudtrail</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
-
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>athena</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
-
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>transcribe</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
-
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>translate</artifactId>
       <version>${awssdk.version}</version>
     </dependency>
-    <!--
-    <dependency>
-      <groupId>software.amazon.awssdk</groupId>
-      <artifactId>url-connection-client</artifactId>
-      <version>${awssdk.version}</version>
-    </dependency>
-    -->
-
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-csv</artifactId>
       <version>1.9.0</version>
     </dependency>
-
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
       <version>4.2.0</version>
     </dependency>
-
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-qute</artifactId>
     </dependency>
-
-
   </dependencies>
-
   <build>
     <defaultGoal>clean compile quarkus:dev</defaultGoal>
     <finalName>cloud-janitor</finalName>
-
     <plugins>
       <plugin>
         <groupId>org.jreleaser</groupId>
         <artifactId>jreleaser-maven-plugin</artifactId>
         <version>1.2.0</version>
-          <configuration>
-            <jreleaser>
-              <project>
-                <copyright>copyleft</copyright>
-                <description>Cloud Janitor</description>
-              </project>
-              <distributions>
-                <cloud-janitor>
-                  <type>JAVA_BINARY</type>
-                  <stereotype>CLI</stereotype>
-                  <brew>
-                    <enabled>true</enabled>
-                    <active>ALWAYS</active>
-                  </brew>
-                  <artifacts>
-                    <artifact>
-                      <path>
-                        target/${project.artifactId}.zip
-                      </path>
-                    </artifact>
-                  </artifacts>
-                </cloud-janitor>
-              </distributions>
-            </jreleaser>
+        <configuration>
+          <jreleaser>
+            <project>
+              <copyright>copyleft</copyright>
+              <description>Cloud Janitor</description>
+            </project>
+            <release>
+              <github>
+                <owner>CaravanaCloud</owner>
+                <overwrite>true</overwrite>
+              </github>
+            </release>
+            <distributions>
+              <cloud-janitor>
+                <type>JAVA_BINARY</type>
+                <stereotype>CLI</stereotype>
+                <brew>
+                  <enabled>true</enabled>
+                  <active>ALWAYS</active>
+                </brew>
+                <artifacts>
+                  <artifact>
+                    <path>target/${project.artifactId}.zip</path>
+                  </artifact>
+                </artifacts>
+              </cloud-janitor>
+            </distributions>
+          </jreleaser>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>appassembler-maven-plugin</artifactId>
@@ -247,7 +204,6 @@
           </programs>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
@@ -268,7 +224,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.10.1</version>
         <configuration>
@@ -277,7 +232,6 @@
           </compilerArgs>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>${quarkus.platform.group-id}</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
@@ -290,7 +244,6 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${surefire-plugin.version}</version>
@@ -301,7 +254,6 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
@@ -317,21 +269,9 @@
           <mainClass>${app.main.class}</mainClass>
         </configuration>
       </plugin>
-
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.4.2</version>
-        <!--
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-        -->
         <configuration>
           <appendAssemblyId>false</appendAssemblyId>
           <descriptors>
@@ -339,7 +279,6 @@
           </descriptors>
         </configuration>
       </plugin>
-
     </plugins>
   </build>
   <profiles>
@@ -350,9 +289,6 @@
           <name>native</name>
         </property>
       </activation>
-      <properties>
-        <quarkus.package.type>native</quarkus.package.type>
-      </properties>
       <build>
         <plugins>
           <plugin>
@@ -376,6 +312,9 @@
           </plugin>
         </plugins>
       </build>
+      <properties>
+        <quarkus.package.type>native</quarkus.package.type>
+      </properties>
     </profile>
   </profiles>
 </project>

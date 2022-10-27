@@ -28,7 +28,7 @@ Start you gitpod worspace by visiting https://gitpod.io/#github.com/CaravanaClou
 
 Once your workspace is running use the command ```aws configure``` to setup your AWS account authentication. You can also use gitpod environment variables or dotfiles for that purpose. Check that authentication is correct with the command ```aws sts get-caller-identity```
 
-You can run cloud-janitor in development mode by executing ```quarkus dev```, ```mvn quarkus:dev``` or simply running the class ```cj.Main```. The default task is called "marvin" and is mostly harmless. It will just log the most important reminder: "Don't panic" :) 
+You can run cloud-janitor in development mode by executing ```quarkus dev```, ```mvn quarkus:dev``` or simply running the class ```cj.Application```. The default task is called "marvin" and is mostly harmless. It will just log the most important reminder: "Don't panic" :) 
 
 Ready to start janitoring? Check the ```LearningFromTests``` class for some examples.
 
