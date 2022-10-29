@@ -1,14 +1,14 @@
 package cj.aws.ec2;
 
-import jdk.jfr.Name;
 import software.amazon.awssdk.services.ec2.model.CreateVpcRequest;
 import cj.Input;
 import cj.Output;
 import cj.aws.AWSWrite;
 
 import javax.enterprise.context.Dependent;
+import javax.inject.Named;
 
-@Name("create-vpc")
+@Named("create-vpc")
 @Dependent
 public class CreateVPC extends AWSWrite {
     private static final String DEFAULT_CIDR = "10.0.0.0/16";

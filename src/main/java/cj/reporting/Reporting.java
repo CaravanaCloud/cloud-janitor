@@ -4,7 +4,6 @@ import cj.Configuration;
 import cj.Tasks;
 import io.quarkus.qute.Location;
 import io.quarkus.qute.Template;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -15,8 +14,6 @@ import java.util.List;
 
 @ApplicationScoped
 public class Reporting {
-    @ConfigProperty(name = "cj.reporting.output.file", defaultValue = "cloud-janitor.html")
-    String outputFile;
     @Location("cloud-janitor.html")
     Template report;
 
@@ -68,7 +65,7 @@ public class Reporting {
 
     private void write(String result) {
         var appPath = config.getApplicationPath();
-        var reportFile = appPath.resolve(outputFile).toFile();
+        var reportFile = appPath.resolve(config.report().outputFile()).toFile();
         try (var out = new PrintWriter(reportFile)) {
             out.println(result);
         } catch (FileNotFoundException e) {

@@ -22,7 +22,6 @@
 *.rpm
 *.dmg
 *.exe
-*.jar
 *.deb
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
@@ -44,3 +43,4 @@ cloud-janitor.csv
 
 data/test-samples/transcribe/*.srt
 config/application-old.yaml
+config/application.yaml

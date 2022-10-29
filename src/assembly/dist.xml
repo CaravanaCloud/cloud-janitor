@@ -10,8 +10,8 @@
     <includeBaseDirectory>false</includeBaseDirectory>
     <fileSets>
         <fileSet>
-            <outputDirectory>./cloud-janitor</outputDirectory>
-            <directory>target/appassembler/</directory>
+            <outputDirectory>/</outputDirectory>
+            <directory>target/dist/cloud-janitor</directory>
             <includes>
                 <include>**/*</include>
             </includes>

@@ -39,11 +39,16 @@ public class Tasks {
     List<Task> history = new ArrayList<>();
 
     public void run(String[] args) {
-        log.trace("Tasks.run()",args);
-        var taskName = config.taskName();
-        var matches = lookupTasks(taskName);
-        runAll(matches);
-        report();
+        log.trace("Tasks.run()", (Object[]) args);
+        var tasks = config.tasks();
+        for(var task : tasks.entrySet()){
+            var name = task.getKey();
+            log.info("Running task {}", name);
+        }
+        //var taskName = config.taskName();
+        //var matches = lookupTasks(taskName);
+        //runAll(matches);
+        //report();
     }
 
     private void report() {

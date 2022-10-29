@@ -11,4 +11,9 @@ public interface ReportConfiguration {
     @WithName("enabled")
     @WithDefault("false")
     boolean enabled();
+
+    @WithName("outputFile")
+    @WithDefault("cloud-janitor.html")
+    String outputFile();
+
 }

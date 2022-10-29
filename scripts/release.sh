@@ -17,7 +17,10 @@ zip -r ../../cloud-janitor.zip .
 popd
 
 unzip -l target/cloud-janitor.zip
+
+mvn jreleaser:full-release
 echo "done"
+
 
 # brew tap CaravanaCloud/homebrew-tap
 # brew install cloud-janitor

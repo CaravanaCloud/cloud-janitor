@@ -9,6 +9,7 @@ import io.smallrye.config.WithName;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -21,10 +22,6 @@ public interface Configuration {
     boolean PRINT_STACK_TRACE = false;
     float MEDIUM_POLL_FACTOR = 4.0f;
     float LARGE_POLL_FACTOR = 8.0f;
-
-    @WithDefault("hello")
-    @WithName("task")
-    String taskName();
 
     @WithName("dryRun")
     @WithDefault("true")
@@ -54,7 +51,7 @@ public interface Configuration {
     ReportConfiguration report();
 
     @WithName("tasks")
-    Map<String, Map<String, String>> tasks();
+    Map<String, TaskConfiguration>  tasks();
 
     default Path getApplicationPath(){
         var home = System.getProperty("user.home");
