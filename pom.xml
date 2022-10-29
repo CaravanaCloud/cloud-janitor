@@ -14,7 +14,7 @@
     </organization>
     <properties>
         <app.main.class>cj.Main</app.main.class>
-        <awssdk.version>2.17.269</awssdk.version>
+        <awssdk.version>2.17.285</awssdk.version>
         <jackson.version>2.13.2.2</jackson.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
