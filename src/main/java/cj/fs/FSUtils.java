@@ -15,6 +15,12 @@ import java.util.stream.Stream;
 public class FSUtils {
     private static final Logger log = LoggerFactory.getLogger(FSUtils.class);
 
+    public static Path getLocalConfigDir() {
+        return getApplicationDir().resolve("config");
+    }
+
+
+
 
     static class FilterVisitor extends SimpleFileVisitor<Path> {
         List<Path> results = new ArrayList<>();
@@ -65,7 +71,7 @@ public class FSUtils {
 
     public static List<Path> filterLocalVideos(){
         var extension = Optional.of("mp4");
-        var dataDirMatch = filterLocalFiles(getDataDir(), extension);
+        var dataDirMatch = filterLocalFiles(getApplicationDir(), extension);
         var videosDirMatch = filterLocalFiles(getVideosDir(), extension);
         var currentDirMatch = filterLocalFiles(getCurrentDir(), extension);
         return Stream.of(dataDirMatch, videosDirMatch, currentDirMatch)
@@ -78,9 +84,10 @@ public class FSUtils {
         return userPath;
     }
 
-    public static Path getDataDir() {
+    public static Path getApplicationDir() {
         Path homePath = getHomePath();
-        var dataPath = homePath.resolve(".cj");
+        var configPath = homePath.resolve(".config");
+        var dataPath = configPath.resolve("cloud-janitor");
         var dataDir = dataPath.toFile();
         if (! dataDir.exists()){
             dataDir.mkdirs();

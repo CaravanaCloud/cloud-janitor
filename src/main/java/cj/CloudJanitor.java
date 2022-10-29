@@ -18,16 +18,22 @@ public class CloudJanitor implements QuarkusApplication{
 
     @Override
     public int run(String... args){
-        tasks.run(args);
+        log.trace("CloudJanitor.run()");
+        try {
+            tasks.run(args);
+        } catch (Exception e) {
+            log.error("CloudJanitor.run() failed", e);
+            return -1;
+        }
         return 0;
     }
 
     void onStart(@Observes StartupEvent ev) {
-        log.info("Cloud Janitor is starting.");
-        log.info("Launch mode: {}", launchMode.name());
+        log.info("Thank you for running cloud-janitor.");
+        log.debug("Quarkus launch mode: {}", launchMode);
     }
 
     void onStop(@Observes ShutdownEvent ev) {
-        log.debug("Cloud Janitor is stopping...");
+        log.debug("Cloud Janitor stopped.");
     }
 }

@@ -15,7 +15,7 @@ import java.util.Random;
 
 import static cj.Utils.existing;
 
-@ConfigMapping(prefix = "cj")
+@ConfigMapping(prefix = "cj" )
 @StaticInitSafe
 public interface Configuration {
     final Random rand = new Random();
@@ -51,7 +51,7 @@ public interface Configuration {
     ReportConfiguration report();
 
     @WithName("tasks")
-    Map<String, TaskConfiguration>  tasks();
+    List<TaskConfiguration>  tasks();
 
     default Path getApplicationPath(){
         var home = System.getProperty("user.home");

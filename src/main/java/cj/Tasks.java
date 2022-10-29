@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import static cj.Errors.Type.Message;
 
@@ -41,14 +42,17 @@ public class Tasks {
     public void run(String[] args) {
         log.trace("Tasks.run()", (Object[]) args);
         var tasks = config.tasks();
-        for(var task : tasks.entrySet()){
-            var name = task.getKey();
-            log.info("Running task {}", name);
+        log.debug("Loaded {} tasks", tasks.size());
+        for(var task : tasks){
+            run(task);
         }
-        //var taskName = config.taskName();
-        //var matches = lookupTasks(taskName);
-        //runAll(matches);
-        //report();
+        report();
+    }
+
+    private void run(TaskConfiguration task) {
+        log.debug("Running task: {}", task.name());
+        var matches = lookupTasks(task.name());
+        runAll(matches);
     }
 
     private void report() {
