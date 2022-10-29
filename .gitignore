@@ -44,3 +44,4 @@ cloud-janitor.csv
 data/test-samples/transcribe/*.srt
 config/application-old.yaml
 config/application.yaml
+nohup.out
