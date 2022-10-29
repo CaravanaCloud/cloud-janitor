@@ -26,4 +26,4 @@
         - name: Build and release
           run: ./mvnw $MVN_FLAGS install
           env:
-            JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            JRELEASER_GITHUB_TOKEN: ${{ secrets.JRELEASER_GITHUB_TOKEN }}

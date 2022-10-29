@@ -12,12 +12,12 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
-      - name: Setup GraalVM action
-        uses: ayltai/setup-graalvm@v1
+      - uses: graalvm/setup-graalvm@v1
         with:
-          java-version: 17
-          graalvm-version: 22.0.0.2
-          native-image: true
+          version: 'latest'
+          java-version: '17'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cache Maven packages
         uses: actions/cache@v2
@@ -29,8 +29,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.CC_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.CC_AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.SB_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.SB_AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION}}
         env:
           AWS_REGION: us-west-2
@@ -62,4 +62,3 @@ jobs:
         uses: cicirello/jacoco-badge-generator@v2
         with:
           generate-branches-badge: true
-
