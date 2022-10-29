@@ -1,7 +1,8 @@
-#/bin/bash
+#!/bin/bash
+set -ex
 
 MAJOR=1
-MINOR=0
+MINOR=2
 PATCH=$(date +%Y%m%d%H%M%S)
 VERSION="$MAJOR.$MINOR.$PATCH"
 TAG="v$VERSION"
