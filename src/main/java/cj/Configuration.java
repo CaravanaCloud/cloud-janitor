@@ -18,7 +18,6 @@ import static cj.Utils.existing;
 @ConfigMapping(prefix = "cj" )
 @StaticInitSafe
 public interface Configuration {
-    final Random rand = new Random();
     boolean PRINT_STACK_TRACE = false;
     float MEDIUM_POLL_FACTOR = 4.0f;
     float LARGE_POLL_FACTOR = 8.0f;
@@ -101,6 +100,7 @@ public interface Configuration {
     }
 
     default float noise() {
+        Random rand = new Random();
         float noise = rand.nextFloat(1.00f, 1.25f);
         return noise;
     }

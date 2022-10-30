@@ -12,7 +12,7 @@ import static cj.Input.Local.message;
 @Named("hello")
 @Dependent
 public class HelloTask extends ReadTask {
-    static final String initialMsg = "Hello, thank you for calling Cloud Janitor.";
+    static final String initialMsg = "Hello World!";
     @Inject
     Logger log;
 

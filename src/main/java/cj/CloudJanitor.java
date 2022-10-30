@@ -6,8 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import java.util.List;
 
-public class CloudJanitor implements QuarkusApplication{
+public class CloudJanitor {
     private static final Logger log = LoggerFactory.getLogger(CloudJanitor.class);
 
     @Inject
@@ -16,11 +17,10 @@ public class CloudJanitor implements QuarkusApplication{
     @Inject
     LaunchMode launchMode;
 
-    @Override
-    public int run(String... args){
+    public int run(String task, List<String> inputs){
         log.trace("CloudJanitor.run()");
         try {
-            tasks.run(args);
+            tasks.run(task, inputs);
         } catch (Exception e) {
             log.error("CloudJanitor.run() failed", e);
             return -1;

@@ -1,7 +1,7 @@
 open module cj {
+    requires info.picocli;
     requires org.slf4j;
     requires awaitility;
-    requires info.picocli;
     requires jakarta.enterprise.cdi.api;
     requires jakarta.inject.api;
     requires quarkus.core;

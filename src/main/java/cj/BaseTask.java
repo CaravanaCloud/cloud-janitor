@@ -195,19 +195,22 @@ public class BaseTask implements Task {
         return inputs.get(key);
     }
 
-    public Optional<Object> inputAs(Input key){
+    public Optional<Object> input(Input key){
         if (key == null) return Optional.empty();
         var value = inputs.get(key);
         if (value == null) {
             var configInputs = getConfig().inputs();
             value = configInputs.get(key.toString());
         }
+        if (value == null) {
+            value = tasks.getCLIInput(key.toString());
+        }
         return Optional.ofNullable(value);
     }
 
     @SuppressWarnings("unchecked")
     public <T> Optional<T> inputAs(Input key, Class<T> clazz){
-        return (Optional<T>) inputAs(key);
+        return (Optional<T>) input(key);
     }
 
     @SuppressWarnings("unchecked")
@@ -217,7 +220,7 @@ public class BaseTask implements Task {
 
     @SuppressWarnings("unchecked")
     public <T> T getInput(Input key, Class<T> inputClass){
-        return (T) inputAs(key).get();
+        return (T) input(key).get();
     }
 
     public String matchMark(boolean match){
@@ -242,7 +245,7 @@ public class BaseTask implements Task {
     }
 
     public Optional<String> inputString(Input key){
-        return inputAs(key).map(o -> o.toString());
+        return input(key).map(o -> o.toString());
     }
 
     public Object output(Output key, Object value){

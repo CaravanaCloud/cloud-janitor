@@ -7,9 +7,10 @@ import picocli.CommandLine;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import java.util.List;
 
 @CommandLine.Command
-public class Command implements Runnable, QuarkusApplication {
+public class CommandJanitor implements Runnable, QuarkusApplication {
     @Inject
     CommandLine.IFactory factory;
 
@@ -19,12 +20,18 @@ public class Command implements Runnable, QuarkusApplication {
     @Inject
     Logger log;
 
-    public Command(){}
+    @CommandLine.Option(names = {"-t", "--task"}, description = "Task to be executed")
+    String taskName;
+
+    @CommandLine.Option(names = {"-i", "--input"}, description = "Input parameter")
+    List<String> input;
+
+    public CommandJanitor(){}
 
     @Override
     public void run() {
         log.trace("Command.run()");
-        cj.run();
+        cj.run(taskName, input);
     }
 
     @Override

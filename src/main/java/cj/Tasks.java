@@ -11,10 +11,7 @@ import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static cj.Errors.Type.Message;
 
@@ -37,16 +34,40 @@ public class Tasks {
     @Inject
     Reporting reporting;
 
+    Map<String, String> cliInputs = new HashMap<>();
+
     List<Task> history = new ArrayList<>();
 
-    public void run(String[] args) {
-        log.trace("Tasks.run()", (Object[]) args);
-        var tasks = config.tasks();
-        log.debug("Loaded {} tasks", tasks.size());
+    public void run(String taskName, List<String> inputs) {
+        log.trace("Tasks.run()", taskName);
+        log.debug("Inputs: {}", inputs);
+        var tasks = new ArrayList<>(config.tasks());
+        parseInputs(inputs);
+        if(taskName != null && !taskName.isEmpty()){
+            tasks.add(new TaskConfiguration() {
+                @Override
+                public String name() {
+                    return taskName;
+                }
+            });
+        }
+        log.info("Received {} tasks to execute.", tasks.size());
         for(var task : tasks){
             run(task);
         }
         report();
+    }
+
+    private void parseInputs(List<String> inputs) {
+        if(inputs != null)  for(var input: inputs){
+            var parts = input.split("=");
+            if(parts.length != 2){
+                throw new IllegalArgumentException("Invalid input: " + input);
+            }
+            var key = parts[0];
+            var value = parts[1];
+            cliInputs.put(key, value);
+        }
     }
 
     private void run(TaskConfiguration task) {
@@ -165,4 +186,7 @@ public class Tasks {
     }
 
 
+    public String getCLIInput(String key) {
+        return cliInputs.get(key);
+    }
 }
