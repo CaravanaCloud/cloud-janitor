@@ -1,5 +1,6 @@
 package cj.hello;
 
+import cj.Output;
 import org.slf4j.Logger;
 import cj.ReadTask;
 
@@ -18,7 +19,8 @@ public class HelloTask extends ReadTask {
 
     @Override
     public void apply() {
-        var msg = inputString(message);
-        log.info(msg.orElse(initialMsg));
+        var msg = inputString(message).orElse(initialMsg);
+        log.info(msg);
+        success(Output.Sample.Message, msg);
     }
 }

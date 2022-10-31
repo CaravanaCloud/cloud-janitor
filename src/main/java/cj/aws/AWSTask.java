@@ -1,7 +1,6 @@
 package cj.aws;
 
 import cj.Input;
-import cj.LogConstants;
 import cj.Output;
 import cj.aws.sts.CallerIdentity;
 import cj.aws.sts.GetCallerIdentityTask;
@@ -16,8 +15,7 @@ import java.util.List;
 import static cj.Input.AWS.identity;
 
 public abstract class   AWSTask
-        extends BaseTask
-        implements LogConstants {
+        extends BaseTask {
 
     private String accountName;
     private String regionName;

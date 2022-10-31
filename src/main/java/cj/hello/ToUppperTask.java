@@ -1,4 +1,4 @@
-package cj.simple;
+package cj.hello;
 
 import cj.BaseTask;
 import cj.spi.Task;
