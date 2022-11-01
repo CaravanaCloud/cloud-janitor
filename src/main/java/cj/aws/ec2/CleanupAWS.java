@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import static cj.Input.aws.identity;
-import static cj.Output.AWS.Identities;
+import static cj.Output.aws.Identities;
 
 @Named("cleanup-aws")
 @Dependent

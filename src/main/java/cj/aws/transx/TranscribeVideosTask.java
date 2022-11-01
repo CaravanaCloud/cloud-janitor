@@ -1,7 +1,7 @@
 package cj.aws.transx;
 
 import cj.aws.AWSWrite;
-import cj.aws.s3.GetDataBucket;
+import cj.aws.s3.GetDataBucketTask;
 import cj.fs.FilterLocalVideos;
 import cj.spi.Task;
 import software.amazon.awssdk.services.s3.model.Bucket;
@@ -15,13 +15,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import static cj.Input.local.fileExtension;
-import static cj.Output.AWS.S3Bucket;
-import static cj.Output.Local.FilesMatch;
-import static java.util.concurrent.TimeUnit.MINUTES;
-import static java.util.concurrent.TimeUnit.SECONDS;
+import static cj.Output.aws.S3Bucket;
+import static cj.Output.local.FilesMatch;
 import static org.awaitility.Awaitility.await;
 
 
@@ -32,7 +29,7 @@ public class TranscribeVideosTask extends AWSWrite {
     FilterLocalVideos filterFiles;
 
     @Inject
-    GetDataBucket getDataBucket;
+    GetDataBucketTask getDataBucket;
 
     static final String prefix = "transcribe/";
 
@@ -62,7 +59,7 @@ public class TranscribeVideosTask extends AWSWrite {
     }
 
     private void download(Transcription tc) {
-        var s3tx = aws().s3tx();
+        var s3tx = aws().s3tm();
         var job = tc.transcriptionJob;
         var transcriptUri = job.transcript().transcriptFileUri();
         var srtPath = tc.getOutputSrtFilePath();
@@ -74,20 +71,10 @@ public class TranscribeVideosTask extends AWSWrite {
     }
 
     private void awaitTranscribe(Transcription tc) {
-            await().atMost(10, MINUTES)
-                    .pollInterval(getPollInterval(), SECONDS)
-                    .until(() -> transcriptionCompleted(tc));
+        awaitUntil(() -> transcriptionCompleted(tc));
     }
 
-    static final Random rand = new Random();
-    private int getPollInterval() {
-        var variance = 0.10;
-        var pollInterval = 30.00;
-        var noise = rand.nextDouble() * variance;
-        var signal = 1 - noise;
-        pollInterval *= signal;
-        return Double.valueOf(pollInterval).intValue();
-    }
+
 
     private boolean transcriptionCompleted(Transcription tc) {
         var transcribe = aws().transcribe();
@@ -124,7 +111,7 @@ public class TranscribeVideosTask extends AWSWrite {
 
 
     private void putObject(Transcription tc) {
-        var s3 = aws().s3tx();
+        var s3 = aws().s3tm();
         var bucketName = getDataBucket.outputAs(S3Bucket, Bucket.class).map(Bucket::name).get();
         var path = tc.sourcePath;
         var objKey = path.getFileName().toString();

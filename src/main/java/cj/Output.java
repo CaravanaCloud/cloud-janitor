@@ -5,16 +5,16 @@ public interface Output {
         paths
     }
 
-    enum Local implements Output {
+    enum local implements Output {
         FilesMatch
 
     }
 
-    enum Sample implements Output{
+    enum sample implements Output{
         Message, UpperMessage
     }
 
-    enum AWS implements Output{
+    enum aws implements Output{
         CallerIdentity,
         VPCMatch,
         SubnetMatch,

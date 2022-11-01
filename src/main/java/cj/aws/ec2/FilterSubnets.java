@@ -32,6 +32,6 @@ public class FilterSubnets extends AWSFilter {
         var describeNets = DescribeSubnetsRequest.builder().build();
         var nets = ec2.describeSubnets(describeNets).subnets().stream();
         var matches = nets.filter(this::match).toList();
-        success(Output.AWS.SubnetMatch, matches);
+        success(Output.aws.SubnetMatch, matches);
     }
 }

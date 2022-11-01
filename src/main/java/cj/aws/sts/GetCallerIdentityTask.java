@@ -1,20 +1,30 @@
 package cj.aws.sts;
 
 import cj.Output;
+import cj.Tasks;
 import cj.aws.AWSFilter;
+import software.amazon.awssdk.services.sts.model.StsException;
 
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import java.util.Optional;
 
 @Dependent
 public class GetCallerIdentityTask extends AWSFilter {
+    @Inject
+    Tasks tasks;
+
     @Override
     public void apply() {
-        var accountId = lookupAccountId();
-        var accountAlias = lookupAccountAlias(accountId);
-        var callerId = new CallerIdentity(accountId, accountAlias);
-        trace("GetCallerIdentity {}", callerId);
-        success(Output.AWS.CallerIdentity, callerId);
+        try {
+            var accountId = lookupAccountId();
+            var accountAlias = lookupAccountAlias(accountId);
+            var callerId = new CallerIdentity(accountId, accountAlias);
+            trace("GetCallerIdentity {}", callerId);
+            success(Output.aws.CallerIdentity, callerId);
+        }catch (StsException ex){
+            warn("Failed to get AWS caller identity");
+        }
     }
 
     private Optional<String> lookupAccountAlias(String accountId) {

@@ -5,7 +5,7 @@ import software.amazon.awssdk.regions.Region;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.Output.AWS.RegionMatches;
+import static cj.Output.aws.RegionMatches;
 
 @Dependent
 public class FilterRegions extends AWSFilter {

@@ -14,6 +14,7 @@ import software.amazon.awssdk.services.route53.Route53Client;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.sts.StsClient;
 import software.amazon.awssdk.services.transcribe.TranscribeClient;
+import software.amazon.awssdk.services.translate.TranslateClient;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
 
 import java.util.HashMap;
@@ -105,7 +106,7 @@ public class AWSClients {
                 .build();
     }
 
-    public S3TransferManager s3tx(){
+    public S3TransferManager s3tm(){
         var tx = S3TransferManager
                 .builder()
                 .s3ClientConfiguration(c -> {
@@ -129,6 +130,18 @@ public class AWSClients {
                 .credentialsProvider(getCredentialsProvider())
                 .build();
         return transcribe;
+    }
+
+    public TranslateClient translate(){
+        return translate(getRegion());
+    }
+
+    private TranslateClient translate(Region region) {
+        var translate = TranslateClient.builder()
+                .region(getRegion())
+                .credentialsProvider(getCredentialsProvider())
+                .build();
+        return translate;
     }
 
     public S3Client s3(Region region){

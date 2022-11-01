@@ -14,12 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class GetDataBucketTest extends TaskTest {
 
     @Inject
-    GetDataBucket getDataBucket;
+    GetDataBucketTask getDataBucket;
 
     @Test
     public void testGetDataBucket(){
         submit(getDataBucket);
-        var bucket = getDataBucket.outputAs(Output.AWS.S3Bucket, Bucket.class);
+        var bucket = getDataBucket.outputAs(Output.aws.S3Bucket, Bucket.class);
         assertTrue(bucket.isPresent());
         log().debug("Got data bucket {}", bucket.get().name());
     }

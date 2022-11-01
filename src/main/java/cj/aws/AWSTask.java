@@ -10,13 +10,22 @@ import software.amazon.awssdk.services.ec2.model.Filter;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import java.time.Duration;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.Callable;
 
 import static cj.Input.aws.identity;
+import static org.awaitility.Awaitility.await;
 
 public abstract class   AWSTask
         extends BaseTask {
+    static final Random rand = new Random();
 
+    static AWSIdentity defaultIdentity = null;
+
+    @Inject
+    Instance<GetCallerIdentityTask> getCallerIdInstance;
     private String accountName;
     private String regionName;
 
@@ -34,30 +43,28 @@ public abstract class   AWSTask
             return awsId;
         }
         else{
-            logger().info("Loading default AWS Identity for task.");
-            var defaultId = LoadDefaultAWSIdentity();
-            return defaultId;
+            if (defaultIdentity == null) {
+                logger().info("Loading default AWS Identity for task.");
+                defaultIdentity = loadDefaultAWSIdentity();
+            }
+            return defaultIdentity;
         }
-    }
-
-    @Inject
-    Instance<GetCallerIdentityTask> getCallerIdInstance;
-
-    private AWSIdentity LoadDefaultAWSIdentity() {
-        var id = DefaultAWSIdentity.of();
-        var callerIdTask = (BaseTask) getCallerIdInstance.get()
-                .withInput(identity, id);
-        submit(callerIdTask);
-        var callerId = callerIdTask.outputAs(Output.AWS.CallerIdentity, CallerIdentity.class);
-        id = id.withCallerIdentity(callerId);
-        setIdentity(id);
-        return id;
     }
 
     protected void setIdentity(AWSIdentity id){
         getInputs().put(identity, id);
     }
 
+    private synchronized AWSIdentity loadDefaultAWSIdentity() {
+        var id = DefaultAWSIdentity.of();
+        var callerIdTask = (BaseTask) getCallerIdInstance.get()
+                .withInput(identity, id);
+        submit(callerIdTask);
+        var callerId = callerIdTask.outputAs(Output.aws.CallerIdentity, CallerIdentity.class);
+        id = id.withCallerIdentity(callerId);
+        setIdentity(id);
+        return id;
+    }
 
     protected <T> T create(Instance<T> instance){
         var result = instance.get();
@@ -125,4 +132,44 @@ public abstract class   AWSTask
         }
         return regionName;
     }
+
+    protected Duration getPollInterval() {
+        return getPollInterval(30.00);
+    }
+
+    protected Duration getPollIntervalLong() {
+        return getPollInterval(60.00);
+    }
+
+
+    protected Duration getPollInterval(double pollInterval) {
+        var variance = 0.10;
+        var noise = rand.nextDouble() * variance;
+        var signal = 1 - noise;
+        pollInterval *= signal;
+        var seconds = Double.valueOf(pollInterval).longValue();
+        var duration = Duration.ofSeconds(seconds);
+        return duration;
+    }
+
+    protected Duration getAtMost() {
+        return Duration.ofMinutes(10L);
+    }
+
+    protected Duration getAtMostLong() {
+        return Duration.ofMinutes(60L);
+    }
+
+    protected void awaitUntil(Callable<Boolean> condition){
+        await().atMost(getAtMost())
+                .pollInterval(getPollInterval())
+                .until(condition);
+    }
+
+    protected void awaitUntilLong(Callable<Boolean> condition){
+        await().atMost(getAtMostLong())
+                .pollInterval(getPollIntervalLong())
+                .until(condition);
+    }
+
 }

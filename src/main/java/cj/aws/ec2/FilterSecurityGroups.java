@@ -14,7 +14,7 @@ public class FilterSecurityGroups extends AWSFilter {
         var ec2 = aws().ec2();
         var resources = ec2.describeSecurityGroups().securityGroups();
         var matches = resources.stream().filter(this::match).toList();
-        success(Output.AWS.SecurityGroupsMatch, matches);
+        success(Output.aws.SecurityGroupsMatch, matches);
     }
 
     private boolean match(SecurityGroup securityGroup) {

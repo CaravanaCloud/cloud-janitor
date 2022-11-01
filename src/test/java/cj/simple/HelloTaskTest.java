@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 
-import static cj.Output.Sample.Message;
+import static cj.Output.sample.Message;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

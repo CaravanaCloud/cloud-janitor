@@ -25,7 +25,7 @@ public class DeleteRouteTables extends AWSWrite {
 
     @Override
     public void apply() {
-        var routeTables = filterRouteTables.outputList(Output.AWS.RouteTablesMatch, RouteTable.class);
+        var routeTables = filterRouteTables.outputList(Output.aws.RouteTablesMatch, RouteTable.class);
         routeTables.forEach(this::deleteRouteTable);
     }
 

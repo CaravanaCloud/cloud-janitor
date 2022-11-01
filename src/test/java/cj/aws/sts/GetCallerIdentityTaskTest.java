@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 
-import static cj.Output.AWS.CallerIdentity;
+import static cj.Output.aws.CallerIdentity;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

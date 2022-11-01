@@ -25,7 +25,7 @@ public class DeleteVPCEndpoints extends AWSTask {
 
     @Override
     public void apply() {
-        var xs = filterVPCEs.outputList(Output.AWS.VPCEndpointsMatch, VpcEndpoint.class);
+        var xs = filterVPCEs.outputList(Output.aws.VPCEndpointsMatch, VpcEndpoint.class);
         xs.forEach(this::deleteResource);
     }
 

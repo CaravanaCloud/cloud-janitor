@@ -3,7 +3,8 @@ package cj;
 public interface Input {
     enum fs implements Input {
         glob,
-        path
+        globPath,
+        paths
     }
     enum local implements Input {
         message, fileExtension
@@ -29,6 +30,10 @@ public interface Input {
         identity,
         targetInstanceId,
         awsClients,
-        targetAddress, securityGroupRule
+        targetAddress,
+        s3Prefix,
+        targetLanguages,
+        sourceLanguage,
+        contentType, securityGroupRule
     }
 }

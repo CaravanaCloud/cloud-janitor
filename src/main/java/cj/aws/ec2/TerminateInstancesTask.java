@@ -9,7 +9,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import static cj.Output.AWS.InstancesMatch;
+import static cj.Output.aws.InstancesMatch;
 
 @Dependent
 public class TerminateInstancesTask extends AWSTask {

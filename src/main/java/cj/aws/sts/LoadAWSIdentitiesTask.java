@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static cj.Output.AWS.CallerIdentity;
-import static cj.Output.AWS.Identities;
+import static cj.Output.aws.CallerIdentity;
+import static cj.Output.aws.Identities;
 
 @Dependent
 public class LoadAWSIdentitiesTask extends AWSTask {

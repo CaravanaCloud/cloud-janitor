@@ -31,7 +31,8 @@ public class CloudJanitor {
     }
 
     void onStart(@Observes StartupEvent ev) {
-        log.info("Thank you for running cloud-janitor.");
+        var execId = tasks.getExecutionId();
+        log.info("Thank you for running cloud-janitor. Your execution id is {}", execId);
         log.debug("Quarkus launch mode: {}", launchMode);
     }
 

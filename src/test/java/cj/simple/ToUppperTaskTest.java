@@ -21,7 +21,7 @@ public class ToUppperTaskTest {
     @Test
     public void testUpMessage(){
         tasks.submit(toUpper);
-        var message = toUpper.outputString(Output.Sample.UpperMessage);
+        var message = toUpper.outputString(Output.sample.UpperMessage);
         assertEquals("HELLO WORLD!", message.get());
     }
 }

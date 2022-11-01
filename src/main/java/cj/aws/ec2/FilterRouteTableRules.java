@@ -30,7 +30,7 @@ public class FilterRouteTableRules extends AWSFilter {
         var client = aws().ec2();
         var resources = client.describeRouteTables().routeTables();
         var matches = resources.stream().filter(this::match).toList();
-        success(Output.AWS.RouteTableRulesMatch, matches);
+        success(Output.aws.RouteTableRulesMatch, matches);
     }
 }
 

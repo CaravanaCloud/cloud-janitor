@@ -32,7 +32,7 @@ public class DeleteSubnets extends AWSWrite {
 
     @Override
     public void apply() {
-        var subnets = outputList(Output.AWS.SubnetMatch, Subnet.class);
+        var subnets = outputList(Output.aws.SubnetMatch, Subnet.class);
         subnets.forEach(this::deleteSubnet);
     }
 

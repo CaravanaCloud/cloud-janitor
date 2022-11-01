@@ -5,7 +5,7 @@ import software.amazon.awssdk.services.ec2.model.NatGateway;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.Output.AWS.NatGatewaysMatch;
+import static cj.Output.aws.NatGatewaysMatch;
 
 @Dependent
 public class FilterNATGateways extends AWSFilter {

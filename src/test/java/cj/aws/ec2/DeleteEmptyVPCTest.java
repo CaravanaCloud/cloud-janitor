@@ -60,7 +60,7 @@ public class DeleteEmptyVPCTest extends TaskTest {
     private boolean vpcExists(String vpcId) {
         filterVPCs.withInput(Input.aws.targetVPCId, vpcId);
         tasks.submit(filterVPCs);
-        var vpcs = filterVPCs.outputList(Output.AWS.VPCMatch, Vpc.class);
+        var vpcs = filterVPCs.outputList(Output.aws.VPCMatch, Vpc.class);
         if (! vpcs.isEmpty()){
             var vpcExists = vpcs.get(0).vpcId().equals(vpcId);
             return vpcExists;
@@ -70,7 +70,7 @@ public class DeleteEmptyVPCTest extends TaskTest {
     private String createVPC() {
         var vpcId = tasks
                 .submit(createVPC)
-                .outputString(Output.AWS.VPCId);
+                .outputString(Output.aws.VPCId);
         if (vpcId.isEmpty()) fail();
         var result = vpcId.get();
         log.debug("Created VPC {}", result);

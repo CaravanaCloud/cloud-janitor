@@ -83,8 +83,10 @@ public interface Task {
     }
 
     default Task withInputs(Map<Input, Object> inputs){ return this; }
+    default Task withInput(Input key, Object value){return this; }
 
-    default Map<Output, Object> getOutputs(){
+
+        default Map<Output, Object> getOutputs(){
         return Map.of();
     }
 

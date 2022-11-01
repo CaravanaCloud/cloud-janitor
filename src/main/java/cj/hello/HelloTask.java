@@ -21,6 +21,6 @@ public class HelloTask extends ReadTask {
     public void apply() {
         var msg = inputString(message).orElse(initialMsg);
         log.info(msg);
-        success(Output.Sample.Message, msg);
+        success(Output.sample.Message, msg);
     }
 }

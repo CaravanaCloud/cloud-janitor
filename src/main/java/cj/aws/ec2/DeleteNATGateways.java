@@ -24,7 +24,7 @@ public class DeleteNATGateways extends AWSTask {
 
     @Override
     public void apply() {
-        var xs = filterNATs.outputList(Output.AWS.NatGatewaysMatch, NatGateway.class);
+        var xs = filterNATs.outputList(Output.aws.NatGatewaysMatch, NatGateway.class);
         xs.forEach(this::deleteResource);
     }
 

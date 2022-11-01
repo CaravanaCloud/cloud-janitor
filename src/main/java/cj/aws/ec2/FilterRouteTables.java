@@ -6,7 +6,7 @@ import software.amazon.awssdk.services.ec2.model.RouteTable;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.Output.AWS.RouteTablesMatch;
+import static cj.Output.aws.RouteTablesMatch;
 
 @Dependent
 public class FilterRouteTables extends AWSFilter {

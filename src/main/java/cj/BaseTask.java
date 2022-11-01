@@ -79,6 +79,13 @@ public class BaseTask implements Task {
                 .map(o -> (List<T>) o)
                 .orElse(List.of());
     }
+    @SuppressWarnings("unchecked")
+    public <T> List<T> inputList(Input key, Class<T> valueClass) {
+        return input(key)
+                .map(o -> (List<T>) o)
+                .orElse(List.of());
+    }
+
 
     @Override
     public Optional<String> outputString(Output key) {
@@ -277,5 +284,9 @@ public class BaseTask implements Task {
     @Override
     public boolean isWrite() {
         return false;
+    }
+
+    protected String getExecutionId(){
+        return tasks.getExecutionId();
     }
 }

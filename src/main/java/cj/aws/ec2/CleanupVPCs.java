@@ -9,7 +9,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import static cj.Output.AWS.VPCMatch;
+import static cj.Output.aws.VPCMatch;
 
 @Dependent
 public class CleanupVPCs extends AWSTask {

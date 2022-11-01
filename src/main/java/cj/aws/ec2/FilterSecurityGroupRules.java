@@ -9,7 +9,7 @@ import javax.enterprise.context.Dependent;
 import java.util.ArrayList;
 
 import static cj.Input.aws.targetVPCId;
-import static cj.Output.AWS.SecurityGroupRulesMatch;
+import static cj.Output.aws.SecurityGroupRulesMatch;
 
 @Dependent
 public class FilterSecurityGroupRules extends AWSFilter {

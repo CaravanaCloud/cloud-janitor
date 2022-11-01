@@ -20,7 +20,7 @@ public class FilterLoadBalancersV2 extends AWSFilter {
         var resources = elb.describeLoadBalancers().loadBalancers();
         var matches = resources.stream().filter(this::match).toList();
         debug("Matched {}/{} load balancers (v2)",  matches.size(), resources.size());
-        success(Output.AWS.ELBV2Match, matches);
+        success(Output.aws.ELBV2Match, matches);
     }
 
 }

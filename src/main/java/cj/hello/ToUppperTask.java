@@ -7,8 +7,8 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static cj.Output.Sample.Message;
-import static cj.Output.Sample.UpperMessage;
+import static cj.Output.sample.Message;
+import static cj.Output.sample.UpperMessage;
 
 @Dependent
 @Named("ToUpper")

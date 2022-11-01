@@ -15,7 +15,7 @@ public class FilterVPCs extends AWSFilter {
     @Override
     public void apply() {
         var vpcs = filterResources();
-        success(Output.AWS.VPCMatch, vpcs);
+        success(Output.aws.VPCMatch, vpcs);
     }
 
     private boolean matchVPCId(Vpc vpc){

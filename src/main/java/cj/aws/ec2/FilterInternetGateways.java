@@ -6,7 +6,7 @@ import software.amazon.awssdk.services.ec2.model.InternetGateway;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.Output.AWS.InternetGatewayMatch;
+import static cj.Output.aws.InternetGatewayMatch;
 
 @Dependent
 public class FilterInternetGateways extends AWSFilter {

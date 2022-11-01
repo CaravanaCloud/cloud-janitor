@@ -4,7 +4,7 @@ import cj.BaseTask;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.Output.Local.FilesMatch;
+import static cj.Output.local.FilesMatch;
 @Dependent
 public class FilterLocalVideos extends BaseTask {
 

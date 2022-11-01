@@ -11,8 +11,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cj.Input.fs.glob;
-import static cj.Input.fs.path;
+import static cj.Input.fs.*;
 import static cj.fs.FSUtils.cwd;
 
 /**
@@ -25,7 +24,7 @@ public class GlobFilesTask extends SafeTask {
     @Override
     public void apply() {
         var inGlob = expectInputString(glob);
-        var inPath = inputString(path).orElse(cwd());
+        var inPath = inputString(globPath).orElse(cwd());
         try {
             var paths = match(inGlob, inPath);
             success(Output.fs.paths, paths);

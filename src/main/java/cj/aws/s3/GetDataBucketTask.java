@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import java.util.Optional;
 
 @Dependent
-public class GetDataBucket extends AWSWrite {
+public class GetDataBucketTask extends AWSWrite {
     @Inject
     GetCallerIdentityTask getCallerId;
 
@@ -31,33 +31,36 @@ public class GetDataBucket extends AWSWrite {
     @Override
     public void apply() {
         var bucketName = getDataBucketName();
-        Optional<Bucket> bucket = getBucket(bucketName);
+        getOrCreateBucket(bucketName);
+    }
+
+    private void getOrCreateBucket(String bucketName) {
+        var bucket = getBucket(bucketName);
         if (bucket.isPresent()){
             debug("Found data bucket {}", bucket.get().name());
-            success(Output.AWS.S3Bucket, bucket);
+            success(Output.aws.S3Bucket, bucket);
         }else {
             debug("Data bucket not found {}. Creating...", bucketName);
             submit(createBucket.withInput(Input.aws.targetBucketName, bucketName));
             debug("Checking if bucket was created");
             bucket = getBucket(bucketName);
             if (bucket.isPresent()){
-                success(Output.AWS.S3Bucket, bucket);
+                success(Output.aws.S3Bucket, bucket);
             }else {
-                fail("Failed to create data bucket");
+                throw fail("Failed to create data bucket");
             }
         }
-
     }
 
     private Optional<Bucket> getBucket(String bucketName) {
         submit(getBucket.withInput(Input.aws.targetBucketName, bucketName));
-        var bucket  = getBucket.outputAs(Output.AWS.S3Bucket, Bucket.class);
+        var bucket  = getBucket.outputAs(Output.aws.S3Bucket, Bucket.class);
         return bucket;
     }
 
     private String getDataBucketName() {
         var prefix = "cj";
-        var callerId = getCallerId.outputAs(Output.AWS.CallerIdentity, CallerIdentity.class);
+        var callerId = getCallerId.outputAs(Output.aws.CallerIdentity, CallerIdentity.class);
         if (callerId.isEmpty()){
             throw fail("Could not find data bucket without caller id");
         } else {

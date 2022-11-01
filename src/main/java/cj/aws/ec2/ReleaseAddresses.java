@@ -25,7 +25,7 @@ public class ReleaseAddresses extends AWSTask {
 
     @Override
     public void apply() {
-        var eips = filterEIPs.outputList(Output.AWS.AddressMatch, Address.class);
+        var eips = filterEIPs.outputList(Output.aws.AddressMatch, Address.class);
         eips.stream().forEach(this::deleteAddress);
     }
 

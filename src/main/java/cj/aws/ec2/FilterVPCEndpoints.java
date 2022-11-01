@@ -6,7 +6,7 @@ import software.amazon.awssdk.services.ec2.model.VpcEndpoint;
 import javax.enterprise.context.Dependent;
 
 import static cj.Input.aws.targetVPCId;
-import static cj.Output.AWS.VPCEndpointsMatch;
+import static cj.Output.aws.VPCEndpointsMatch;
 
 @Dependent
 public class FilterVPCEndpoints extends AWSFilter {

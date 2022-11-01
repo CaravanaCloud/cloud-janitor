@@ -27,7 +27,7 @@ public class CleanupRegions extends AWSTask {
 
     @Override
     public void apply() {
-        var regions = filterRegions.outputList(Output.AWS.RegionMatches, Region.class);
+        var regions = filterRegions.outputList(Output.aws.RegionMatches, Region.class);
         var tasks = regions.stream().map(this::mapTask);
         tasks.forEach(this::submit);
     }

@@ -25,7 +25,7 @@ public class DeleteNetworkInterfaces extends AWSTask {
 
     @Override
     public void apply() {
-        var lbs = filterENIs.outputList(Output.AWS.NetworkINterfacesMatch, NetworkInterface.class);
+        var lbs = filterENIs.outputList(Output.aws.NetworkINterfacesMatch, NetworkInterface.class);
         lbs.stream().forEach(this::deleteNetworkInterface);
     }
 

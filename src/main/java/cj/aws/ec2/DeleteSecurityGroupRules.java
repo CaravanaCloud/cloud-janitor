@@ -24,7 +24,7 @@ public class DeleteSecurityGroupRules extends AWSTask {
 
     @Override
     public void apply() {
-        var rules = filterRules.outputList(Output.AWS.SecurityGroupRulesMatch, SecurityGroupRule.class);
+        var rules = filterRules.outputList(Output.aws.SecurityGroupRulesMatch, SecurityGroupRule.class);
         rules.forEach(this::deleteRule);
     }
 
