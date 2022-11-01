@@ -11,7 +11,7 @@ import javax.enterprise.context.Dependent;
 public class FilterRouteTableRules extends AWSFilter {
 
     private boolean match(RouteTable resource) {
-        var vpcId = inputString(Input.AWS.targetVPCId);
+        var vpcId = inputString(Input.aws.targetVPCId);
         var match = true;
         if (vpcId.isPresent()){
             match = match && resource.vpcId().equals(vpcId);

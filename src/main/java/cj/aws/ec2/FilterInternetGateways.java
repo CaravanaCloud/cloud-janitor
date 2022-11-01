@@ -23,7 +23,7 @@ public class FilterInternetGateways extends AWSFilter {
             match = nameMatch;
         }
 
-        var vpcId = inputAs(Input.AWS.targetVPCId, String.class);
+        var vpcId = inputAs(Input.aws.targetVPCId, String.class);
         if (vpcId.isPresent()){
             var vpcMatch = resource.attachments().stream().anyMatch(
                     vpc -> vpc.vpcId().equals(vpcId.get()));

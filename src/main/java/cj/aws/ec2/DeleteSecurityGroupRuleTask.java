@@ -27,7 +27,7 @@ public class DeleteSecurityGroupRuleTask extends AWSWrite {
     }
 
     private SecurityGroupRule getSecurityGroupRule() {
-        return getInput(Input.AWS.securityGroupRule, SecurityGroupRule.class);
+        return getInput(Input.aws.securityGroupRule, SecurityGroupRule.class);
     }
 
     @Override

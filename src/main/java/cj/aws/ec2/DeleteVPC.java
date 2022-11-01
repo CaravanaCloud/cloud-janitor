@@ -8,7 +8,7 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.util.List;
 
-import static cj.Input.AWS.targetVPCId;
+import static cj.Input.aws.targetVPCId;
 
 @Dependent
 public class DeleteVPC extends AWSWrite {

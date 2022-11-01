@@ -30,7 +30,7 @@ public class DeleteSecurityGroupRules extends AWSTask {
 
     private void deleteRule(SecurityGroupRule sgr) {
         var deleteRule = deleteRuleInstance.get()
-                .withInput(Input.AWS.securityGroupRule, sgr);
+                .withInput(Input.aws.securityGroupRule, sgr);
         submit(deleteRule);
     }
 

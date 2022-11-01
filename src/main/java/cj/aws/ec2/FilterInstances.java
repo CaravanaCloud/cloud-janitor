@@ -21,7 +21,7 @@ public class FilterInstances extends AWSFilter {
 
         if (terminated) return false;
 
-        var vpcId = inputString(Input.AWS.targetVPCId);
+        var vpcId = inputString(Input.aws.targetVPCId);
         if (vpcId.isPresent()){
             var vpcMatch = vpcId.get().equals(instance.vpcId());
             match = match && vpcMatch;

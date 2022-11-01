@@ -32,7 +32,7 @@ public class TerminateInstancesTask extends AWSTask {
 
     public void terminate(software.amazon.awssdk.services.ec2.model.Instance instance){
         var terminate = terminateInstance.get()
-                .withInput(Input.AWS.targetInstanceId, instance.instanceId());
+                .withInput(Input.aws.targetInstanceId, instance.instanceId());
         submit(terminate);
     }
 }

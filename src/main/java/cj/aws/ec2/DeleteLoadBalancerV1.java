@@ -10,7 +10,7 @@ import javax.enterprise.context.Dependent;
 public class DeleteLoadBalancerV1 extends AWSWrite {
     @Override
     public void apply() {
-        var albName = getInput(Input.AWS.targetLoadBalancerName, String.class);
+        var albName = getInput(Input.aws.targetLoadBalancerName, String.class);
         info("Deleting ELBV1 {}", albName);
         var request = DeleteLoadBalancerRequest.builder()
                 .loadBalancerName(albName)

@@ -11,7 +11,7 @@ public class DeleteNATGateway extends AWSWrite {
 
     @Override
     public void apply() {
-        var natGatewayId = getInputString(Input.AWS.targetNatGatewayId);
+        var natGatewayId = getInputString(Input.aws.targetNatGatewayId);
         debug("Deleting {}", natGatewayId);
         var deleteNat = DeleteNatGatewayRequest.builder().natGatewayId(natGatewayId).build();
         var ec2 = aws().ec2();

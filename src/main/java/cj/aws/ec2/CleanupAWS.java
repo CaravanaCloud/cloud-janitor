@@ -12,7 +12,7 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static cj.Input.AWS.identity;
+import static cj.Input.aws.identity;
 import static cj.Output.AWS.Identities;
 
 @Named("cleanup-aws")
@@ -26,7 +26,7 @@ public class CleanupAWS extends BaseTask {
 
     private void setDefaultIdentity() {
         var identity = DefaultAWSIdentity.of();
-        getInputs().put(Input.AWS.identity, identity);
+        getInputs().put(Input.aws.identity, identity);
     }
 
     @Override

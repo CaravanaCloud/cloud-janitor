@@ -22,7 +22,7 @@ public class CleanupRegion extends AWSFilter {
 
     @Override
     public void apply() {
-        var region = getInput(Input.AWS.targetRegion, Region.class);
+        var region = getInput(Input.aws.targetRegion, Region.class);
         info("Region cleaned up "+region);
     }
 }

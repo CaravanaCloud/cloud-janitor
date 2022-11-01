@@ -31,7 +31,7 @@ public class ReleaseAddresses extends AWSTask {
 
     private void deleteAddress(Address eip) {
         var delTask = deleteEIPInstance.get()
-                .withInput(Input.AWS.address, eip);
+                .withInput(Input.aws.address, eip);
         submit(delTask);
     }
 }

@@ -1,6 +1,10 @@
 package cj;
 
 public interface Output {
+    enum fs implements Output {
+        paths
+    }
+
     enum Local implements Output {
         FilesMatch
 

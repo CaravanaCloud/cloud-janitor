@@ -21,7 +21,7 @@ public class TerminateInstanceTask extends AWSWrite {
     }
 
     private String getInstanceId() {
-        return getInputString(Input.AWS.targetInstanceId);
+        return getInputString(Input.aws.targetInstanceId);
     }
 
     @Override

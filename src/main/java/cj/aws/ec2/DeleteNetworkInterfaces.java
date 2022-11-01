@@ -32,7 +32,7 @@ public class DeleteNetworkInterfaces extends AWSTask {
     private void deleteNetworkInterface(NetworkInterface eni) {
         var delLbTask = deleteENIInstance
                 .get()
-                .withInput(Input.AWS.targetNetworkInterfaceId, eni.networkInterfaceId());
+                .withInput(Input.aws.targetNetworkInterfaceId, eni.networkInterfaceId());
         submit(delLbTask);
     }
 }

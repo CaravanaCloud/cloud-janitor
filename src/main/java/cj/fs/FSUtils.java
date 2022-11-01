@@ -19,7 +19,9 @@ public class FSUtils {
         return getApplicationDir().resolve("config");
     }
 
-
+    public static String cwd() {
+        return System.getProperty("user.dir");
+    }
 
 
     static class FilterVisitor extends SimpleFileVisitor<Path> {
@@ -32,6 +34,7 @@ public class FSUtils {
 
         @Override
         public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
+            System.out.println(path);
             if (filterMatch(path)){
                 results.add(path);
             }

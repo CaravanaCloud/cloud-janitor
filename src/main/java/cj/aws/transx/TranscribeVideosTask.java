@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static cj.Input.Local.fileExtension;
+import static cj.Input.local.fileExtension;
 import static cj.Output.AWS.S3Bucket;
 import static cj.Output.Local.FilesMatch;
 

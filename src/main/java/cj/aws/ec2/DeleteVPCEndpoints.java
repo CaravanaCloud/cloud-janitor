@@ -31,7 +31,7 @@ public class DeleteVPCEndpoints extends AWSTask {
 
     private void deleteResource(VpcEndpoint vpce) {
         var delTask = deleteVPCEInstance.get()
-                .withInput(Input.AWS.targetVPCEndpoint, vpce);
+                .withInput(Input.aws.targetVPCEndpoint, vpce);
         submit(delTask);
     }
 }

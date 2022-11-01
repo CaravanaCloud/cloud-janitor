@@ -1,11 +1,16 @@
 package cj;
 
 public interface Input {
-    enum Local implements Input {
+    enum fs implements Input {
+        glob,
+        path
+    }
+    enum local implements Input {
         message, fileExtension
+
     }
 
-    enum AWS implements Input {
+    enum aws implements Input {
         targetVPCId,
         vpcCIDR,
         routeTable,

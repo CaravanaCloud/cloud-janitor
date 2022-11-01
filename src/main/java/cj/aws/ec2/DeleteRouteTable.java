@@ -13,7 +13,7 @@ public class DeleteRouteTable extends AWSWrite {
 
     @Override
     public void apply() {
-        RouteTable resource = getInput(Input.AWS.routeTable, RouteTable.class);
+        RouteTable resource = getInput(Input.aws.routeTable, RouteTable.class);
         if (! isMainRouteTable(resource)) {
             deleteRoutes(resource);
             try {

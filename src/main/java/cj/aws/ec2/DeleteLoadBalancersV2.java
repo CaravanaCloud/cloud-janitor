@@ -8,7 +8,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import static cj.Input.AWS.targetLoadBalancerArn;
+import static cj.Input.aws.targetLoadBalancerArn;
 import static cj.Output.AWS.ELBV2Match;
 
 @Dependent

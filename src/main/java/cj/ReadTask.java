@@ -1,9 +1,7 @@
 package cj;
 
-public abstract class ReadTask extends BaseTask {
-
-    @Override
-    public boolean isWrite(){
-        return false;
-    }
-}
+/**
+ * Syntactic sugar for SafeTask
+ * @see ReadTask
+ */
+public abstract class ReadTask extends SafeTask { }

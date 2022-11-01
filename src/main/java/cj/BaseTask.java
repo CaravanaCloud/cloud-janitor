@@ -173,6 +173,10 @@ public class BaseTask implements Task {
         return inputs;
     }
 
+    public String expectInputString(Input key){
+        return inputString(key).orElseThrow();
+    }
+
     public String getInputString(Input key){
         return getInputString(key, null);
     }
@@ -200,7 +204,8 @@ public class BaseTask implements Task {
         var value = inputs.get(key);
         if (value == null) {
             var configInputs = getConfig().inputs();
-            value = configInputs.get(key.toString());
+            var keyName = key.toString();
+            value = configInputs.get(keyName);
         }
         if (value == null) {
             value = tasks.getCLIInput(key.toString());

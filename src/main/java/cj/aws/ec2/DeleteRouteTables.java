@@ -30,7 +30,7 @@ public class DeleteRouteTables extends AWSWrite {
     }
 
     private void deleteRouteTable(RouteTable routeTable) {
-        var delRoute = delRouteTable.get().withInput(Input.AWS.routeTable, routeTable);
+        var delRoute = delRouteTable.get().withInput(Input.aws.routeTable, routeTable);
         submit(delRoute);
     }
 }

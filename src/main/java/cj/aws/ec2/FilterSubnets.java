@@ -13,7 +13,7 @@ public class FilterSubnets extends AWSFilter {
 
 
     private boolean match(Subnet net) {
-        var vpcId = getInputString(Input.AWS.targetVPCId);
+        var vpcId = getInputString(Input.aws.targetVPCId);
         if (vpcId != null) {
             return net.vpcId().equals(vpcId);
         }else if (hasFilterPrefix()){

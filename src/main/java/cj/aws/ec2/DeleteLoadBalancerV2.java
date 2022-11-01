@@ -11,7 +11,7 @@ public class DeleteLoadBalancerV2 extends AWSWrite {
 
     @Override
     public void apply() {
-        var albArn = getInput(Input.AWS.targetLoadBalancerArn, String.class);
+        var albArn = getInput(Input.aws.targetLoadBalancerArn, String.class);
         info("Deleting ELBV2 {}", albArn);
         var request = DeleteLoadBalancerRequest.builder()
                 .loadBalancerArn(albArn)

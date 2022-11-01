@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 import static cj.Utils.existing;
@@ -51,6 +52,7 @@ public interface Configuration {
 
     @WithName("tasks")
     List<TaskConfiguration>  tasks();
+
 
     default Path getApplicationPath(){
         var home = System.getProperty("user.home");

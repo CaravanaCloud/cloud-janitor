@@ -12,7 +12,7 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.List;
 
-import static cj.Input.AWS.identity;
+import static cj.Input.aws.identity;
 
 public abstract class   AWSTask
         extends BaseTask {
@@ -65,7 +65,7 @@ public abstract class   AWSTask
     }
 
     protected Region getRegion(){
-        var regionIn = inputAs(Input.AWS.targetRegion, Region.class);
+        var regionIn = inputAs(Input.aws.targetRegion, Region.class);
         if (regionIn.isEmpty()){
             var regionName = getConfig().aws().defaultRegion();
             return Region.of(regionName);

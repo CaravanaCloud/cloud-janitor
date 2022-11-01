@@ -30,7 +30,7 @@ public class CleanupVPCs extends AWSTask {
 
     private void deleteVPC(Vpc vpc) {
         var delVpc = create(deleteVPC)
-                .withInput(Input.AWS.targetVPCId, vpc.vpcId());
+                .withInput(Input.aws.targetVPCId, vpc.vpcId());
         submit(delVpc);
     }
 

@@ -23,7 +23,7 @@ public class FilterVPCs extends AWSFilter {
     }
 
     private String getTargetVpcId() {
-        var targetVpcId = getInputString(Input.AWS.targetVPCId);
+        var targetVpcId = getInputString(Input.aws.targetVPCId);
         return targetVpcId;
     }
 
@@ -55,6 +55,6 @@ public class FilterVPCs extends AWSFilter {
     }
 
     public void setTargetVPC(String vpcId) {
-        getInputs().put(Input.AWS.targetVPCId, vpcId);
+        getInputs().put(Input.aws.targetVPCId, vpcId);
     }
 }

@@ -6,7 +6,7 @@ import software.amazon.awssdk.services.s3.model.ListBucketsRequest;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.Input.AWS.targetBucketName;
+import static cj.Input.aws.targetBucketName;
 
 @Dependent
 public class GetBucketTask extends AWSTask {

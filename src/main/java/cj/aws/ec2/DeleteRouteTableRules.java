@@ -13,7 +13,7 @@ import javax.enterprise.context.Dependent;
 public class DeleteRouteTableRules extends AWSWrite {
     @Override
     public void apply() {
-        var rtb = getInput(Input.AWS.targetRouteTable, RouteTable.class);
+        var rtb = getInput(Input.aws.targetRouteTable, RouteTable.class);
         if (! isMainRouteTable(rtb)) {
             try {
                 deleteRoutes(rtb);

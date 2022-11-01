@@ -5,7 +5,7 @@ import cj.aws.AWSFilter;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.Input.AWS.targetVPCId;
+import static cj.Input.aws.targetVPCId;
 import static cj.Output.AWS.VPCEndpointsMatch;
 
 @Dependent

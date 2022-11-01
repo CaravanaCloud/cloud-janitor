@@ -30,7 +30,7 @@ public class DeleteNATGateways extends AWSTask {
 
     private void deleteResource(NatGateway nat) {
         var delTask = deleteNATInstance.get()
-                .withInput(Input.AWS.targetNatGatewayId, nat.natGatewayId());
+                .withInput(Input.aws.targetNatGatewayId, nat.natGatewayId());
         submit(delTask);
     }
 }

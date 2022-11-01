@@ -12,7 +12,7 @@ public class FilterNetworkInterfaces extends AWSFilter {
 
     private boolean match(NetworkInterface resource) {
         var match = true;
-        var vpcId = inputString(Input.AWS.targetVPCId);
+        var vpcId = inputString(Input.aws.targetVPCId);
         if (vpcId.isPresent()){
             match = match && resource.vpcId().equals(vpcId);
         }

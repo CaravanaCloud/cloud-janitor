@@ -11,7 +11,7 @@ public class DeleteBucket extends AWSWrite {
 
     @Override
     public void apply() {
-        var resource = getInputString(Input.AWS.targetBucketName);
+        var resource = getInputString(Input.aws.targetBucketName);
         debug("Deleting Bucket [{}]", resource);
         var request = DeleteBucketRequest.builder().bucket(resource).build();
         aws().s3().deleteBucket(request);

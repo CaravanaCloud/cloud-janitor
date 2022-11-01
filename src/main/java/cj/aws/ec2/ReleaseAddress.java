@@ -13,7 +13,7 @@ public class ReleaseAddress extends AWSWrite {
 
     @Override
     public void apply() {
-        var eip = getInput(Input.AWS.address, Address.class);
+        var eip = getInput(Input.aws.address, Address.class);
         debug("Releasing address {}", eip.publicIp());
         var associationId = eip.associationId();
         if (associationId != null && !associationId.isEmpty()) {
