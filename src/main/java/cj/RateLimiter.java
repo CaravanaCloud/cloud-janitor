@@ -1,8 +1,8 @@
 package cj;
 
+import cj.spi.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cj.spi.Task;
 
 import javax.enterprise.context.Dependent;
 

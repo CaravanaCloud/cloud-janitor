@@ -1,10 +1,10 @@
 package cj.aws.ec2;
 
 import cj.Input;
-import software.amazon.awssdk.services.ec2.model.DescribeSubnetsRequest;
-import software.amazon.awssdk.services.ec2.model.Subnet;
 import cj.Output;
 import cj.aws.AWSFilter;
+import software.amazon.awssdk.services.ec2.model.DescribeSubnetsRequest;
+import software.amazon.awssdk.services.ec2.model.Subnet;
 
 import javax.enterprise.context.Dependent;
 

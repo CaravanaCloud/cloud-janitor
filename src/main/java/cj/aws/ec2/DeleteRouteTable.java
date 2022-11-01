@@ -40,7 +40,6 @@ public class DeleteRouteTable extends AWSWrite {
         var gatewayId = route.gatewayId();
         if ("local".equals(gatewayId)) {
             debug("Not deleting local route {} / {}", resource.routeTableId(), route.toString());
-            return;
         }else{
             var builder = DeleteRouteRequest.builder()
                     .routeTableId(resource.routeTableId());

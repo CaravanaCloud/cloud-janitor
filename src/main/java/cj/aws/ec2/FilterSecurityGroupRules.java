@@ -1,7 +1,9 @@
 package cj.aws.ec2;
 
-import software.amazon.awssdk.services.ec2.model.*;
 import cj.aws.AWSFilter;
+import software.amazon.awssdk.services.ec2.model.DescribeSecurityGroupRulesRequest;
+import software.amazon.awssdk.services.ec2.model.SecurityGroup;
+import software.amazon.awssdk.services.ec2.model.SecurityGroupRule;
 
 import javax.enterprise.context.Dependent;
 import java.util.ArrayList;

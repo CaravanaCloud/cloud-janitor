@@ -2,8 +2,8 @@ package cj.aws.ec2;
 
 import cj.Input;
 import cj.Output;
-import software.amazon.awssdk.services.ec2.model.SecurityGroup;
 import cj.aws.AWSFilter;
+import software.amazon.awssdk.services.ec2.model.SecurityGroup;
 
 import javax.enterprise.context.Dependent;
 

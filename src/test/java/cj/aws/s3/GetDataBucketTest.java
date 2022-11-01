@@ -8,7 +8,7 @@ import software.amazon.awssdk.services.s3.model.Bucket;
 
 import javax.inject.Inject;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 class GetDataBucketTest extends TaskTest {

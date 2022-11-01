@@ -1,8 +1,8 @@
 package cj.aws.ec2;
 
 import cj.Input;
-import software.amazon.awssdk.services.ec2.model.RouteTable;
 import cj.aws.AWSFilter;
+import software.amazon.awssdk.services.ec2.model.RouteTable;
 
 import javax.enterprise.context.Dependent;
 

@@ -1,9 +1,9 @@
 package cj.aws.ec2;
 
 import cj.Input;
+import cj.aws.AWSFilter;
 import software.amazon.awssdk.services.ec2.model.DescribeInstancesRequest;
 import software.amazon.awssdk.services.ec2.model.Instance;
-import cj.aws.AWSFilter;
 
 import javax.enterprise.context.Dependent;
 

@@ -2,7 +2,10 @@ package cj.aws.ec2;
 
 import cj.aws.AWSWrite;
 import cj.spi.Task;
-import software.amazon.awssdk.services.ec2.model.*;
+import software.amazon.awssdk.services.ec2.model.DeleteInternetGatewayRequest;
+import software.amazon.awssdk.services.ec2.model.DetachInternetGatewayRequest;
+import software.amazon.awssdk.services.ec2.model.InternetGateway;
+import software.amazon.awssdk.services.ec2.model.InternetGatewayAttachment;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;

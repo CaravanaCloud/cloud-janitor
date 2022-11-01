@@ -4,7 +4,8 @@ import cj.Output;
 import cj.aws.AWSWrite;
 import cj.spi.Task;
 import org.awaitility.core.ConditionTimeoutException;
-import software.amazon.awssdk.services.ec2.model.*;
+import software.amazon.awssdk.services.ec2.model.DescribeInstancesRequest;
+import software.amazon.awssdk.services.ec2.model.Subnet;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
@@ -12,9 +13,9 @@ import javax.inject.Inject;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
 import static software.amazon.awssdk.services.ec2.model.InstanceStateName.RUNNING;
 import static software.amazon.awssdk.services.ec2.model.InstanceStateName.SHUTTING_DOWN;
-import static org.awaitility.Awaitility.*;
 
 @Dependent
 public class DeleteSubnets extends AWSWrite {

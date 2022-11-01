@@ -3,12 +3,6 @@ package cj;
 import cj.fs.FSUtils;
 import io.quarkus.runtime.Quarkus;
 import io.quarkus.runtime.annotations.QuarkusMain;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.List;
 
 @QuarkusMain
 public class Main {

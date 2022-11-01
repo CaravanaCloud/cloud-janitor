@@ -1,7 +1,7 @@
 package cj.aws.ec2;
 
-import software.amazon.awssdk.regions.Region;
 import cj.aws.AWSFilter;
+import software.amazon.awssdk.regions.Region;
 
 import javax.enterprise.context.Dependent;
 

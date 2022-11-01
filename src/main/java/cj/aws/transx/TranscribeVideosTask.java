@@ -10,7 +10,6 @@ import software.amazon.awssdk.services.transcribe.model.*;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,10 +20,9 @@ import java.util.Random;
 import static cj.Input.local.fileExtension;
 import static cj.Output.AWS.S3Bucket;
 import static cj.Output.Local.FilesMatch;
-
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.*;
+import static org.awaitility.Awaitility.await;
 
 
 @Named("aws-transcribe-videos")

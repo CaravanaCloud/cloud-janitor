@@ -1,8 +1,8 @@
 package cj.hello;
 
 import cj.Output;
-import org.slf4j.Logger;
 import cj.ReadTask;
+import org.slf4j.Logger;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;

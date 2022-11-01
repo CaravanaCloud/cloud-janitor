@@ -1,7 +1,7 @@
 package cj.aws.ec2;
 
-import software.amazon.awssdk.services.ec2.model.NatGateway;
 import cj.aws.AWSFilter;
+import software.amazon.awssdk.services.ec2.model.NatGateway;
 
 import javax.enterprise.context.Dependent;
 

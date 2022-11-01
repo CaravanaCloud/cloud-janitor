@@ -11,8 +11,9 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cj.Input.fs.*;
-import static cj.fs.FSUtils.*;
+import static cj.Input.fs.glob;
+import static cj.Input.fs.path;
+import static cj.fs.FSUtils.cwd;
 
 /**
  *
@@ -36,12 +37,12 @@ public class GlobFilesTask extends SafeTask {
     public List<Path> match(String globInput, String location) throws IOException {
         debug("Walking file tree [{}] [{}]", globInput, location);
         var visitor = new GlobVisitor(globInput, location);
-        Files.walkFileTree(Paths.get(location), visitor);;
+        Files.walkFileTree(Paths.get(location), visitor);
         return visitor.result;
     }
 
     class GlobVisitor extends SimpleFileVisitor<Path>{
-        private String globIn;
+        private final String globIn;
         private final String pathIn;
         final PathMatcher pathMatcher;
         private final List<Path> result = new ArrayList<>();

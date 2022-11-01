@@ -16,7 +16,8 @@ import software.amazon.awssdk.services.sts.StsClient;
 import software.amazon.awssdk.services.transcribe.TranscribeClient;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AWSClients {
     static final Logger log = LoggerFactory.getLogger(AWSClients.class);

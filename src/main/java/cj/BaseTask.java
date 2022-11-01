@@ -7,10 +7,13 @@ import org.slf4j.LoggerFactory;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
-import static cj.Errors.*;
+import static cj.Errors.Type;
 import static cj.Errors.Type.Message;
 @Dependent
 public class BaseTask implements Task {

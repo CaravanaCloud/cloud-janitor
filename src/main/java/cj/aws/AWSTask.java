@@ -1,11 +1,11 @@
 package cj.aws;
 
+import cj.BaseTask;
 import cj.Input;
 import cj.Output;
 import cj.aws.sts.CallerIdentity;
 import cj.aws.sts.GetCallerIdentityTask;
 import software.amazon.awssdk.regions.Region;
-import cj.BaseTask;
 import software.amazon.awssdk.services.ec2.model.Filter;
 
 import javax.enterprise.inject.Instance;
@@ -93,7 +93,7 @@ public abstract class   AWSTask
             String acctName = getAccountName();
             String region = getRegionName();
             if (acctName == null || region == null){
-                System.out.println("");
+                System.out.println();
             }
             return List.of("aws",
                     acctName,

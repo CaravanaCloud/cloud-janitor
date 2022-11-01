@@ -1,9 +1,9 @@
 package cj.aws.ec2;
 
-import software.amazon.awssdk.services.ec2.model.CreateVpcRequest;
 import cj.Input;
 import cj.Output;
 import cj.aws.AWSWrite;
+import software.amazon.awssdk.services.ec2.model.CreateVpcRequest;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;

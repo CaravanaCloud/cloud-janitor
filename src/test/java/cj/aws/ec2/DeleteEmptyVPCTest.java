@@ -7,14 +7,13 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
-
 import software.amazon.awssdk.services.ec2.model.Vpc;
 
 import javax.inject.Inject;
 
-import static org.awaitility.Awaitility.*;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
-import static java.util.concurrent.TimeUnit.*;
 
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -58,7 +57,6 @@ public class DeleteEmptyVPCTest extends TaskTest {
         tasks.submit(deleteVpc);
     }
 
-    @SuppressWarnings("unchecked")
     private boolean vpcExists(String vpcId) {
         filterVPCs.withInput(Input.aws.targetVPCId, vpcId);
         tasks.submit(filterVPCs);

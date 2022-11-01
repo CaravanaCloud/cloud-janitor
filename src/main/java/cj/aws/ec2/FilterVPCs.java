@@ -1,10 +1,10 @@
 package cj.aws.ec2;
 
-import software.amazon.awssdk.services.ec2.model.DescribeVpcsRequest;
-import software.amazon.awssdk.services.ec2.model.Vpc;
 import cj.Input;
 import cj.Output;
 import cj.aws.AWSFilter;
+import software.amazon.awssdk.services.ec2.model.DescribeVpcsRequest;
+import software.amazon.awssdk.services.ec2.model.Vpc;
 
 import javax.enterprise.context.Dependent;
 import java.util.List;

@@ -1,8 +1,8 @@
 package cj.aws.ec2;
 
-import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
 import cj.Output;
 import cj.aws.AWSFilter;
+import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
 
 import javax.enterprise.context.Dependent;
 

@@ -1,12 +1,12 @@
 package cj.aws.ec2;
 
 import cj.Input;
-import software.amazon.awssdk.services.ec2.model.InternetGateway;
 import cj.aws.AWSFilter;
+import software.amazon.awssdk.services.ec2.model.InternetGateway;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.Output.AWS.*;
+import static cj.Output.AWS.InternetGatewayMatch;
 
 @Dependent
 public class FilterInternetGateways extends AWSFilter {

@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 
 import static cj.Output.AWS.CallerIdentity;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTest
 public class GetCallerIdentityTaskTest extends TaskTest {

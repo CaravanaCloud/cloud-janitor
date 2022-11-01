@@ -1,23 +1,23 @@
 package cj;
 
+import cj.aws.ec2.CleanupVPCs;
+import cj.aws.ec2.FilterVPCs;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
-
-import cj.aws.ec2.CleanupVPCs;
-import cj.aws.ec2.FilterVPCs;
 import software.amazon.awssdk.services.cloudformation.model.*;
+import software.amazon.awssdk.services.ec2.model.Vpc;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.*;
-import software.amazon.awssdk.services.ec2.model.Vpc;
 import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CloudFormationTest extends TaskTest{
@@ -39,7 +39,7 @@ public class CloudFormationTest extends TaskTest{
     }
 
     @AfterAll
-    private void afterAll(){
+    public void afterAll(){
         if (!retainStackAfterTest())
             deleteStack();
     }

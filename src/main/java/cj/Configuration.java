@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Random;
 
 import static cj.Utils.existing;
@@ -79,7 +78,7 @@ public interface Configuration {
         return existing(execPath);
     }
 
-    static final class StaticConfig {
+    final class StaticConfig {
         static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddss_hhmmss");
         static final LocalDateTime loadTime = LocalDateTime.now();
         static final String executionId = dtf.format(loadTime);

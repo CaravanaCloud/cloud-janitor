@@ -1,8 +1,8 @@
 package cj.aws.ec2;
 
+import cj.aws.AWSFilter;
 import software.amazon.awssdk.services.ec2.model.Address;
 import software.amazon.awssdk.services.ec2.model.DescribeAddressesRequest;
-import cj.aws.AWSFilter;
 
 import javax.enterprise.context.Dependent;
 

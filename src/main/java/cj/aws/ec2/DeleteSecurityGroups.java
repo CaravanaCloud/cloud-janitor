@@ -2,15 +2,17 @@ package cj.aws.ec2;
 
 import cj.aws.AWSWrite;
 import cj.spi.Task;
-import software.amazon.awssdk.services.ec2.model.*;
+import software.amazon.awssdk.services.ec2.model.DeleteSecurityGroupRequest;
+import software.amazon.awssdk.services.ec2.model.DescribeNetworkInterfacesRequest;
+import software.amazon.awssdk.services.ec2.model.SecurityGroup;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import static cj.Output.AWS.SecurityGroupsMatch;
 import static cj.Utils.msToStr;
-import static java.util.concurrent.TimeUnit.*;
-import static org.awaitility.Awaitility.*;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.awaitility.Awaitility.await;
 
 @Dependent
 public class DeleteSecurityGroups extends AWSWrite {

@@ -9,8 +9,8 @@ import javax.inject.Named;
 
 import static cj.Input.aws.targetInstanceId;
 import static cj.Utils.msToStr;
-import static java.util.concurrent.TimeUnit.*;
-import static org.awaitility.Awaitility.*;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.awaitility.Awaitility.await;
 
 @Named("convert-to-spot")
 @Dependent
@@ -111,7 +111,7 @@ public class ConvertEC2ToSpot extends AWSWrite {
 
     private boolean canStop(String targetInstanceId) {
         var state = lookupInstanceStateName(targetInstanceId);
-        boolean canStop = state.toUpperCase().equals("RUNNING");
+        boolean canStop = state.equalsIgnoreCase("RUNNING");
         return canStop;
     }
 
