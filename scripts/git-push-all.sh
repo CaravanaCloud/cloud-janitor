@@ -1,4 +1,5 @@
-#/bin/bash
+#!/bin/bash
+set -ex
 
 DATESTAMP=$(date +%Y%m%d-%H%M%S)
 
