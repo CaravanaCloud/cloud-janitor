@@ -39,23 +39,30 @@ public class Tasks {
     List<Task> history = new ArrayList<>();
 
     public void run(String taskName, List<String> inputs) {
-        log.trace("Tasks.run()", taskName);
-        log.debug("Inputs: {}", inputs);
-        var tasks = new ArrayList<>(config.tasks());
+        log.trace("Tasks.run({})", taskName);
         parseInputs(inputs);
-        if(taskName != null && !taskName.isEmpty()){
-            tasks.add(new TaskConfiguration() {
-                @Override
-                public String name() {
-                    return taskName;
-                }
-            });
-        }
-        log.info("Received {} tasks to execute.", tasks.size());
+        var tasks = loadTasks(taskName);
+        var taskNames = String.join(",", tasks.stream().map(TaskConfiguration::name).toList());
+        var inputsSize = inputs != null ? inputs.size() : 0;
+        log.info("Starting {} tasks with {} inputs: {}", tasks.size(), inputsSize, taskNames);
+        log.debug("Inputs: {}", inputs);
         for(var task : tasks){
             run(task);
         }
         report();
+    }
+
+    private List<TaskConfiguration> loadTasks(String taskName) {
+        var tasks = new ArrayList<>(config.tasks());
+        addTask(tasks, taskName);
+        config.task().ifPresent(t -> addTask(tasks, t));
+        return tasks;
+    }
+
+    private void addTask(List<TaskConfiguration> tasks, String taskName) {
+        if(taskName != null && !taskName.isEmpty()){
+            tasks.add(new SimpleTaskConfiguration(taskName));
+        }
     }
 
     private void parseInputs(List<String> inputs) {
@@ -71,7 +78,7 @@ public class Tasks {
     }
 
     private void run(TaskConfiguration task) {
-        log.debug("Running task: {}", task.name());
+        log.info("Running task: {}", task.name());
         var matches = lookupTasks(task.name());
         runAll(matches);
     }

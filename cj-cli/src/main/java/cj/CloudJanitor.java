@@ -30,12 +30,14 @@ public class CloudJanitor {
         return 0;
     }
 
+    @SuppressWarnings("unused")
     void onStart(@Observes StartupEvent ev) {
         var execId = tasks.getExecutionId();
-        log.info("Thank you for running cloud-janitor. Your execution id is {}", execId);
+        log.info("Thank you for running cloud-janitor. This execution id is {}", execId);
         log.debug("Quarkus launch mode: {}", launchMode);
     }
 
+    @SuppressWarnings("unused")
     void onStop(@Observes ShutdownEvent ev) {
         log.debug("Cloud Janitor stopped.");
     }

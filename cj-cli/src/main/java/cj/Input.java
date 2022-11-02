@@ -1,6 +1,11 @@
 package cj;
 
 public interface Input {
+    enum shell implements Input {
+        stdout, cmd
+    }
+
+
     enum fs implements Input {
         glob,
         globPath,

@@ -13,8 +13,8 @@
   </organization>
   <properties>
     <app.main.class>cj.Main</app.main.class>
-    <awssdk.version>2.17.269</awssdk.version>
-    <jackson.version>2.13.2.2</jackson.version>
+    <awssdk.version>2.18.8</awssdk.version>
+    <jackson.version>2.13.4.2</jackson.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus.package.type>fast-jar</quarkus.package.type>
@@ -232,6 +232,32 @@
           <mainClass>${app.main.class}</mainClass>
         </configuration>
       </plugin>
+
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.2.0</version>
+
+        <configuration>
+          <excludeDefaultDirectories>true</excludeDefaultDirectories>
+          <filesets>
+            <fileset>
+              <directory>target/dist/</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
+
+      </plugin>
+
       <plugin>
         <groupId>org.panteleyev</groupId>
         <artifactId>jpackage-maven-plugin</artifactId>
@@ -245,6 +271,7 @@
             </goals>
           </execution>
         </executions>
+
         <configuration>
           <name>cloud-janitor</name>
           <appVersion>${project.version}</appVersion>
@@ -259,6 +286,10 @@
           <type>APP_IMAGE</type>
         </configuration>
       </plugin>
+
+
+
+
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.4.2</version>
@@ -296,6 +327,8 @@
             <project>
               <copyright>copyleft</copyright>
               <description>Cloud Janitor</description>
+              <license>GNU General Public License v3.0</license>
+              <authors>Caravana Cloud</authors>
             </project>
             <release>
               <github>
@@ -313,7 +346,7 @@
                 </brew>
                 <artifacts>
                   <artifact>
-                    <path>target/cloud-janitor.zip</path>
+                    <path>${project.basedir}/target/cloud-janitor.zip</path>
                   </artifact>
                 </artifacts>
               </cloud-janitor>

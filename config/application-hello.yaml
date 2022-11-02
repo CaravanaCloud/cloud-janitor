@@ -1,5 +1,0 @@
-cj:
-  tasks:
-    - name: hello
-  inputs:
-    message: Have a nice day :)

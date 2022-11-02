@@ -1,6 +1,11 @@
 package cj;
 
 public interface Output {
+    enum shell implements Output {
+        sdtout
+
+    }
+
     enum fs implements Output {
         paths
     }

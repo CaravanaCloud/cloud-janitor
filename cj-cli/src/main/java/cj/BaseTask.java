@@ -18,11 +18,12 @@ import static cj.Errors.Type.Message;
 @Dependent
 public class BaseTask implements Task {
     @Inject
-    Tasks tasks;
+    transient Tasks tasks;
 
     @Inject
     Configuration config;
 
+    //TODO: Use null instead of Optional in fields
     Optional<LocalDateTime> startTime = Optional.empty();
     Optional<LocalDateTime> endTime = Optional.empty();
 
@@ -34,6 +35,10 @@ public class BaseTask implements Task {
     public Task submit(Task delegate){
         delegate.getInputs().putAll(getInputs());
         return tasks.submit(delegate);
+    }
+
+    public Task submit(Task delegate, Input input, Object value){
+        return tasks.submit(delegate.withInput(input, value));
     }
 
 

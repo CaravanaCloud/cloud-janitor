@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 import static cj.Utils.existing;
@@ -26,9 +27,7 @@ public interface Configuration {
     @WithDefault("true")
     boolean dryRun();
 
-    @WithName("waitBeforeRun")
-    @WithDefault("1000")
-    long waitBeforeRun();
+
     @WithName("inputs")
     Map<String, String> inputs();
 
@@ -51,6 +50,9 @@ public interface Configuration {
 
     @WithName("tasks")
     List<TaskConfiguration>  tasks();
+
+    @WithName("task")
+    Optional<String> task();
 
 
     default Path getApplicationPath(){
@@ -93,6 +95,7 @@ public interface Configuration {
 
     }
 
+    @SuppressWarnings("redundant")
     default long pollIntervalMs(float sizeFactor){
         float pollInterval = pollInterval();
         float result = sizeFactor * pollInterval * noise() * 1000;

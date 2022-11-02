@@ -14,8 +14,6 @@ import java.util.List;
 
 @ApplicationScoped
 public class Reporting {
-    @Location("cloud-janitor.html")
-    Template report;
 
     @Inject
     Logger log;
@@ -24,8 +22,9 @@ public class Reporting {
     Configuration config;
 
 
+    //TODO
     public void report(Tasks tasks) {
-        copyReportTemplate();
+//        copyReportTemplate();
 //        replaceTemplateVariables();
 //        sucess();
     }
@@ -53,15 +52,6 @@ public class Reporting {
         }
         return List.of();
     }
-
-
-    public void oldReport(Tasks tasks) {
-        String result = report
-                .data("tasks", tasks)
-                .render();
-        write(result);
-    }
-
 
     private void write(String result) {
         var appPath = config.getApplicationPath();
