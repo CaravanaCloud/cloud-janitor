@@ -6,6 +6,8 @@ open module cj {
     requires jakarta.inject.api;
     requires quarkus.core;
     requires smallrye.config.core;
+    requires smallrye.config.common;
+    requires smallrye.config.source.yaml;
     requires qute.core;
     requires software.amazon.awssdk.auth;
     requires software.amazon.awssdk.regions;

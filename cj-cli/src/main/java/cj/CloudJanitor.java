@@ -1,6 +1,7 @@
 package cj;
 
 import io.quarkus.runtime.LaunchMode;
+import io.quarkus.runtime.QuarkusApplication;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
@@ -11,7 +12,8 @@ import javax.inject.Inject;
 import java.util.List;
 
 public class CloudJanitor {
-    private static final Logger log = LoggerFactory.getLogger(CloudJanitor.class);
+    @Inject
+    Logger log;
 
     @Inject
     Tasks tasks;
@@ -41,4 +43,5 @@ public class CloudJanitor {
     void onStop(@Observes ShutdownEvent ev) {
         log.debug("Cloud Janitor stopped.");
     }
+
 }
