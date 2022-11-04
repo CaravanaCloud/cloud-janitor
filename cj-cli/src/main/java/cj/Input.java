@@ -1,8 +1,19 @@
 package cj;
 
 public interface Input {
+    enum ocp implements Input {
+        clusterName
+    }
+    enum cj implements Input {
+        task,
+        tasks,
+        fixTask,
+        dryRun
+    }
+
     enum shell implements Input {
-        stdout, cmd
+        cmd,
+        cmds
     }
 
 

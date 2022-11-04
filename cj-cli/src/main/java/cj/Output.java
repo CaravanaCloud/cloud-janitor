@@ -2,7 +2,7 @@ package cj;
 
 public interface Output {
     enum shell implements Output {
-        sdtout
+        exitCode, stdout
 
     }
 

@@ -16,7 +16,7 @@ public interface AWSConfiguration {
                 !regions().get().isEmpty()){
             return regions.get().get(0);
         }
-        return "us-east-1";
+        return null;
     }
 
     @WithName("filter.prefix")

@@ -106,12 +106,13 @@ public class Tasks {
         return tasks;
     }
 
-    //TODO: Consider cycles
+    //TODO: Consider async execution
     public Task submit(Task task) {
         task.init();
         var thisInputs = task.getInputs();
         var dependencies = task.getDependencies();
         dependencies.forEach(d -> {
+            //TODO: Consider if dependencies should inherit inputs
             d.getInputs().putAll(thisInputs);
             submit(d);
         });
@@ -152,7 +153,8 @@ public class Tasks {
             } catch (Exception e) {
                 task.getErrors().put(Message, e.getMessage());
                 log.error("Error executing {}: {}", task, e.getMessage());
-                e.printStackTrace();
+                // e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
         task.setEndTime(LocalDateTime.now());
@@ -186,7 +188,7 @@ public class Tasks {
 
     public synchronized String getExecutionId() {
         if (executionId == null){
-            var sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
+            var sdf = new SimpleDateFormat("yyMMdd-HHmmss");
             executionId = "cj-"+sdf.format(new Date());
         }
         return executionId;

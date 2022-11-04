@@ -1,26 +1,26 @@
 package cj;
 
-import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.function.Consumer;
 
 public class StreamGobbler implements Runnable {
-    private static final String LINE_SEP = System.getProperty("line.separator");
     private final InputStream inputStream;
-    private final StringBuilder output = new StringBuilder();
+    private final Consumer<String> consumer;
 
-    public StreamGobbler(InputStream inputStream) {
+    public StreamGobbler(InputStream inputStream, Consumer<String> consumer) {
         this.inputStream = inputStream;
+        this.consumer = consumer;
     }
 
     @Override
     public void run() {
-        var reader =  new BufferedReader(new InputStreamReader(inputStream));
-        var lines = reader.lines();
-        lines.forEach(line -> output.append(line + LINE_SEP));
-    }
-
-    public String getOutput() {
-        return output.toString();
+        try {
+            var text = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+            consumer.accept(text);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

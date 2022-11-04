@@ -1,5 +1,6 @@
 package cj.aws;
 
+import cj.shell.ShellTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
@@ -38,10 +39,8 @@ public class AWSClients {
     private final AWSIdentity id;
     private Region region;
     //TODO: cache by identity and region
-    public static AWSClients of(AWSConfiguration config, AWSIdentity identity, Region region) {
-        assert config != null;
-        assert identity != null;
-        assert region != null;
+    public static AWSClients of(AWSConfiguration config, AWSIdentity identity) {
+        var region = getRegion(config);
         var key = Map.of(identity, region);
         var value = clients.get(key);
         if (value == null ){
@@ -54,19 +53,35 @@ public class AWSClients {
         return value;
     }
 
-    public Region getRegion() {
+    public static Region getRegion(AWSConfiguration config) {
+        var region = (Region) null;
         if (region == null){
-            region = getDefaultRegion();
+            region = getDefaultRegion(config);
+        }
+        if (region == null){
+            region = getCLIRegion();
+        }else {
+            region = Region.US_EAST_1;
         }
         return region;
+    }
+
+    private static Region getCLIRegion() {
+        var cliRegion = ShellTask.execute("aws", "configure", "get", "region");
+        return cliRegion.map(Region::of).orElse(null);
     }
 
     public void setRegion(Region region){
         this.region = region;
     }
 
-    protected Region getDefaultRegion(){
-        return Region.of(cfg.defaultRegion());
+    protected static Region getDefaultRegion(AWSConfiguration config){
+        //TODO: Use "aws configure get region" to get configured region
+        var defaultRegion = config.defaultRegion();
+        if (defaultRegion != null){
+            return Region.of(defaultRegion);
+        }
+        return null;
     }
     // Clients //
 
@@ -189,4 +204,7 @@ public class AWSClients {
     }
 
 
+    public Region getRegion() {
+        return getRegion(config());
+    }
 }

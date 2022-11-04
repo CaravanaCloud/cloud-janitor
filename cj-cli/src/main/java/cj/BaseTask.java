@@ -1,20 +1,24 @@
 package cj;
 
+import cj.fs.FSUtils;
 import cj.spi.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static cj.Errors.Type;
 import static cj.Errors.Type.Message;
+import static cj.Input.cj.*;
+import static cj.Input.shell.*;
+
+import cj.shell.*;
 @Dependent
 public class BaseTask implements Task {
     @Inject
@@ -22,6 +26,13 @@ public class BaseTask implements Task {
 
     @Inject
     Configuration config;
+
+    @Inject
+    Instance<RetryTask> retry;
+
+    @Inject
+    Instance<ShellTask> shellInstance;
+
 
     //TODO: Use null instead of Optional in fields
     Optional<LocalDateTime> startTime = Optional.empty();
@@ -37,6 +48,9 @@ public class BaseTask implements Task {
         return tasks.submit(delegate);
     }
 
+    public Task submit(Instance<? extends Task> delegate, Input input, Object value){
+        return tasks.submit(delegate.get().withInput(input, value));
+    }
     public Task submit(Task delegate, Input input, Object value){
         return tasks.submit(delegate.withInput(input, value));
     }
@@ -86,9 +100,16 @@ public class BaseTask implements Task {
     }
     @SuppressWarnings("unchecked")
     public <T> List<T> inputList(Input key, Class<T> valueClass) {
-        return input(key)
-                .map(o -> (List<T>) o)
-                .orElse(List.of());
+        var in = input(key);
+        if (in.isPresent()){
+            var val = in.get();
+            if (val instanceof List<?>){
+                return (List<T>) val;
+            } else {
+                throw new IllegalArgumentException("Input " + key + " is not a list");
+            }
+        }else
+            return List.of();
     }
 
 
@@ -131,14 +152,16 @@ public class BaseTask implements Task {
         logger().error(fmt(message), args);
     }
 
-    protected RuntimeException fail(String message) {
-        error(message);
+    protected RuntimeException fail(String message, Object... args) {
+        error(message, args);
         getErrors().put(Message ,message);
         return new RuntimeException(message);
     }
 
     private String fmt(String message) {
-        return getContextString() + getContextSeparator() + message;
+        var context = getContextString();
+        var separator = context.isEmpty() ? "" : getContextSeparator();
+        return context + separator + message;
     }
 
     protected String getContextString() {
@@ -149,13 +172,13 @@ public class BaseTask implements Task {
         return " || ";
     }
 
-    protected void fail(Exception ex) {
+    protected RuntimeException fail(Exception ex) {
         logger().error(ex.getMessage(), ex);
         if( Configuration.PRINT_STACK_TRACE){
             ex.printStackTrace();
         }
         getErrors().put(Type.Exception , ex);
-        throw new RuntimeException(ex);
+        return new RuntimeException(ex);
     }
 
     protected void warn(String message, Object... args) {
@@ -293,5 +316,48 @@ public class BaseTask implements Task {
 
     protected String getExecutionId(){
         return tasks.getExecutionId();
+    }
+
+    protected void retry(Task theMainTask, Task theFixTask) {
+        var ccoctlTask = retry.get()
+                .withInput(task, theMainTask)
+                .withInput(fixTask, theFixTask);
+        submit(ccoctlTask);
+    }
+
+    protected Task withInput(Instance<? extends Task> task, Input input, Object value) {
+        return task.get().withInput(input, value);
+    }
+
+    protected Path getTaskDir(String dirName) {
+        return FSUtils.getTaskDir(getContextName(), dirName);
+    }
+
+    private String getContextName() {
+        return getClass().getPackageName().replaceAll("cj.","");
+    }
+
+    protected Optional<String> exec(String... cmdArgs){
+        return exec(false, cmdArgs);
+    }
+    protected Optional<String> exec(Boolean isDryRun, String... cmdArgs){
+        var shellTask = shellTask(isDryRun, cmdArgs);
+        submit(shellTask);
+        var output = shellTask.outputString(Output.shell.stdout);
+        return output;
+    }
+
+    protected ShellTask shellTask(String... cmdArgs) {
+        return shellTask(false , cmdArgs);
+    }
+
+    protected ShellTask shellTask(Boolean isDryRun, String... cmdArgs) {
+        var cmdList = Arrays.asList(cmdArgs);
+        var shellTask = shellInstance.get();
+        if (isDryRun != null){
+            shellTask.withInput(dryRun, isDryRun);
+        }
+        shellTask.withInput(cmds, cmdList);
+        return shellTask;
     }
 }

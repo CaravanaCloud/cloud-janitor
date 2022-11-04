@@ -8,6 +8,7 @@ import cj.aws.sts.GetCallerIdentityTask;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.model.Filter;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.time.Duration;
@@ -27,13 +28,12 @@ public abstract class   AWSTask
     @Inject
     Instance<GetCallerIdentityTask> getCallerIdInstance;
     private String accountName;
-    private String regionName;
+
 
     public AWSClients aws(){
         var identity = getIdentity();
         var config = getConfig().aws();
-        var region = getRegion();
-        return AWSClients.of(config, identity, region);
+        return AWSClients.of(config, identity);
     }
 
     protected AWSIdentity getIdentity() {
@@ -73,11 +73,7 @@ public abstract class   AWSTask
 
     protected Region getRegion(){
         var regionIn = inputAs(Input.aws.targetRegion, Region.class);
-        if (regionIn.isEmpty()){
-            var regionName = getConfig().aws().defaultRegion();
-            return Region.of(regionName);
-        }
-        return regionIn.get();
+        return regionIn.orElse(aws().getRegion());
     }
 
     protected Filter filter(String filterName, String filterValue) {
@@ -127,10 +123,7 @@ public abstract class   AWSTask
     }
 
     private String getRegionName() {
-        if (regionName == null){
-            regionName = aws().getRegion().toString();
-        }
-        return regionName;
+        return getRegion().toString();
     }
 
     protected Duration getPollInterval() {

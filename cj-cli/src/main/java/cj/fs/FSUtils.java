@@ -90,7 +90,24 @@ public class FSUtils {
     public static Path getApplicationDir() {
         Path homePath = getHomePath();
         var configPath = homePath.resolve(".config");
-        var dataPath = configPath.resolve("cloud-janitor");
+        var appPath = resolve(configPath, "cloud-janitor");
+        return appPath;
+    }
+
+    public static Path getTaskDir(String context, String dirName){
+        return resolve(getContextPath(context), dirName);
+    }
+
+    public static Path getContextPath(String context){
+        return resolve(getDataDir(), context);
+    }
+
+    public static Path getDataDir(){
+        return resolve(getApplicationDir(), "data");
+    }
+
+    public static Path resolve(Path parent, String target) {
+        var dataPath = parent.resolve(target);
         var dataDir = dataPath.toFile();
         if (! dataDir.exists()){
             dataDir.mkdirs();
