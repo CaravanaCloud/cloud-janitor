@@ -11,4 +11,16 @@ import java.util.Optional;
 public interface OCPConfiguration {
     @WithName("baseDomain")
     Optional<String> baseDomain();
+
+    @WithName("clusterName")
+    Optional<String> clusterName();
+
+    @WithName("pullSecret")
+    Optional<String> pullSecret();
+
+    @WithName("sshKey")
+    Optional<String> sshKey();
+
+
+
 }

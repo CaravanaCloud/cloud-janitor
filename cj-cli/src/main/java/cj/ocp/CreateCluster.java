@@ -15,6 +15,8 @@ import static cj.Input.cj.*;
 import static cj.Input.shell.cmd;
 
 import cj.aws.AWSWrite;
+import io.quarkus.qute.Location;
+import io.quarkus.qute.Template;
 
 @Dependent
 @Named("ocp-create-cluster")
@@ -23,6 +25,9 @@ public class CreateCluster extends AWSWrite {
     private static final String[] INSTALL_OPENSHIFT_INSTALL = {"/bin/bash", "-c", "mkdir -p '/tmp/openshift-installer' && wget -nv -O '/tmp/openshift-installer/openshift-install-linux.tar.gz' 'https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/latest/openshift-install-linux.tar.gz' && tar zxvf '/tmp/openshift-installer/openshift-install-linux.tar.gz' -C '/tmp/openshift-installer' && sudo mv  '/tmp/openshift-installer/openshift-install' '/usr/local/bin/' && rm '/tmp/openshift-installer/openshift-install-linux.tar.gz'"};
     @Inject
     Instance<CheckShellCommandExistsTask> checkCmd;
+
+    @Location("ocp/aws_ipi_sts/install-config.qute.yaml")
+    Template installConfigTemplate;
 
     enum InstallProfile {
         aws_ipi_sts,
@@ -43,12 +48,15 @@ public class CreateCluster extends AWSWrite {
         var credsDir = FSUtils.resolve(clusterDir, "ccoctl-creds");
         var outputDir = FSUtils.resolve(clusterDir, "ccoctl-output");
         var clusterRegion = aws().getRegion().toString();
-        createAllCcoctlResources(clusterName, clusterRegion, clusterDir, credsDir, outputDir);
-        createInstallConfig(clusterName);
+        createAllCcoctlResources(clusterName, clusterDir, credsDir, outputDir);
+        createInstallConfig(clusterDir, clusterName);
     }
 
-    private void createInstallConfig(String clusterName) {
-
+    private void createInstallConfig(Path clusterDir, String clusterName) {
+        String installConfig = installConfigTemplate.data("config", getConfig()).render();
+        Path installConfigPath = clusterDir.resolve("install-config.yaml");
+        FSUtils.writeFile(installConfigPath, installConfig);
+        debug("Wrote install-config.yaml [{}] to {}", installConfig.length() ,installConfigPath);
     }
 
     private Path getClusterDir(String clusterName) {
@@ -58,7 +66,7 @@ public class CreateCluster extends AWSWrite {
     }
 
     private void createAllCcoctlResources(String clusterName,
-                                          String clusterRegion,
+//                                          String clusterRegion,
                                           Path clusterDir,
                                           Path credsDir,
                                           Path outputDir) {
@@ -71,7 +79,7 @@ public class CreateCluster extends AWSWrite {
                 "--output-dir="+outputDir);
 
         if (ccoctlExec.isPresent()){
-            logger().debug("ccoctl returned: {}", ccoctlExec.get());
+            logger().debug("ccoctl output: {}", ccoctlExec.get());
         }else{
             throw fail("ccoctl failed.");
         }

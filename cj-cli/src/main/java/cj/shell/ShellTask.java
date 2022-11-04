@@ -48,8 +48,7 @@ public class ShellTask extends ReadTask {
             var processExitCode = process.waitFor();
             var processOutput = output.toString().trim();
             future.get();
-            debug("Process exit code: {}", processExitCode);
-            debug("Process output:\n{}", processOutput);
+            debug("[{}]$ {}\n{}", processExitCode, cmdLine, processOutput);
             success(stdout, processOutput);
             success(exitCode, processExitCode);
         } catch (Exception e) {
