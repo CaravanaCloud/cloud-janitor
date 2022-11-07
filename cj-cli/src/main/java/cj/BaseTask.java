@@ -341,6 +341,12 @@ public class BaseTask implements Task {
         return exec(false, cmdArgs);
     }
     protected Optional<String> exec(Boolean isDryRun, String... cmdArgs){
+        if (cmdArgs.length == 1){
+            var cmd = cmdArgs[0];
+            if (cmd.contains(" ")){
+                cmdArgs = cmd.split(" ");
+            }
+        }
         var shellTask = shellTask(isDryRun, cmdArgs);
         submit(shellTask);
         var output = shellTask.outputString(Output.shell.stdout);

@@ -1,11 +1,11 @@
-apiVersion: v1
-baseDomain: {config.ocp.baseDomain}
-credentialsMode: Manual
+apiVersion: 'v1'
+baseDomain: '{config.ocp.baseDomain}'
+credentialsMode: 'Manual'
 metadata:
-  name: {config.ocp.clusterName}
+  name: '{config.ocp.clusterName}'
 platform:
   aws:
-    region: REGION
-publish: External
-pullSecret: {config.ocp.pullSecret}
-sshKey: {config.ocp.sshKey}
+    region: '{config.ocp.awsRegion}'
+publish: 'External'
+pullSecret: '{config.ocp.pullSecret}'
+sshKey: '{config.ocp.sshKey}'

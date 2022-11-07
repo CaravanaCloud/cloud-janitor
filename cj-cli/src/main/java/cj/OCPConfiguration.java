@@ -21,6 +21,6 @@ public interface OCPConfiguration {
     @WithName("sshKey")
     Optional<String> sshKey();
 
-
-
+    @WithName("awsRegion")
+    Optional<String> awsRegion();
 }

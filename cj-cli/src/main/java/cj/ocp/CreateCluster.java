@@ -37,17 +37,31 @@ public class CreateCluster extends AWSWrite {
     public void apply() {
         debug("ocp-create-cluster");
         var clusterName = inputString(ocp.clusterName).orElse(getExecutionId());
-        checkCommands();
-        preInstall(clusterName);
-        debug("ocp-create-cluster done");
-    }
-
-    private void preInstall(String clusterName) {
-        debug("preInstall({}, {})", clusterName);
         var clusterDir = getClusterDir(clusterName);
         var credsDir = FSUtils.resolve(clusterDir, "ccoctl-creds");
         var outputDir = FSUtils.resolve(clusterDir, "ccoctl-output");
         var clusterRegion = aws().getRegion().toString();
+        checkCommands();
+        preCreate(clusterName, clusterDir, credsDir, outputDir);
+        createCluster(clusterName, clusterDir);
+        debug("ocp-create-cluster done");
+    }
+
+    private void createCluster(String clusterName, Path clusterDir) {
+        var output = exec("openshift-install",
+                "create",
+                "cluster",
+                "--dir=" + clusterDir,
+                "--log-level=debug");
+        if (output.isPresent()){
+            logger().debug("openshift-install output: {}", output.get());
+        }else{
+            throw fail("openshift-install failed.");
+        }
+    }
+
+    private void preCreate(String clusterName, Path clusterDir, Path credsDir, Path outputDir) {
+        debug("preInstall({}, {})", clusterName);
         createAllCcoctlResources(clusterName, clusterDir, credsDir, outputDir);
         createInstallConfig(clusterDir, clusterName);
     }
@@ -56,6 +70,7 @@ public class CreateCluster extends AWSWrite {
         String installConfig = installConfigTemplate.data("config", getConfig()).render();
         Path installConfigPath = clusterDir.resolve("install-config.yaml");
         FSUtils.writeFile(installConfigPath, installConfig);
+        Path backupConfigPath = clusterDir.resolve("install-config.bak.yaml");
         debug("Wrote install-config.yaml [{}] to {}", installConfig.length() ,installConfigPath);
     }
 

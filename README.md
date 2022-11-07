@@ -49,6 +49,34 @@ Here are multiple ways you can execute this project.
 
 All mentioned binaries can be found in the [project releases page](https://github.com/CaravanaCloud/cloud-janitor/releases).
 
+
+## Homebrew
+Install it:
+```
+brew tap caravanacloud/homebrew-tap
+brew install cloud-janitor
+```
+Run it:
+```
+cloud-janitor
+```
+
+## From sources (dev mode)
+Using the maven wrapper:
+```
+./mvnw quarkus:dev
+```
+Using the Quarkus CLI:
+```
+quarkus dev
+```
+Using your IDE, run the `cj.Main` class.
+
+## Executable Jar
+```bash
+java -jar java -jar cloud-janitor.jar
+```
+
 ## Docker Container
 ```bash
 docker run --pull=always caravanacloud/cloud-janitor 
@@ -59,77 +87,3 @@ docker run --pull=always caravanacloud/cloud-janitor
 - name: Cloud Janitor
   uses: CaravanaCloud/cloud-janitor@v1.0.20220324161817
 ```
-
-## Executable Jar
-```bash
-java -jar java -jar cloud-janitor.jar
-```
-
-## RPM Package
-Install it:
-```
-rpm -Uvh --force cloud-janitor.rpm
-```
-Add it to your PATH:
-```
-sudo ln -sf /opt/cloud-janitor/bin/cloud-janitor /usr/local/bin/cloud-janitor
-```
-Run it:
-```
-cloud-janitor
-```
-
-## From sources (dev mode)
-```
-./mvnw quarkus:dev
-```
-
-# Configuring Tasks
-
-Here are a few samples demonstrating how to use environment variables to configure tasks.
-
-## marvin
-Don't panic! This is just a sample task.
-Try running this one to check everything is working:
-```
-tt marvin
-```
-
-## cleanup-aws
-Delete AWS resources based on a naming prefix.
-Try adding this configuration to ```$CWD/config/application.yaml```:
-```yaml
-tt:
-  task: cleanup-aws
-  dryRun: true
-  ocp:
-    baseDomain: devcluster.openshift.com
-  aws:
-    region: ap-northeast-1
-    cleanup:
-      prefix: rhnb-
-```
-## Transcribe Videos
-By default, .mp4 files are loaded from $HOME\.cj and $HOME\Videos
-```
-docker run --pull=always -e CJ_TASK=aws-transcribe-videos -e CJ_DRYRUN=false caravanacloud/cloud-janitor:latest
-```
-# Wishlist:
-- Support more/all AWS Services on cleanup task
-- Improve test coverage
-- Report/Delete AWS resources by tag
-- Report/Delete AWS resources by usage
-- Parallel Tasks
-- Waiter Tasks
-- Shell Tasks
-- Cross-Language Tasks through GraalVM / JSR 223
-- Report/Notify usage by attribution ("chargeback")
-- OpenShift Cluster Provisioning and Deployment
-- Fully-automated OpenShift management (Source2Service)
-- Ansible integration
-- Kogito-defined tasks
-- CloudWatch and/or ElasticSearch/Logstash/Kibana for visualization
-
-# Badges
-![Tests](https://github.com/CaravanaCloud/cloud-janitor/workflows/test-prs-to-main/badge.svg)
-![Coverage](.github/badges/jacoco.svg)
