@@ -4,7 +4,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>caravanacloud</groupId>
   <artifactId>cloud-janitor</artifactId>
-  <version>1.3.0</version>
+  <!-- Also change CommandJanitor class -->
+  <version>1.3.3</version>
+
   <description>Automating cleanup, maintenance and troubleshooting tasks in Cloud Computing</description>
   <url>https://github.com/CaravanaCloud/cloud-janitor</url>
   <organization>
@@ -313,7 +315,7 @@
       <plugin>
         <groupId>org.jreleaser</groupId>
         <artifactId>jreleaser-maven-plugin</artifactId>
-        <version>1.2.0</version>
+        <version>1.3.1</version>
         <executions>
           <execution>
             <id>make-assembly</id>
@@ -339,7 +341,7 @@
             </release>
             <distributions>
               <cloud-janitor>
-                <type>JAVA_BINARY</type>
+                <type>JLINK</type>
                 <stereotype>CLI</stereotype>
                 <brew>
                   <enabled>true</enabled>
@@ -348,6 +350,7 @@
                 <artifacts>
                   <artifact>
                     <path>${project.basedir}/target/cloud-janitor.zip</path>
+                    <platform>linux</platform>
                   </artifact>
                 </artifacts>
               </cloud-janitor>

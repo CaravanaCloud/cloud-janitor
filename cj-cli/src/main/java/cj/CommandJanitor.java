@@ -7,7 +7,7 @@ import picocli.CommandLine;
 import javax.inject.Inject;
 import java.util.List;
 
-@CommandLine.Command(version = "1.3.0",
+@CommandLine.Command(version = "1.3.3",
         mixinStandardHelpOptions = true,
         name = "cloud-janitor", description = "Cloud Janitor at your service.")
 public class CommandJanitor implements Runnable, QuarkusApplication {
