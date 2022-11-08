@@ -44,8 +44,9 @@ public class Tasks {
         var tasks = loadTasks(taskName);
         var taskNames = String.join(",", tasks.stream().map(TaskConfiguration::name).toList());
         var inputsSize = inputs != null ? inputs.size() : 0;
-        log.info("Starting {} tasks with {} inputs: {}", tasks.size(), inputsSize, taskNames);
-        log.debug("Inputs: {}", inputs);
+        log.info("Starting {} tasks with {} inputs.", tasks.size(), inputsSize);
+        if (inputsSize > 0)
+            log.debug("Inputs: {}", inputs);
         for(var task : tasks){
             run(task);
         }

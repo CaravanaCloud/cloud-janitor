@@ -35,7 +35,7 @@ public class TaskTest {
     protected AWSClients aws(){
         var id = DefaultAWSIdentity.of();
         var region = config.aws().defaultRegion();
-        return AWSClients.of(config.aws(), id, Region.of(region));
+        return AWSClients.of(config.aws(), id);
     }
 
     protected Configuration config(){

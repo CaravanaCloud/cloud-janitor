@@ -26,29 +26,35 @@ public class CreateCluster extends AWSWrite {
     @Inject
     Instance<CheckShellCommandExistsTask> checkCmd;
 
-    @Location("ocp/aws_ipi_sts/install-config.qute.yaml")
+    @Location("ocp/aws_ipi_sts/install-config.yaml")
     Template installConfigTemplate;
 
     enum InstallProfile {
         aws_ipi_sts,
+        aws_ipi_default
     }
 
     @Override
     public void apply() {
         debug("ocp-create-cluster");
-        var clusterName = inputString(ocp.clusterName).orElse(getExecutionId());
+        var clusterName = inputString(ocp.clusterName)
+                .or(() -> getConfig().ocp().clusterName())
+                .orElse(getExecutionId());
         var clusterDir = getClusterDir(clusterName);
         var credsDir = FSUtils.resolve(clusterDir, "ccoctl-creds");
         var outputDir = FSUtils.resolve(clusterDir, "ccoctl-output");
         var clusterRegion = aws().getRegion().toString();
+        var profile = InstallProfile.aws_ipi_default;
         checkCommands();
-        preCreate(clusterName, clusterDir, credsDir, outputDir);
+        preCreate(clusterName, clusterDir, credsDir, outputDir, profile);
         createCluster(clusterName, clusterDir);
         debug("ocp-create-cluster done");
     }
 
     private void createCluster(String clusterName, Path clusterDir) {
-        var output = exec("openshift-install",
+        var tip = "tail -f "+ clusterDir.resolve(".openshift_install.log").toAbsolutePath();
+        debug(tip);
+        var output = exec(true, "openshift-install",
                 "create",
                 "cluster",
                 "--dir=" + clusterDir,
@@ -56,18 +62,37 @@ public class CreateCluster extends AWSWrite {
         if (output.isPresent()){
             logger().debug("openshift-install output: {}", output.get());
         }else{
-            throw fail("openshift-install failed.");
+            fail("openshift-install failed.");
         }
     }
 
-    private void preCreate(String clusterName, Path clusterDir, Path credsDir, Path outputDir) {
+    private void preCreate(String clusterName, Path clusterDir, Path credsDir, Path outputDir, InstallProfile profile) {
         debug("preInstall({}, {})", clusterName);
-        createAllCcoctlResources(clusterName, clusterDir, credsDir, outputDir);
-        createInstallConfig(clusterDir, clusterName);
+        if (profile.equals(InstallProfile.aws_ipi_sts)) {
+            createAllCcoctlResources(clusterName, clusterDir, credsDir, outputDir);
+            createInstallConfigFromTemplate(clusterDir, clusterName);
+        }else {
+            createDefaultInstallConfig(clusterDir, clusterName);
+        }
     }
 
-    private void createInstallConfig(Path clusterDir, String clusterName) {
-        String installConfig = installConfigTemplate.data("config", getConfig()).render();
+    private void createDefaultInstallConfig(Path clusterDir, String clusterName) {
+        var output = exec( "openshift-install",
+                "create",
+                "install-config",
+                "--dir=" + clusterDir,
+                "--log-level=debug");
+        if (output.isPresent()){
+            logger().debug("openshift create install-config output: {}", output.get());
+        }else{
+            fail("openshift create install-config failed.");
+        }
+    }
+
+    private void createInstallConfigFromTemplate(Path clusterDir, String clusterName) {
+        String installConfig = installConfigTemplate
+                .data("config", getConfig())
+                .render();
         Path installConfigPath = clusterDir.resolve("install-config.yaml");
         FSUtils.writeFile(installConfigPath, installConfig);
         Path backupConfigPath = clusterDir.resolve("install-config.bak.yaml");

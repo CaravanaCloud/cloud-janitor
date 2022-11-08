@@ -66,6 +66,7 @@ public class ShellTask extends ReadTask {
 
     private void printAndAppend(StringBuffer output, String s) {
         output.append(s);
+        output.append("\n");
         debug(s);
     }
 

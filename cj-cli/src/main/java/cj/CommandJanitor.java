@@ -7,7 +7,9 @@ import picocli.CommandLine;
 import javax.inject.Inject;
 import java.util.List;
 
-@CommandLine.Command
+@CommandLine.Command(version = "1.3.0",
+        mixinStandardHelpOptions = true,
+        name = "cloud-janitor", description = "Cloud Janitor at your service.")
 public class CommandJanitor implements Runnable, QuarkusApplication {
     @Inject
     CommandLine.IFactory factory;
@@ -18,10 +20,10 @@ public class CommandJanitor implements Runnable, QuarkusApplication {
     @Inject
     Logger log;
 
-    @CommandLine.Option(names = {"-t", "--task"}, description = "Task to be executed")
+    @CommandLine.Option(names = {"-t", "--task"}, description = "Task to be executed. Try '-t hello'")
     String taskName;
 
-    @CommandLine.Option(names = {"-i", "--input"}, description = "Input parameter")
+    @CommandLine.Option(names = {"-i", "--input"}, description = "Input parameters for the task, repeatable.")
     List<String> input;
 
     public CommandJanitor(){}
