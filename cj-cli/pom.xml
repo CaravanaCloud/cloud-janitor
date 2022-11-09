@@ -350,11 +350,16 @@
                 <artifacts>
                   <artifact>
                     <path>${project.basedir}/target/cloud-janitor.zip</path>
-                    <platform>linux</platform>
+                    <platform>linux-x86_64</platform>
                   </artifact>
                 </artifacts>
               </cloud-janitor>
             </distributions>
+            <packagers>
+              <brew>
+                <active>ALWAYS</active>
+              </brew>
+            </packagers>
           </jreleaser>
         </configuration>
       </plugin>
