@@ -16,11 +16,11 @@ import static cj.Input.shell.cmd;
 
 import cj.aws.AWSWrite;
 import io.quarkus.qute.Engine;
-import io.quarkus.qute.Location;
-import io.quarkus.qute.Template;
+
 
 @Dependent
 @Named("ocp-create-cluster")
+@SuppressWarnings("unused")
 public class CreateCluster extends AWSWrite {
     private static final String[] INSTALL_CCOCTL = {"/bin/bash", "-c", "mkdir -p '/tmp/ccoctl' && wget -nv -O '/tmp/ccoctl/ccoctl-linux.tar.gz' 'https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/latest/ccoctl-linux.tar.gz' && tar zxvf '/tmp/ccoctl/ccoctl-linux.tar.gz' -C '/tmp/ccoctl' && find /tmp/ccoctl/ && sudo mv '/tmp/ccoctl/ccoctl' '/usr/local/bin/' && rm '/tmp/oc/openshift-client-linux.tar.gz'"};
     private static final String[] INSTALL_OPENSHIFT_INSTALL = {"/bin/bash", "-c", "mkdir -p '/tmp/openshift-installer' && wget -nv -O '/tmp/openshift-installer/openshift-install-linux.tar.gz' 'https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/latest/openshift-install-linux.tar.gz' && tar zxvf '/tmp/openshift-installer/openshift-install-linux.tar.gz' -C '/tmp/openshift-installer' && sudo mv  '/tmp/openshift-installer/openshift-install' '/usr/local/bin/' && rm '/tmp/openshift-installer/openshift-install-linux.tar.gz'"};
@@ -55,7 +55,8 @@ public class CreateCluster extends AWSWrite {
     private void createCluster(String clusterName, Path clusterDir) {
         var tip = "tail -f "+ clusterDir.resolve(".openshift_install.log").toAbsolutePath();
         debug(tip);
-        var output = exec("openshift-install",
+
+        var output = exec(90L,"openshift-install",
                 "create",
                 "cluster",
                 "--dir=" + clusterDir,
@@ -63,7 +64,7 @@ public class CreateCluster extends AWSWrite {
         if (output.isPresent()){
             logger().debug("openshift-install output: {}", output.get());
         }else{
-            fail("openshift-install failed.");
+            throw fail("openshift-install failed.");
         }
     }
 
@@ -71,17 +72,18 @@ public class CreateCluster extends AWSWrite {
         debug("preInstall({}, {})", clusterName);
         switch (profile){
             case aws_ipi_sts:
-                createAllCcoctlResources(clusterName, clusterDir, credsDir, outputDir);
+                createAllCcoctlResources(clusterName, credsDir, outputDir);
                 break;
             case aws_ipi_default:
                 break;
             default:
-                fail("Unknown profile: {}", profile);
+                throw fail("Unknown profile: {}", profile);
         }
-        createInstallConfigFromTemplate(clusterDir, clusterName, profile);
+        createInstallConfigFromTemplate(clusterDir, profile);
     }
 
     //TODO: Avoid prompts
+    @SuppressWarnings("unused")
     private void createDefaultInstallConfig(Path clusterDir, String clusterName) {
         var output = exec( "openshift-install",
                 "create",
@@ -91,11 +93,11 @@ public class CreateCluster extends AWSWrite {
         if (output.isPresent()){
             logger().debug("openshift create install-config output: {}", output.get());
         }else{
-            fail("openshift create install-config failed.");
+            throw fail("openshift create install-config failed.");
         }
     }
 
-    private void createInstallConfigFromTemplate(Path clusterDir, String clusterName, ClusterProfile profile) {
+    private void createInstallConfigFromTemplate(Path clusterDir, ClusterProfile profile) {
         var location = "ocp/%s/install-config.yaml".formatted(profile);
         var installConfigTemplate = engine.getTemplate(location);
         String installConfig = installConfigTemplate
@@ -104,6 +106,7 @@ public class CreateCluster extends AWSWrite {
         Path installConfigPath = clusterDir.resolve("install-config.yaml");
         FSUtils.writeFile(installConfigPath, installConfig);
         Path backupConfigPath = clusterDir.resolve("install-config.bak.yaml");
+        FSUtils.writeFile(backupConfigPath, installConfig);
         debug("Wrote [{}] install-config.yaml [{}] to {}", profile, installConfig.length() ,installConfigPath);
     }
 
@@ -114,8 +117,6 @@ public class CreateCluster extends AWSWrite {
     }
 
     private void createAllCcoctlResources(String clusterName,
-//                                          String clusterRegion,
-                                          Path clusterDir,
                                           Path credsDir,
                                           Path outputDir) {
         var ccoctlExec = exec("ccoctl",

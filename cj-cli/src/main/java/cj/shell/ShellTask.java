@@ -9,6 +9,7 @@ import javax.inject.Named;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static cj.Input.shell.*;
 import static cj.Input.cj.*;
@@ -31,8 +32,7 @@ public class ShellTask extends ReadTask {
         }else {
             cmdArr = cmdList.toArray(String[]::new);
         }
-        if(cmdArr.length > 0) try {
-            trace("shell[{}]: {}", cmdArr.length, cmdArr);
+        if(cmdArr != null && cmdArr.length > 0) try {
             var cmdLine = String.join(" ", cmdArr);
             debug(cmdLine);
             var isDryRun = inputAs(dryRun, Boolean.class).orElse(false);
@@ -40,6 +40,7 @@ public class ShellTask extends ReadTask {
                 info("Dry run, shell command not executed.");
                 return;
             }
+            var timeoutIn = inputAs(timeout, Long.class).orElse(DEFAULT_TIMEOUT_MINS);
             var process = runtime.exec(cmdArr);
             var output = new StringBuffer();
             var error = new StringBuffer();
@@ -50,8 +51,10 @@ public class ShellTask extends ReadTask {
                     s -> this.printAndAppend(error, s));
             var futureOut = executor.submit(outGobbler);
             var futureErr = executor.submit(errGobbler);
-            futureOut.get();
-            futureErr.get();
+            debug("Waiting up to [{}] minutes for shell command to complete.", timeoutIn);
+            futureOut.get(timeoutIn, TimeUnit.MINUTES);
+            futureErr.get(timeoutIn, TimeUnit.MINUTES);
+
             var processExitCode = process.waitFor();
             var processOutput = output.toString().trim();
             var processError = error.toString().trim();
@@ -84,7 +87,7 @@ public class ShellTask extends ReadTask {
             }
             var processOutput = output.toString().trim();
             future.get();
-            return Optional.ofNullable(processOutput);
+            return Optional.of(processOutput);
         } catch (Exception e) {
             return Optional.empty();
         }

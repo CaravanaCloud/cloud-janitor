@@ -92,13 +92,13 @@ public class BaseTask implements Task {
         return result;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("all")
     public <T> List<T> outputList(Output key, Class<T> valueClass) {
         return output(key)
                 .map(o -> (List<T>) o)
                 .orElse(List.of());
     }
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("all")
     public <T> List<T> inputList(Input key, Class<T> valueClass) {
         var in = input(key);
         if (in.isPresent()){
@@ -116,7 +116,7 @@ public class BaseTask implements Task {
     @Override
     public Optional<String> outputString(Output key) {
         return output(key)
-                .map(o -> o.toString());
+                .map(Object::toString);
     }
 
     @Override
@@ -251,19 +251,19 @@ public class BaseTask implements Task {
         return Optional.ofNullable(value);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("all")
     public <T> Optional<T> inputAs(Input key, Class<T> clazz){
         return (Optional<T>) input(key);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("all")
     public <T> Optional<T> outputAs(Output key, Class<T> clazz){
         return (Optional<T>) Optional.ofNullable(outputs.get(key));
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("all")
     public <T> T getInput(Input key, Class<T> inputClass){
-        return (T) input(key).get();
+        return (T) input(key).orElseThrow();
     }
 
     public String matchMark(boolean match){
@@ -284,20 +284,16 @@ public class BaseTask implements Task {
         Stream.of(delegates).forEach(this::submit);
     }
     public void submitAll(List<Task> delegates){
-        delegates.stream().forEach(this::submit);
+        delegates.forEach(this::submit);
     }
 
     public Optional<String> inputString(Input key){
-        return input(key).map(o -> o.toString());
+        return input(key).map(Object::toString);
     }
 
     public Object output(Output key, Object value){
         if (value instanceof Optional<?> opt){
-            if(opt.isPresent()){
-                value = opt.get();
-            }else{
-                value = null;
-            }
+            value = opt.orElse(null);
         }
         if (value != null) {
             trace("{} / {} := {}", toString(), key.toString(), value.toString());
@@ -305,9 +301,6 @@ public class BaseTask implements Task {
         } else return null;
     }
 
-    public String getOutputString(Output key){
-        return output(key).map(o -> o.toString()).get();
-    }
 
     @Override
     public boolean isWrite() {
@@ -338,17 +331,30 @@ public class BaseTask implements Task {
     }
 
     protected Optional<String> exec(String... cmdArgs){
-        return exec(false, cmdArgs);
+        return exec(DEFAULT_TIMEOUT_MINS, false, cmdArgs);
     }
-    protected Optional<String> exec(Boolean isDryRun, String... cmdArgs){
+
+    @SuppressWarnings("unused")
+    protected Optional<String> exec(Boolean dryRun, String... cmdArgs){
+        return exec(DEFAULT_TIMEOUT_MINS, dryRun, cmdArgs);
+    }
+
+    @SuppressWarnings("all")
+    protected Optional<String> exec(Long timeout, String... cmdArgs){
+        return exec(timeout, false, cmdArgs);
+    }
+
+    protected Optional<String> exec(Long timeoutMins, Boolean isDryRun, String... cmdArgs){
         if (cmdArgs.length == 1){
             var cmd = cmdArgs[0];
             if (cmd.contains(" ")){
                 cmdArgs = cmd.split(" ");
             }
         }
-        var shellTask = shellTask(isDryRun, cmdArgs);
+        var shellTask = shellTask(isDryRun, cmdArgs)
+                .withInput(timeout, timeoutMins);
         submit(shellTask);
+        @SuppressWarnings("all")
         var output = shellTask.outputString(Output.shell.stdout);
         return output;
     }

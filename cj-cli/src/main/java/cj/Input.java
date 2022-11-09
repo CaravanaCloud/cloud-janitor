@@ -13,7 +13,9 @@ public interface Input {
 
     enum shell implements Input {
         cmd,
-        cmds
+        cmds,
+        timeout;
+        public static final Long DEFAULT_TIMEOUT_MINS = 5L;
     }
 
 

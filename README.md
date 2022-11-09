@@ -3,7 +3,8 @@
 TL;DR: A collection of scripts to automate tasks in cloud computing, like create clusters or cleanup accounts.
 
 For example, in a 'create-cluster' task, cloud-janitor should execute all the commands or scripts necessary to validate and backup configuration,
-install dependencies, create account-level resources, create cluster-level resources, wait for health check, install plugins and verify the application.
+install dependencies, create account-level resources, create cluster-level resources, wait for health check, install plugins and verify the application. 
+All that from a single invocation, using a command line like `cloud-janitor -t openshift-create-cluster` or the equivalent inside a container, github action or gitpod.io workspace.
 
 ## Motivation
 
@@ -102,7 +103,7 @@ docker run --pull=always caravanacloud/cloud-janitor
 ## Configuring Cloud Janitor
 
 Cloud janitor can be configured to perform wide variety of tasks, from creating cluster to translating videos.
-Take a look at our configuration samples in the [config](config) folder.
+Take a look at our configuration samples in the [config](./config) directory in this repository.
 Renaming any configuration file to `application.yaml` will make it the default configuration and executed by cloud-janitor.
 
 
