@@ -6,6 +6,9 @@ For example, in a 'create-cluster' task, cloud-janitor should execute all the co
 install dependencies, create account-level resources, create cluster-level resources, wait for health check, install plugins and verify the application. 
 All that from a single invocation, using a command line like `cloud-janitor -t openshift-create-cluster` or the equivalent inside a container, github action or gitpod.io workspace.
 
+Start you gitpod worspace by visiting:
+https://gitpod.io/#github.com/CaravanaCloud/cloud-janitor
+
 ## Motivation
 
 As developers and sysadmins we are used to building scripts and solutions to automate tasks. 
@@ -37,8 +40,6 @@ Cloud Janitor is also built to be easily extensible and contributions are most w
 ## Cloud Janitor on GitPod
 
 This repository is ready to launch on gitpod, containing all configuration to start your development instance with Java, Quarkus, AWS CLI and all tools that you need to code.
-
-Start you gitpod worspace by visiting https://gitpod.io/#github.com/CaravanaCloud/cloud-janitor
 
 Once your workspace is running use the command ```aws configure``` to setup your AWS account authentication. You can also use gitpod environment variables or dotfiles for that purpose. Check that authentication is correct with the command ```aws sts get-caller-identity```
 
