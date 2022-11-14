@@ -1,9 +1,0 @@
-cj:
-  task: cleanup-aws
-  dryRun: true
-  ocp:
-    baseDomain: devcluster.openshift.com
-  aws:
-    region: ap-northeast-1
-    cleanup:
-      prefix: rhnb-

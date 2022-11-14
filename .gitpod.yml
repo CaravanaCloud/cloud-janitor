@@ -5,15 +5,26 @@ image:
 tasks:
   - name: Maven Build
     init: mvn -B org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline
-    command: mvn -B install -DskipTests=true
+    command: mvn verify sudo ln -s /workspace/cloud-janitor/target/jpackage/app_image/cloud-janitor/bin/cloud-janitor /usr/local/bin/cloud-janitor
+
+  - name: Try Cloud Janitor
+    command: cloud-janitor -V
 
 ports:
+  - port: 3306
+    onOpen: ignore
   - port: 5000
+    onOpen: ignore
   - port: 8080
+    onOpen: ignore
   - port: 13370
+    onOpen: ignore
   - port: 13371
+    onOpen: ignore
   - port: 13372
+    onOpen: ignore
   - port: 13373
+    onOpen: ignore
 
 vscode:
   extensions:

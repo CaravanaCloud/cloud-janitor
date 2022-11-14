@@ -1,21 +1,22 @@
-# mvn clean package appassembler:assemble assembly:single jreleaser:full-release
-# brew tap CaravanaCloud/tap
-# TODO: brew install cloud-janitor
 project:
   name: cloud-janitor
-  version: 1.0
+  version: 1.3.4
   description: Cloud Janitor
   longDescription: Automating cleanup, maintenance and troubleshooting tasks in Cloud Computing
-  website: https://github.com/CaravanaCloud/cloud-janitor
+  links:
+    homepage: https://github.com/CaravanaCloud/cloud-janitor
   authors:
     - Julio Faerman
   license: GNU General Public License v3.0
+  vendor: caravanacloud
+  inceptionYear: 2021
   java:
     groupId: caravanacloud
     version: 17
-  extraProperties:
-    inceptionYear: 2021
+    mainClass: cj.Main
 
-
-
+release:
+  github:
+    owner: CaravanaCloud
+    overwrite: true
 

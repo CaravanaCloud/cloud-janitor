@@ -1,5 +1,0 @@
-cj:
-  task: cleanup-aws
-  dryRun: true
-  aws:
-    regions: ap-northeast-1
