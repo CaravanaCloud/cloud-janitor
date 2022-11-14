@@ -1,0 +1,514 @@
+Description: Resources for DeletePopulatedVPCTest
+
+Parameters:
+  VpcCIDR:
+    Description: IP range for this VPC
+    Type: String
+    Default: 10.192.0.0/16
+
+  PublicSubnet1CIDR:
+    Description: IP range for the public subnet in the first Availability Zone
+    Type: String
+    Default: 10.192.10.0/24
+
+  PublicSubnet2CIDR:
+    Description: IP range for the public subnet in the second Availability Zone
+    Type: String
+    Default: 10.192.11.0/24
+
+  PrivateSubnet1CIDR:
+    Description: IP range for the private subnet in the first Availability Zone
+    Type: String
+    Default: 10.192.20.0/24
+
+  PrivateSubnet2CIDR:
+    Description: IP range for the private subnet in the second Availability Zone
+    Type: String
+    Default: 10.192.21.0/24
+
+  DBPort:
+    Description: Database Port
+    Type: String
+    Default: 3306
+
+  DBAllowCidrIp:
+    Description: Database Allowed Ingress
+    Type: String
+    Default: 0.0.0.0/0
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    DeletionPolicy: Delete
+    Properties:
+      CidrBlock: !Ref VpcCIDR
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-vpc"
+        - Key: !Sub "kubernetes.io/cluster/${AWS::StackName}EKS"
+          Value: "shared"
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-igw"
+
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    DeletionPolicy: Delete
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !Ref PublicSubnet1CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-net-pub-1"
+        - Key: kubernetes.io/role/elb
+          Value: "1"
+        - Key: !Sub "kubernetes.io/cluster/${AWS::StackName}EKS"
+          Value: "shared"
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    DeletionPolicy: Delete
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      CidrBlock: !Ref PublicSubnet2CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-net-pub-2"
+        - Key: kubernetes.io/role/elb
+          Value: "1"
+        - Key: !Sub "kubernetes.io/cluster/${AWS::StackName}EKS"
+          Value: "shared"
+
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    DeletionPolicy: Delete
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 0, !GetAZs  '' ]
+      CidrBlock: !Ref PrivateSubnet1CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-net-pvt-1'
+        - Key: kubernetes.io/role/internal-elb
+          Value: '1'
+        - Key: !Sub "kubernetes.io/cluster/${AWS::StackName}EKS"
+          Value: "shared"
+
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    DeletionPolicy: Delete
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [ 1, !GetAZs  '' ]
+      CidrBlock: !Ref PrivateSubnet2CIDR
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-net-pvt-2'
+        - Key: kubernetes.io/role/internal-elb
+          Value: '1'
+        - Key: !Sub "kubernetes.io/cluster/${AWS::StackName}EKS"
+          Value: "shared"
+
+  NatGateway1EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-igw-vpc'
+
+  NatGateway2EIP:
+    Type: AWS::EC2::EIP
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-eip-nat-2'
+
+  NatGateway1:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway1EIP.AllocationId
+      SubnetId: !Ref PublicSubnet1
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-eip-nat-1'
+
+  NatGateway2:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatGateway2EIP.AllocationId
+      SubnetId: !Ref PublicSubnet2
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-natgw-2'
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-rtb-pub'
+
+  DefaultPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet1
+
+  PublicSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet2
+
+  PrivateRouteTable1:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-rtb-pvt-1'
+
+  DefaultPrivateRoute1:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway1
+
+  PrivateSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable1
+      SubnetId: !Ref PrivateSubnet1
+
+  PrivateRouteTable2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-rtb-pvt-2'
+
+  DefaultPrivateRoute2:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable2
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NatGateway2
+
+  PrivateSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable2
+      SubnetId: !Ref PrivateSubnet2
+
+  EKSClusterSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Security Group for EKS Cluster (control plane)"
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-sg-eks-cluster'
+
+  EKSNodeSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Security Group for EKS Nodes (workers)"
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-sg-eks-cluster-workers'
+        - Key: !Sub kubernetes.io/cluster/BC::${AWS::StackName}::VPCID
+          Value: owned
+
+  DatabaseSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Security Group for Databases"
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-sg-db'
+
+
+  # TODO: Fix SG ports
+  IngressForDatabase:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !Ref EKSNodeSG
+      IpProtocol: tcp
+      FromPort: !Ref DBPort
+      ToPort: !Ref DBPort
+      CidrIp: !Ref DBAllowCidrIp
+
+  IngressFromPeers:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !Ref EKSNodeSG
+      IpProtocol: '-1'
+      FromPort: 0
+      ToPort: 65535
+      SourceSecurityGroupId: !GetAtt EKSNodeSG.GroupId
+
+  IngressFromCluster:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !Ref EKSNodeSG
+      IpProtocol: '-1'
+      FromPort: 0
+      ToPort: 65535
+      SourceSecurityGroupId: !GetAtt EKSNodeSG.GroupId
+
+  IngressFromNodes:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !GetAtt EKSNodeSG.GroupId
+      IpProtocol: '-1'
+      FromPort: 0
+      ToPort: 65535
+      SourceSecurityGroupId: !Ref EKSNodeSG
+
+  EgressNodesToCluster:
+    Type: 'AWS::EC2::SecurityGroupEgress'
+    Properties:
+      Description: >-
+        Allow control plane to communicate with worker nodes in group ng-workers
+        (kubelet and workload TCP ports)
+      DestinationSecurityGroupId: !Ref EKSNodeSG
+      FromPort: 1025
+      GroupId: !Ref EKSClusterSG
+      IpProtocol: tcp
+      ToPort: 65535
+
+  EgressInterClusterAPI:
+    Type: 'AWS::EC2::SecurityGroupEgress'
+    Properties:
+      Description: >-
+        Allow control plane to communicate with worker nodes in group ng-workers
+        (workloads using HTTPS port, commonly used with extension API servers)
+      DestinationSecurityGroupId: !Ref EKSNodeSG
+      FromPort: 443
+      GroupId: !Ref EKSClusterSG
+      IpProtocol: tcp
+      ToPort: 443
+
+  IngressInterCluster:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      Description: >-
+        Allow worker nodes in group ng-workers to communicate with control plane
+        (kubelet and workload TCP ports)
+      FromPort: 1025
+      GroupId: !Ref EKSNodeSG
+      IpProtocol: tcp
+      SourceSecurityGroupId: !Ref EKSClusterSG
+      ToPort: 65535
+
+  IngressInterClusterAPI:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      Description: >-
+        Allow worker nodes in group ng-workers to communicate with control plane
+        (workloads using HTTPS port, commonly used with extension API servers)
+      FromPort: 443
+      GroupId: !Ref EKSNodeSG
+      IpProtocol: tcp
+      SourceSecurityGroupId: !Ref EKSClusterSG
+      ToPort: 443
+
+  IngressInterClusterCP:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      Description: >-
+        Allow control plane to receive API requests from worker nodes in group
+        ng-workers
+      FromPort: 443
+      GroupId: !Ref EKSNodeSG
+      IpProtocol: tcp
+      SourceSecurityGroupId: !Ref EKSNodeSG
+      ToPort: 443
+
+  IngressForSSH:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !Ref EKSNodeSG
+      IpProtocol: tcp
+      FromPort: 22
+      ToPort: 22
+      CidrIp: 0.0.0.0/0
+
+  IngressForApplication:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !Ref EKSNodeSG
+      IpProtocol: tcp
+      FromPort: 3001
+      ToPort: 3001
+      CidrIp: 0.0.0.0/0
+
+  TempAllowAllTCP:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !Ref EKSNodeSG
+      IpProtocol: tcp
+      FromPort: 0
+      ToPort: 65535
+      CidrIp: 0.0.0.0/0
+
+  TempAllowAllUDP:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !Ref EKSNodeSG
+      IpProtocol: udp
+      FromPort: 0
+      ToPort: 65535
+      CidrIp: 0.0.0.0/0
+
+  TempAllowAllICMP:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !Ref EKSNodeSG
+      IpProtocol: icmp
+      FromPort: -1
+      ToPort: -1
+      CidrIp: 0.0.0.0/0
+
+  TempAllowAllTCPEKS:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !Ref EKSClusterSG
+      IpProtocol: tcp
+      FromPort: 0
+      ToPort: 65535
+      CidrIp: 0.0.0.0/0
+
+  TempAllowAllUDPEKS:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !Ref EKSClusterSG
+      IpProtocol: udp
+      FromPort: 0
+      ToPort: 65535
+      CidrIp: 0.0.0.0/0
+
+  TempAllowAllICMPEKS:
+    Type: 'AWS::EC2::SecurityGroupIngress'
+    Properties:
+      GroupId: !Ref EKSClusterSG
+      IpProtocol: icmp
+      FromPort: -1
+      ToPort: -1
+      CidrIp: 0.0.0.0/0
+
+Outputs:
+  StackName:
+    Description: Name of the created stack
+    Value: !Ref AWS::StackName
+    Export:
+      Name: !Sub "CJ::${AWS::StackName}::STACK"
+
+  EKSName:
+    Description: Name that the future EKS Cluster must have to match EKS subnet tagging rules
+    Value: !Sub "${AWS::StackName}EKS"
+    Export:
+      Name: !Sub "CJ::${AWS::StackName}::EKSNAME"
+
+  VPC:
+    Description: A reference to the created VPC
+    Value: !Ref VPC
+    Export:
+      Name: !Sub "CJ::${AWS::StackName}::VPCID"
+
+  PublicSubnets:
+    Description: The list of the public subnets (YAML style A)
+    Value: !Join
+      - ','
+      - - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+    Export:
+      Name: !Sub "CJ::${AWS::StackName}::PUBNETS"
+
+  PrivateSubnets:
+    Description: The list of the private subnets (YAML style B)
+    Value: !Join [ ",", [ !Ref PrivateSubnet1, !Ref PrivateSubnet2 ]]
+    Export:
+      Name: !Sub "CJ::${AWS::StackName}::PRIVNETS"
+
+  PublicSubnet1:
+    Description: A reference to the public subnet in the 1st Availability Zone
+    Value: !Ref PublicSubnet1
+    Export:
+      Name: !Sub "CJ::${AWS::StackName}::PUBNET1"
+
+  PublicSubnet2:
+    Description: A reference to the public subnet in the 2nd Availability Zone
+    Value: !Ref PublicSubnet2
+    Export:
+      Name: !Sub "CJ::${AWS::StackName}::PUBNET2"
+
+  PrivateSubnet1:
+    Description: A reference to the private subnet in the 1st Availability Zone
+    Value: !Ref PrivateSubnet1
+    Export:
+      Name: !Sub "CJ::${AWS::StackName}::PVTNET1"
+
+  PrivateSubnet2:
+    Description: A reference to the private subnet in the 2nd Availability Zone
+    Value: !Ref PrivateSubnet2
+    Export:
+      Name: !Sub "CJ::${AWS::StackName}::PVTNET2"
+
+  EKSClusterSGId:
+    Description: EKS cluster security group id
+    Value: !Ref EKSClusterSG
+    Export:
+      Name: !Sub "CJ::${AWS::StackName}::EKSSGID"
+
+  EKSNodeSGId:
+    Description: EKS cluster security group id
+    Value: !Ref EKSNodeSG
+    Export:
+      Name: !Sub "CJ::${AWS::StackName}::NODESGID"
+
+  DBSGId:
+    Description: Database Security Group Id
+    Value: !Ref DatabaseSG
+    Export:
+      Name: !Sub "CJ::${AWS::StackName}::DBSGID"
+
+# cheat sheet
+
+# aws cloudformation deploy --template-file main.yaml --stack-name "${TF_VAR_env_name}-NETW" --parameter-overrides AWS::StackName=${TF_VAR_env_name}
+# aws cloudformation delete-stack --stack-name "${TF_VAR_env_name}-NETW"
