@@ -56,12 +56,12 @@ public class DeleteEmptyVPCTest extends TaskTest {
     }
 
     private void deleteVPC(String vpcId) {
-        //deleteVpc.filterVPCs.withInput(Input.aws.targetVPCId, vpcId);
+        //deleteVpc.filterVPCs.withInput(AWSInput.targetVPCId, vpcId);
         tasks.submit(deleteVpc);
     }
 
     private boolean vpcExists(String vpcId) {
-        filterVPCs.withInput(Input.aws.targetVPCId, vpcId);
+        filterVPCs.withInput(AWSInput.targetVPCId, vpcId);
         tasks.submit(filterVPCs);
         var vpcs = filterVPCs.outputList(Output.aws.VPCMatch, Vpc.class);
         if (! vpcs.isEmpty()){

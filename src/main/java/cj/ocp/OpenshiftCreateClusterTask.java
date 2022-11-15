@@ -1,22 +1,22 @@
 package cj.ocp;
 
-import cj.shell.CheckShellCommandExistsTask;
+import cj.Capabilities;
+import cj.ConfigurationNotFoundException;
+import cj.Input;
+import cj.Inputs;
+import cj.aws.AWSWrite;
 import cj.fs.FSUtils;
-
+import cj.shell.CheckShellCommandExistsTask;
+import cj.shell.ShellInput;
+import io.quarkus.qute.Engine;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import java.nio.file.Path;
-
-import static cj.Input.cj.*;
-import static cj.Input.shell.cmd;
-
-import cj.aws.AWSWrite;
-import io.quarkus.qute.Engine;
-import cj.Capabilities;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Dependent
 @Named("openshift-create-cluster")
@@ -38,22 +38,97 @@ public class OpenshiftCreateClusterTask extends AWSWrite {
     @Override
     public void apply() {
         debug("ocp-create-cluster");
-        var clusterName = inputString(ocp.clusterName)
-                .or(() -> getConfig().ocp().clusterName())
-                .orElse(getExecutionId());
+
+
+        List<Input> inputs = List.of(OCPInput.clusterName,
+                OCPInput.baseDomain,
+                OCPInput.sshKey,
+                OCPInput.pullSecret,
+                OCPInput.awsRegion);
+
+        List<Input> missing = new ArrayList<>();
+        Map<Input, String> present = new HashMap<>();
+        for(var input:inputs){
+            var inputValue = input(input)
+                    .or( () -> fromConfig(input));
+            if(inputValue.isPresent()){
+                present.put(input, inputValue.get().toString());
+            }else{
+                missing.add(input);
+            }
+        }
+        debug("{} inputs, {} present, {} missing", inputs.size(), present.size(), missing.size());
+        if (!missing.isEmpty()){
+            error("[{}] inputs are missing: {}", missing.size(), missing);
+            throw new ConfigurationNotFoundException(missing.stream().map(Object::toString).toList());
+        }
+        var clusterName = present.get(OCPInput.clusterName);
         var clusterDir = getClusterDir(clusterName);
         if (! FSUtils.isEmptyDir(clusterDir))
             throw fail("Cluster directory already exists {} ", clusterDir);
         var credsDir = FSUtils.resolve(clusterDir, "ccoctl-creds");
         var outputDir = FSUtils.resolve(clusterDir, "ccoctl-output");
         var clusterRegion = aws().getRegion().toString();
-        var profile = inputAs(ocp.clusterProfile, ClusterProfile.class)
+        var profile = inputAs(OCPInput.clusterProfile, ClusterProfile.class)
                 .orElse(ClusterProfile.aws_ipi_default);
         checkCommands();
-        preCreate(clusterName, clusterDir, credsDir, outputDir, profile);
+        var data = present.entrySet().stream()
+                .collect(Collectors.toMap(
+                        e -> e.getKey().toString(),
+                        Map.Entry::getValue
+                ));
+        preCreate(clusterName, clusterDir, credsDir, outputDir, profile, data);
         createCluster(clusterName, clusterDir);
         debug("ocp-create-cluster done");
     }
+
+    /*
+    private static final Map<Input, >> fromConfigMap = new HashMap<>(){{
+        put(OCPInput.clusterName, c -> c.ocp().clusterName());
+        put(OCPInput.baseDomain, c -> c.ocp().baseDomain());
+        put(OCPInput.sshKey, c -> c.ocp().sshKey());
+        put(OCPInput.pullSecret, c -> c.ocp().pullSecret());
+        put(OCPAWSInputRegion, c -> c.ocp().awsRegion());
+    }};
+    */
+
+    @Inject
+    Inputs inputs;
+    private Optional<String> fromConfig(Input input) {
+        return inputs.fromConfig(input);
+    }
+
+
+    private Map<String, String> validateConfig(String clusterName) {
+
+        var data = Map.of(
+                "clusterName", Optional.of(clusterName),
+                "baseDomain", getConfig().ocp().baseDomain(),
+                "awsRegion", getConfig().ocp().awsRegion(),
+                "pullSecret", getConfig().ocp().pullSecret(),
+                "sshKey", getConfig().ocp().sshKey()
+        );
+        var entries = data.entrySet();
+        var missing = new ArrayList<String>();
+        var present = new HashMap<String, String>();
+        for (var entry : entries) {
+            var key = entry.getKey();
+            var value = entry.getValue();
+            if(value.isEmpty()) {
+                missing.add(key);
+            }else {
+                present.put(key, value.get());
+            }
+        }
+        if (! missing.isEmpty()){
+            throw new ConfigurationNotFoundException(missing);
+        }else {
+            debug("All required configuration found");
+            return present;
+        }
+    }
+
+
     private void createCluster(String clusterName, Path clusterDir) {
         var tip = "tail -f "+ clusterDir.resolve(".openshift_install.log").toAbsolutePath();
         debug(tip);
@@ -68,7 +143,6 @@ public class OpenshiftCreateClusterTask extends AWSWrite {
         }else{
             throw fail("openshift-install failed.");
         }
-
     }
 
     private void expectCapability(Capabilities capability) {
@@ -82,7 +156,7 @@ public class OpenshiftCreateClusterTask extends AWSWrite {
         return tasks().hasCapabilities(cs);
     }
 
-    private void preCreate(String clusterName, Path clusterDir, Path credsDir, Path outputDir, ClusterProfile profile) {
+    private void preCreate(String clusterName, Path clusterDir, Path credsDir, Path outputDir, ClusterProfile profile, Map<String, String> configData) {
         debug("Preparing to create cluster {} with profile {}", clusterName, profile);
         switch (profile){
             case aws_ipi_sts:
@@ -93,7 +167,7 @@ public class OpenshiftCreateClusterTask extends AWSWrite {
             default:
                 throw fail("Unknown profile: {}", profile);
         }
-        createInstallConfigFromTemplate(clusterDir, clusterName, profile);
+        createInstallConfigFromTemplate(clusterDir, clusterName, profile, configData);
     }
 
     //TODO: Avoid prompts
@@ -111,12 +185,12 @@ public class OpenshiftCreateClusterTask extends AWSWrite {
         }
     }
 
-    private void createInstallConfigFromTemplate(Path clusterDir, String clusterName, ClusterProfile profile) {
+    private void createInstallConfigFromTemplate(Path clusterDir, String clusterName, ClusterProfile profile, Map<String, String> configData) {
         var location = "ocp/%s/install-config.yaml".formatted(profile);
         var installConfigTemplate = engine.getTemplate(location);
+
         String installConfig = installConfigTemplate
-                .data("clusterName", clusterName)
-                .data("config", getConfig())
+                .data(configData)
                 .render();
         Path installConfigPath = clusterDir.resolve("install-config.yaml");
         FSUtils.writeFile(installConfigPath, installConfig);
@@ -155,7 +229,7 @@ public class OpenshiftCreateClusterTask extends AWSWrite {
     }
 
     private void checkCmd(String executable, String[] installCmd) {
-        var checkTask = withInput(checkCmd, cmd, executable);
+        var checkTask = withInput(checkCmd, ShellInput.cmd, executable);
         var installTask = shellTask(installCmd);
         retry(checkTask, installTask);
     }

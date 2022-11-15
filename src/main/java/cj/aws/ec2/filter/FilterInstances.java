@@ -2,6 +2,7 @@ package cj.aws.ec2.filter;
 
 import cj.Input;
 import cj.aws.AWSFilter;
+import cj.aws.AWSInput;
 import software.amazon.awssdk.services.ec2.model.DescribeInstancesRequest;
 import software.amazon.awssdk.services.ec2.model.Instance;
 
@@ -21,7 +22,7 @@ public class FilterInstances extends AWSFilter {
 
         if (terminated) return false;
 
-        var vpcId = inputString(Input.aws.targetVPCId);
+        var vpcId = inputString(AWSInput.targetVPCId);
         if (vpcId.isPresent()){
             var vpcMatch = vpcId.get().equals(instance.vpcId());
             match = match && vpcMatch;

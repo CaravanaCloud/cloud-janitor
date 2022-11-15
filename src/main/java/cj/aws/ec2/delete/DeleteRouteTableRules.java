@@ -1,6 +1,7 @@
 package cj.aws.ec2.delete;
 
 import cj.Input;
+import cj.aws.AWSInput;
 import cj.aws.AWSWrite;
 import software.amazon.awssdk.services.ec2.model.DeleteRouteRequest;
 import software.amazon.awssdk.services.ec2.model.DeleteRouteTableRequest;
@@ -13,7 +14,7 @@ import javax.enterprise.context.Dependent;
 public class DeleteRouteTableRules extends AWSWrite {
     @Override
     public void apply() {
-        var rtb = getInput(Input.aws.targetRouteTable, RouteTable.class);
+        var rtb = getInput(AWSInput.targetRouteTable, RouteTable.class);
         if (! isMainRouteTable(rtb)) {
             try {
                 deleteRoutes(rtb);

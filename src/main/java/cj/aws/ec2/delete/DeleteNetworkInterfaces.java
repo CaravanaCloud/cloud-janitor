@@ -2,6 +2,7 @@ package cj.aws.ec2.delete;
 
 import cj.Input;
 import cj.Output;
+import cj.aws.AWSInput;
 import cj.aws.AWSTask;
 import cj.aws.ec2.filter.FilterNetworkInterfaces;
 import cj.spi.Task;
@@ -33,7 +34,7 @@ public class DeleteNetworkInterfaces extends AWSTask {
     private void deleteNetworkInterface(NetworkInterface eni) {
         var delLbTask = deleteENIInstance
                 .get()
-                .withInput(Input.aws.targetNetworkInterfaceId, eni.networkInterfaceId());
+                .withInput(AWSInput.targetNetworkInterfaceId, eni.networkInterfaceId());
         submit(delLbTask);
     }
 }

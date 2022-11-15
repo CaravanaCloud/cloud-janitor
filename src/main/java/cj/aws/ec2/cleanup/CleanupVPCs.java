@@ -1,6 +1,7 @@
 package cj.aws.ec2.cleanup;
 
 import cj.Input;
+import cj.aws.AWSInput;
 import cj.aws.AWSTask;
 import cj.aws.ec2.delete.DeleteVPC;
 import cj.aws.ec2.filter.FilterVPCs;
@@ -32,7 +33,7 @@ public class CleanupVPCs extends AWSTask {
 
     private void deleteVPC(Vpc vpc) {
         var delVpc = create(deleteVPC)
-                .withInput(Input.aws.targetVPCId, vpc.vpcId());
+                .withInput(AWSInput.targetVPCId, vpc.vpcId());
         submit(delVpc);
     }
 

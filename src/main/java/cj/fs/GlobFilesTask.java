@@ -11,7 +11,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
-import static cj.Input.fs.*;
+import static cj.fs.FSInput.*;
 import static cj.fs.FSUtils.cwd;
 
 /**

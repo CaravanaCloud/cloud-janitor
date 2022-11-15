@@ -2,6 +2,7 @@ package cj.aws.ec2.delete;
 
 import cj.Input;
 import cj.Output;
+import cj.aws.AWSInput;
 import cj.aws.AWSTask;
 import cj.aws.ec2.filter.FilterNATGateways;
 import cj.spi.Task;
@@ -31,7 +32,7 @@ public class DeleteNATGateways extends AWSTask {
 
     private void deleteResource(NatGateway nat) {
         var delTask = deleteNATInstance.get()
-                .withInput(Input.aws.targetNatGatewayId, nat.natGatewayId());
+                .withInput(AWSInput.targetNatGatewayId, nat.natGatewayId());
         submit(delTask);
     }
 }

@@ -10,20 +10,20 @@ import cj.spi.Task;
 import software.amazon.awssdk.services.iam.IamClient;
 import software.amazon.awssdk.services.iam.model.*;
 import software.amazon.awssdk.services.s3.model.Bucket;
-import software.amazon.awssdk.services.translate.model.*;
+import software.amazon.awssdk.services.translate.model.DescribeTextTranslationJobRequest;
+import software.amazon.awssdk.services.translate.model.InputDataConfig;
+import software.amazon.awssdk.services.translate.model.OutputDataConfig;
+import software.amazon.awssdk.services.translate.model.StartTextTranslationJobRequest;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.concurrent.Callable;
 
-import static cj.Input.aws.*;
-import static cj.Input.fs.*;
-import static cj.Output.aws.*;
-import static org.awaitility.Awaitility.await;
-import static software.amazon.awssdk.services.translate.model.JobStatus.COMPLETED;
+import static cj.aws.AWSInput.*;
+import static cj.fs.FSInput.*;
+import static cj.Output.aws.S3Bucket;
 
 
 @Dependent

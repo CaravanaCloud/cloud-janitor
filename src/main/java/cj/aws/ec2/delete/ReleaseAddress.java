@@ -1,6 +1,7 @@
 package cj.aws.ec2.delete;
 
 import cj.Input;
+import cj.aws.AWSInput;
 import cj.aws.AWSWrite;
 import software.amazon.awssdk.services.ec2.model.Address;
 import software.amazon.awssdk.services.ec2.model.DisassociateAddressRequest;
@@ -13,7 +14,7 @@ public class ReleaseAddress extends AWSWrite {
 
     @Override
     public void apply() {
-        var eip = getInput(Input.aws.address, Address.class);
+        var eip = getInput(AWSInput.address, Address.class);
         debug("Releasing address {}", eip.publicIp());
         var associationId = eip.associationId();
         if (associationId != null && !associationId.isEmpty()) {

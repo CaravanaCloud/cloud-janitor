@@ -2,6 +2,7 @@ package cj.aws.ec2.filter;
 
 import cj.Input;
 import cj.aws.AWSFilter;
+import cj.aws.AWSInput;
 import software.amazon.awssdk.services.ec2.model.NetworkInterface;
 
 import javax.enterprise.context.Dependent;
@@ -12,7 +13,7 @@ public class FilterNetworkInterfaces extends AWSFilter {
 
     private boolean match(NetworkInterface resource) {
         var match = true;
-        var vpcId = inputString(Input.aws.targetVPCId);
+        var vpcId = inputString(AWSInput.targetVPCId);
         if (vpcId.isPresent()){
             match = match && resource.vpcId().equals(vpcId);
         }

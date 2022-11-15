@@ -7,11 +7,9 @@ import cj.Tasks;
 import cj.aws.sts.CallerIdentity;
 import cj.aws.sts.GetCallerIdentityTask;
 import cj.aws.sts.LoadAWSIdentitiesTask;
-import cj.spi.Task;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.model.Filter;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.time.Duration;
@@ -19,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
-import static cj.Input.aws.identity;
+import static cj.aws.AWSInput.identity;
 import static org.awaitility.Awaitility.await;
 
 public abstract class   AWSTask
@@ -77,7 +75,7 @@ public abstract class   AWSTask
     }
 
     protected Region getRegion(){
-        var regionIn = inputAs(Input.aws.targetRegion, Region.class);
+        var regionIn = inputAs(AWSInput.targetRegion, Region.class);
         return regionIn.orElse(aws().getRegion());
     }
 
@@ -128,7 +126,8 @@ public abstract class   AWSTask
     }
 
     private String getRegionName() {
-        return getRegion().toString();
+        var region = getRegion();
+        return region != null? region.toString() : "-null-region-";
     }
 
     protected Duration getPollInterval() {

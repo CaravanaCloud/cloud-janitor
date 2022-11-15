@@ -2,6 +2,7 @@ package cj.aws.ec2.delete;
 
 import cj.Input;
 import cj.Output;
+import cj.aws.AWSInput;
 import cj.aws.AWSTask;
 import cj.aws.ec2.filter.FilterSecurityGroupRules;
 import cj.spi.Task;
@@ -31,7 +32,7 @@ public class DeleteSecurityGroupRules extends AWSTask {
 
     private void deleteRule(SecurityGroupRule sgr) {
         var deleteRule = deleteRuleInstance.get()
-                .withInput(Input.aws.securityGroupRule, sgr);
+                .withInput(AWSInput.securityGroupRule, sgr);
         submit(deleteRule);
     }
 

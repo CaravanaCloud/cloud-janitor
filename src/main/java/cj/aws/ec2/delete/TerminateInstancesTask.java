@@ -2,6 +2,7 @@ package cj.aws.ec2.delete;
 
 
 import cj.Input;
+import cj.aws.AWSInput;
 import cj.aws.AWSTask;
 import cj.aws.ec2.filter.FilterInstances;
 import cj.spi.Task;
@@ -33,7 +34,7 @@ public class TerminateInstancesTask extends AWSTask {
 
     public void terminate(software.amazon.awssdk.services.ec2.model.Instance instance){
         var terminate = terminateInstance.get()
-                .withInput(Input.aws.targetInstanceId, instance.instanceId());
+                .withInput(AWSInput.targetInstanceId, instance.instanceId());
         submit(terminate);
     }
 }

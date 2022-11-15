@@ -1,6 +1,7 @@
 package cj.aws.ec2.delete;
 
 import cj.Input;
+import cj.aws.AWSInput;
 import cj.aws.AWSWrite;
 import software.amazon.awssdk.services.ec2.model.TerminateInstancesRequest;
 
@@ -21,7 +22,7 @@ public class TerminateInstanceTask extends AWSWrite {
     }
 
     private String getInstanceId() {
-        return getInputString(Input.aws.targetInstanceId);
+        return getInputString(AWSInput.targetInstanceId);
     }
 
     @Override

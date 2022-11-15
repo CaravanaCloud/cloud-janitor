@@ -2,8 +2,6 @@ package cj.reporting;
 
 import cj.Configuration;
 import cj.Tasks;
-import io.quarkus.qute.Location;
-import io.quarkus.qute.Template;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;

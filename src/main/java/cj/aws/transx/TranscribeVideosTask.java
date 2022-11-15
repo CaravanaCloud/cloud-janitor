@@ -16,10 +16,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-import static cj.Input.local.fileExtension;
+import static cj.LocalInput.*;
 import static cj.Output.aws.S3Bucket;
 import static cj.Output.local.FilesMatch;
-import static org.awaitility.Awaitility.await;
 
 
 @Named("aws-transcribe-videos")

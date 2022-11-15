@@ -1,6 +1,7 @@
 package cj.aws.ec2.delete;
 
 import cj.Input;
+import cj.aws.AWSInput;
 import cj.aws.AWSWrite;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.DeleteTargetGroupRequest;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetGroup;
@@ -12,7 +13,7 @@ public class DeleteTargetGroup extends AWSWrite {
 
     @Override
     public void apply() {
-        var resource = getInput(Input.aws.targetTargetGroup, TargetGroup.class);
+        var resource = getInput(AWSInput.targetTargetGroup, TargetGroup.class);
         debug("Deleting Target group {}", resource.targetGroupArn());
         var request = DeleteTargetGroupRequest.builder()
                 .targetGroupArn(resource.targetGroupArn())

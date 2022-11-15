@@ -2,6 +2,7 @@ package cj.aws.ec2.create;
 
 import cj.Input;
 import cj.Output;
+import cj.aws.AWSInput;
 import cj.aws.AWSWrite;
 import software.amazon.awssdk.services.ec2.model.CreateVpcRequest;
 
@@ -18,7 +19,7 @@ public class CreateVPC extends AWSWrite {
         var ec2 = aws().ec2();
         var req = CreateVpcRequest
                 .builder()
-                .cidrBlock(getInputString(Input.aws.vpcCIDR, DEFAULT_CIDR))
+                .cidrBlock(getInputString(AWSInput.vpcCIDR, DEFAULT_CIDR))
                 .build();
         var resp = ec2.createVpc(req);
         var vpc = resp.vpc();

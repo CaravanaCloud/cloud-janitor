@@ -158,6 +158,9 @@ public class Tasks {
         }catch (CapabilityNotFoundException e){
             var c = e.getCapability();
             log.warn("Capability not found: {}, try with -c '{}' or equivalent", c, c);
+        }catch (ConfigurationNotFoundException e){
+            var varName = e.getVarName();
+            log.warn("Configuration not found: {}.", varName);
         } catch (Exception e) {
             task.getErrors().put(Message, e.getMessage());
             log.error("Error executing {}: {}", task, e.getMessage());

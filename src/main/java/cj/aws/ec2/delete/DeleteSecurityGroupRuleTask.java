@@ -1,6 +1,7 @@
 package cj.aws.ec2.delete;
 
 import cj.Input;
+import cj.aws.AWSInput;
 import cj.aws.AWSWrite;
 import software.amazon.awssdk.services.ec2.model.RevokeSecurityGroupEgressRequest;
 import software.amazon.awssdk.services.ec2.model.RevokeSecurityGroupIngressRequest;
@@ -27,7 +28,7 @@ public class DeleteSecurityGroupRuleTask extends AWSWrite {
     }
 
     private SecurityGroupRule getSecurityGroupRule() {
-        return getInput(Input.aws.securityGroupRule, SecurityGroupRule.class);
+        return getInput(AWSInput.securityGroupRule, SecurityGroupRule.class);
     }
 
     @Override

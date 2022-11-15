@@ -4,18 +4,17 @@ import cj.ReadTask;
 import cj.StreamGobbler;
 
 import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static cj.Input.shell.*;
-import static cj.Input.cj.*;
-import static cj.Output.shell.*;
+import static cj.CJInput.*;
+import static cj.shell.ShellInput.*;
+import static cj.Output.shell.exitCode;
+import static cj.Output.shell.stdout;
 
 @Dependent
 @Named("shell")

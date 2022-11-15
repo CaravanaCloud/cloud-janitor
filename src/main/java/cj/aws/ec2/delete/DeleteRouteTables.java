@@ -2,6 +2,7 @@ package cj.aws.ec2.delete;
 
 import cj.Input;
 import cj.Output;
+import cj.aws.AWSInput;
 import cj.aws.AWSWrite;
 import cj.aws.ec2.filter.FilterRouteTables;
 import cj.spi.Task;
@@ -31,7 +32,7 @@ public class DeleteRouteTables extends AWSWrite {
     }
 
     private void deleteRouteTable(RouteTable routeTable) {
-        var delRoute = delRouteTable.get().withInput(Input.aws.routeTable, routeTable);
+        var delRoute = delRouteTable.get().withInput(AWSInput.routeTable, routeTable);
         submit(delRoute);
     }
 }

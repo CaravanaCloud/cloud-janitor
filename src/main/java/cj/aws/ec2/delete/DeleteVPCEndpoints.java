@@ -2,6 +2,7 @@ package cj.aws.ec2.delete;
 
 import cj.Input;
 import cj.Output;
+import cj.aws.AWSInput;
 import cj.aws.AWSTask;
 import cj.aws.ec2.filter.FilterVPCEndpoints;
 import cj.spi.Task;
@@ -32,7 +33,7 @@ public class DeleteVPCEndpoints extends AWSTask {
 
     private void deleteResource(VpcEndpoint vpce) {
         var delTask = deleteVPCEInstance.get()
-                .withInput(Input.aws.targetVPCEndpoint, vpce);
+                .withInput(AWSInput.targetVPCEndpoint, vpce);
         submit(delTask);
     }
 }

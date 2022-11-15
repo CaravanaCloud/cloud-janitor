@@ -1,6 +1,7 @@
 package cj;
 
 import cj.fs.FSUtils;
+import cj.shell.ShellTask;
 import cj.spi.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +14,10 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static cj.CJInput.*;
 import static cj.Errors.Type;
 import static cj.Errors.Type.Message;
-import static cj.Input.cj.*;
-import static cj.Input.shell.*;
-
-import cj.shell.*;
+import static cj.shell.ShellInput.*;
 @Dependent
 public class BaseTask implements Task {
     @Inject
@@ -92,11 +91,19 @@ public class BaseTask implements Task {
         return result;
     }
 
-    @SuppressWarnings("all")
+    @SuppressWarnings("unchecked")
     public <T> List<T> outputList(Output key, Class<T> valueClass) {
-        return output(key)
-                .map(o -> (List<T>) o)
-                .orElse(List.of());
+        var output = output(key);
+        if (output.isEmpty()){
+            return List.of();
+        }else{
+            var outputValue = output.get();
+            if (outputValue instanceof List outputList){
+                return (List<T>) outputList;
+            }else {
+                throw new RuntimeException( "Output " + key + " is not a List<"+valueClass.getName()+">");
+            }
+        }
     }
     @SuppressWarnings("all")
     public <T> List<T> inputList(Input key, Class<T> valueClass) {

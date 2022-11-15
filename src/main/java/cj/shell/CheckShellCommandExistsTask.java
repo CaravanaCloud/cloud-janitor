@@ -7,10 +7,9 @@ import cj.SafeTask;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-
 import java.util.List;
 
-import static cj.Input.shell.*;
+import static cj.shell.ShellInput.*;
 
 @Dependent
 public class CheckShellCommandExistsTask extends SafeTask {
@@ -19,7 +18,7 @@ public class CheckShellCommandExistsTask extends SafeTask {
 
     @Override
     public void apply() {
-        var cmdIn = getInputString(Input.shell.cmd);
+        var cmdIn = getInputString(ShellInput.cmd);
         var shellTask = shellTaskInstance.get();
         var cmdList = List.of("command", "-v", cmdIn);
         submit(shellTask, cmds, cmdList);

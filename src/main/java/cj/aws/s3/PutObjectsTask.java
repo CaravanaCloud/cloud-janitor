@@ -2,17 +2,17 @@ package cj.aws.s3;
 
 import cj.Input;
 import cj.aws.AWSWrite;
+import cj.fs.FSInput;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
 import software.amazon.awssdk.transfer.s3.UploadFileRequest;
-import software.amazon.awssdk.transfer.s3.UploadRequest;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import java.nio.file.Path;
 
-import static cj.Input.aws.*;
-import static cj.Input.fs.*;
+import static cj.aws.AWSInput.*;
+import static cj.fs.FSInput.*;
 
 @Dependent
 @Named("aws-put-objects")
@@ -20,7 +20,7 @@ public class PutObjectsTask extends AWSWrite {
     @Override
     public void apply() {
         var bucketName = expectInputString(targetBucketName);
-        var paths = inputList(Input.fs.paths, Path.class);
+        var paths = inputList(FSInput.paths, Path.class);
         var prefix = inputString(s3Prefix).orElse("");
         var s3tm = aws().s3tm();
         debug("Putting {} files to {}/{}", paths.size(), bucketName, prefix);

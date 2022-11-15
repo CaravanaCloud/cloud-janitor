@@ -2,6 +2,7 @@ package cj.aws.cleanup;
 
 import cj.Input;
 import cj.aws.AWSFilter;
+import cj.aws.AWSInput;
 import cj.aws.ec2.cleanup.CleanupVPCs;
 import cj.spi.Task;
 import software.amazon.awssdk.regions.Region;
@@ -22,7 +23,7 @@ public class CleanupRegion extends AWSFilter {
 
     @Override
     public void apply() {
-        var region = getInput(Input.aws.targetRegion, Region.class);
+        var region = getInput(AWSInput.targetRegion, Region.class);
         info("Region cleaned up "+region);
     }
 }

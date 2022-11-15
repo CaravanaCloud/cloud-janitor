@@ -3,6 +3,7 @@ package cj.aws.ec2.filter;
 import cj.Input;
 import cj.Output;
 import cj.aws.AWSFilter;
+import cj.aws.AWSInput;
 import software.amazon.awssdk.services.ec2.model.DescribeVpcsRequest;
 import software.amazon.awssdk.services.ec2.model.Vpc;
 
@@ -23,7 +24,7 @@ public class FilterVPCs extends AWSFilter {
     }
 
     private String getTargetVpcId() {
-        var targetVpcId = getInputString(Input.aws.targetVPCId);
+        var targetVpcId = getInputString(AWSInput.targetVPCId);
         return targetVpcId;
     }
 
@@ -55,6 +56,6 @@ public class FilterVPCs extends AWSFilter {
     }
 
     public void setTargetVPC(String vpcId) {
-        getInputs().put(Input.aws.targetVPCId, vpcId);
+        getInputs().put(AWSInput.targetVPCId, vpcId);
     }
 }

@@ -3,6 +3,7 @@ package cj.aws.ec2.filter;
 import cj.Input;
 import cj.Output;
 import cj.aws.AWSFilter;
+import cj.aws.AWSInput;
 import software.amazon.awssdk.services.ec2.model.DescribeSubnetsRequest;
 import software.amazon.awssdk.services.ec2.model.Subnet;
 
@@ -13,7 +14,7 @@ public class FilterSubnets extends AWSFilter {
 
 
     private boolean match(Subnet net) {
-        var vpcId = getInputString(Input.aws.targetVPCId);
+        var vpcId = getInputString(AWSInput.targetVPCId);
         if (vpcId != null) {
             return net.vpcId().equals(vpcId);
         }else if (hasFilterPrefix()){

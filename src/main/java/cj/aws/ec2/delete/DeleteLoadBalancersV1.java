@@ -10,8 +10,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import static cj.Input.aws.targetLoadBalancerName;
-
+import static cj.aws.AWSInput.*;
 @Dependent
 public class DeleteLoadBalancersV1 extends AWSTask {
     @Inject

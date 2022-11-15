@@ -8,14 +8,14 @@ import javax.enterprise.context.Dependent;
 public class RetryTask extends BaseTask {
     @Override
     public void apply() {
-        var task = getInput(Input.cj.taskName, Task.class);
+        var task = getInput(CJInput.taskName, Task.class);
         try {
             info("Trying task {}", task);
             tasks.submit(task);
         } catch (Exception e){
             //TODO: Consider TaskFailedException instead of Exception
             info("Task {} failed {}", task.getName() , e.getMessage());
-            var fix = inputAs(Input.cj.fixTask, Task.class);
+            var fix = inputAs(CJInput.fixTask, Task.class);
             if (fix.isPresent()){
                 var fixTask = fix.get();
                 info("Submitting fix task {}", fixTask);

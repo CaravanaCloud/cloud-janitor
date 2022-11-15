@@ -8,8 +8,7 @@ import cj.aws.sts.GetCallerIdentityTask;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import static cj.Input.aws.identity;
-
+import static cj.aws.AWSInput.*;
 @Dependent
 public class CleanupAWSIdentity extends AWSTask {
     @Inject

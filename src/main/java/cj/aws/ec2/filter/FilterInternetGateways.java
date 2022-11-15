@@ -2,6 +2,7 @@ package cj.aws.ec2.filter;
 
 import cj.Input;
 import cj.aws.AWSFilter;
+import cj.aws.AWSInput;
 import software.amazon.awssdk.services.ec2.model.InternetGateway;
 
 import javax.enterprise.context.Dependent;
@@ -23,7 +24,7 @@ public class FilterInternetGateways extends AWSFilter {
             match = nameMatch;
         }
 
-        var vpcId = inputAs(Input.aws.targetVPCId, String.class);
+        var vpcId = inputAs(AWSInput.targetVPCId, String.class);
         if (vpcId.isPresent()){
             var vpcMatch = resource.attachments().stream().anyMatch(
                     vpc -> vpc.vpcId().equals(vpcId.get()));

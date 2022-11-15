@@ -3,6 +3,7 @@ package cj.aws.ec2.filter;
 import cj.Input;
 import cj.Output;
 import cj.aws.AWSFilter;
+import cj.aws.AWSInput;
 import software.amazon.awssdk.services.ec2.model.SecurityGroup;
 
 import javax.enterprise.context.Dependent;
@@ -20,7 +21,7 @@ public class FilterSecurityGroups extends AWSFilter {
     private boolean match(SecurityGroup securityGroup) {
         var match = ! "default".equals(securityGroup.groupName());
 
-        var vpcId = inputString(Input.aws.targetVPCId);
+        var vpcId = inputString(AWSInput.targetVPCId);
         if (vpcId.isPresent()){
             match = match && vpcId.get().equals(securityGroup.vpcId());
         }

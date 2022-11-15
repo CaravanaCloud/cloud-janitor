@@ -2,6 +2,7 @@ package cj.aws.sts;
 
 import cj.Input;
 import cj.aws.AWSIdentity;
+import cj.aws.AWSInput;
 import cj.aws.AWSTask;
 import cj.aws.DefaultAWSIdentity;
 
@@ -43,7 +44,7 @@ public class LoadAWSIdentitiesTask extends AWSTask {
         var task = (GetCallerIdentityTask) submit(
                 callerIdTaskInstance
                         .get()
-                        .withInput(Input.aws.identity, awsIdentity));
+                        .withInput(AWSInput.identity, awsIdentity));
         var callerId = task.outputAs(CallerIdentity, cj.aws.sts.CallerIdentity.class);
         awsIdentity.withCallerIdentity(callerId);
         return awsIdentity;

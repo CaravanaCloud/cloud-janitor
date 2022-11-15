@@ -2,6 +2,7 @@ package cj.aws.ec2.filter;
 
 import cj.Input;
 import cj.aws.AWSFilter;
+import cj.aws.AWSInput;
 import software.amazon.awssdk.services.ec2.model.RouteTable;
 
 import javax.enterprise.context.Dependent;
@@ -14,7 +15,7 @@ public class FilterRouteTables extends AWSFilter {
     private boolean match(RouteTable resource) {
         var match = true;
 
-        var vpcId = input(Input.aws.targetVPCId);
+        var vpcId = input(AWSInput.targetVPCId);
         if (vpcId.isPresent()){
             var matchVpcId = resource.vpcId();
             var targetVpcId = vpcId.get().toString();
