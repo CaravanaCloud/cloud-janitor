@@ -9,10 +9,7 @@ import picocli.CommandLine;
 
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @CommandLine.Command(version = "1.3.4",
         mixinStandardHelpOptions = true,
@@ -25,29 +22,37 @@ public class CommandJanitor implements Runnable,
 
     @Inject
     CloudJanitor cj;
+    @Inject
+    Tasks tasks;
 
     @Inject
     Logger log;
 
     @CommandLine.Option(names = {"-t", "--task"}, description = "Task to be executed. Try '-t hello'")
-    String taskName;
+    Optional<String> taskName;
 
     @CommandLine.Option(names = {"-i", "--input"}, description = "Input parameters for the task, repeatable.")
     List<String> input;
 
-    @CommandLine.Option(names = {"-d", "--dry-run"}, description = "Disable dry-run safety check.")
-    Boolean dryRun;
+    @CommandLine.Option(names = {"-c", "--capabilities"},
+            defaultValue = "all",
+            description = "Feature toggles (empty or 'none' for dry run).")
+    List<String> capabilities;
 
     public CommandJanitor(){}
-
-
 
     @Override
     public void run() {
         log.trace("Command.run()");
-        InMemoryConfigSource.configuration.put("cj.dryRun", dryRun.toString());
+        parseArs();
+        cj.run();
+    }
 
-        cj.run(taskName, input);
+    private void parseArs() {
+        taskName.ifPresent(tasks::setTask);
+        if (input != null)
+            input.forEach(tasks::addInput);
+        capabilities.forEach(tasks::addCapability);
     }
 
     @Override

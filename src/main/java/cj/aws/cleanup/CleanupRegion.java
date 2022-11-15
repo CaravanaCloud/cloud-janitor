@@ -2,7 +2,7 @@ package cj.aws.cleanup;
 
 import cj.Input;
 import cj.aws.AWSFilter;
-import cj.aws.ec2.CleanupVPCs;
+import cj.aws.ec2.cleanup.CleanupVPCs;
 import cj.spi.Task;
 import software.amazon.awssdk.regions.Region;
 

@@ -48,10 +48,10 @@ public class BaseTask implements Task {
         return tasks.submit(delegate);
     }
 
-    public Task submit(Instance<? extends Task> delegate, Input input, Object value){
+    protected Task submitInstance(Instance<? extends Task> delegate, Input input, Object value){
         return tasks.submit(delegate.get().withInput(input, value));
     }
-    public Task submit(Task delegate, Input input, Object value){
+    protected Task submit(Task delegate, Input input, Object value){
         return tasks.submit(delegate.withInput(input, value));
     }
 

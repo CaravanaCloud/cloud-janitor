@@ -5,6 +5,8 @@ import cj.Input;
 import cj.Output;
 import cj.aws.sts.CallerIdentity;
 import cj.aws.sts.GetCallerIdentityTask;
+import cj.aws.sts.LoadAWSIdentitiesTask;
+import cj.spi.Task;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.model.Filter;
 
@@ -163,6 +165,15 @@ public abstract class   AWSTask
         await().atMost(getAtMostLong())
                 .pollInterval(getPollIntervalLong())
                 .until(condition);
+    }
+
+    @Inject
+    Instance<LoadAWSIdentitiesTask> loadAWSIdentitiesTask;
+    protected List<AWSIdentity> loadAWSIdentities(){
+        var task = loadAWSIdentitiesTask.get();
+        submit(task);
+        var identities = task.outputList(Output.aws.Identities, AWSIdentity.class);
+        return identities;
     }
 
 }

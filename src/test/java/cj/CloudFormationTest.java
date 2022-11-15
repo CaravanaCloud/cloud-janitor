@@ -1,7 +1,7 @@
 package cj;
 
-import cj.aws.ec2.CleanupVPCs;
-import cj.aws.ec2.FilterVPCs;
+import cj.aws.ec2.cleanup.CleanupVPCs;
+import cj.aws.ec2.filter.FilterVPCs;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;

@@ -2,7 +2,7 @@ package cj.aws.cleanup;
 
 import cj.Output;
 import cj.aws.AWSTask;
-import cj.aws.ec2.FilterRegions;
+import cj.aws.ec2.filter.FilterRegions;
 import cj.spi.Task;
 import software.amazon.awssdk.regions.Region;
 

@@ -1,8 +1,12 @@
 package cj;
 
+import java.util.Optional;
+
 public interface Input {
     enum ocp implements Input {
-        clusterName
+        clusterName,
+
+        clusterProfile;
     }
     enum cj implements Input {
         task,

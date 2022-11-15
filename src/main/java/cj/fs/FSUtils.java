@@ -31,6 +31,17 @@ public class FSUtils {
         }
     }
 
+    public static boolean isEmptyDir(Path path) {
+        if (Files.isDirectory(path)) {
+            try (Stream<Path> entries = Files.list(path)) {
+                return !entries.findFirst().isPresent();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return false;
+    }
+
 
     static class FilterVisitor extends SimpleFileVisitor<Path> {
         List<Path> results = new ArrayList<>();

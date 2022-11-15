@@ -14,7 +14,7 @@ controlPlane:
   replicas: 3
 metadata:
   creationTimestamp: null
-  name: '{config.ocp.clusterName}'
+  name: '{clusterName}'
 networking:
   clusterNetwork:
     - cidr: 10.128.0.0/14

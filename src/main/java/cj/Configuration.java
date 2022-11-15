@@ -25,8 +25,7 @@ public interface Configuration {
     float LARGE_POLL_FACTOR = 8.0f;
 
     @WithName("dryRun")
-    @WithDefault("true")
-    boolean dryRun();
+    Optional<Boolean> dryRun();
 
 
     @WithName("inputs")

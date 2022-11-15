@@ -34,34 +34,42 @@ public class Tasks {
     @Inject
     Reporting reporting;
 
+    List<Capabilities> capabilities = new ArrayList<>();
+
     Map<String, String> cliInputs = new HashMap<>();
 
     List<Task> history = new ArrayList<>();
 
-    public void run(String taskName, List<String> inputs) {
-        log.trace("Tasks.run({})", taskName);
-        parseInputs(inputs);
-        var tasks = loadTasks(taskName);
+    String task;
+
+    public void run() {
+        log.trace("Tasks.run()");
+        log.debug("Capabilities: {}", getCapabilities());
+        //parseInputs(inputs);
+        var tasks = loadTasks();
         var taskNames = String.join(",", tasks.stream().map(TaskConfiguration::name).toList());
-        var inputsSize = inputs != null ? inputs.size() : 0;
-        var dryRun = config.dryRun();
-        log.info("Starting {} tasks with {} inputs and dry run {}.", tasks.size(), inputsSize, dryRun);
-        if (inputsSize > 0)
-            log.debug("Inputs: {}", inputs);
+        //var inputsSize = inputs != null ? inputs.size() : 0;
+        var cfgDryRun = config.dryRun();
+        //var dryRun = cfgDryRun.orElse(cliDryRun);
+        // log.info("Starting {} tasks with {} inputs and dry run {}.", tasks.size(), inputsSize, dryRun);
+        //if (inputsSize > 0)
+        //    log.debug("Inputs: {}", inputs);
         for(var task : tasks){
             run(task);
         }
         report();
     }
 
-    private List<TaskConfiguration> loadTasks(String taskName) {
+    private List<TaskConfiguration> loadTasks() {
         var tasks = new ArrayList<>(config.tasks());
-        addTask(tasks, taskName);
-        config.task().ifPresent(t -> addTask(tasks, t));
+        config.task().ifPresent(t -> addTaskByName(tasks, t));
+        if(task != null){
+            addTaskByName(tasks, task);
+        }
         return tasks;
     }
 
-    private void addTask(List<TaskConfiguration> tasks, String taskName) {
+    private void addTaskByName(List<TaskConfiguration> tasks, String taskName) {
         if(taskName != null && !taskName.isEmpty()){
             tasks.add(new SimpleTaskConfiguration(taskName));
         }
@@ -139,7 +147,7 @@ public class Tasks {
     public void runSingle(Task task) {
         history.add(task);
         if (task.isWrite()
-                && config.dryRun()) {
+                && config.dryRun().get()) {
             log.warn("[dry-run] Rejecting write task: {}", task);
         } else {
             try {
@@ -177,7 +185,7 @@ public class Tasks {
     public void init(String[] args) {
         log.info("Configuration: {}", config);
         log.info("Args: {}", String.join(",", args));
-        if(!config.dryRun()){
+        if(!config.dryRun().get()){
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -190,8 +198,8 @@ public class Tasks {
 
     public synchronized String getExecutionId() {
         if (executionId == null){
-            var sdf = new SimpleDateFormat("yyMMdd-HHmmss");
-            executionId = "cj-"+sdf.format(new Date());
+            var sdf = new SimpleDateFormat("yyMMddHHmmss");
+            executionId = "cj"+sdf.format(new Date());
         }
         return executionId;
     }
@@ -201,4 +209,31 @@ public class Tasks {
         return cliInputs.get(key);
     }
 
+    public void setTask(String taskName) {
+        this.task=taskName;
+    }
+
+    public void addInput(String entry) {
+        var parts = entry.split("=");
+        var key = parts[0];
+        var hasValue = parts.length > 1;
+        var value = hasValue ? parts[1] : "";
+        cliInputs.put(key, value);
+    }
+
+    public void addCapability(String capability) {
+        if("all".equals(capability.toLowerCase())) {
+            var caps = List.of(Capabilities.values());
+            capabilities.addAll(caps);
+        } else if ("none".equals(capability.toLowerCase())) {
+            capabilities.clear();
+        }
+        else {
+            capabilities.add(Capabilities.valueOf(capability));
+        }
+    }
+
+    public List<Capabilities> getCapabilities() {
+        return capabilities;
+    }
 }

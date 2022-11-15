@@ -42,10 +42,13 @@ public class OpenshiftCreateClusterTask extends AWSWrite {
                 .or(() -> getConfig().ocp().clusterName())
                 .orElse(getExecutionId());
         var clusterDir = getClusterDir(clusterName);
+        if (! FSUtils.isEmptyDir(clusterDir))
+            throw fail("Cluster directory already exists {} ", clusterDir);
         var credsDir = FSUtils.resolve(clusterDir, "ccoctl-creds");
         var outputDir = FSUtils.resolve(clusterDir, "ccoctl-output");
         var clusterRegion = aws().getRegion().toString();
-        var profile = ClusterProfile.aws_ipi_default;
+        var profile = inputAs(ocp.clusterProfile, ClusterProfile.class)
+                .orElse(ClusterProfile.aws_ipi_default);
         checkCommands();
         preCreate(clusterName, clusterDir, credsDir, outputDir, profile);
         createCluster(clusterName, clusterDir);
@@ -69,7 +72,7 @@ public class OpenshiftCreateClusterTask extends AWSWrite {
     }
 
     private void preCreate(String clusterName, Path clusterDir, Path credsDir, Path outputDir, ClusterProfile profile) {
-        debug("preInstall({}, {})", clusterName);
+        debug("Preparing to create cluster {} with profile {}", clusterName, profile);
         switch (profile){
             case aws_ipi_sts:
                 createAllCcoctlResources(clusterName, credsDir, outputDir);
@@ -79,7 +82,7 @@ public class OpenshiftCreateClusterTask extends AWSWrite {
             default:
                 throw fail("Unknown profile: {}", profile);
         }
-        createInstallConfigFromTemplate(clusterDir, profile);
+        createInstallConfigFromTemplate(clusterDir, clusterName, profile);
     }
 
     //TODO: Avoid prompts
@@ -97,10 +100,11 @@ public class OpenshiftCreateClusterTask extends AWSWrite {
         }
     }
 
-    private void createInstallConfigFromTemplate(Path clusterDir, ClusterProfile profile) {
+    private void createInstallConfigFromTemplate(Path clusterDir, String clusterName, ClusterProfile profile) {
         var location = "ocp/%s/install-config.yaml".formatted(profile);
         var installConfigTemplate = engine.getTemplate(location);
         String installConfig = installConfigTemplate
+                .data("clusterName", clusterName)
                 .data("config", getConfig())
                 .render();
         Path installConfigPath = clusterDir.resolve("install-config.yaml");

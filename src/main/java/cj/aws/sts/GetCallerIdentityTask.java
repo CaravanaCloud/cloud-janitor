@@ -7,9 +7,11 @@ import software.amazon.awssdk.services.sts.model.StsException;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Optional;
 
 @Dependent
+@Named("aws-get-caller-identity")
 public class GetCallerIdentityTask extends AWSFilter {
     @Inject
     Tasks tasks;
@@ -20,7 +22,7 @@ public class GetCallerIdentityTask extends AWSFilter {
             var accountId = lookupAccountId();
             var accountAlias = lookupAccountAlias(accountId);
             var callerId = new CallerIdentity(accountId, accountAlias);
-            trace("GetCallerIdentity {}", callerId);
+            info("GetCallerIdentity {}", callerId);
             success(Output.aws.CallerIdentity, callerId);
         }catch (StsException ex){
             warn("Failed to get AWS caller identity");
