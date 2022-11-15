@@ -16,7 +16,7 @@ import static cj.Input.shell.cmd;
 
 import cj.aws.AWSWrite;
 import io.quarkus.qute.Engine;
-
+import cj.Capabilities;
 
 @Dependent
 @Named("openshift-create-cluster")
@@ -54,12 +54,11 @@ public class OpenshiftCreateClusterTask extends AWSWrite {
         createCluster(clusterName, clusterDir);
         debug("ocp-create-cluster done");
     }
-
     private void createCluster(String clusterName, Path clusterDir) {
         var tip = "tail -f "+ clusterDir.resolve(".openshift_install.log").toAbsolutePath();
         debug(tip);
-
-        var output = exec(90L,"openshift-install",
+        expectCapability(Capabilities.CLOUD_CREATE_INSTANCES);
+        var output = exec(90L, "openshift-install",
                 "create",
                 "cluster",
                 "--dir=" + clusterDir,
@@ -69,6 +68,18 @@ public class OpenshiftCreateClusterTask extends AWSWrite {
         }else{
             throw fail("openshift-install failed.");
         }
+
+    }
+
+    private void expectCapability(Capabilities capability) {
+        if(! hasCapabilities(capability)){
+            debug("Missing capability {} ", capability);
+            throw new CapabilityNotFoundException(capability);
+        }
+    }
+
+    protected boolean hasCapabilities(Capabilities... cs){
+        return tasks().hasCapabilities(cs);
     }
 
     private void preCreate(String clusterName, Path clusterDir, Path credsDir, Path outputDir, ClusterProfile profile) {

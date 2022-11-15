@@ -153,7 +153,8 @@ public class BaseTask implements Task {
     }
 
     protected RuntimeException fail(String message, Object... args) {
-        error(message, args);
+        var msg = fmt(message) + " " + args;
+        error(msg);
         getErrors().put(Message ,message);
         return new RuntimeException(message);
     }
@@ -313,7 +314,7 @@ public class BaseTask implements Task {
 
     protected void retry(Task theMainTask, Task theFixTask) {
         var ccoctlTask = retry.get()
-                .withInput(task, theMainTask)
+                .withInput(taskName, theMainTask)
                 .withInput(fixTask, theFixTask);
         submit(ccoctlTask);
     }

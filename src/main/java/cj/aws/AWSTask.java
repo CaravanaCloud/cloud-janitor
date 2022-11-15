@@ -3,6 +3,7 @@ package cj.aws;
 import cj.BaseTask;
 import cj.Input;
 import cj.Output;
+import cj.Tasks;
 import cj.aws.sts.CallerIdentity;
 import cj.aws.sts.GetCallerIdentityTask;
 import cj.aws.sts.LoadAWSIdentitiesTask;
@@ -29,8 +30,10 @@ public abstract class   AWSTask
 
     @Inject
     Instance<GetCallerIdentityTask> getCallerIdInstance;
-    private String accountName;
+    String accountName;
 
+    @Inject
+    Tasks tasks;
 
     public AWSClients aws(){
         var identity = getIdentity();
@@ -174,6 +177,10 @@ public abstract class   AWSTask
         submit(task);
         var identities = task.outputList(Output.aws.Identities, AWSIdentity.class);
         return identities;
+    }
+
+    protected Tasks tasks(){
+        return tasks;
     }
 
 }

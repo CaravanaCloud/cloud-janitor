@@ -56,7 +56,7 @@ public class DeleteEmptyVPCTest extends TaskTest {
     }
 
     private void deleteVPC(String vpcId) {
-        deleteVpc.filterVPCs.withInput(Input.aws.targetVPCId, vpcId);
+        //deleteVpc.filterVPCs.withInput(Input.aws.targetVPCId, vpcId);
         tasks.submit(deleteVpc);
     }
 

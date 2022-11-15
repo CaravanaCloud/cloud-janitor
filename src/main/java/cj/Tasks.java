@@ -1,5 +1,6 @@
 package cj;
 
+import cj.ocp.CapabilityNotFoundException;
 import cj.reporting.Reporting;
 import cj.spi.Task;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class Tasks {
     @Inject
     Reporting reporting;
 
-    List<Capabilities> capabilities = new ArrayList<>();
+    Set<Capabilities> capabilities = new HashSet<>();
 
     Map<String, String> cliInputs = new HashMap<>();
 
@@ -49,12 +50,10 @@ public class Tasks {
         var tasks = loadTasks();
         var taskNames = String.join(",", tasks.stream().map(TaskConfiguration::name).toList());
         //var inputsSize = inputs != null ? inputs.size() : 0;
-        var cfgDryRun = config.dryRun();
-        //var dryRun = cfgDryRun.orElse(cliDryRun);
         // log.info("Starting {} tasks with {} inputs and dry run {}.", tasks.size(), inputsSize, dryRun);
         //if (inputsSize > 0)
         //    log.debug("Inputs: {}", inputs);
-        for(var task : tasks){
+        for (var task : tasks) {
             run(task);
         }
         report();
@@ -63,22 +62,22 @@ public class Tasks {
     private List<TaskConfiguration> loadTasks() {
         var tasks = new ArrayList<>(config.tasks());
         config.task().ifPresent(t -> addTaskByName(tasks, t));
-        if(task != null){
+        if (task != null) {
             addTaskByName(tasks, task);
         }
         return tasks;
     }
 
     private void addTaskByName(List<TaskConfiguration> tasks, String taskName) {
-        if(taskName != null && !taskName.isEmpty()){
+        if (taskName != null && !taskName.isEmpty()) {
             tasks.add(new SimpleTaskConfiguration(taskName));
         }
     }
 
     private void parseInputs(List<String> inputs) {
-        if(inputs != null)  for(var input: inputs){
+        if (inputs != null) for (var input : inputs) {
             var parts = input.split("=");
-            if(parts.length != 2){
+            if (parts.length != 2) {
                 throw new IllegalArgumentException("Invalid input: " + input);
             }
             var key = parts[0];
@@ -97,10 +96,10 @@ public class Tasks {
         if (config.report().enabled())
             try {
                 reporting.report(this);
-        }catch (Exception ex){
-            ex.printStackTrace();
-            log.error("Reporting failed", ex);
-        }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                log.error("Reporting failed", ex);
+            }
     }
 
     private void runAll(List<Task> matches) {
@@ -136,7 +135,7 @@ public class Tasks {
         var ref = bm.getReference(bean, bean.getBeanClass(), ctx);
         if (ref instanceof Task task) {
             return task;
-        }else{
+        } else {
             log.error("Bean {} is not a Task", bean);
             throw new IllegalArgumentException("Bean is not a task");
         }
@@ -146,32 +145,33 @@ public class Tasks {
     //TODO: Consider thread synchronization
     public void runSingle(Task task) {
         history.add(task);
-        if (task.isWrite()
-                && config.dryRun().get()) {
-            log.warn("[dry-run] Rejecting write task: {}", task);
-        } else {
-            try {
-                task.setStartTime(LocalDateTime.now());
-                task.apply();
-                log.trace("Executed {} ({})",
-                        task,
-                        task.isWrite() ? "W" : "R");
-                //TODO: General waiter
-                if (task.isWrite()) {
-                    rateLimiter.waitAfterTask(task);
-                }
-            } catch (Exception e) {
-                task.getErrors().put(Message, e.getMessage());
-                log.error("Error executing {}: {}", task, e.getMessage());
-                // e.printStackTrace();
-                throw new RuntimeException(e);
+        try {
+            task.setStartTime(LocalDateTime.now());
+            task.apply();
+            log.trace("Executed {} ({})",
+                    task,
+                    task.isWrite() ? "W" : "R");
+            //TODO: General waiter
+            if (task.isWrite()) {
+                rateLimiter.waitAfterTask(task);
             }
+        }catch (CapabilityNotFoundException e){
+            var c = e.getCapability();
+            log.warn("Capability not found: {}, try with -c '{}' or equivalent", c, c);
+        } catch (Exception e) {
+            task.getErrors().put(Message, e.getMessage());
+            log.error("Error executing {}: {}", task, e.getMessage());
+            // e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            task.setEndTime(LocalDateTime.now());
         }
-        task.setEndTime(LocalDateTime.now());
     }
+
     public List<Task> getHistory() {
         return new ArrayList<>(history);
     }
+
     public String getStartTimeFmt() {
         return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(startTime);
     }
@@ -180,26 +180,13 @@ public class Tasks {
         return config;
     }
 
-    String[] args;
-
-    public void init(String[] args) {
-        log.info("Configuration: {}", config);
-        log.info("Args: {}", String.join(",", args));
-        if(!config.dryRun().get()){
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 
     private String executionId;
 
     public synchronized String getExecutionId() {
-        if (executionId == null){
+        if (executionId == null) {
             var sdf = new SimpleDateFormat("yyMMddHHmmss");
-            executionId = "cj"+sdf.format(new Date());
+            executionId = "cj" + sdf.format(new Date());
         }
         return executionId;
     }
@@ -210,7 +197,7 @@ public class Tasks {
     }
 
     public void setTask(String taskName) {
-        this.task=taskName;
+        this.task = taskName;
     }
 
     public void addInput(String entry) {
@@ -222,18 +209,35 @@ public class Tasks {
     }
 
     public void addCapability(String capability) {
-        if("all".equals(capability.toLowerCase())) {
+        if ("all".equalsIgnoreCase(capability)) {
             var caps = List.of(Capabilities.values());
             capabilities.addAll(caps);
-        } else if ("none".equals(capability.toLowerCase())) {
+        } else if ("none".equalsIgnoreCase(capability)) {
             capabilities.clear();
-        }
-        else {
-            capabilities.add(Capabilities.valueOf(capability));
+        } else {
+            try{
+                var cap = Capabilities.valueOf(capability);
+                capabilities.add(cap);
+            } catch (IllegalArgumentException ex) {
+                log.error("Invalid capability: {}", capability);
+            }
         }
     }
 
-    public List<Capabilities> getCapabilities() {
+    public Set<Capabilities> getCapabilities() {
         return capabilities;
+    }
+
+    public boolean hasCapabilities(Capabilities[] cs) {
+        for (var c : cs) {
+            if (!capabilities.contains(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void addAll(List<Capabilities> capabilities) {
+        this.capabilities.addAll(capabilities);
     }
 }

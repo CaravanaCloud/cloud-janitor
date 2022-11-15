@@ -24,10 +24,6 @@ public interface Configuration {
     float MEDIUM_POLL_FACTOR = 4.0f;
     float LARGE_POLL_FACTOR = 8.0f;
 
-    @WithName("dryRun")
-    Optional<Boolean> dryRun();
-
-
     @WithName("inputs")
     Map<String, String> inputs();
 
@@ -54,6 +50,8 @@ public interface Configuration {
     @WithName("task")
     Optional<String> task();
 
+    @WithName("capabilities")
+    Optional<List<Capabilities>> capabilities();
 
     default Path getApplicationPath(){
         var home = System.getProperty("user.home");

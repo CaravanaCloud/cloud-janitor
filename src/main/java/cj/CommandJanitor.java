@@ -1,13 +1,10 @@
 package cj;
 
 import io.quarkus.runtime.QuarkusApplication;
-import io.quarkus.runtime.StartupEvent;
 import io.quarkus.runtime.annotations.StaticInitSafe;
-import org.eclipse.microprofile.config.spi.ConfigSource;
 import org.slf4j.Logger;
 import picocli.CommandLine;
 
-import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import java.util.*;
 
@@ -35,8 +32,8 @@ public class CommandJanitor implements Runnable,
     List<String> input;
 
     @CommandLine.Option(names = {"-c", "--capabilities"},
-            defaultValue = "all",
-            description = "Feature toggles (empty or 'none' for dry run).")
+            defaultValue = "none",
+            description = "Feature toggles (try -c 'all').")
     List<String> capabilities;
 
     public CommandJanitor(){}
@@ -44,11 +41,11 @@ public class CommandJanitor implements Runnable,
     @Override
     public void run() {
         log.trace("Command.run()");
-        parseArs();
+        parseArgs();
         cj.run();
     }
 
-    private void parseArs() {
+    private void parseArgs() {
         taskName.ifPresent(tasks::setTask);
         if (input != null)
             input.forEach(tasks::addInput);
