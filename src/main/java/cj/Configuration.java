@@ -48,7 +48,7 @@ public interface Configuration {
     Optional<String> task();
 
     @WithName("capabilities")
-    Optional<List<Capabilities>> capabilities();
+    Optional<List<String>> capabilities();
 
     default Path getApplicationPath(){
         var home = System.getProperty("user.home");
@@ -74,10 +74,6 @@ public interface Configuration {
         var execPath = appPath.resolve(execId);
         return existing(execPath);
     }
-
-
-
-
 
     final class StaticConfig {
         static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddss_hhmmss");

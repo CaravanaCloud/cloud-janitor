@@ -3,9 +3,11 @@ package cj;
 import cj.ocp.CapabilityNotFoundException;
 import cj.reporting.Reporting;
 import cj.spi.Task;
+import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
@@ -268,13 +270,19 @@ public class Tasks {
         return true;
     }
 
-    public void addAll(List<Capabilities> capabilities) {
-        this.capabilities.addAll(capabilities);
+    public void addAll(List<String> capabilities) {
+        capabilities.forEach(this::addCapability);
     }
 
     @Inject
     Inputs inputs;
     private Optional<String> fromConfig(Input input) {
         return Optional.ofNullable(inputs.getFromConfig(input));
+    }
+
+
+    public void loadCapabilities(@Observes StartupEvent ev){
+        log.info("Loading capabilities");
+        getConfig().capabilities().ifPresent(this::addAll);
     }
 }
