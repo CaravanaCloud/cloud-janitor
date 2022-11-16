@@ -8,7 +8,7 @@ import javax.enterprise.context.Dependent;
 public class RetryTask extends BaseTask {
     @Override
     public void apply() {
-        var task = getInput(CJInput.taskName, Task.class);
+        var task = getInput(CJInput.task, Task.class);
         try {
             info("Trying task {}", task);
             tasks.submit(task);
