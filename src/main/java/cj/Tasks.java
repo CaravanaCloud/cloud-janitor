@@ -164,6 +164,7 @@ public class Tasks {
             log.warn(e.getMessage());
         }catch (TaskFailedException e) {
             log.warn("Task failed to complete: {}", e.getMessage());
+
         }catch (Exception e) {
             task.getErrors().put(Message, e.getMessage());
             log.error("Error executing {}: {}", task, e.getMessage());

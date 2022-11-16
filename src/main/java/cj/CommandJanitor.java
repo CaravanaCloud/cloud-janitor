@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
-@CommandLine.Command(version = "1.3.4",
+@CommandLine.Command(version = "1.3.5",
         mixinStandardHelpOptions = true,
         name = "cloud-janitor", description = "Cloud Janitor at your service.")
 @StaticInitSafe
