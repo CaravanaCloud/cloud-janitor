@@ -15,7 +15,7 @@ name: Lint Code Base
 # Start the job on all push #
 #############################
 on:
-  workflow_call: {}
+  workflow_dispatch: {}
   push:
     branches:
       - "**"
