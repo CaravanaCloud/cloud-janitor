@@ -383,4 +383,8 @@ public class BaseTask implements Task {
         shellTask.withInput(cmds, cmdList);
         return shellTask;
     }
+
+    protected boolean hasCapabilities(Capabilities... cs){
+        return tasks.hasCapabilities(cs);
+    }
 }
