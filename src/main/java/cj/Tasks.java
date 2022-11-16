@@ -242,6 +242,7 @@ public class Tasks {
     }
 
     public void addCapability(String capability) {
+        log.debug("Adding capability {}", capability);
         if ("all".equalsIgnoreCase(capability)) {
             var caps = List.of(Capabilities.values());
             capabilities.addAll(caps);

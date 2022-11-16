@@ -33,9 +33,7 @@ public class CommandJanitor implements Runnable,
     @CommandLine.Option(names = {"-i", "--input"}, description = "Input parameters for the task, repeatable.")
     List<String> input;
 
-    @CommandLine.Option(names = {"-c", "--capabilities"},
-            defaultValue = "none",
-            description = "Feature toggles (try -c 'all').")
+    @CommandLine.Option(names = {"-c", "--capabilities"}, description = "Feature toggles (try -c 'all').")
     List<String> capabilities;
 
     public CommandJanitor(){}
@@ -51,7 +49,8 @@ public class CommandJanitor implements Runnable,
         taskName.ifPresent(tasks::setTask);
         if (input != null)
             input.forEach(tasks::addInput);
-        capabilities.forEach(tasks::addCapability);
+        if (capabilities != null)            
+            capabilities.forEach(tasks::addCapability);
     }
 
     @Override
