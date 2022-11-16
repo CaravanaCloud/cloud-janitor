@@ -1,6 +1,5 @@
 package cj.shell;
 
-import cj.Input;
 import cj.Output;
 import cj.SafeTask;
 

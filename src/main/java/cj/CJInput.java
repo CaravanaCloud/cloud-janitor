@@ -1,8 +1,8 @@
 package cj;
 
 public enum CJInput implements Input {
-    taskName,
-    taskNames,
+    task,
+    tasks,
     fixTask,
     dryRun
 

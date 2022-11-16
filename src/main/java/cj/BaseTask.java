@@ -331,7 +331,7 @@ public class BaseTask implements Task {
 
     protected void retry(Task theMainTask, Task theFixTask) {
         var ccoctlTask = retry.get()
-                .withInput(taskName, theMainTask)
+                .withInput(CJInput.task, theMainTask)
                 .withInput(fixTask, theFixTask);
         submit(ccoctlTask);
     }
