@@ -45,9 +45,9 @@ public class FSUtils {
 
     static class FilterVisitor extends SimpleFileVisitor<Path> {
         List<Path> results = new ArrayList<>();
-        Optional<String> extension = Optional.empty();
+        String extension = null;
 
-        public FilterVisitor(Optional<String> extension) {
+        public FilterVisitor(String extension) {
             this.extension = extension;
         }
 
@@ -62,8 +62,8 @@ public class FSUtils {
 
         private boolean filterMatch(Path path) {
             var match=true;
-            if (extension.isPresent()){
-                match = match && path.toFile().getName().endsWith(extension.get());
+            if (extension != null){
+                match = match && path.toFile().getName().endsWith(extension);
             }
             log.trace("Found path {} match? {}", path, match);
             return match;
@@ -74,7 +74,7 @@ public class FSUtils {
         }
     }
 
-    public static List<Path> filterLocalFiles(Path dir, Optional<String> extension) {
+    public static List<Path> filterLocalFiles(Path dir, String extension) {
         if(dir.toFile().exists()){
             log.debug("Starting visitor on {}", dir);
             var visitor = new FilterVisitor(extension);
@@ -92,7 +92,7 @@ public class FSUtils {
     }
 
     public static List<Path> filterLocalVideos(){
-        var extension = Optional.of("mp4");
+        var extension = "mp4";
         var dataDirMatch = filterLocalFiles(getApplicationDir(), extension);
         var videosDirMatch = filterLocalFiles(getVideosDir(), extension);
         var currentDirMatch = filterLocalFiles(getCurrentDir(), extension);

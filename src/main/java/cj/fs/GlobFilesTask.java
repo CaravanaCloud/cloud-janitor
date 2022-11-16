@@ -35,23 +35,20 @@ public class GlobFilesTask extends SafeTask {
 
     public List<Path> match(String globInput, String location) throws IOException {
         debug("Walking file tree [{}] [{}]", globInput, location);
-        var visitor = new GlobVisitor(globInput, location);
+        var visitor = new GlobVisitor(globInput);
         Files.walkFileTree(Paths.get(location), visitor);
         return visitor.result;
     }
 
     class GlobVisitor extends SimpleFileVisitor<Path>{
-        private final String globIn;
-        private final String pathIn;
         final PathMatcher pathMatcher;
         private final List<Path> result = new ArrayList<>();
-        public GlobVisitor(String globIn,
-                           String pathIn){
-            this.globIn = "glob:" + globIn;
-            this.pathIn = pathIn;
+        public GlobVisitor(String globIn){
+            var globIn1 = "glob:" + globIn;
+
 
             this.pathMatcher = globIn != null ?
-                    FileSystems.getDefault().getPathMatcher(this.globIn) :
+                    FileSystems.getDefault().getPathMatcher(globIn1) :
                     null;
         }
 

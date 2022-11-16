@@ -34,8 +34,8 @@ public class BaseTask implements Task {
 
 
     //TODO: Use null instead of Optional in fields
-    Optional<LocalDateTime> startTime = Optional.empty();
-    Optional<LocalDateTime> endTime = Optional.empty();
+    LocalDateTime startTime = null;
+    LocalDateTime endTime = null;
 
     Map<Input, Object> inputs = new HashMap<>();
     Map<Output, Object> outputs = new HashMap<>();
@@ -57,23 +57,23 @@ public class BaseTask implements Task {
 
     /* Task Interface Methods */
     @Override
-    public Optional<LocalDateTime> getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
     @Override
     public void setStartTime(LocalDateTime localDateTime) {
-        startTime = Optional.ofNullable(localDateTime);
+        startTime = localDateTime;
     }
 
     @Override
-    public Optional<LocalDateTime> getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
     @Override
     public void setEndTime(LocalDateTime localDateTime) {
-        this.endTime = Optional.ofNullable(localDateTime);
+        this.endTime = localDateTime;
     }
 
     /* Input, Output and Errors */
@@ -110,8 +110,10 @@ public class BaseTask implements Task {
         var in = input(key);
         if (in.isPresent()){
             var val = in.get();
-            if (val instanceof List<?>){
-                return (List<T>) val;
+            if (val instanceof List<?> vals){
+                @SuppressWarnings("unchecked")
+                var result = (List<T>) vals;
+                return result;
             } else {
                 throw new IllegalArgumentException("Input " + key + " is not a list");
             }
@@ -269,17 +271,22 @@ public class BaseTask implements Task {
 
     @SuppressWarnings("all")
     public <T> Optional<T> inputAs(Input key, Class<T> clazz){
-        return (Optional<T>) input(key);
+        @SuppressWarnings("unchecked")
+        var result = (Optional<T>) input(key);
+        return result;
     }
 
     @SuppressWarnings("all")
     public <T> Optional<T> outputAs(Output key, Class<T> clazz){
-        return (Optional<T>) Optional.ofNullable(outputs.get(key));
+        var result = (Optional<T>) Optional.ofNullable(outputs.get(key));
+        return result;
     }
 
     @SuppressWarnings("all")
     public <T> T getInput(Input key, Class<T> inputClass){
-        return (T) input(key).orElseThrow();
+        @SuppressWarnings("unchecked")
+        var result = (T) input(key).orElseThrow();
+        return result;
     }
 
     public String matchMark(boolean match){

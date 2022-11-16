@@ -46,8 +46,11 @@ public class LoadAWSIdentitiesTask extends AWSTask {
                         .get()
                         .withInput(AWSInput.identity, awsIdentity));
         var callerId = task.outputAs(CallerIdentity, cj.aws.sts.CallerIdentity.class);
-        awsIdentity.withCallerIdentity(callerId);
-        return awsIdentity;
+        if (callerId.isPresent()) {
+            awsIdentity.withCallerIdentity(callerId.get());
+            return awsIdentity;
+        }
+        return null;
     }
 
 

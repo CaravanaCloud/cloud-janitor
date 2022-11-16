@@ -27,8 +27,8 @@ public interface Task {
     /**
      * Task start time, if started
      */
-    default Optional<LocalDateTime> getStartTime(){
-        return Optional.empty();
+    default LocalDateTime getStartTime(){
+        return null;
     }
 
     default void setStartTime(LocalDateTime localDateTime){
@@ -38,8 +38,8 @@ public interface Task {
     /**
     * Task end time, if finished
      */
-    default Optional<LocalDateTime> getEndTime(){
-        return Optional.empty();
+    default LocalDateTime getEndTime(){
+        return null;
     }
 
     default void setEndTime(LocalDateTime localDateTime){
@@ -52,8 +52,8 @@ public interface Task {
     default Optional<Duration> getElapsedTime(){
         var start = getStartTime();
         var end = getEndTime();
-        if (start.isPresent() && end.isPresent()){
-            return Optional.of(Duration.between(start.get(),end.get()));
+        if (start != null && end != null){
+            return Optional.of(Duration.between(start,end));
         }else return Optional.empty();
     }
 
@@ -127,9 +127,7 @@ public interface Task {
     }
 
     default String getStartTimeFmt(){
-        return getStartTime()
-                .map(startTime -> getDateFormat().format(startTime))
-                .orElse("?");
+        return getDateFormat().format(getStartTime());
     }
 
     DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");

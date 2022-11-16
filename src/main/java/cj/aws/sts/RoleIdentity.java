@@ -18,7 +18,7 @@ public class RoleIdentity
     private final AWSRoleConfig roleCfg;
     private final StsClient sts;
 
-    private static final String roleSessionName(String str) {
+    private static String roleSessionName(String str) {
         return str.replaceAll(ROLE_SESSION_REGEX, "-");
     }
 

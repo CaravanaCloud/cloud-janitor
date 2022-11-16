@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 public class Utils {
     static final DateTimeFormatter DEFAULT_FMT = DateTimeFormatter.ofPattern("yyyyMMddsshhmmss");
 
-    public static final String nowStamp(){
+    public static String nowStamp(){
         var now = LocalDateTime.now();
         return now.format(DEFAULT_FMT);
     }
@@ -17,7 +17,7 @@ public class Utils {
     static final double HOUR = 60.00;
     static final double DAY = 24.00;
 
-    public static final String msToStr(long ms){
+    public static String msToStr(long ms){
         if (ms < 1000){
             return ms + "ms";
         } else if (ms < SECOND * MINUTE){

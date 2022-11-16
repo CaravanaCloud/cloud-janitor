@@ -13,7 +13,7 @@ public class Logs {
         return LoggerFactory.getLogger(loggerName(ipName));
     }
 
-    public static final String loggerName(String name) {
+    public static String loggerName(String name) {
         var LoggerName = name.split("_")[0];
         return LoggerName;
     }

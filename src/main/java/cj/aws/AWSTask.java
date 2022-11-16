@@ -64,9 +64,12 @@ public abstract class   AWSTask
                 .withInput(identity, id);
         submit(callerIdTask);
         var callerId = callerIdTask.outputAs(Output.aws.CallerIdentity, CallerIdentity.class);
-        id = id.withCallerIdentity(callerId);
-        setIdentity(id);
-        return id;
+        if (callerId.isPresent()) {
+            id = id.withCallerIdentity(callerId.get());
+            setIdentity(id);
+            return id;
+        }
+        return null;
     }
 
     protected <T> T create(Instance<T> instance){

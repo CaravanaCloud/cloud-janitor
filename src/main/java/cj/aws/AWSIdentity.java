@@ -7,22 +7,21 @@ import java.util.Optional;
 
 public abstract class AWSIdentity {
 
-    private Optional<CallerIdentity> callerId = Optional.empty();
+    private CallerIdentity callerId = null;
 
     public abstract AwsCredentialsProvider toCredentialsProvider();
 
-    public AWSIdentity withCallerIdentity(Optional<CallerIdentity> callerId) {
+    public AWSIdentity withCallerIdentity(CallerIdentity callerId) {
         this.callerId = callerId;
         return this;
     }
 
     public boolean hasCallerIdentity(){
-        return callerId.isPresent();
+        return callerId != null;
     }
 
     public String getAccountName() {
-        var name = callerId.map(CallerIdentity::getAccountName).orElse(" ");
-        return name;
+        return callerId.getAccountName();
     }
 
 }

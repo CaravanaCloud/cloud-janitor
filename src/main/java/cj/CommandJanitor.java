@@ -26,6 +26,7 @@ public class CommandJanitor implements Runnable,
     @Inject
     Logger log;
 
+    @SuppressWarnings("all")
     @CommandLine.Option(names = {"-t", "--task"}, description = "Task to be executed. Try '-t hello'")
     Optional<String> taskName;
 
