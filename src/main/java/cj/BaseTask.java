@@ -252,6 +252,9 @@ public class BaseTask implements Task {
             value = cfgInputString(key);
         }
         if (value == null) {
+            value = inputss.getFromDefault(key);
+        }
+        if (value == null) {
             value = tasks.getCLIInput(key.toString());
         }
         return Optional.ofNullable(value);

@@ -77,45 +77,6 @@ public class OpenshiftCreateClusterTask extends AWSWrite {
         return inputsMap;
     }
 
-    /*
-    private static final Map<Input, >> fromConfigMap = new HashMap<>(){{
-        put(OCPInput.clusterName, c -> c.ocp().clusterName());
-        put(OCPInput.baseDomain, c -> c.ocp().baseDomain());
-        put(OCPInput.sshKey, c -> c.ocp().sshKey());
-        put(OCPInput.pullSecret, c -> c.ocp().pullSecret());
-        put(OCPAWSInputRegion, c -> c.ocp().awsRegion());
-    }};
-    */
-
-    private Map<String, String> validateConfig(String clusterName) {
-
-        var data = Map.of(
-                "clusterName", Optional.of(clusterName),
-                "baseDomain", getConfig().ocp().baseDomain(),
-                "awsRegion", getConfig().ocp().awsRegion(),
-                "pullSecret", getConfig().ocp().pullSecret(),
-                "sshKey", getConfig().ocp().sshKey()
-        );
-        var entries = data.entrySet();
-        var missing = new ArrayList<String>();
-        var present = new HashMap<String, String>();
-        for (var entry : entries) {
-            var key = entry.getKey();
-            var value = entry.getValue();
-            if(value.isEmpty()) {
-                missing.add(key);
-            }else {
-                present.put(key, value.get());
-            }
-        }
-        if (! missing.isEmpty()){
-            throw new ConfigurationNotFoundException(missing);
-        }else {
-            debug("All required configuration found");
-            return present;
-        }
-    }
-
 
     private void createCluster(String clusterName, Path clusterDir) {
         var tip = "tail -f "+ clusterDir.resolve(".openshift_install.log").toAbsolutePath();

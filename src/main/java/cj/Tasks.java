@@ -160,9 +160,8 @@ public class Tasks {
             var c = e.getCapability();
             log.warn("Capability not found: {}, try with -c '{}' or equivalent", c, c);
         }catch (ConfigurationNotFoundException e){
-            var varName = e.getVarName();
-            //TODO: Suggest variable to set
-            log.warn("Configuration not found: {}.", varName);
+            log.warn("Expected configuration not found.");
+            log.warn(e.getMessage());
         }catch (TaskFailedException e) {
             log.warn("Task failed to complete: {}", e.getMessage());
         }catch (Exception e) {
@@ -178,7 +177,7 @@ public class Tasks {
     private void checkInputs(Task task) {
         List<Input> expected = task.getExpectedInputs();
 
-        List<Input> missing = new ArrayList<>();
+        List<InputConfig> missing = new ArrayList<>();
         Map<Input, String> present = new HashMap<>();
         for(var inputKey:expected){
             var inputValue = task.input(inputKey)
@@ -186,13 +185,15 @@ public class Tasks {
             if(inputValue.isPresent()){
                 present.put(inputKey, inputValue.get().toString());
             }else{
-                missing.add(inputKey);
+                missing.add(inputs.getConfig(inputKey));
             }
         }
-        log.debug("[{}] {} inputs, {} present, {} missing", task.getName(), expected.size(), present.size(), missing.size());
+        if (! expected.isEmpty())
+            log.debug("[{}] {} inputs expected, {} present, {} missing", task.getName(), expected.size(), present.size(), missing.size());
         if (!missing.isEmpty()){
-            log.error("[{}] inputs are missing: {}", missing.size(), missing);
-            throw new ConfigurationNotFoundException(missing.stream().map(Object::toString).toList());
+            log.error("[{}] inputs are missing: {}", missing.size(),
+                    missing.stream().map(InputConfig::input).toList());
+            throw new ConfigurationNotFoundException(missing);
         }
     }
 
