@@ -6,6 +6,7 @@ import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithDefault;
 import io.smallrye.config.WithName;
 
+import javax.inject.Inject;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
-
+import cj.Inputs;
 import static cj.Utils.existing;
 
 @ConfigMapping(prefix = "cj" )
@@ -22,9 +23,6 @@ public interface Configuration {
     boolean PRINT_STACK_TRACE = false;
     float MEDIUM_POLL_FACTOR = 4.0f;
     float LARGE_POLL_FACTOR = 8.0f;
-
-    @WithName("inputs")
-    Map<String, String> inputs();
 
     @WithName("pollInterval")
     @WithDefault("10.00")
@@ -76,6 +74,10 @@ public interface Configuration {
         var execPath = appPath.resolve(execId);
         return existing(execPath);
     }
+
+
+
+
 
     final class StaticConfig {
         static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddss_hhmmss");

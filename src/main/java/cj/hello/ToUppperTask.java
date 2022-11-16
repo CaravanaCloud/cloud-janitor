@@ -33,9 +33,4 @@ public class ToUppperTask extends BaseTask {
         }
     }
 
-
-    @Override
-    public boolean isWrite() {
-        return false;
-    }
 }

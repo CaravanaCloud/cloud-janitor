@@ -25,14 +25,6 @@ public interface Task {
     }
 
     /**
-     * A *write* task is only *safe* to execute if the *dry run* flag is false.
-     */
-    default boolean isWrite(){
-        return true;
-    }
-
-    default void init(){}
-    /**
      * Task start time, if started
      */
     default Optional<LocalDateTime> getStartTime(){
@@ -163,4 +155,11 @@ public interface Task {
         return getErrors().isEmpty();
     }
 
+    default List<Input> getExpectedInputs(){
+        return List.of();
+    }
+
+    default Optional<Object> input(Input key){
+        return Optional.empty();
+    }
 }

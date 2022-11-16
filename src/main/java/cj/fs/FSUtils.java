@@ -126,6 +126,9 @@ public class FSUtils {
     }
 
     public static Path resolve(Path parent, String target) {
+        if (parent == null || target == null) {
+            throw new IllegalArgumentException("Parent and target must not be null");
+        }
         var dataPath = parent.resolve(target);
         var dataDir = dataPath.toFile();
         if (! dataDir.exists()){

@@ -3,6 +3,7 @@ package cj.aws.ec2;
 import cj.Input;
 import cj.Output;
 import cj.TaskTest;
+import cj.aws.AWSInput;
 import cj.aws.ec2.cleanup.CleanupVPCs;
 import cj.aws.ec2.create.CreateVPC;
 import cj.aws.ec2.filter.FilterVPCs;

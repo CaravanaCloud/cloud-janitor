@@ -2,11 +2,6 @@ package cj.aws;
 
 public abstract class AWSFilter extends AWSTask {
 
-    @Override
-    public boolean isWrite() {
-        return false;
-    }
-
     protected boolean matchName(String name){
         var prefix = aws().config().filterPrefix();
         if (prefix.isEmpty()) return true;

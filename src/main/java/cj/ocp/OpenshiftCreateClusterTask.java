@@ -36,50 +36,45 @@ public class OpenshiftCreateClusterTask extends AWSWrite {
     }
 
     @Override
-    public void apply() {
-        debug("ocp-create-cluster");
-
-
-        List<Input> inputs = List.of(OCPInput.clusterName,
+    public List<Input> getExpectedInputs() {
+        return List.of(OCPInput.clusterName,
                 OCPInput.baseDomain,
                 OCPInput.sshKey,
                 OCPInput.pullSecret,
                 OCPInput.awsRegion);
+    }
 
-        List<Input> missing = new ArrayList<>();
-        Map<Input, String> present = new HashMap<>();
-        for(var input:inputs){
-            var inputValue = input(input)
-                    .or( () -> fromConfig(input));
-            if(inputValue.isPresent()){
-                present.put(input, inputValue.get().toString());
-            }else{
-                missing.add(input);
-            }
-        }
-        debug("{} inputs, {} present, {} missing", inputs.size(), present.size(), missing.size());
-        if (!missing.isEmpty()){
-            error("[{}] inputs are missing: {}", missing.size(), missing);
-            throw new ConfigurationNotFoundException(missing.stream().map(Object::toString).toList());
-        }
-        var clusterName = present.get(OCPInput.clusterName);
+    @Override
+    public void apply() {
+        debug("ocp-create-cluster");
+        var clusterName = getInputString(OCPInput.clusterName);
         var clusterDir = getClusterDir(clusterName);
         if (! FSUtils.isEmptyDir(clusterDir))
-            throw fail("Cluster directory already exists {} ", clusterDir);
+            throw fail("Cluster directory already exists %s ", clusterDir);
         var credsDir = FSUtils.resolve(clusterDir, "ccoctl-creds");
         var outputDir = FSUtils.resolve(clusterDir, "ccoctl-output");
         var clusterRegion = aws().getRegion().toString();
         var profile = inputAs(OCPInput.clusterProfile, ClusterProfile.class)
                 .orElse(ClusterProfile.aws_ipi_default);
         checkCommands();
-        var data = present.entrySet().stream()
-                .collect(Collectors.toMap(
-                        e -> e.getKey().toString(),
-                        Map.Entry::getValue
-                ));
+        var data = getInputsMap();
         preCreate(clusterName, clusterDir, credsDir, outputDir, profile, data);
         createCluster(clusterName, clusterDir);
         debug("ocp-create-cluster done");
+    }
+
+    private Map<String, String> getInputsMap() {
+        var inputsMap = getExpectedInputs()
+                .stream()
+                .collect(Collectors.toMap(
+                        Input::toString,
+                        this::inputString
+                )).entrySet()
+                .stream()
+                .filter( e -> e.getValue().isPresent())
+                .collect(Collectors.toMap(e -> e.getKey(),
+                        e -> e.getValue().get()));
+        return inputsMap;
     }
 
     /*
@@ -91,13 +86,6 @@ public class OpenshiftCreateClusterTask extends AWSWrite {
         put(OCPAWSInputRegion, c -> c.ocp().awsRegion());
     }};
     */
-
-    @Inject
-    Inputs inputs;
-    private Optional<String> fromConfig(Input input) {
-        return inputs.fromConfig(input);
-    }
-
 
     private Map<String, String> validateConfig(String clusterName) {
 

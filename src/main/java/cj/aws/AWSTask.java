@@ -84,11 +84,6 @@ public abstract class   AWSTask
     }
 
     @Override
-    public boolean isWrite() {
-        return false;
-    }
-
-    @Override
     protected String getContextString() {
         return String.join(" - ", getContext());
     }

@@ -160,10 +160,10 @@ public class BaseTask implements Task {
     }
 
     protected RuntimeException fail(String message, Object... args) {
-        var msg = fmt(message) + " " + args;
+        var msg = fmt(message).formatted(args);
         error(msg);
-        getErrors().put(Message ,message);
-        return new RuntimeException(message);
+        getErrors().put(Message ,msg);
+        return new TaskFailedException(msg);
     }
 
     private String fmt(String message) {
@@ -249,14 +249,19 @@ public class BaseTask implements Task {
         if (key == null) return Optional.empty();
         var value = inputs.get(key);
         if (value == null) {
-            var configInputs = getConfig().inputs();
-            var keyName = key.toString();
-            value = configInputs.get(keyName);
+            value = cfgInputString(key);
         }
         if (value == null) {
             value = tasks.getCLIInput(key.toString());
         }
         return Optional.ofNullable(value);
+    }
+
+    //TODO move to task inputs
+    @Inject
+    Inputs inputss;
+    public String cfgInputString(Input key){
+        return inputss.getFromConfig(key);
     }
 
     @SuppressWarnings("all")
@@ -309,11 +314,6 @@ public class BaseTask implements Task {
         } else return null;
     }
 
-
-    @Override
-    public boolean isWrite() {
-        return false;
-    }
 
     protected String getExecutionId(){
         return tasks.getExecutionId();

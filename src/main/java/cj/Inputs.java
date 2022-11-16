@@ -18,7 +18,10 @@ public class Inputs {
         return this;
     }
 
-    public Optional<String> fromConfig(Input input) {
-        return fromConfigMap.get(input).apply(configuration);
+    public String getFromConfig(Input input) {
+        var fromConfigFn = fromConfigMap.get(input);
+        if (fromConfigFn != null)
+            return fromConfigFn.apply(configuration).orElse(null);
+        return null;
     }
 }

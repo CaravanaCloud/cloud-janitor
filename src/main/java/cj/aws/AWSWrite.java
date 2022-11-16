@@ -1,8 +1,5 @@
 package cj.aws;
 
 public class AWSWrite extends AWSTask {
-    @Override
-    public boolean isWrite() {
-        return true;
-    }
+    //TODO: Require CLOUD_WRITE capability
 }

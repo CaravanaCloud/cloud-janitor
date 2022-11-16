@@ -117,7 +117,6 @@ public class Tasks {
 
     //TODO: Consider async execution
     public Task submit(Task task) {
-        task.init();
         var thisInputs = task.getInputs();
         var dependencies = task.getDependencies();
         dependencies.forEach(d -> {
@@ -144,30 +143,56 @@ public class Tasks {
     //TODO: Consider retries
     //TODO: Consider thread synchronization
     public void runSingle(Task task) {
+        if (task == null) {
+            log.error("Task is null");
+            return;
+        }
         history.add(task);
         try {
             task.setStartTime(LocalDateTime.now());
+            //TODO: Asynchronous Execution
+            checkInputs(task);
             task.apply();
-            log.trace("Executed {} ({})",
-                    task,
-                    task.isWrite() ? "W" : "R");
+            log.trace("Executed {}",
+                    task);
             //TODO: General waiter
-            if (task.isWrite()) {
-                rateLimiter.waitAfterTask(task);
-            }
         }catch (CapabilityNotFoundException e){
             var c = e.getCapability();
             log.warn("Capability not found: {}, try with -c '{}' or equivalent", c, c);
         }catch (ConfigurationNotFoundException e){
             var varName = e.getVarName();
+            //TODO: Suggest variable to set
             log.warn("Configuration not found: {}.", varName);
-        } catch (Exception e) {
+        }catch (TaskFailedException e) {
+            log.warn("Task failed to complete: {}", e.getMessage());
+        }catch (Exception e) {
             task.getErrors().put(Message, e.getMessage());
             log.error("Error executing {}: {}", task, e.getMessage());
             // e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
             task.setEndTime(LocalDateTime.now());
+        }
+    }
+
+    private void checkInputs(Task task) {
+        List<Input> expected = task.getExpectedInputs();
+
+        List<Input> missing = new ArrayList<>();
+        Map<Input, String> present = new HashMap<>();
+        for(var inputKey:expected){
+            var inputValue = task.input(inputKey)
+                    .or( () -> fromConfig(inputKey));
+            if(inputValue.isPresent()){
+                present.put(inputKey, inputValue.get().toString());
+            }else{
+                missing.add(inputKey);
+            }
+        }
+        log.debug("[{}] {} inputs, {} present, {} missing", task.getName(), expected.size(), present.size(), missing.size());
+        if (!missing.isEmpty()){
+            log.error("[{}] inputs are missing: {}", missing.size(), missing);
+            throw new ConfigurationNotFoundException(missing.stream().map(Object::toString).toList());
         }
     }
 
@@ -242,5 +267,11 @@ public class Tasks {
 
     public void addAll(List<Capabilities> capabilities) {
         this.capabilities.addAll(capabilities);
+    }
+
+    @Inject
+    Inputs inputs;
+    private Optional<String> fromConfig(Input input) {
+        return Optional.ofNullable(inputs.getFromConfig(input));
     }
 }
