@@ -1,7 +1,6 @@
 package cj.aws;
 
 import cj.BaseTask;
-import cj.Input;
 import cj.Output;
 import cj.Tasks;
 import cj.aws.sts.CallerIdentity;
@@ -28,7 +27,6 @@ public abstract class   AWSTask
 
     @Inject
     Instance<GetCallerIdentityTask> getCallerIdInstance;
-    String accountName;
 
     @Inject
     Tasks tasks;
@@ -42,6 +40,7 @@ public abstract class   AWSTask
     protected AWSIdentity getIdentity() {
         var id = inputAs(identity, AWSIdentity.class);
         if (id.isPresent()){
+            @SuppressWarnings("redundant")
             var awsId = id.get();
             return awsId;
         }
@@ -73,6 +72,7 @@ public abstract class   AWSTask
     }
 
     protected <T> T create(Instance<T> instance){
+        @SuppressWarnings("redundant")
         var result = instance.get();
         return result;
     }
@@ -93,34 +93,14 @@ public abstract class   AWSTask
 
     private List<String> getContext() {
         var id = getIdentity();
-        if (id != null){
-            String acctName = getAccountName();
-            String region = getRegionName();
-            if (acctName == null || region == null){
-                System.out.println();
-            }
+        if (id != null && id.hasCallerIdentity()) {
+            String acctName = ""+id.getAccountName();
+            String region = ""+getRegionName();
             return List.of("aws",
                     acctName,
                     region);
         }
         else return List.of("aws");
-    }
-
-    private String getAccountName() {
-        if(accountName == null){
-            accountName = lookupAccountName();
-        }
-        return accountName;
-    }
-
-    private String lookupAccountName() {
-        var identityIn = getIdentity();
-        if (identityIn == null){
-            System.out.println("Could not find AWS identity for task");
-            return "? unknown account id ?";
-        }else{
-            return identityIn.getAccountName();
-        }
     }
 
     private String getRegionName() {
@@ -143,6 +123,7 @@ public abstract class   AWSTask
         var signal = 1 - noise;
         pollInterval *= signal;
         var seconds = Double.valueOf(pollInterval).longValue();
+        @SuppressWarnings("redundant")
         var duration = Duration.ofSeconds(seconds);
         return duration;
     }
@@ -172,6 +153,7 @@ public abstract class   AWSTask
     protected List<AWSIdentity> loadAWSIdentities(){
         var task = loadAWSIdentitiesTask.get();
         submit(task);
+        @SuppressWarnings("redundant")
         var identities = task.outputList(Output.aws.Identities, AWSIdentity.class);
         return identities;
     }

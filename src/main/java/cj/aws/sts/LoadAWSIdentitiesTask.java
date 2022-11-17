@@ -1,6 +1,5 @@
 package cj.aws.sts;
 
-import cj.Input;
 import cj.aws.AWSIdentity;
 import cj.aws.AWSInput;
 import cj.aws.AWSTask;
@@ -24,56 +23,52 @@ public class LoadAWSIdentitiesTask extends AWSTask {
     @Override
     public void apply() {
         var id = loadDefaultIdentity();
-        if (! id.isPresent()){
-            error("Failed to load AWS identity.");
+        if (id.isEmpty()){
+            warn("Failed to load default AWS identity.");
         }
         else {
-            trace("Loading AWS identities using default identity");
-                var ids = Stream.concat(
-                Stream.of(id.get()),
-                loadRoles().stream());
-                var result = ids
-                        .filter(AWSIdentity::hasCallerIdentity)
-                        .toList();
-                logger().debug("{} aws identities loaded: {}", result.size(), result);
-                success(Identities, result);
+            trace("Loading further AWS identities using default identity");
+            var ids = Stream.concat(
+               Stream.of(id.get()),
+               loadRoles().stream());
+            var result = ids
+               .filter(AWSIdentity::hasCallerIdentity)
+               .toList();
+            logger().debug("{} aws identities loaded: {}", result.size(), result);
+            success(Identities, result);
         }
     }
 
-    private AWSIdentity withCallerIdentity(AWSIdentity awsIdentity) {
-        var task = (GetCallerIdentityTask) submit(
-                callerIdTaskInstance
-                        .get()
-                        .withInput(AWSInput.identity, awsIdentity));
-        var callerId = task.outputAs(CallerIdentity, cj.aws.sts.CallerIdentity.class);
-        if (callerId.isPresent()) {
-            awsIdentity.withCallerIdentity(callerId.get());
-            return awsIdentity;
-        }
-        return null;
-    }
 
 
     private List<? extends AWSIdentity> loadRoles() {
         var roles = aws().config().roles();
         if(roles.isPresent()){
-            var sts = aws().sts();
-            var workingRoles = roles.get().stream()
-                    .map(r -> RoleIdentity.of(r,sts))
-                    .filter(RoleIdentity::canAssume)
-                    .map(this::withCallerIdentity)
-                    .toList();
-            return workingRoles;
+            try(var sts = aws().sts()){
+                @SuppressWarnings("redundant")
+                var workingRoles = roles.get().stream()
+                        .map(r -> RoleIdentity.of(r,sts))
+                        .filter(RoleIdentity::canAssume)
+                        .map(this::verifyIdentity)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .toList();
+                return workingRoles;
+            }
         }
         return List.of();
     }
 
 
     private Optional<AWSIdentity> loadDefaultIdentity() {
-        var id = DefaultAWSIdentity.of();
-        id = withCallerIdentity(id);
-        if (id.hasCallerIdentity()){
-            setIdentity(id);
+        return verifyIdentity(DefaultAWSIdentity.of());
+    }
+
+    private Optional<AWSIdentity> verifyIdentity(AWSIdentity id){
+        var task = submitInstance(callerIdTaskInstance, AWSInput.identity, id);
+        var callerId = task.outputAs(CallerIdentity, cj.aws.sts.CallerIdentity.class);
+        if (callerId.isPresent()){
+            id.setCallerIdentity(callerId.get());
             return Optional.of(id);
         }
         return Optional.empty();

@@ -3,8 +3,6 @@ package cj.aws;
 import cj.aws.sts.CallerIdentity;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 
-import java.util.Optional;
-
 public abstract class AWSIdentity {
 
     private CallerIdentity callerId = null;
@@ -21,7 +19,15 @@ public abstract class AWSIdentity {
     }
 
     public String getAccountName() {
-        return callerId.getAccountName();
+        return callerId == null ? "" : callerId.getAccountName();
     }
 
+    @Override
+    public String toString() {
+        return getAccountName();
+    }
+
+    public void setCallerIdentity(CallerIdentity callerIdentity) {
+        this.callerId = callerIdentity;
+    }
 }

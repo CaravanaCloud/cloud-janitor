@@ -20,45 +20,45 @@ public interface Task {
     /**
      * The code to be executed by the Task, if considered *safe* by the TaskManager.
      */
-    default void apply(){
+    default void apply() {
         throw new RuntimeException("Task not implemented");
     }
 
     /**
      * Task start time, if started
      */
-    default LocalDateTime getStartTime(){
+    default LocalDateTime getStartTime() {
         return null;
     }
 
-    default void setStartTime(LocalDateTime localDateTime){
+    default void setStartTime(LocalDateTime localDateTime) {
         throw new RuntimeException("Method not implemented");
     }
 
     /**
-    * Task end time, if finished
+     * Task end time, if finished
      */
-    default LocalDateTime getEndTime(){
+    default LocalDateTime getEndTime() {
         return null;
     }
 
-    default void setEndTime(LocalDateTime localDateTime){
+    default void setEndTime(LocalDateTime localDateTime) {
         throw new RuntimeException("Method not implemented");
     }
 
     /**
      * Elapsed Time between Start and End, if finished
      */
-    default Optional<Duration> getElapsedTime(){
+    default Optional<Duration> getElapsedTime() {
         var start = getStartTime();
         var end = getEndTime();
-        if (start != null && end != null){
-            return Optional.of(Duration.between(start,end));
-        }else return Optional.empty();
+        if (start != null && end != null) {
+            return Optional.of(Duration.between(start, end));
+        } else return Optional.empty();
     }
 
     /* Task Chaining */
-    default List<Task> getDependencies(){
+    default List<Task> getDependencies() {
         var dep = getDependency();
         if (dep != null)
             return List.of(dep);
@@ -66,38 +66,46 @@ public interface Task {
             return List.of();
     }
 
-    default Task getDependency(){
+    default Task getDependency() {
         return null;
     }
 
-    default Map<Input, Object> getInputs(){
+    default Map<Input, Object> getInputs() {
         return Map.of();
     }
 
-    default Task withInputs(Map<Input, Object> inputs){ return this; }
-    default Task withInput(Input key, Object value){return this; }
+    default Task withInputs(Map<Input, Object> inputs) {
+        return this;
+    }
+
+    default Task withInput(Input key, Object value) {
+        return this;
+    }
 
 
-        default Map<Output, Object> getOutputs(){
+    default Map<Output, Object> getOutputs() {
         return Map.of();
     }
 
-    default Optional<Object> output(Output key){
+    default Optional<Object> output(Output key) {
         return Optional.empty();
     }
-    default Optional<String> outputString(Output key) { return Optional.empty(); }
 
-    default Map<Errors, Object> getErrors(){
+    default Optional<String> outputString(Output key) {
+        return Optional.empty();
+    }
+
+    default Map<Errors, Object> getErrors() {
         return Map.of();
     }
 
 
     /* Task Naming */
-    default String getSimpleName(){
+    default String getSimpleName() {
         return getClass().getSimpleName().split("_")[0];
     }
 
-    default String getPackage(){
+    default String getPackage() {
         return getClass().getPackage().getName();
     }
 
@@ -115,27 +123,25 @@ public interface Task {
         return name;
     }
 
-    /* Task Throttling */
-    default Optional<Long> getWaitAfterRun() {
-        return Optional.of(1_000L);
-    }
-
     /* Logging */
     default String getLoggerName() {
         var name = getClass().getName();
         return Logs.loggerName(name);
     }
 
-    default String getStartTimeFmt(){
+    @SuppressWarnings("unused")
+    default String getStartTimeFmt() {
         return getDateFormat().format(getStartTime());
     }
 
     DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-    default DateTimeFormatter getDateFormat(){
+
+    default DateTimeFormatter getDateFormat() {
         return dateTimeFormat;
     }
 
-    default String getDurationFmt(){
+    @SuppressWarnings("unused")
+    default String getDurationFmt() {
         return getElapsedTime()
                 .map(duration -> {
                     var secs = duration.getSeconds();
@@ -145,19 +151,28 @@ public interface Task {
                 .orElse("?");
     }
 
-    default String getClassName(){
+    @SuppressWarnings("unused")
+    default String getClassName() {
         return getClass().getName().split("_")[0];
     }
 
-    default boolean isSuccess(){
+    default boolean isSuccess() {
         return getErrors().isEmpty();
     }
 
-    default List<Input> getExpectedInputs(){
+    default List<Input> getExpectedInputs() {
         return List.of();
     }
 
-    default Optional<Object> input(Input key){
+    default Optional<Object> input(Input key) {
         return Optional.empty();
+    }
+
+    default <T> Optional<T> outputAs(Output key, Class<T> clazz) {
+        return Optional.empty();
+    }
+
+    default <T> List<T> outputList(Output key, Class<T> valueClass) {
+        return List.of();
     }
 }

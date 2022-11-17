@@ -2,7 +2,8 @@ package cj.aws.cleanup;
 
 import cj.Output;
 import cj.aws.AWSTask;
-import cj.aws.ec2.filter.FilterRegions;
+import cj.aws.filter.FilterRegion;
+import cj.aws.filter.FilterRegions;
 import cj.spi.Task;
 import software.amazon.awssdk.regions.Region;
 
@@ -10,14 +11,14 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import static cj.aws.AWSInput.*;
+import static cj.aws.AWSInput.targetRegion;
 @Dependent
 public class CleanupRegions extends AWSTask {
     @Inject
     FilterRegions filterRegions;
 
     @Inject
-    Instance<CleanupRegion> cleanupRegionInstance;
+    Instance<FilterRegion> cleanupRegionInstance;
 
     @Override
     public Task getDependency() {
@@ -32,17 +33,9 @@ public class CleanupRegions extends AWSTask {
     }
 
     private Task mapTask(Region region) {
+        @SuppressWarnings("redundant")
         var task = cleanupRegionInstance.get()
                 .withInput(targetRegion, region);
         return task;
-    }
-
-    private boolean filterRegion(Region region) {
-        var match = true;
-        var regions = aws().config().regions();
-        if (regions.isPresent()){
-            match = regions.get().contains(region);
-        }
-        return match;
     }
 }

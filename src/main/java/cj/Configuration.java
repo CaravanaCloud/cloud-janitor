@@ -6,15 +6,13 @@ import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithDefault;
 import io.smallrye.config.WithName;
 
-import javax.inject.Inject;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
-import cj.Inputs;
+
 import static cj.Utils.existing;
 
 @ConfigMapping(prefix = "cj" )
@@ -50,12 +48,17 @@ public interface Configuration {
     @WithName("capabilities")
     Optional<List<String>> capabilities();
 
+    @WithName("parallel")
+    @WithDefault("false")
+    boolean parallel();
+
     default Path getApplicationPath(){
         var home = System.getProperty("user.home");
         var homePath = Path.of(home);
         var appPath = homePath.resolve(".cj");
         var appDir = appPath.toFile();
         if (! appDir.exists()){
+            //noinspection ResultOfMethodCallIgnored
             appDir.mkdirs();
         }
         return appPath;
@@ -94,12 +97,14 @@ public interface Configuration {
     default long pollIntervalMs(float sizeFactor){
         float pollInterval = pollInterval();
         float result = sizeFactor * pollInterval * noise() * 1000;
+        @SuppressWarnings("redundant")
         long resultLong = Float.valueOf(result).longValue();
         return resultLong;
     }
 
     default float noise() {
         Random rand = new Random();
+        @SuppressWarnings("redundant")
         float noise = rand.nextFloat(1.00f, 1.25f);
         return noise;
     }

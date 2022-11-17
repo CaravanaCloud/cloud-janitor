@@ -1,9 +1,12 @@
 package cj.aws.filter;
 
+import cj.Output;
+import cj.aws.AWSInput;
 import cj.aws.AWSTask;
-import cj.aws.ec2.filter.FilterRegions;
+import software.amazon.awssdk.regions.Region;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 @Dependent
@@ -11,9 +14,20 @@ public class AWSFilterIdentityTask extends AWSTask {
     @Inject
     FilterRegions filterRegions;
 
+    @Inject
+    Instance<FilterRegion> filterRegion;
+
     @Override
     public void apply() {
-        info("Filtering AWS identity");
-        submit(filterRegions);
+        info("Filtering AWS identity - {}", getIdentity());
+        var regions = submit(filterRegions)
+                .outputList(Output.aws.RegionMatches, Region.class);
+        forEach(regions, this::filterRegion);
+    }
+
+
+
+    private void filterRegion(Region region) {
+        submitInstance(filterRegion, AWSInput.targetRegion, region);
     }
 }

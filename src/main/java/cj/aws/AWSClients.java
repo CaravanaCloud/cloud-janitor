@@ -27,37 +27,31 @@ public class AWSClients {
     static final Map<Map<AWSIdentity, Region>, AWSClients> clients = new HashMap<>();
 
     private AWSClients(AWSConfiguration cfg,
-                      AWSIdentity id,
-                      Region region){
+                      AWSIdentity id){
         this.cfg = cfg;
         this.id = id;
-        this.region = region;
     }
 
     private final AWSConfiguration cfg;
 
     private final AWSIdentity id;
-    private Region region;
-    //TODO: cache by identity and region
+    //TODO: consider caching AWSClients by identity / region
     public static AWSClients of(AWSConfiguration config, AWSIdentity identity) {
         var region = getRegion(config);
         var key = Map.of(identity, region);
         var value = clients.get(key);
         if (value == null ){
-            log.debug("Creating AWS clients {} - {}", identity, region);
-            value = new AWSClients(config, identity, region);
+            log.debug("Creating new AWSClients for {} - {}", identity, region);
+            value = new AWSClients(config, identity);
             clients.put(key, value);
         }else {
-            log.trace("Found AWS clients {} - {}", identity, region);
+            log.trace("Using cached AWSClients for {} - {}", identity, region);
         }
         return value;
     }
 
     public static Region getRegion(AWSConfiguration config) {
-        var region = (Region) null;
-        if (region == null){
-            region = getDefaultRegion(config);
-        }
+        var region = getDefaultRegion(config);
         if (region == null){
             region = getCLIRegion();
         }else {
@@ -71,9 +65,6 @@ public class AWSClients {
         return cliRegion.map(Region::of).orElse(null);
     }
 
-    public void setRegion(Region region){
-        this.region = region;
-    }
 
     protected static Region getDefaultRegion(AWSConfiguration config){
         //TODO: Use "aws configure get region" to get configured region
@@ -86,6 +77,7 @@ public class AWSClients {
     // Clients //
 
     public StsClient sts() {
+        @SuppressWarnings("redundant")
         var sts = StsClient.builder()
                 .region(getRegion())
                 .credentialsProvider(getCredentialsProvider())
@@ -94,6 +86,7 @@ public class AWSClients {
     }
 
     public IamClient iam() {
+        @SuppressWarnings("redundant")
         var iam = IamClient.builder()
                 .region(Region.AWS_GLOBAL)
                 .credentialsProvider(getCredentialsProvider())
@@ -106,6 +99,7 @@ public class AWSClients {
     }
 
     public Ec2Client ec2(Region region){
+        @SuppressWarnings("redundant")
         var ec2 = Ec2Client.builder()
                 .region(region)
                 .credentialsProvider(getCredentialsProvider())
@@ -122,6 +116,7 @@ public class AWSClients {
     }
 
     public S3TransferManager s3tm(){
+        @SuppressWarnings("redundant")
         var tx = S3TransferManager
                 .builder()
                 .s3ClientConfiguration(c -> {
@@ -140,8 +135,9 @@ public class AWSClients {
     }
 
     private TranscribeClient transcribe(Region region) {
+        @SuppressWarnings("redundant")
         var transcribe = TranscribeClient.builder()
-                .region(getRegion())
+                .region(region)
                 .credentialsProvider(getCredentialsProvider())
                 .build();
         return transcribe;
@@ -152,16 +148,18 @@ public class AWSClients {
     }
 
     private TranslateClient translate(Region region) {
+        @SuppressWarnings("redundant")
         var translate = TranslateClient.builder()
-                .region(getRegion())
+                .region(region)
                 .credentialsProvider(getCredentialsProvider())
                 .build();
         return translate;
     }
 
     public S3Client s3(Region region){
+        @SuppressWarnings("redundant")
         var s3 = S3Client.builder()
-                .region(getRegion())
+                .region(region)
                 .credentialsProvider(getCredentialsProvider())
                 .build();
         return s3;
@@ -188,11 +186,14 @@ public class AWSClients {
                 .build();
     }
 
+    @SuppressWarnings("unused")
     public AthenaClient athena() {
-        return AthenaClient.builder()
+        @SuppressWarnings("redundant")
+        var athena = AthenaClient.builder()
                 .region(getRegion())
                 .credentialsProvider(getCredentialsProvider())
                 .build();
+        return athena;
     }
 
     public AWSConfiguration config(){

@@ -15,6 +15,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static cj.Errors.Type.Message;
 
@@ -32,9 +34,6 @@ public class Tasks {
     Configuration config;
 
     @Inject
-    RateLimiter rateLimiter;
-
-    @Inject
     Reporting reporting;
 
     Set<Capabilities> capabilities = new HashSet<>();
@@ -48,13 +47,8 @@ public class Tasks {
     public void run() {
         log.trace("Tasks.run()");
         log.debug("Capabilities: {}", getCapabilities());
-        //parseInputs(inputs);
+        log.debug("Parallel: {}", config.parallel());
         var tasks = loadTasks();
-        var taskNames = String.join(",", tasks.stream().map(TaskConfiguration::name).toList());
-        //var inputsSize = inputs != null ? inputs.size() : 0;
-        // log.info("Starting {} tasks with {} inputs and dry run {}.", tasks.size(), inputsSize, dryRun);
-        //if (inputsSize > 0)
-        //    log.debug("Inputs: {}", inputs);
         for (var task : tasks) {
             run(task);
         }
@@ -73,18 +67,6 @@ public class Tasks {
     private void addTaskByName(List<TaskConfiguration> tasks, String taskName) {
         if (taskName != null && !taskName.isEmpty()) {
             tasks.add(new SimpleTaskConfiguration(taskName));
-        }
-    }
-
-    private void parseInputs(List<String> inputs) {
-        if (inputs != null) for (var input : inputs) {
-            var parts = input.split("=");
-            if (parts.length != 2) {
-                throw new IllegalArgumentException("Invalid input: " + input);
-            }
-            var key = parts[0];
-            var value = parts[1];
-            cliInputs.put(key, value);
         }
     }
 
@@ -118,7 +100,22 @@ public class Tasks {
     }
 
     //TODO: Consider async execution
-    public Task submit(Task task) {
+    public Task submit(Task task){
+        @SuppressWarnings("redundant")
+        var cf = submitFuture(task);
+        try {
+            @SuppressWarnings("redundant")
+            var result = cf.get();
+            return result;
+        } catch (InterruptedException e) {
+            log.error("Task interrupted", e);
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            log.error("Task exceciton exception", e);
+            throw new RuntimeException(e);
+        }
+    }
+    public CompletableFuture<Task> submitFuture(Task task) {
         var thisInputs = task.getInputs();
         var dependencies = task.getDependencies();
         dependencies.forEach(d -> {
@@ -126,16 +123,28 @@ public class Tasks {
             d.getInputs().putAll(thisInputs);
             submit(d);
         });
-        runSingle(task);
-        return task;
-    }
 
+        log.trace("Submitting future: {}", task);
+        @SuppressWarnings("redundant")
+        CompletableFuture<Task> cf = CompletableFuture.supplyAsync(() -> {
+            log.trace("Running future: {}", task);
+            try {
+                runSingle(task);
+                log.trace("Completed future: {}", task);
+            } catch (Exception ex) {
+                log.error("Failed future: {} {}", task, ex.getMessage());
+            }
+            return task;
+        });
+
+        return cf;
+    }
 
     private Task fromBean(Bean<?> bean) {
         var ctx = bm.createCreationalContext(bean);
         var ref = bm.getReference(bean, bean.getBeanClass(), ctx);
-        if (ref instanceof Task task) {
-            return task;
+        if (ref instanceof Task aTask) {
+            return aTask;
         } else {
             log.error("Bean {} is not a Task", bean);
             throw new IllegalArgumentException("Bean is not a task");
@@ -155,8 +164,7 @@ public class Tasks {
             //TODO: Asynchronous Execution
             checkInputs(task);
             task.apply();
-            log.trace("Executed {}",
-                    task);
+            log.trace("Executed {}", task);
             //TODO: General waiter
         }catch (CapabilityNotFoundException e){
             var c = e.getCapability();
@@ -201,10 +209,12 @@ public class Tasks {
         }
     }
 
+    @SuppressWarnings("unused")
     public List<Task> getHistory() {
         return new ArrayList<>(history);
     }
 
+    @SuppressWarnings("unused")
     public String getStartTimeFmt() {
         return DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(startTime);
     }
@@ -282,8 +292,9 @@ public class Tasks {
     }
 
 
+    @SuppressWarnings("unused")
     public void loadCapabilities(@Observes StartupEvent ev){
-        log.info("Loading capabilities");
         getConfig().capabilities().ifPresent(this::addAll);
+        log.debug("Loaded {} capabilities: {}",  capabilities.size(), capabilities);
     }
 }

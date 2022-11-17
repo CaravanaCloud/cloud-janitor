@@ -1,11 +1,13 @@
 package cj.aws.sts;
 
-import java.util.Optional;
-
 public record CallerIdentity(
         String accountId,
-        Optional<String> accountAlias) {
+        String userARN,
+        String userId,
+        String accountAlias) {
     public String getAccountName(){
-        return accountAlias.orElse(accountId);
+        if (accountAlias != null)
+            return accountAlias;
+        return accountId;
     }
 }

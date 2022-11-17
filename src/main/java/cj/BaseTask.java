@@ -12,9 +12,11 @@ import javax.inject.Inject;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import static cj.CJInput.*;
+import static cj.CJInput.dryRun;
+import static cj.CJInput.fixTask;
 import static cj.Errors.Type;
 import static cj.Errors.Type.Message;
 import static cj.shell.ShellInput.*;
@@ -98,7 +100,7 @@ public class BaseTask implements Task {
             return List.of();
         }else{
             var outputValue = output.get();
-            if (outputValue instanceof List outputList){
+            if (outputValue instanceof List<?> outputList){
                 return (List<T>) outputList;
             }else {
                 throw new RuntimeException( "Output " + key + " is not a List<"+valueClass.getName()+">");
@@ -276,8 +278,9 @@ public class BaseTask implements Task {
         return result;
     }
 
-    @SuppressWarnings("all")
+
     public <T> Optional<T> outputAs(Output key, Class<T> clazz){
+        @SuppressWarnings("unchecked")
         var result = (Optional<T>) Optional.ofNullable(outputs.get(key));
         return result;
     }
@@ -393,5 +396,13 @@ public class BaseTask implements Task {
 
     protected boolean hasCapabilities(Capabilities... cs){
         return tasks.hasCapabilities(cs);
+    }
+
+    protected <T> void forEach(List<T> list, Consumer<T> consumer) {
+        var stream = list.stream();
+        if (getConfig().parallel()){
+            stream = stream.parallel();
+        }
+        stream.forEach(consumer);
     }
 }

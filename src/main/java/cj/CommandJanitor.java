@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
-@CommandLine.Command(version = "1.3.5",
+@CommandLine.Command(version = "1.3.6",
         mixinStandardHelpOptions = true,
         name = "cloud-janitor", description = "Cloud Janitor at your service.")
 @StaticInitSafe
@@ -51,11 +51,14 @@ public class CommandJanitor implements Runnable,
             input.forEach(tasks::addInput);
         if (capabilities != null)            
             capabilities.forEach(tasks::addCapability);
+        if (input != null)
+            input.forEach(tasks::addInput);
     }
 
     @Override
     public int run(String... args) throws Exception {
         log.trace("Command.run(...)");
+        @SuppressWarnings("redundant")
         var exit = new CommandLine(this, factory).execute(args);
         return exit;
     }

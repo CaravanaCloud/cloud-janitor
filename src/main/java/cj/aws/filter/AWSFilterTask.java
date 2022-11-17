@@ -1,6 +1,5 @@
 package cj.aws.filter;
 
-import cj.Input;
 import cj.aws.AWSIdentity;
 import cj.aws.AWSInput;
 import cj.aws.AWSTask;
