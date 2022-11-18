@@ -183,5 +183,7 @@
     <orderEntry type="library" name="Maven: org.awaitility:awaitility:4.2.0" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-qute:2.14.0.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus.qute:qute-core:2.14.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.logmanager:log4j2-jboss-logmanager:1.1.1.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.19.0" level="project" />
   </component>
 </module>

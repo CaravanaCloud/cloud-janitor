@@ -153,6 +153,7 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-qute</artifactId>
     </dependency>
+
   </dependencies>
   <build>
     <defaultGoal>clean compile quarkus:dev</defaultGoal>
