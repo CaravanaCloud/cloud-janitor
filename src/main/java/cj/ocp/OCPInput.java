@@ -8,7 +8,9 @@ public enum OCPInput implements Input {
     sshKey,
     pullSecret,
     awsRegion,
-    clusterProfile
+    clusterProfile,
+
+    instanceType
 
 }
 

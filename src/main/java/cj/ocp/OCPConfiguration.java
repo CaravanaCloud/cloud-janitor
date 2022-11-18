@@ -26,4 +26,7 @@ public interface OCPConfiguration {
 
     @WithName("clusterProfile")
     Optional<ClusterProfile> clusterProfile();
+
+    @WithName("instanceType")
+    Optional<String> instanceType();
 }

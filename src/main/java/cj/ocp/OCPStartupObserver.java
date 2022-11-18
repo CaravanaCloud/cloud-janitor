@@ -45,7 +45,11 @@ public class OCPStartupObserver {
                 .putConfig(clusterProfile,
                         "cj.ocp.clusterProfile",
                         c -> c.ocp().clusterProfile(),
-                        () -> ClusterProfile.aws_ipi_default);
+                        () -> ClusterProfile.aws_ipi_default)
+                .putConfig(instanceType,
+                        "cj.ocp.instanceType",
+                        c -> c.ocp().instanceType(),
+                        () -> "m5.xlarge");
 
         logger.debug("OpenShift config mapping complete.");
     }
