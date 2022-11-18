@@ -1,6 +1,5 @@
 package cj.aws.ec2.cleanup;
 
-import cj.Input;
 import cj.aws.AWSInput;
 import cj.aws.AWSTask;
 import cj.aws.ec2.delete.DeleteVPC;

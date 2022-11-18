@@ -7,7 +7,7 @@ import software.amazon.awssdk.services.ec2.model.NetworkInterface;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.aws.AWSInput.*;
+import static cj.aws.AWSInput.targetNetworkInterface;
 @Dependent
 public class DeleteNetworkInterface extends AWSWrite {
 

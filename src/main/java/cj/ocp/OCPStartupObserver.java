@@ -5,10 +5,8 @@ import cj.Tasks;
 import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
 
-
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-
 
 import static cj.ocp.OCPInput.*;
 

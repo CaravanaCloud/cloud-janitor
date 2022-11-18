@@ -1,6 +1,5 @@
 package cj.aws.ec2.filter;
 
-import cj.Input;
 import cj.aws.AWSFilter;
 import cj.aws.AWSInput;
 import software.amazon.awssdk.services.ec2.model.DescribeInstancesRequest;

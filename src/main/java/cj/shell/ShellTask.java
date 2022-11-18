@@ -11,10 +11,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static cj.CJInput.*;
-import static cj.shell.ShellInput.*;
+import static cj.CJInput.dryRun;
 import static cj.Output.shell.exitCode;
 import static cj.Output.shell.stdout;
+import static cj.shell.ShellInput.*;
 
 @Dependent
 @Named("shell")

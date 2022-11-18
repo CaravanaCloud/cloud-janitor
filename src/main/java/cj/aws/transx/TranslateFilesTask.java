@@ -21,9 +21,9 @@ import javax.inject.Named;
 import java.nio.file.Path;
 import java.util.List;
 
-import static cj.aws.AWSInput.*;
-import static cj.fs.FSInput.*;
 import static cj.Output.aws.S3Bucket;
+import static cj.aws.AWSInput.*;
+import static cj.fs.FSInput.paths;
 
 
 @Dependent

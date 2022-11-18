@@ -1,6 +1,5 @@
 package cj.aws.ec2;
 
-import cj.Input;
 import cj.Output;
 import cj.TaskTest;
 import cj.aws.AWSInput;

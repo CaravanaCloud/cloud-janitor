@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-import static cj.LocalInput.*;
+import static cj.LocalInput.fileExtension;
 import static cj.Output.aws.S3Bucket;
 import static cj.Output.local.FilesMatch;
 

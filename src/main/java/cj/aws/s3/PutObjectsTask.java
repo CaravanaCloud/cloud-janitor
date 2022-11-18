@@ -1,6 +1,5 @@
 package cj.aws.s3;
 
-import cj.Input;
 import cj.aws.AWSWrite;
 import cj.fs.FSInput;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -11,8 +10,8 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import java.nio.file.Path;
 
-import static cj.aws.AWSInput.*;
-import static cj.fs.FSInput.*;
+import static cj.aws.AWSInput.s3Prefix;
+import static cj.aws.AWSInput.targetBucketName;
 
 @Dependent
 @Named("aws-put-objects")

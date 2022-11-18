@@ -1,7 +1,6 @@
 package cj.aws.ec2.delete;
 
 
-import cj.Input;
 import cj.aws.AWSInput;
 import cj.aws.AWSTask;
 import cj.aws.ec2.filter.FilterInstances;

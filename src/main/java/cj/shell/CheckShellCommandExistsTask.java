@@ -8,7 +8,7 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.List;
 
-import static cj.shell.ShellInput.*;
+import static cj.shell.ShellInput.cmds;
 
 @Dependent
 public class CheckShellCommandExistsTask extends SafeTask {

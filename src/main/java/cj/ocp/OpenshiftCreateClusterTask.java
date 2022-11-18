@@ -1,7 +1,8 @@
 package cj.ocp;
 
-import cj.*;
-import cj.aws.AWSWrite;
+import cj.BaseTask;
+import cj.Capabilities;
+import cj.Input;
 import cj.fs.FSUtils;
 import cj.shell.CheckShellCommandExistsTask;
 import cj.shell.ShellInput;
@@ -12,7 +13,8 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Dependent

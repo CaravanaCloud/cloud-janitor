@@ -7,8 +7,8 @@ import software.amazon.awssdk.services.ec2.model.*;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 
-import static cj.aws.AWSInput.*;
 import static cj.Utils.msToStr;
+import static cj.aws.AWSInput.targetInstanceId;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.awaitility.Awaitility.await;
 

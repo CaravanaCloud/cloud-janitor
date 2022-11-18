@@ -1,6 +1,5 @@
 package cj.aws.ec2.create;
 
-import cj.Input;
 import cj.Output;
 import cj.aws.AWSInput;
 import cj.aws.AWSWrite;

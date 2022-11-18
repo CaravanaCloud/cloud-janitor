@@ -1,6 +1,5 @@
 package cj.aws.ec2.delete;
 
-import cj.Input;
 import cj.aws.AWSInput;
 import cj.aws.AWSWrite;
 import software.amazon.awssdk.services.route53.model.*;

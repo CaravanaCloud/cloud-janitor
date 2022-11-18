@@ -8,7 +8,7 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static cj.LocalInput.*;
+import static cj.LocalInput.message;
 
 @Named("hello")
 @Dependent

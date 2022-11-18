@@ -1,6 +1,5 @@
 package cj.aws.s3;
 
-import cj.Input;
 import cj.Output;
 import cj.aws.AWSInput;
 import cj.aws.AWSWrite;

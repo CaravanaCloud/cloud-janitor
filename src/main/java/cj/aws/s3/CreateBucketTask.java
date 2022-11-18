@@ -5,7 +5,7 @@ import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.aws.AWSInput.*;
+import static cj.aws.AWSInput.targetBucketName;
 @Dependent
 public class CreateBucketTask extends AWSWrite {
     public void  apply(){

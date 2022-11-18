@@ -1,6 +1,5 @@
 package cj.aws.ec2.filter;
 
-import cj.Input;
 import cj.Output;
 import cj.aws.AWSFilter;
 import cj.aws.AWSInput;
