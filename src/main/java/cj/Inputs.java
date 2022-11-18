@@ -17,21 +17,24 @@ public class Inputs {
 
     public Inputs putConfig(Input input,
                             String configKey,
-                            Function<Configuration, Optional<String>> configFn,
-                            Supplier<String> defaultFn){
+                            Function<Configuration, Optional<?>> configFn,
+                            Supplier<?> defaultFn){
         var inputConfig = new InputConfig(input, configKey, configFn, defaultFn);
         inputConfigs.put(input, inputConfig);
         return this;
     }
 
-    public String getFromConfig(Input input) {
+    public Object getFromConfig(Input input) {
         var inputConfig = inputConfigs.get(input);
-        if (inputConfig != null)
-            return inputConfig.applyConfigFn(configuration).orElse(null);
+        if (inputConfig != null) {
+            @SuppressWarnings("all")
+            var inputValue = inputConfig.applyConfigFn(configuration).orElse(null);
+            return inputValue;
+        }
         return null;
     }
 
-    public String getFromDefault(Input input) {
+    public Object getFromDefault(Input input) {
         var inputConfig = inputConfigs.get(input);
         if (inputConfig != null)
             return inputConfig.applyDefaultFn();

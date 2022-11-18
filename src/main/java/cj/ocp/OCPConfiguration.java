@@ -1,4 +1,4 @@
-package cj;
+package cj.ocp;
 
 import io.quarkus.runtime.annotations.StaticInitSafe;
 import io.smallrye.config.ConfigMapping;
@@ -23,4 +23,7 @@ public interface OCPConfiguration {
 
     @WithName("awsRegion")
     Optional<String> awsRegion();
+
+    @WithName("clusterProfile")
+    Optional<ClusterProfile> clusterProfile();
 }

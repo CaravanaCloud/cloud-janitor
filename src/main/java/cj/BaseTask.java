@@ -1,8 +1,13 @@
 package cj;
 
 import cj.fs.FSUtils;
+import cj.ocp.CapabilityNotFoundException;
+import cj.shell.CheckShellCommandExistsTask;
+import cj.shell.ShellInput;
 import cj.shell.ShellTask;
 import cj.spi.Task;
+import io.quarkus.qute.Engine;
+import io.quarkus.qute.Template;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +18,7 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static cj.CJInput.dryRun;
@@ -267,7 +273,7 @@ public class BaseTask implements Task {
     //TODO move to task inputs
     @Inject
     Inputs inputss;
-    public String cfgInputString(Input key){
+    public Object cfgInputString(Input key){
         return inputss.getFromConfig(key);
     }
 
@@ -332,11 +338,11 @@ public class BaseTask implements Task {
         return tasks.getExecutionId();
     }
 
-    protected void retry(Task theMainTask, Task theFixTask) {
-        var ccoctlTask = retry.get()
+    protected Task retry(Task theMainTask, Task theFixTask) {
+        var retryTask = retry.get()
                 .withInput(CJInput.task, theMainTask)
                 .withInput(fixTask, theFixTask);
-        submit(ccoctlTask);
+        return submit(retryTask);
     }
 
     protected Task withInput(Instance<? extends Task> task, Input input, Object value) {
@@ -405,4 +411,44 @@ public class BaseTask implements Task {
         }
         stream.forEach(consumer);
     }
+
+    @Inject
+    Instance<CheckShellCommandExistsTask> checkCmd;
+
+    @SuppressWarnings("UnusedReturnValue")
+    protected Task checkCmd(String executable, Map<OS, String[]> fixMap) {
+        var checkTask = withInput(checkCmd, ShellInput.cmd, executable);
+        var installTask = shellTask(OS.get(fixMap));
+        return retry(checkTask, installTask);
+    }
+
+    @Inject
+    Engine engine;
+
+    protected Template getTemplate(String location) {
+        return engine.getTemplate(location);
+    }
+
+    protected Map<String, String> getInputsMap() {
+        @SuppressWarnings("redundant")
+        var inputsMap = getExpectedInputs()
+                .stream()
+                .collect(Collectors.toMap(
+                        Input::toString,
+                        this::inputString
+                )).entrySet()
+                .stream()
+                .filter( e -> e.getValue().isPresent())
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        e -> e.getValue().get()));
+        return inputsMap;
+    }
+
+    protected void expectCapability(@SuppressWarnings("SameParameterValue") Capabilities capability) {
+        if(! hasCapabilities(capability)){
+            debug("Missing capability {} ", capability);
+            throw new CapabilityNotFoundException(capability);
+        }
+    }
+
 }

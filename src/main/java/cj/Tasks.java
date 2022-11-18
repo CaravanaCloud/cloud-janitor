@@ -287,7 +287,7 @@ public class Tasks {
 
     @Inject
     Inputs inputs;
-    private Optional<String> fromConfig(Input input) {
+    private Optional<?> fromConfig(Input input) {
         return Optional.ofNullable(inputs.getFromConfig(input));
     }
 

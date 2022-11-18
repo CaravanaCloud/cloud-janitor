@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import static cj.ocp.OCPInput.*;
 
+@SuppressWarnings("unused")
 public class OCPStartupObserver {
     @Inject
     Inputs inputs;
@@ -40,7 +41,12 @@ public class OCPStartupObserver {
             .putConfig(awsRegion,
                     "cj.ocp.awsRegion",
                     c -> c.ocp().awsRegion(),
-                    null);
+                    null)
+                .putConfig(clusterProfile,
+                        "cj.ocp.clusterProfile",
+                        c -> c.ocp().clusterProfile(),
+                        () -> ClusterProfile.aws_ipi_default);
+
         logger.debug("OpenShift config mapping complete.");
     }
 }

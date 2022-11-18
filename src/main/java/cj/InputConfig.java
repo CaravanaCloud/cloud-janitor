@@ -7,8 +7,8 @@ import java.util.function.Supplier;
 public record InputConfig(
         Input input,
         String configKey,
-        Function<Configuration, Optional<String>> configFn,
-        Supplier<String> defaultFn
+        Function<Configuration, Optional<?>> configFn,
+        Supplier<?> defaultFn
 ) {
     public String getEnvVarName(){
         return toEnvVarName(configKey);
@@ -24,13 +24,13 @@ public record InputConfig(
         System.out.println(toEnvVarName("cj.ocp.clusterName"));
     }
 
-    public Optional<String> applyConfigFn(Configuration configuration) {
+    public Optional<?> applyConfigFn(Configuration configuration) {
         if (configFn != null)
             return configFn.apply(configuration);
-        return null;
+        return Optional.empty();
     }
 
-    public String applyDefaultFn() {
+    public Object applyDefaultFn() {
         if (defaultFn != null)
             return defaultFn.get();
         return null;
