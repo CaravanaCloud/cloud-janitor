@@ -9,19 +9,21 @@ public class ConfigurationNotFoundException extends RuntimeException {
         this.missingInputs = missingInputs;
     }
 
-    public List<InputConfig> getMissingInputs() {
-        return missingInputs;
-    }
-
     @Override
     public String getMessage() {
-        StringBuilder msg = new StringBuilder();
+        var msg = new StringBuilder();
         for (var input: missingInputs) {
+            var configKey = input.configKey();
+            var envVarName = input.getEnvVarName();
             msg.append("Missing input, try setting ");
-            msg.append(input.configKey() + " (yaml) or ");
-            msg.append(input.getEnvVarName()+ " (env)");
+            msg.append(configKey);
+            msg.append(" (yaml) or ");
+            msg.append( envVarName);
+            msg.append(" (env)");
             msg.append("\n");
         }
-        return msg.toString();
+        @SuppressWarnings("redundant")
+        var result = msg.toString();
+        return result;
     }
 }

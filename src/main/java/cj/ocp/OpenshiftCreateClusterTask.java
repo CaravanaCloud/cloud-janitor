@@ -6,7 +6,6 @@ import cj.Input;
 import cj.OS;
 import cj.fs.FSUtils;
 
-
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import java.nio.file.Path;
@@ -24,14 +23,15 @@ public class OpenshiftCreateClusterTask extends BaseTask {
                 OCPInput.baseDomain,
                 OCPInput.sshKey,
                 OCPInput.pullSecret,
-                OCPInput.awsRegion);
+                OCPInput.awsRegion,
+                OCPInput.clusterProfile);
     }
 
     @Override
     public void apply() {
         debug("ocp-create-cluster");
         var clusterName = getInputString(OCPInput.clusterName);
-        var clusterProfile = inputAs(OCPInput.clusterProfile, ClusterProfile.class).orElseThrow();
+        var clusterProfile = getInput(OCPInput.clusterProfile, ClusterProfile.class);
         debug("creating cluster [{}] with profile [{}]", clusterName, clusterProfile);
         var clusterDir = getClusterDir(clusterName);
         if (! FSUtils.isEmptyDir(clusterDir))

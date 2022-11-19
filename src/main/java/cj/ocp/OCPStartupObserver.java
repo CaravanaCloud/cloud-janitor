@@ -1,7 +1,6 @@
 package cj.ocp;
 
 import cj.Inputs;
-import cj.Tasks;
 import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
 
@@ -15,8 +14,7 @@ public class OCPStartupObserver {
     @Inject
     Inputs inputs;
 
-    @Inject
-    Tasks tasks;
+
 
     @Inject
     Logger logger;
@@ -25,7 +23,7 @@ public class OCPStartupObserver {
         inputs.putConfig(clusterName,
                         "cj.ocp.clusterName",
                         c -> c.ocp().clusterName(),
-                        () -> tasks.getExecutionId())
+                        () -> "cj"+System.currentTimeMillis())
             .putConfig(baseDomain,
                     "cj.ocp.baseDomain",
                     c -> c.ocp().baseDomain(),

@@ -11,7 +11,14 @@ public record InputConfig(
         Supplier<?> defaultFn
 ) {
     public String getEnvVarName(){
-        return toEnvVarName(configKey);
+        return toEnvVarName(getConfigKey());
+    }
+
+    private String getConfigKey() {
+        if (configKey == null) {
+            var inputName =  input != null ? input.toString() : "INPUT_NAME";
+            return "cj.GROUP_NAME." + inputName;
+        } else return configKey;
     }
 
     private static String toEnvVarName(String configKey) {

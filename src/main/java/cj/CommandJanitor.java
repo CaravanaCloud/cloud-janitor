@@ -35,10 +35,34 @@ public class CommandJanitor implements Callable<Integer>, QuarkusApplication {
 
     public CommandJanitor(){}
 
+    @SuppressWarnings("RedundantThrows")
     @Override
     public Integer call() throws Exception {
         parseArgs();
-        Quarkus.run(CommandJanitor.class);
+        try {
+            Quarkus.run(CommandJanitor.class);
+        }catch (Exception e){
+            log.error("Error running Quarkus", e);
+            return -1;
+        }
+        return 0;
+    }
+
+    @Override
+    public int run(String... args) throws Exception {
+        log.trace("Command.run(...)");
+        try {
+            if(cj != null){
+                cj.run();
+            }else {
+                log.error("CloudJanitor is null");
+            }
+            Quarkus.waitForExit();
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("Error running CloudJanitor", e);
+            return -1;
+        }
         return 0;
     }
 
@@ -59,12 +83,6 @@ public class CommandJanitor implements Callable<Integer>, QuarkusApplication {
         }
     }
 
-    @Override
-    public int run(String... args) throws Exception {
-        log.trace("Command.run(...)");
-        cj.run();
-        return 0;
-    }
 
     private static void loadLocalQuarkusConfig() {
         var localConfigDir = FSUtils.getLocalConfigDir();

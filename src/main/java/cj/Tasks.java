@@ -5,6 +5,7 @@ import cj.reporting.Reporting;
 import cj.spi.Task;
 import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -24,8 +25,8 @@ import static cj.Errors.Type.Message;
 public class Tasks {
     static final LocalDateTime startTime = LocalDateTime.now();
 
-    @Inject
-    Logger log;
+    //@Inject
+    Logger log = LoggerFactory.getLogger(Tasks.class);
 
     @Inject
     BeanManager bm;
@@ -37,8 +38,6 @@ public class Tasks {
     Reporting reporting;
 
     Set<Capabilities> capabilities = new HashSet<>();
-
-    Map<String, String> cliInputs = new HashMap<>();
 
     List<Task> history = new ArrayList<>();
 
@@ -111,7 +110,12 @@ public class Tasks {
             log.error("Task interrupted", e);
             throw new RuntimeException(e);
         } catch (ExecutionException e) {
-            log.error("Task exceciton exception", e);
+            log.error("Task execution exception", e);
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            log.error("Task exception", e);
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -142,12 +146,18 @@ public class Tasks {
 
     private Task fromBean(Bean<?> bean) {
         var ctx = bm.createCreationalContext(bean);
-        var ref = bm.getReference(bean, bean.getBeanClass(), ctx);
-        if (ref instanceof Task aTask) {
-            return aTask;
-        } else {
-            log.error("Bean {} is not a Task", bean);
-            throw new IllegalArgumentException("Bean is not a task");
+        try {
+            var ref = bm.getReference(bean, bean.getBeanClass(), ctx);
+            if (ref instanceof Task aTask) {
+                return aTask;
+            } else {
+                log.error("Bean {} is not a Task", bean);
+                throw new IllegalArgumentException("Bean is not a task");
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+            log.error("Failed to create task from bean {}", bean, ex);
+            throw ex;
         }
     }
 
@@ -170,6 +180,16 @@ public class Tasks {
             var c = e.getCapability();
             log.warn("Capability not found: {}, try with -c '{}' or equivalent", c, c);
         }catch (ConfigurationNotFoundException e){
+            var msg = e.getMessage();
+            log.error("ERROR");
+            log.warn("WARN");
+            log.info("INFO");
+            log.debug("DEBUG");
+            log.trace("TRACE");
+            // System.out.println("System.out");
+            //TODO: Why dont you log this?
+            System.out.println(msg);
+            log.error("Configuration not found: {}", msg);
             log.warn("Expected configuration not found.");
             log.warn(e.getMessage());
         }catch (TaskFailedException e) {
@@ -179,7 +199,7 @@ public class Tasks {
         }catch (Exception e) {
             task.getErrors().put(Message, e.getMessage());
             log.error("Error executing {}: {}", task, e.getMessage());
-            // e.printStackTrace();
+            e.printStackTrace();
             throw new RuntimeException(e);
         } finally {
             task.setEndTime(LocalDateTime.now());
@@ -203,8 +223,7 @@ public class Tasks {
         if (! expected.isEmpty())
             log.debug("[{}] {} inputs expected, {} present, {} missing", task.getName(), expected.size(), present.size(), missing.size());
         if (!missing.isEmpty()){
-            log.error("[{}] inputs are missing: {}", missing.size(),
-                    missing.stream().map(InputConfig::input).toList());
+            log.debug("[{}] inputs are missing: {}", missing.size(), missing);
             throw new ConfigurationNotFoundException(missing);
         }
     }
@@ -234,21 +253,8 @@ public class Tasks {
         return executionId;
     }
 
-
-    public String getCLIInput(String key) {
-        return cliInputs.get(key);
-    }
-
     public void setTask(String taskName) {
         this.task = taskName;
-    }
-
-    public void addInput(String entry) {
-        var parts = entry.split("=");
-        var key = parts[0];
-        var hasValue = parts.length > 1;
-        var value = hasValue ? parts[1] : "";
-        cliInputs.put(key, value);
     }
 
     public void addCapability(String capability) {

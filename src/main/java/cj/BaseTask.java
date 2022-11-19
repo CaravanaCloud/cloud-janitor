@@ -264,9 +264,6 @@ public class BaseTask implements Task {
         if (value == null) {
             value = inputss.getFromDefault(key);
         }
-        if (value == null) {
-            value = tasks.getCLIInput(key.toString());
-        }
         return Optional.ofNullable(value);
     }
 
@@ -294,8 +291,11 @@ public class BaseTask implements Task {
     @SuppressWarnings("all")
     public <T> T getInput(Input key, Class<T> inputClass){
         @SuppressWarnings("unchecked")
-        var result = (T) input(key).orElseThrow();
-        return result;
+        var result = input(key);
+        if (result.isEmpty()){
+            throw new IllegalArgumentException("Failed to resolve expected input "+ key);
+        }
+        return (T) result.get();
     }
 
     public String matchMark(boolean match){
@@ -345,8 +345,16 @@ public class BaseTask implements Task {
         return submit(retryTask);
     }
 
-    protected Task withInput(Instance<? extends Task> task, Input input, Object value) {
-        return task.get().withInput(input, value);
+    protected Task withInput(Instance<? extends Task> instance, Input input, Object value) {
+        try{
+            var task = instance.get();
+            task = task.withInput(input, value);
+            return task;
+        } catch (Exception ex){
+            ex.printStackTrace();
+            debug("Failed to create task instance for {}", instance);
+            throw new RuntimeException(ex);
+        }
     }
 
     protected Path getTaskDir(String dirName) {
@@ -386,6 +394,10 @@ public class BaseTask implements Task {
         return output;
     }
 
+    protected ShellTask shellTask(List<String> cmdsList) {
+        String[] cmdArgs = cmdsList.toArray(String[]::new);
+        return shellTask(false , cmdArgs);
+    }
     protected ShellTask shellTask(String... cmdArgs) {
         return shellTask(false , cmdArgs);
     }

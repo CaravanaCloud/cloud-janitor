@@ -20,13 +20,13 @@ public class CloudJanitor {
     @Inject
     LaunchMode launchMode;
 
-    @Inject
-    Configuration config;
+
     public int run(){
         log.trace("CloudJanitor.run()");
         try {
             tasks.run();
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("CloudJanitor.run() failed", e);
             return -1;
         }
