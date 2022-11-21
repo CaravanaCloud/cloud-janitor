@@ -15,14 +15,12 @@ import java.util.function.Supplier;
 @Startup
 public class Inputs {
     @Inject
-    Logger log;
-    @Inject
     Configuration configuration;
 
     Map<Input, InputConfig> inputConfigs = new HashMap<>();
 
     public Inputs(){
-        log.debug("Creating new inputs mapping");
+        System.out.println("Creating new inputs mapping");
     }
     public Inputs putConfig(Input input,
                             String configKey,

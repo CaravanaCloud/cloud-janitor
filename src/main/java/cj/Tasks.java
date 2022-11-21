@@ -2,6 +2,7 @@ package cj;
 
 import cj.ocp.CapabilityNotFoundException;
 import cj.reporting.Reporting;
+import cj.shell.CheckShellCommandExistsTask;
 import cj.shell.ShellInput;
 import cj.shell.ShellTask;
 import cj.spi.Task;
@@ -20,10 +21,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
+
 
 import static cj.Errors.Type.Message;
 
@@ -342,34 +340,22 @@ public class Tasks {
         return shellTask;
     }
 
-    /*
-     * @Inject
-     * Instance<CheckShellCommandExistsTask> checkCmd;
-     * 
-     * @SuppressWarnings("UnusedReturnValue")
-     * protected Task checkCmd(String executable, Map<OS, String[]> fixMap) {
-     * var checkTask = withInput(checkCmd, ShellInput.cmd, executable);
-     * var installTask = tasks.shellTask(OS.get(fixMap));
-     * return retry(checkTask, installTask);
-     * }
-     * 
-     * protected void checkCommands(ClusterProfile profile) {
-     * if (profile.ccoctl) {
-     * checkCmd("ccoctl", Map.of(OS.linux, OCPCommands.INSTALL_CCOCTL));
-     * }
-     * checkCmd("openshift-install", Map.of(OS.linux,
-     * OCPCommands.INSTALL_OPENSHIFT_INSTALL));
-     * }
-     * 
-     * @Inject
-     * Instance<RetryTask> retry;
-     * 
-     * protPcted Task retry(Task theMainTask, Task theFixTask) {
-     * var retryTask = retry.get()
-     * .withInput(CJInput.task, theMainTask)
-     * .withInput(fixTask, theFixTask);
-     * return submit(retryTask);
-     * }
-     * 
-     */
+    @Inject
+    Instance<CheckShellCommandExistsTask> checkCmd;
+
+    @Inject
+    Instance<RetryTask> retry;
+
+    @SuppressWarnings("UnusedReturnValue")
+    public Task checkCmd(String executable, Map<OS, String[]> fixMap) {
+        var checkTask = checkCmd.get().withInput(ShellInput.cmd, executable);
+        var installTask = shellTask(OS.get(fixMap));
+        return retry(checkTask, installTask);
+    }
+    public Task retry(Task theMainTask, Task theFixTask) {
+      var retryTask = retry.get()
+        .withInput(CJInput.task, theMainTask)
+        .withInput(CJInput.fixTask, theFixTask);
+      return submit(retryTask);
+     }
 }

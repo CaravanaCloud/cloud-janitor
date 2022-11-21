@@ -40,12 +40,21 @@ public class OpenshiftCreateClusterTask extends BaseTask {
             debug("Using cluster dir {}", clusterDir);
         var credsDir = FSUtils.resolve(clusterDir, "ccoctl-creds");
         var outputDir = FSUtils.resolve(clusterDir, "ccoctl-output");
-        // TODO: checkCommands(clusterProfile);
+        checkCommands(clusterProfile);
         var data = getInputsMap();
         preCreate(clusterName, clusterDir, credsDir, outputDir, clusterProfile, data);
         createCluster(clusterName, clusterDir);
         debug("ocp-create-cluster done");
     }
+
+    protected void checkCommands(ClusterProfile profile) {
+        if (profile.ccoctl) {
+            tasks.checkCmd("ccoctl", Map.of(OS.linux, OCPCommands.INSTALL_CCOCTL));
+        }
+        tasks.checkCmd("openshift-install", Map.of(OS.linux,
+                OCPCommands.INSTALL_OPENSHIFT_INSTALL));
+    }
+
 
     private void createCluster(String clusterName, Path clusterDir) {
         var tip = "tail -f " + clusterDir.resolve(".openshift_install.log").toAbsolutePath();
