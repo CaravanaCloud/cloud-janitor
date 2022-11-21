@@ -1,12 +1,12 @@
 # Cloud Janitor
 
-TL;DR: A collection of scripts to automate tasks in cloud computing, like create clusters or cleanup accounts.
+TL;DR: A convenience tool to automate operations in cloud computing, like creating clusters or cleaning up accounts.
 
-For example, in a 'create-cluster' task, cloud-janitor should execute all the commands or scripts necessary to validate and backup configuration,
+For example, consider a 'create-cluster' task. Cloud janitor will lookup reasonable defaults, validate and backup configuration,
 install dependencies, create account-level resources, create cluster-level resources, wait for health check, install plugins and verify the application. 
 All that from a single invocation, using a command line like `cloud-janitor -t openshift-create-cluster` or the equivalent inside a container, github action or gitpod.io workspace.
 
-Start you gitpod worspace by visiting:
+Start you gitpod worspace in the link below and try `cloud-jantor --help`:
 https://gitpod.io/#github.com/CaravanaCloud/cloud-janitor
 
 ## Motivation
