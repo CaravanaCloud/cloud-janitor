@@ -1,3 +1,4 @@
+# docker build --pull --no-cache --tag cloud-janitor:latest .
 # ARG UBI=ghcr.io/graalvm/graalvm-ce:latest
 # ARG UBI=quay.io/quarkus/ubi-quarkus-native-image:22.0-java17
 # ARG UBI=registry.access.redhat.com/ubi8/ubi-minimal
