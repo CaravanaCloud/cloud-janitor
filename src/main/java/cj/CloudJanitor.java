@@ -1,12 +1,9 @@
 package cj;
 
 import io.quarkus.runtime.LaunchMode;
-import io.quarkus.runtime.Quarkus;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
-
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 import io.quarkus.runtime.QuarkusApplication;
@@ -26,16 +23,11 @@ public class CloudJanitor implements QuarkusApplication {
     @Inject
     LaunchMode launchMode;
 
-    @Inject
-    ExecutorService executor;
-
     @Override
     public int run(String... args) throws Exception {
         log.trace("CloudJanitor.run(...)");
         try {
             tasks.run();
-//            log.debug("Quarkus wait for exit...");
-//            Quarkus.waitForExit();
         } catch (Exception e) {
             e.printStackTrace();
             log.error("CloudJanitor.run() failed", e);
@@ -61,23 +53,12 @@ public class CloudJanitor implements QuarkusApplication {
         var pool = ForkJoinPool.commonPool();
         var threadCount = pool.getActiveThreadCount();
         log.debug("Waiting for {} common pool threads to finish.", threadCount);
-        pool.awaitQuiescence(60, TimeUnit.MINUTES);
+        var quiescent = pool.awaitQuiescence(60, TimeUnit.MINUTES);
+        log.trace("Quiescent: {}", quiescent);
         // executor
         // log.debug("Waiting for executor ");
         // awaitTerminationAfterShutdown(executor);
         log.info("Cloud Janitor stopped.");
-    }
-
-    public static void awaitTerminationAfterShutdown(ExecutorService threadPool) {
-        threadPool.shutdown();
-        try {
-            if (!threadPool.awaitTermination(60, TimeUnit.MINUTES)) {
-                threadPool.shutdownNow();
-            }
-        } catch (InterruptedException ex) {
-            threadPool.shutdownNow();
-            Thread.currentThread().interrupt();
-        }
     }
 
 }

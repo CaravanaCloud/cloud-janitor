@@ -16,14 +16,14 @@ public class DeleteNetworkInterface extends AWSWrite {
         var eni = getInput(targetNetworkInterface, NetworkInterface.class);
         var eniId = eni.networkInterfaceId();
         if(canDelete(eni))
-            try {
+            try (var ec2 = aws().ec2()){
                 debug("Deleting ENI {} {}", eniId,
                         name(eni),
                         eni.status());
                 var request = DeleteNetworkInterfaceRequest.builder()
                         .networkInterfaceId(eni.networkInterfaceId())
                         .build();
-                aws().ec2().deleteNetworkInterface(request);
+                ec2.deleteNetworkInterface(request);
             } catch (Exception ex){
                 error("Failed to delete ENI {}", eniId);
                 throw new RuntimeException(ex);
@@ -35,6 +35,7 @@ public class DeleteNetworkInterface extends AWSWrite {
 
     private String name(NetworkInterface resource) {
         var tags = resource.tagSet();
+        @SuppressWarnings("all")
         var name = tags.stream()
                 .filter(t -> "Name".equals(t.key()))
                 .map(t -> t.value())
@@ -47,14 +48,15 @@ public class DeleteNetworkInterface extends AWSWrite {
         var req = DescribeNetworkInterfacesRequest.builder()
                 .networkInterfaceIds(resource.networkInterfaceId())
                 .build();
-        try{
-            var describe = aws().ec2(getRegion())
+        try(var ec2= aws().ec2()){
+            var describe = ec2
                     .describeNetworkInterfaces(req)
                     .networkInterfaces();
             if (! describe.isEmpty()){
                 var eni = describe.get(0);
                 var status = eni.status().toString();
                 debug("ENI {} still exists with status {}", eni.networkInterfaceId(), status);
+                @SuppressWarnings("all")
                 boolean result = switch (status) {
                     case "detaching" -> false;
                     default -> true;
