@@ -3,6 +3,7 @@ package cj;
 import cj.fs.FSUtils;
 import cj.ocp.CapabilityNotFoundException;
 import cj.qute.GlobalQuoteEngine;
+import cj.qute.Templates;
 import cj.shell.CheckShellCommandExistsTask;
 import cj.shell.ShellInput;
 import cj.shell.ShellTask;
@@ -47,6 +48,9 @@ public class BaseTask implements Task {
     // TODO move to task inputs
     @Inject
     Inputs inputss;
+
+    @Inject
+    Templates templates;
 
     /* Submits a delegate task for execution */
     public Task submit(Task delegate) {
@@ -358,24 +362,7 @@ public class BaseTask implements Task {
     }
 
     protected Template getTemplate(String location) {
-        var engine = tasks.engine;
-        if (engine == null) {
-            error("Failed to inject template engine");
-            engine = GlobalQuoteEngine.engine;
-            if (engine == null) {
-                throw new RuntimeException("Failed to lookup template engine");
-            }
-        }
-        if (location == null) {
-            error("Template requested for null location");
-            throw new IllegalArgumentException("Template requested for null location");
-        }
-        try {
-            return engine.getTemplate(location);
-        } catch (Exception ex) {
-            error("Failed to get template engine for {}", location);
-            throw new RuntimeException(ex);
-        }
+        return templates.getTemplate(location);
     }
 
     protected Map<String, String> getInputsMap() {
@@ -414,4 +401,14 @@ public class BaseTask implements Task {
         return getClass().getPackageName().replaceAll("cj.", "");
     }
 
+    protected void checkpoint(String message){
+        var sleep = config.checkpointSleep();
+        debug("Checkpoint [{}s]: {}", sleep ,message);
+        try {
+            Thread.sleep(sleep * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -53,6 +53,10 @@ public interface Configuration {
     @WithDefault("false")
     boolean parallel();
 
+    @WithName("checkpointSleep")
+    @WithDefault("5")
+    long checkpointSleep();
+
     default Path getApplicationPath(){
         var home = System.getProperty("user.home");
         var homePath = Path.of(home);

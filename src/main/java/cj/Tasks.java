@@ -56,7 +56,7 @@ public class Tasks {
     Instance<ShellTask> shellInstance;
 
     @Inject
-    Engine engine;
+    Instance<Engine> engine;
 
     public void run() {
         log.trace("Tasks.run()");

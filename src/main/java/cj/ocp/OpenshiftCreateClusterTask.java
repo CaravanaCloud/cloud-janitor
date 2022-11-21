@@ -43,6 +43,7 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         checkCommands(clusterProfile);
         var data = getInputsMap();
         preCreate(clusterName, clusterDir, credsDir, outputDir, clusterProfile, data);
+
         createCluster(clusterName, clusterDir);
         debug("ocp-create-cluster done");
     }
@@ -60,6 +61,7 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         var tip = "tail -f " + clusterDir.resolve(".openshift_install.log").toAbsolutePath();
         debug(tip);
         expectCapability(Capabilities.CLOUD_CREATE_INSTANCES);
+        checkpoint("Creating openshift cluster using openshift-install");
         var output = tasks.exec(90L, "openshift-install",
                 "create",
                 "cluster",
