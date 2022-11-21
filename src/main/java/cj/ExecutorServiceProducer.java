@@ -13,11 +13,8 @@ import java.util.concurrent.Executors;
 @Singleton
 @Startup
 public class ExecutorServiceProducer {
-<<<<<<< HEAD
-=======
     @Inject
     Logger log;
->>>>>>> 7b1c21a (1.3.7 - Improved initialization)
     private static ExecutorService pool;
 
     @Produces
@@ -25,11 +22,7 @@ public class ExecutorServiceProducer {
         if (pool == null) {
             pool = Executors.newWorkStealingPool();
         }
-<<<<<<< HEAD
-        System.out.println("Asked for new ExecutorService, returning singleton.");
-=======
         log.debug("Asked for new ExecutorService, returning singleton.");
->>>>>>> 7b1c21a (1.3.7 - Improved initialization)
         return pool;
     }
 }
