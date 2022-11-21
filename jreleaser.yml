@@ -1,6 +1,6 @@
 project:
   name: cloud-janitor
-  version: 1.3.6
+  version: 1.3.7
   description: Cloud Janitor
   longDescription: Automating cleanup, maintenance and troubleshooting tasks in Cloud Computing
   links:

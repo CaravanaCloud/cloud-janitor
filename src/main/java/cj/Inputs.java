@@ -1,6 +1,7 @@
 package cj;
 
 import io.quarkus.runtime.Startup;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -14,12 +15,14 @@ import java.util.function.Supplier;
 @Startup
 public class Inputs {
     @Inject
+    Logger log;
+    @Inject
     Configuration configuration;
 
     Map<Input, InputConfig> inputConfigs = new HashMap<>();
 
     public Inputs(){
-        System.out.println("Inputs()");
+        log.debug("Creating new inputs mapping");
     }
     public Inputs putConfig(Input input,
                             String configKey,
