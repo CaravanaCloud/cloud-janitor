@@ -5,6 +5,8 @@ import cj.Input;
 public enum ShellInput implements Input {
     cmd,
     cmds,
-    timeout;
+    timeout,
+    dryRun;
+
     public static final Long DEFAULT_TIMEOUT_MINS = 5L;
 }

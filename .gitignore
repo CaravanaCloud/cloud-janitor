@@ -30,8 +30,6 @@ hs_err_pid*
 .idea/
 .idea
 
-.vscode
-
 target
 tasktree.csv
 

@@ -34,58 +34,46 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         var clusterProfile = getInput(OCPInput.clusterProfile, ClusterProfile.class);
         debug("creating cluster [{}] with profile [{}]", clusterName, clusterProfile);
         var clusterDir = getClusterDir(clusterName);
-        if (! FSUtils.isEmptyDir(clusterDir))
+        if (!FSUtils.isEmptyDir(clusterDir))
             throw fail("Cluster directory already exists %s ", clusterDir);
         else
             debug("Using cluster dir {}", clusterDir);
         var credsDir = FSUtils.resolve(clusterDir, "ccoctl-creds");
         var outputDir = FSUtils.resolve(clusterDir, "ccoctl-output");
-        checkCommands(clusterProfile);
+        // TODO: checkCommands(clusterProfile);
         var data = getInputsMap();
         preCreate(clusterName, clusterDir, credsDir, outputDir, clusterProfile, data);
         createCluster(clusterName, clusterDir);
         debug("ocp-create-cluster done");
     }
+
     private void createCluster(String clusterName, Path clusterDir) {
-        var tip = "tail -f "+ clusterDir.resolve(".openshift_install.log").toAbsolutePath();
+        var tip = "tail -f " + clusterDir.resolve(".openshift_install.log").toAbsolutePath();
         debug(tip);
         expectCapability(Capabilities.CLOUD_CREATE_INSTANCES);
-        var output = exec(90L, "openshift-install",
+        var output = tasks.exec(90L, "openshift-install",
                 "create",
                 "cluster",
                 "--dir=" + clusterDir,
                 "--log-level=debug");
-        if (output.isPresent()){
+        if (output.isPresent()) {
             logger().debug("openshift-install output: {}", output.get());
-        }else{
+        } else {
             throw fail("openshift-install failed.");
         }
     }
 
-    private void preCreate(String clusterName, Path clusterDir, Path credsDir, Path outputDir, ClusterProfile profile, Map<String, String> configData) {
+    private void preCreate(String clusterName, Path clusterDir, Path credsDir, Path outputDir, ClusterProfile profile,
+            Map<String, String> configData) {
         debug("Preparing to create cluster {} with profile {}", clusterName, profile);
-        if (profile.ccoctl){
+        if (profile.ccoctl) {
             createAllCcoctlResources(clusterName, credsDir, outputDir);
         }
         createInstallConfigFromTemplate(clusterDir, clusterName, profile, configData);
     }
 
-    //TODO: Avoid prompts
-    @SuppressWarnings("unused")
-    private void createDefaultInstallConfig(Path clusterDir, String clusterName) {
-        var output = exec( "openshift-install",
-                "create",
-                "install-config",
-                "--dir=" + clusterDir,
-                "--log-level=debug");
-        if (output.isPresent()){
-            logger().debug("openshift create install-config output: {}", output.get());
-        }else{
-            throw fail("openshift create install-config failed.");
-        }
-    }
-
-    private void createInstallConfigFromTemplate(Path clusterDir, String clusterName, ClusterProfile profile, Map<String, String> configData) {
+    private void createInstallConfigFromTemplate(Path clusterDir, String clusterName, ClusterProfile profile,
+            Map<String, String> configData) {
         var location = "ocp/%s/install-config.yaml".formatted(profile);
         var installConfigTemplate = getTemplate(location);
         String installConfig = installConfigTemplate
@@ -95,7 +83,7 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         FSUtils.writeFile(installConfigPath, installConfig);
         Path backupConfigPath = clusterDir.resolve("install-config.bak.yaml");
         FSUtils.writeFile(backupConfigPath, installConfig);
-        debug("Wrote [{}] install-config.yaml [{}] to {}", profile, installConfig.length() ,installConfigPath);
+        debug("Wrote [{}] install-config.yaml [{}] to {}", profile, installConfig.length(), installConfigPath);
     }
 
     private Path getClusterDir(String clusterName) {
@@ -105,27 +93,21 @@ public class OpenshiftCreateClusterTask extends BaseTask {
     }
 
     private void createAllCcoctlResources(String clusterName,
-                                          Path credsDir,
-                                          Path outputDir) {
-        var ccoctlExec = exec("ccoctl",
+            Path credsDir,
+            Path outputDir) {
+        var ccoctlExec = tasks.exec("ccoctl",
                 "aws",
                 "create-all",
-                "--name="+clusterName,
-                "--region="+inputString(OCPInput.awsRegion),
-                "--credentials-requests-dir="+credsDir.toString(),
-                "--output-dir="+outputDir);
+                "--name=" + clusterName,
+                "--region=" + inputString(OCPInput.awsRegion),
+                "--credentials-requests-dir=" + credsDir.toString(),
+                "--output-dir=" + outputDir);
 
-        if (ccoctlExec.isPresent()){
+        if (ccoctlExec.isPresent()) {
             logger().debug("ccoctl output: {}", ccoctlExec.get());
-        }else{
+        } else {
             throw fail("ccoctl failed.");
         }
     }
 
-    protected void checkCommands(ClusterProfile profile) {
-        if(profile.ccoctl) {
-            checkCmd("ccoctl", Map.of(OS.linux, OCPCommands.INSTALL_CCOCTL));
-        }
-        checkCmd("openshift-install", Map.of(OS.linux, OCPCommands.INSTALL_OPENSHIFT_INSTALL));
-    }
 }
