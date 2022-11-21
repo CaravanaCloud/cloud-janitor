@@ -10,7 +10,11 @@ import picocli.CommandLine;
 public class Main {
     public static void main(String[] args) {
         int exitCode = new CommandLine(new CommandJanitor()).execute(args);
-        System.out.println("[Main] Command line parsed, exit code: " + exitCode);
+        if (exitCode == 0) {
+            System.out.println("[Main] Command line parsed, exit code");
+        } else {
+            System.out.println("[Main] Command line failed to parse.");
+        }
         Quarkus.run(CloudJanitor.class, args);
         System.out.println("[Main] Quarkus run() returned, exiting main().");
     }

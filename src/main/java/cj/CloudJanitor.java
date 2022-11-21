@@ -34,8 +34,8 @@ public class CloudJanitor implements QuarkusApplication {
         log.trace("CloudJanitor.run(...)");
         try {
             tasks.run();
-            log.debug("Quarkus wait for exit...");
-            Quarkus.waitForExit();
+//            log.debug("Quarkus wait for exit...");
+//            Quarkus.waitForExit();
         } catch (Exception e) {
             e.printStackTrace();
             log.error("CloudJanitor.run() failed", e);
