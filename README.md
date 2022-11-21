@@ -9,31 +9,31 @@ All that from a single invocation, using a command line like `cloud-janitor -t o
 Start you gitpod worspace in the link below and try `cloud-jantor --help`:
 https://gitpod.io/#github.com/CaravanaCloud/cloud-janitor
 
-## Motivation
+## Features
 
 As developers and sysadmins we are used to building scripts and solutions to automate tasks. 
 However, sharing those solutions can be difficult as they are executed in different machines and contexts.
 This often leads to a lot of duplication of effort and code to perform the same tasks, such as creating clusters or cleaning up accounts.
 
-Cloud Janitor is a tool to automate and share complex maintenance and troubleshooting tasks in cloud computing. 
-It's built considering the security and flexibility requirements found in operating real-world production workloads.
+**Intent Resolution**
+Tasks will look up reasonable defaults, using well-known tools and patterns. 
+For example, a "create-cluster" identify the cluster provider from the system configuration and generate reasonable defaults, including the cluster name. 
 
-In cloud computing, many responsibilities are shared between the provider and the consumer of services. 
-This tool's goal is to share automations that customers and partners frequently need to build themselves, often with minimal differences.
+**Improved Security**
+Sensitive outputs, such as administrator passwords, can be filtered out of output and stored in a secure location.
+All sensitive operations are protected by a capability toggle and can be easily disabled for dry runs.
 
-A key automation in this context is "cleaning up" an AWS account, for example. That will be a bit different in each environment, but it's all about filtering and deleting (or replacing) resources. Here's how our features can help:
+**Easy to Run and Configure**
+All settings are exposed as environment variables, yaml and others, as supported by [Quarkus and Smallrye Config](https://quarkus.io/guides/config). Code can be executed as a command line, jar package, container image, github action. Ansible and other tools to be added in future releases.
 
-**Easy to Run and Configure** - All settings are exposed as environment variables and code can run as CLI, jar, container, github action or your preferred CI/CD tool.
+**Resource Filtering & Resolution**
+Only the matched resources, and their dependents, are affected.
 
-**Simple to customize and extend** - Take custom actions, such as scale down or notify, instead of delete.
+**Logs & Reporting**
+Keep a record of invocations and their results for queries, visualization and audits.
 
-**Defensive Defaults** - No writes are executed unless the "dry run" setting is explicitly disabled.
-
-**Resource Filtering** - Only the matched resources, and their dependents, are deleted.
-
-**Logs & Reporting** - Keep a record of invocations and their results for queries, visualization and audits.
-
-**Rate Limiting** - API limits and throttling are respected with backoffs.
+**Rate Limiting**
+Respect API limits and throttling with backoffs and timeouts.
 
 Cloud Janitor is also built to be easily extensible and contributions are most welcome!
 
