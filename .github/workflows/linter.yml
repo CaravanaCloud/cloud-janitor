@@ -50,6 +50,7 @@ jobs:
       - name: Lint Code Base
         uses: github/super-linter@v4
         timeout-minutes: 30
+        continue-on-error: true
         env:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
