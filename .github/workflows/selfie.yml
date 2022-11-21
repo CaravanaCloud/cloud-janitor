@@ -1,0 +1,19 @@
+---
+name: Run cloud-janitor
+
+on:
+  workflow_dispatch: { }
+  push:
+    branches:
+      - "**"
+
+jobs:
+  build:
+    name: Cloud Janitor Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Cloud Janitor
+        uses: CaravanaCloud/cloud-janitor@v1.4.0
