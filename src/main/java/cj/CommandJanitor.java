@@ -8,7 +8,10 @@ import picocli.CommandLine;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(version = "1.4.0", mixinStandardHelpOptions = true, name = "cloud-janitor", description = "Cloud Janitor at your service.")
+@CommandLine.Command(version = "1.4.0",
+        mixinStandardHelpOptions = true,
+        name = "cloud-janitor",
+        description = "Cloud Janitor at your service.")
 public class CommandJanitor implements Callable<Integer> {
     private static final Logger log = LoggerFactory.getLogger(CommandJanitor.class);
 
@@ -16,22 +19,31 @@ public class CommandJanitor implements Callable<Integer> {
     @CommandLine.Option(names = { "-t", "--task" }, description = "task to be executed. Try '-t hello'")
     String taskName;
 
-    @CommandLine.Option(names = { "-i", "--input" }, description = "input parameters for the task, repeatable.")
+    @CommandLine.Option(names = { "-i", "--input" },
+            description = "input parameters for the task, repeatable.")
     List<String> input;
 
-    @CommandLine.Option(names = { "-c", "--capabilities" }, description = "feature toggles (try -c 'all').")
+    @CommandLine.Option(names = { "-c", "--capabilities" },
+            description = "feature toggles (try -c 'all').")
     String capabilities;
 
-    @CommandLine.Option(names = { "-l", "--log-level" }, description = "log level (try -l 'debug').")
+    @CommandLine.Option(names = { "-l", "--log-level" },
+            description = "log level (try -l 'debug').")
     String logLevel;
 
-    @CommandLine.Option(names = { "-v", "--version" }, description = "show version and exit.")
+    @CommandLine.Option(names = { "-v", "--version" },
+            versionHelp = true,
+            description = "show version and exit.")
     Boolean showVersion;
 
-    @CommandLine.Option(names = { "-h", "--help" }, description = "show help and exit.")
+    @CommandLine.Option(names = { "-h", "--help" },
+            usageHelp = true,
+            description = "show help for arguments and tasks.")
     Boolean showHelp;
 
-    public CommandJanitor() {
+    private static final CommandJanitor instance = new CommandJanitor();
+    public static CommandJanitor of() {
+        return instance;
     }
 
     @SuppressWarnings("RedundantThrows")
@@ -41,7 +53,8 @@ public class CommandJanitor implements Callable<Integer> {
         return 0;
     }
 
-    private void parseArgs() {
+
+    public void parseArgs() {
         trySetProperty("quarkus.log.console.level", logLevel);
         trySetProperty("cj.task", taskName);
         trySetProperty("cj.capabilities", capabilities);
@@ -78,4 +91,8 @@ public class CommandJanitor implements Callable<Integer> {
         }
     }
 
+
+    public CommandLine commandLine() {
+        return new CommandLine(this);
+    }
 }

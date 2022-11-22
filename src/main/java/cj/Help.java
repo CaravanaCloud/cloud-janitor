@@ -11,19 +11,29 @@ public class Help {
     Tasks tasks;
 
     @Inject
+    Configuration config;
+
+    @Inject
     Logger log;
 
     public void showHelp() {
         var msg = new StringBuilder();
         msg.append("\n=== Cloud Janitor Help ===");
-        msg.append("\nHere are all the tasks you can run, using -t <task-name>, setting CJ_TASK or equivalent configuration.");
-        var taskConfigs = tasks.findAll();
+
+        var taskConfigs = tasks.findAll().stream();
+        var configTask = config.task();
+        if (configTask.isPresent()){
+            var task = configTask.get();
+            taskConfigs = taskConfigs.filter(t -> t.name().equals(task));
+        } else {
+            msg.append("\nHere are all the tasks you can run, using -t <task-name>, setting CJ_TASK or equivalent configuration.");
+        }
         taskConfigs.forEach(tc -> this.showConfig(tc, msg));
         log.info(msg.toString());
     }
 
     private void showConfig(TaskConfiguration task, StringBuilder msg) {
-        msg.append("\n\n== Task ");
+        msg.append("\n== Task ");
         msg.append("\nname: %s".formatted(task.name()));
         msg.append("\ndescription: %s".formatted(task.description()));
         msg.append("\nmaturity: %s".formatted(task.maturityLevel()));

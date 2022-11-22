@@ -61,6 +61,7 @@ public class Tasks {
         log.trace("Tasks.run()");
         log.debug("Capabilities: {}", getCapabilities());
         log.debug("Parallel: {}", config.parallel());
+
         var task = config.task();
         task.ifPresent(this::run);
         var tasks = config.tasks();

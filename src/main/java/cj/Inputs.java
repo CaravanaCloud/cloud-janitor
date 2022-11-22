@@ -31,7 +31,7 @@ public class Inputs {
     @PostConstruct
     @SuppressWarnings("unused")
     public void init(){
-        log.info("Initializing input mappings.");
+        log.debug("Initializing input mappings.");
     }
     public Inputs putConfig(Input input,
                             String configKey,
