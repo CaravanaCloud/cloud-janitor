@@ -2,13 +2,8 @@ package cj;
 
 import cj.fs.FSUtils;
 import cj.ocp.CapabilityNotFoundException;
-import cj.qute.GlobalQuoteEngine;
 import cj.qute.Templates;
-import cj.shell.CheckShellCommandExistsTask;
-import cj.shell.ShellInput;
-import cj.shell.ShellTask;
 import cj.spi.Task;
-import io.quarkus.qute.Engine;
 import io.quarkus.qute.Template;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +18,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static cj.CJInput.dryRun;
-import static cj.CJInput.fixTask;
 import static cj.Errors.Type;
 import static cj.Errors.Type.Message;
-import static cj.shell.ShellInput.*;
 
 @Dependent
 public class BaseTask implements Task {
@@ -215,12 +207,13 @@ public class BaseTask implements Task {
 
     @SuppressWarnings("all")
     public <T> T getInput(Input key, Class<T> inputClass) {
-        @SuppressWarnings("unchecked")
         var result = input(key);
         if (result.isEmpty()) {
             throw new IllegalArgumentException("Failed to resolve expected input " + key);
         }
-        return (T) result.get();
+        @SuppressWarnings("unchecked")
+        T t = (T) result.get();
+        return t;
     }
 
     public String matchMark(boolean match) {
@@ -367,7 +360,7 @@ public class BaseTask implements Task {
 
     protected Map<String, String> getInputsMap() {
         @SuppressWarnings("redundant")
-        var inputsMap = getExpectedInputs()
+        var inputsMap = inputss.getExpectedInputs(this)
                 .stream()
                 .collect(Collectors.toMap(
                         Input::toString,
@@ -401,7 +394,7 @@ public class BaseTask implements Task {
         return getClass().getPackageName().replaceAll("cj.", "");
     }
 
-    protected void checkpoint(String message){
+    protected void checkpoint(@SuppressWarnings("SameParameterValue") String message){
         var sleep = config.checkpointSleep();
         debug("Checkpoint [{}s]: {}", sleep ,message);
         try {

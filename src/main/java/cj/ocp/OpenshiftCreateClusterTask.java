@@ -6,7 +6,6 @@ import cj.fs.FSUtils;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Map;
 
 import static cj.TaskMaturity.Level.experimental;
@@ -15,18 +14,14 @@ import static cj.TaskMaturity.Level.experimental;
 @Named("openshift-create-cluster")
 @TaskDescription("Creates an OpenShift cluster")
 @TaskMaturity(experimental)
+@ExpectedInputs({"clusterName",
+        "baseDomain",
+        "sshKey",
+        "pullSecret",
+        "awsRegion",
+        "clusterProfile"})
 @SuppressWarnings("unused")
 public class OpenshiftCreateClusterTask extends BaseTask {
-
-    @Override
-    public List<Input> getExpectedInputs() {
-        return List.of(OCPInput.clusterName,
-                OCPInput.baseDomain,
-                OCPInput.sshKey,
-                OCPInput.pullSecret,
-                OCPInput.awsRegion,
-                OCPInput.clusterProfile);
-    }
 
     @Override
     public void apply() {

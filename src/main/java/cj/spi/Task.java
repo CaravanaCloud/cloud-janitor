@@ -160,10 +160,6 @@ public interface Task {
         return getErrors().isEmpty();
     }
 
-    default List<Input> getExpectedInputs() {
-        return List.of();
-    }
-
     default Optional<Object> input(Input key) {
         return Optional.empty();
     }

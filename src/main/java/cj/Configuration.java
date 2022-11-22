@@ -41,7 +41,7 @@ public interface Configuration {
     ReportConfiguration report();
 
     @WithName("tasks")
-    List<TaskConfiguration>  tasks();
+    Optional<List<String>>  tasks();
 
     @WithName("task")
     Optional<String> task();

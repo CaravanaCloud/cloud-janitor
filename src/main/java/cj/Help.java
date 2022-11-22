@@ -20,10 +20,17 @@ public class Help {
     }
 
     private void showConfig(TaskConfiguration task) {
-        String msg = "\n== Task " +
-                "\nname: %s".formatted(task.name()) +
-                "\ndescription: %s".formatted(task.description()) +
-                "\nmaturity: %s".formatted(task.maturityLevel());
-        log.info(msg);
+        StringBuilder msg = new StringBuilder();
+        msg.append("\n== Task ");
+        msg.append("\nname: %s".formatted(task.name()));
+        msg.append("\ndescription: %s".formatted(task.description()));
+        msg.append("\nmaturity: %s".formatted(task.maturityLevel()));
+        task.inputs().forEach(input -> {
+            msg.append("\n    input: %s".formatted(input.input().toString()));
+            msg.append("\n  yml key: %s".formatted(input.configKey()));
+            msg.append("\n  env var: %s".formatted(input.getEnvVarName()));
+            msg.append("\n");
+        });
+        log.info(msg.toString());
     }
 }

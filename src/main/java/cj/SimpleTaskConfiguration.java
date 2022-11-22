@@ -1,13 +1,13 @@
 package cj;
 
 
+import java.util.List;
+
 public record SimpleTaskConfiguration(
         String name,
         String description,
-        String maturityLevel)
+        String maturityLevel,
+        List<InputConfig> inputs)
         implements TaskConfiguration {
 
-    public static TaskConfiguration of(String taskName) {
-        return new SimpleTaskConfiguration(taskName, null, null);
-    }
 }
