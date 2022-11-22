@@ -349,6 +349,7 @@ public class Tasks {
                 .stream()
                 .map(beans::configFromBean)
                 .filter(Objects::nonNull)
+                .sorted(Comparator.comparing(TaskConfiguration::name))
                 .toList();
         return tasks;
      }

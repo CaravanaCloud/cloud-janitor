@@ -1,5 +1,6 @@
 package cj.aws.transx;
 
+import cj.TaskDescription;
 import cj.aws.AWSWrite;
 import cj.aws.s3.GetDataBucketTask;
 import cj.fs.FilterLocalVideos;
@@ -23,6 +24,8 @@ import static cj.Output.local.FilesMatch;
 
 @Named("aws-transcribe-videos")
 @Dependent
+@TaskDescription("Transcribe videos from local directory")
+@SuppressWarnings("unused")
 public class TranscribeVideosTask extends AWSWrite {
     @Inject
     FilterLocalVideos filterFiles;
@@ -58,70 +61,77 @@ public class TranscribeVideosTask extends AWSWrite {
     }
 
     private void download(Transcription tc) {
-        var s3tx = aws().s3tm();
-        var job = tc.transcriptionJob;
-        var transcriptUri = job.transcript().transcriptFileUri();
-        var srtPath = tc.getOutputSrtFilePath();
-        var download = s3tx.downloadFile(b -> b.destination(srtPath)
-                        .getObjectRequest(req -> req.bucket(tc.bucketName)
-                                .key(tc.getOutputSrtKey())));
-        download.completionFuture().join();
-        debug("Transcription downloaded. {}", srtPath.toAbsolutePath().toString());
+        try(var s3tx = aws().s3tm()) {
+            var job = tc.transcriptionJob;
+            var transcriptUri = job.transcript().transcriptFileUri();
+            var srtPath = tc.getOutputSrtFilePath();
+            var download = s3tx.downloadFile(b -> b.destination(srtPath)
+                    .getObjectRequest(req -> req.bucket(tc.bucketName)
+                            .key(tc.getOutputSrtKey())));
+            download.completionFuture().join();
+            debug("Transcription downloaded. {}", srtPath.toAbsolutePath().toString());
+        }
     }
 
     private void awaitTranscribe(Transcription tc) {
         awaitUntil(() -> transcriptionCompleted(tc));
     }
 
-
-
     private boolean transcriptionCompleted(Transcription tc) {
-        var transcribe = aws().transcribe();
-        var req = GetTranscriptionJobRequest.builder()
-                .transcriptionJobName(tc.transcriptionJobName())
-                .build();
-        var job = aws().transcribe().getTranscriptionJob(req).transcriptionJob();
-        var completionTime = job.completionTime();
-        var completed = completionTime != null;
-        debug("Waiting for transcription to complete. Completed {} ? {}" , tc.transcriptionJobName(), completed);
-        tc.transcriptionJob = job;
-        return completed;
+        try(var transcribe = aws().transcribe()) {
+            var req = GetTranscriptionJobRequest.builder()
+                    .transcriptionJobName(tc.transcriptionJobName())
+                    .build();
+            var job = transcribe.getTranscriptionJob(req).transcriptionJob();
+            var completionTime = job.completionTime();
+            var completed = completionTime != null;
+            debug("Waiting for transcription to complete. Completed {} ? {}", tc.transcriptionJobName(), completed);
+            tc.transcriptionJob = job;
+            return completed;
+        }
     }
 
     private void requestTranscribe(Transcription tc) {
-        var transcribe = aws().transcribe();
-        var jobName = tc.transcriptionJobName();
-        var req = StartTranscriptionJobRequest.builder()
-                .transcriptionJobName(jobName)
-                .media(Media.builder()
-                        .mediaFileUri(tc.sourceMediaUri())
-                        .build())
-                .identifyLanguage(true)
-                .outputBucketName(tc.bucketName)
-                .outputKey(tc.getOutputKey())
-                .subtitles(Subtitles.builder()
-                        .formats(SubtitleFormat.SRT)
-                        .build())
-                .build();
-        var job = transcribe.startTranscriptionJob(req).transcriptionJob();
-        tc.transcriptionJob = job;
-        info("Transcription job started {}", job.transcriptionJobName());
+        try (var transcribe = aws().transcribe()){
+            var jobName = tc.transcriptionJobName();
+            var req = StartTranscriptionJobRequest.builder()
+                    .transcriptionJobName(jobName)
+                    .media(Media.builder()
+                            .mediaFileUri(tc.sourceMediaUri())
+                            .build())
+                    .identifyLanguage(true)
+                    .outputBucketName(tc.bucketName)
+                    .outputKey(tc.getOutputKey())
+                    .subtitles(Subtitles.builder()
+                            .formats(SubtitleFormat.SRT)
+                            .build())
+                    .build();
+            var job = transcribe.startTranscriptionJob(req).transcriptionJob();
+            tc.transcriptionJob = job;
+            info("Transcription job started {}", job.transcriptionJobName());
+        }
     }
 
 
     private void putObject(Transcription tc) {
-        var s3 = aws().s3tm();
-        var bucketName = getDataBucket.outputAs(S3Bucket, Bucket.class).map(Bucket::name).get();
-        var path = tc.sourcePath;
-        var objKey = path.getFileName().toString();
-        var sourceKey = prefix+objKey;
-        var upload = s3.uploadFile(b -> b.source(path)
-                .putObjectRequest(r -> r.bucket(bucketName).key(sourceKey) ) );
-        var completeUpload = upload.completionFuture().join();
-        var objUrl = "s3://%s/%s%s".formatted(bucketName, prefix, objKey);
-        tc.bucketName = bucketName;
-        tc.sourceKey = objKey;
-        debug("Uploaded {} as {} ", path, objUrl);
+        try(var s3 = aws().s3tm()){
+            var bucketIn = getDataBucket.outputAs(S3Bucket, Bucket.class)
+                    .map(Bucket::name);
+            if(bucketIn.isEmpty()){
+                throw new IllegalStateException("No bucket found");
+            }
+            var bucketName = bucketIn.get();
+            var path = tc.sourcePath;
+            var objKey = path.getFileName().toString();
+            var sourceKey = prefix+objKey;
+            var upload = s3.uploadFile(b -> b.source(path)
+                    .putObjectRequest(r -> r.bucket(bucketName).key(sourceKey) ) );
+            var completeUpload = upload.completionFuture().join();
+            var objUrl = "s3://%s/%s%s".formatted(bucketName, prefix, objKey);
+            tc.bucketName = bucketName;
+            tc.sourceKey = objKey;
+            debug("Uploaded {} as {} ", path, objUrl);
+        }
     }
 
     static class Transcription {
@@ -150,10 +160,12 @@ public class TranscribeVideosTask extends AWSWrite {
 
         public String transcriptionJobName(){
             var jobBaseName = sourceKey + "-" +createTime.format(fmt);
+            @SuppressWarnings("VariableTypeCanBeExplicit")
             var jobName = validKey(jobBaseName);
             return jobName;
         }
         public String sourceMediaUri() {
+            @SuppressWarnings("UnnecessaryLocalVariable")
             var uri = "s3://%s/%s%s".formatted(bucketName, prefix, sourceKey);
             return uri;
         }
@@ -163,6 +175,7 @@ public class TranscribeVideosTask extends AWSWrite {
             var filebase = sourceName.substring(0, sourceName.lastIndexOf('.'));
             var langCode = transcriptionJob.languageCode().toString();
             var srtFile = "%s.%s.srt".formatted(filebase, langCode);
+            @SuppressWarnings("UnnecessaryLocalVariable")
             var srtPath = sourcePath.getParent().resolve(srtFile);
             return srtPath;
         }

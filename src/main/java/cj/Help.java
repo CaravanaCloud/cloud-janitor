@@ -14,14 +14,16 @@ public class Help {
     Logger log;
 
     public void showHelp() {
-        log.info("=== Cloud Janitor Help ===");
+        var msg = new StringBuilder();
+        msg.append("\n=== Cloud Janitor Help ===");
+        msg.append("\nHere are all the tasks you can run, using -t <task-name>, setting CJ_TASK or equivalent configuration.");
         var taskConfigs = tasks.findAll();
-        taskConfigs.forEach(this::showConfig);
+        taskConfigs.forEach(tc -> this.showConfig(tc, msg));
+        log.info(msg.toString());
     }
 
-    private void showConfig(TaskConfiguration task) {
-        StringBuilder msg = new StringBuilder();
-        msg.append("\n== Task ");
+    private void showConfig(TaskConfiguration task, StringBuilder msg) {
+        msg.append("\n\n== Task ");
         msg.append("\nname: %s".formatted(task.name()));
         msg.append("\ndescription: %s".formatted(task.description()));
         msg.append("\nmaturity: %s".formatted(task.maturityLevel()));
@@ -31,6 +33,5 @@ public class Help {
             msg.append("\n  env var: %s".formatted(input.getEnvVarName()));
             msg.append("\n");
         });
-        log.info(msg.toString());
     }
 }

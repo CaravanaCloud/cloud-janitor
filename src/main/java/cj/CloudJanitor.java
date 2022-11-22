@@ -72,15 +72,21 @@ public class CloudJanitor implements QuarkusApplication {
         // forceSleep();
         // TODO: Configurable timeout
         // Default fork join pool is used by Quarkus
-        var pool = ForkJoinPool.commonPool();
-        var threadCount = pool.getActiveThreadCount();
-        log.debug("Waiting for {} common pool threads to finish.", threadCount);
-        var quiescent = pool.awaitQuiescence(60, TimeUnit.MINUTES);
-        log.trace("Quiescent: {}", quiescent);
+        waitCommonForkJoinPool();
         // executor
         // log.debug("Waiting for executor ");
         // awaitTerminationAfterShutdown(executor);
         log.info("Cloud Janitor stopped.");
+    }
+
+    private void waitCommonForkJoinPool() {
+        var pool = ForkJoinPool.commonPool();
+        var threadCount = pool.getActiveThreadCount();
+        if(threadCount > 0) {
+            log.debug("Waiting for {} common pool threads to finish.", threadCount);
+            var quiescent = pool.awaitQuiescence(60, TimeUnit.MINUTES);
+            log.trace("Quiescent: {}", quiescent);
+        }
     }
 
 }
