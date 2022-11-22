@@ -6,7 +6,6 @@ import cj.shell.CheckShellCommandExistsTask;
 import cj.shell.ShellInput;
 import cj.shell.ShellTask;
 import cj.spi.Task;
-import io.quarkus.qute.Engine;
 import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +16,8 @@ import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -55,9 +56,6 @@ public class Tasks {
     @Inject
     Instance<ShellTask> shellInstance;
 
-    @Inject
-    Instance<Engine> engine;
-
     public void run() {
         log.trace("Tasks.run()");
         log.debug("Capabilities: {}", getCapabilities());
@@ -81,6 +79,7 @@ public class Tasks {
         }
     }
 
+    @SuppressWarnings("all")
     public Task submitNow(Task task) {
         var thisInputs = task.getInputs();
         var dependencies = task.getDependencies();
@@ -215,7 +214,8 @@ public class Tasks {
 
     private void addTaskByName(List<TaskConfiguration> tasks, String taskName) {
         if (taskName != null && !taskName.isEmpty()) {
-            tasks.add(new SimpleTaskConfiguration(taskName));
+            //TODO: Consider using a map
+            tasks.add(SimpleTaskConfiguration.of(taskName));
         }
     }
 
@@ -358,4 +358,52 @@ public class Tasks {
         .withInput(CJInput.fixTask, theFixTask);
       return submit(retryTask);
      }
+     public List<TaskConfiguration> findAll(){
+        @SuppressWarnings("redundant")
+        var tasks = bm.getBeans(Task.class)
+                .stream()
+                .map(this::configFromBean)
+                .filter(Objects::nonNull)
+                .toList();
+        return tasks;
+     }
+
+    private TaskConfiguration configFromBean(Bean<?> bean) {
+        var name = bean.getName();
+        var taskDescription = getAnnotationValue(bean, TaskDescription.class);
+        var taskMaturity = getAnnotationValue(bean, TaskMaturity.class);
+        if (name == null || taskDescription == null) {
+            log.trace("Ignoring bean {}.", bean);
+            return null;
+        }
+        return new SimpleTaskConfiguration(name,
+                taskDescription,
+                taskMaturity);
+    }
+
+    private <A extends Annotation> String getAnnotationValue(Bean<?> bean, Class<A> annotation) {
+        var result = (String) null;
+        var clazz = bean.getBeanClass();
+        var annot = clazz.getAnnotation(annotation);
+        if (annot == null){
+            var superclazz = clazz.getSuperclass();
+            annot = superclazz.getAnnotation(annotation);
+        }
+        if (annot == null){
+            return null;
+        }
+        var valueMethod = Arrays.stream(annotation.getMethods()).filter(m -> m.getName().equals("value")).findFirst();
+        if (valueMethod.isPresent()){
+            try {
+                result = valueMethod.get().invoke(annot).toString();
+            } catch (IllegalAccessException e) {
+                log.error("IllegalAccessException", e);
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                log.error("Failed to get annotation value", e);
+                throw new RuntimeException(e);
+            }
+        }
+        return result;
+    }
 }

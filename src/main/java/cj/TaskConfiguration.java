@@ -7,4 +7,8 @@ import io.smallrye.config.ConfigMapping;
 @StaticInitSafe
 public interface TaskConfiguration {
     String name();
+
+    String description();
+
+    String maturityLevel();
 }

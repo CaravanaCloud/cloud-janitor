@@ -10,10 +10,12 @@ import io.quarkus.runtime.QuarkusApplication;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 @ApplicationScoped
 public class CloudJanitor implements QuarkusApplication {
+    public static final String VERSION = "1.4.1";
     @Inject
     Logger log;
 
@@ -21,19 +23,39 @@ public class CloudJanitor implements QuarkusApplication {
     Tasks tasks;
 
     @Inject
+    Configuration config;
+
+    @Inject
     LaunchMode launchMode;
+
+    @Inject
+    Instance<Help> help;
 
     @Override
     public int run(String... args) throws Exception {
         log.trace("CloudJanitor.run(...)");
         try {
-            tasks.run();
+            if (config.showHelp()){
+                showHelp();
+            } else if (config.showVersion()) {
+                showVersion();
+            } else {
+                tasks.run();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             log.error("CloudJanitor.run() failed", e);
             return -1;
         }
         return 0;
+    }
+
+    private void showVersion() {
+        log.info(CloudJanitor.VERSION);
+    }
+
+    private void showHelp() {
+        help.get().showHelp();
     }
 
     @SuppressWarnings("unused")
@@ -46,7 +68,7 @@ public class CloudJanitor implements QuarkusApplication {
 
     @SuppressWarnings("unused")
     void onStop(@Observes ShutdownEvent ev) {
-        log.info("Waiting for all tasks to finish.");
+        log.debug("Waiting for all tasks to finish.");
         // forceSleep();
         // TODO: Configurable timeout
         // Default fork join pool is used by Quarkus

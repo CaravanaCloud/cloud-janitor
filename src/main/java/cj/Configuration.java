@@ -57,6 +57,16 @@ public interface Configuration {
     @WithDefault("5")
     long checkpointSleep();
 
+    @WithName("showVersion")
+    @WithDefault("false")
+    boolean showVersion();
+
+    @WithName("showHelp")
+    @WithDefault("false")
+    boolean showHelp();
+
+
+
     default Path getApplicationPath(){
         var home = System.getProperty("user.home");
         var homePath = Path.of(home);

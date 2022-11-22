@@ -4,8 +4,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>caravanacloud</groupId>
   <artifactId>cloud-janitor</artifactId>
-  <!-- Also change CommandJanitor class and jreleaser.yml -->
-  <version>1.4.0</version>
+  <!-- Also change CloudJanitor.VERSION and jreleaser.yml -->
+  <version>1.4.1</version>
 
   <description>Automating cleanup, maintenance and troubleshooting tasks in Cloud Computing</description>
   <url>https://github.com/CaravanaCloud/cloud-janitor</url>

@@ -1,9 +1,6 @@
 package cj.ocp;
 
-import cj.BaseTask;
-import cj.Capabilities;
-import cj.Input;
-import cj.OS;
+import cj.*;
 import cj.fs.FSUtils;
 
 import javax.enterprise.context.Dependent;
@@ -12,8 +9,12 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
+import static cj.TaskMaturity.Level.experimental;
+
 @Dependent
 @Named("openshift-create-cluster")
+@TaskDescription("Creates an OpenShift cluster")
+@TaskMaturity(experimental)
 @SuppressWarnings("unused")
 public class OpenshiftCreateClusterTask extends BaseTask {
 
