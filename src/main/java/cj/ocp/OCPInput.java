@@ -10,7 +10,8 @@ public enum  OCPInput implements Input {
     awsRegion,
     clusterProfile,
 
-    instanceType
+    instanceType,
+    infrastructureProvider
 
 }
 

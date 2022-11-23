@@ -8,7 +8,6 @@ import cj.qute.Templates;
 import cj.spi.Task;
 import io.quarkus.qute.Template;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
@@ -25,7 +24,16 @@ import static cj.Errors.Type.Message;
 import static cj.Output.local.FilesMatch;
 
 @Dependent
-public class BaseTask implements Task {
+public class BaseTask
+        implements Task, Logging {
+    @Inject
+    transient Logger logger;
+
+    @Override
+    public Logger logger() {
+        return logger;
+    }
+
     @Inject
     transient protected Tasks tasks;
 
@@ -272,22 +280,6 @@ public class BaseTask implements Task {
         trace("Task success(): {}", this);
     }
 
-    /* Logging Shortcuts */
-    protected void info(String message, Object... args) {
-        logger().info(fmt(message), args);
-    }
-
-    protected void trace(String message, Object... args) {
-        logger().trace(fmt(message), args);
-    }
-
-    protected void debug(String message, Object... args) {
-        logger().debug(fmt(message), args);
-    }
-
-    protected void error(String message, Object... args) {
-        logger().error(fmt(message), args);
-    }
 
     protected RuntimeException fail(String message, Object... args) {
         var msg = fmt(message).formatted(args);
@@ -296,9 +288,6 @@ public class BaseTask implements Task {
         return new TaskFailedException(msg);
     }
 
-    protected String getContextString() {
-        return "";
-    }
 
     protected RuntimeException fail(Exception ex) {
         logger().error(ex.getMessage(), ex);
@@ -309,18 +298,6 @@ public class BaseTask implements Task {
         return new RuntimeException(ex);
     }
 
-    protected void warn(String message, Object... args) {
-        logger().warn(fmt(message), args);
-    }
-
-    protected void warn(Exception ex, String message, Object... args) {
-        warn(ex.getMessage());
-        warn(fmt(message), args);
-    }
-
-    protected Logger logger() {
-        return LoggerFactory.getLogger(getLoggerName());
-    }
 
     protected String getExecutionId() {
         return tasks.getExecutionId();
@@ -383,19 +360,6 @@ public class BaseTask implements Task {
         }
     }
 
-    private String fmt(String message) {
-        var context = getContextString();
-        var separator = context.isEmpty() ? "" : getContextSeparator();
-        return context + separator + message;
-    }
-
-    private String getContextSeparator() {
-        return " || ";
-    }
-
-    private String getContextName() {
-        return getClass().getPackageName().replaceAll("cj.", "");
-    }
 
     protected void checkpoint(@SuppressWarnings("SameParameterValue") String message,
                               Object... args){

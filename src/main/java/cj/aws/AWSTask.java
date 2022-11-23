@@ -87,7 +87,7 @@ public abstract class   AWSTask
     }
 
     @Override
-    protected String getContextString() {
+    public String getContextString() {
         return String.join(" - ", getContext());
     }
 

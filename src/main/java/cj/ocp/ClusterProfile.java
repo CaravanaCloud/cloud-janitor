@@ -1,8 +1,8 @@
 package cj.ocp;
 
 enum ClusterProfile {
-        aws_ipi_sts(true),
-        aws_ipi_default(false);
+        sts(true),
+        standard(false);
 
         final boolean ccoctl;
 

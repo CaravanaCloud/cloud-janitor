@@ -1,4 +1,4 @@
-package cj;
+package cj.cloud;
 
 public enum CloudProvider {
     aws,

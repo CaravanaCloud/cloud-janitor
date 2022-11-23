@@ -57,12 +57,16 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         var tip = "tail -f " + clusterDir.resolve(".openshift_install.log").toAbsolutePath();
         debug(tip);
         expectCapability(Capabilities.CLOUD_CREATE_INSTANCES);
-        checkpoint("Creating openshift cluster using openshift-install");
-        var output = tasks.exec(90L, "openshift-install",
+        var cmdArgs = new String[]{
+                "openshift-install",
                 "create",
                 "cluster",
                 "--dir=" + clusterDir,
-                "--log-level=debug");
+                "--log-level=debug"
+        };
+        debug("Running command: {}", String.join(" ", cmdArgs));
+        checkpoint("Creating openshift cluster using openshift-install");
+        var output = tasks.exec(90L, cmdArgs);
         if (output.isPresent()) {
             logger().debug("openshift-install output: {}", output.get());
         } else {

@@ -2,7 +2,6 @@ package cj.spi;
 
 import cj.Errors;
 import cj.Input;
-import cj.Logs;
 import cj.Output;
 
 import javax.inject.Named;
@@ -124,10 +123,7 @@ public interface Task {
     }
 
     /* Logging */
-    default String getLoggerName() {
-        var name = getClass().getName();
-        return Logs.loggerName(name);
-    }
+
 
     @SuppressWarnings("unused")
     default String getStartTimeFmt() {

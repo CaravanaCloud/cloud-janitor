@@ -4,16 +4,29 @@ import cj.BaseTask;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
+import java.util.regex.Pattern;
 
 @Dependent
 @Named("test-shell")
 public class TestShell extends BaseTask {
-    public void apply() {
-        var out1 = tasks.exec("echo hello1");
-        var out2 = tasks.exec("logger -s hello2");
+    public static void main(String[] args) {
+        var replacement = "";
+        var regex = "level=([\\S]+) msg= [\\s?]";
+        var pattern = Pattern.compile(regex);
+        var line = "level=debug msg=  Fetching Ironic bootstrap credentials... ";
+        var line2 = "Something Elso credentials... ";
+        var match = pattern.matcher(line);
+        var matches = match.matches();
+        var out = "???";
+        if (matches){
+            out = match.replaceAll(replacement);
+        }
 
-        out1.ifPresent(System.out::println);
-        System.out.println(out2.orElse("no output"));
+        System.out.println(out);
+        System.out.println(line.replaceAll(regex,replacement));
+        System.out.println(line2.replaceAll(regex,replacement));
+
+        System.out.println("--");
     }
 
 }

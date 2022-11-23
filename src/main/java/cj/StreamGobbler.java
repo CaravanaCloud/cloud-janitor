@@ -14,6 +14,10 @@ public class StreamGobbler implements Runnable {
         this.consumer = consumer;
     }
 
+    public static StreamGobbler of(InputStream inputStream, Consumer<String> consumer) {
+        return new StreamGobbler(inputStream, consumer);
+    }
+
     @Override
     public void run() {
             new BufferedReader(new InputStreamReader(inputStream))

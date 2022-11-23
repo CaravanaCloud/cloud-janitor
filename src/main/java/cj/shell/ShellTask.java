@@ -25,10 +25,6 @@ public class ShellTask extends ReadTask {
     ExecutorService executor;
 
 
-
-
-
-
     @Override
     public void apply() {
         var cmdList = inputList(cmds, String.class);
@@ -53,9 +49,9 @@ public class ShellTask extends ReadTask {
             var process = runtime.exec(cmdArr);
             var output = new StringBuffer();
             var error = new StringBuffer();
-            var outGobbler =
-                    new StreamGobbler(process.getInputStream(),
-                            s -> this.printAndAppend(output, s));
+            var outGobbler = StreamGobbler.of(
+                    process.getInputStream(),
+                    s -> this.printAndAppend(output, s));
             var errGobbler = new StreamGobbler(process.getErrorStream(),
                     s -> this.printAndAppend(error, s));
             var futureOut = executor.submit(outGobbler);
@@ -77,9 +73,21 @@ public class ShellTask extends ReadTask {
     }
 
     private void printAndAppend(StringBuffer output, String s) {
+        s = redact(s);
         output.append(s);
         output.append("\n");
         debug(s);
+    }
+
+    private String redact(String s) {
+        s = redactRedundantLogLevel(s);
+        //TODO: Redact secrets
+        return s;
+    }
+
+    static final String redundantLogLevelRegex = "level=([\\S]+) msg= [\\s?]";
+    private String redactRedundantLogLevel(String s) {
+        return s.replaceAll(redundantLogLevelRegex,"");
     }
 
     public static Optional<String> execute(String... cmdArr){
