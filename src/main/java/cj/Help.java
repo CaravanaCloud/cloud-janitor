@@ -21,12 +21,13 @@ public class Help {
         msg.append("\n=== Cloud Janitor Help ===");
 
         var taskConfigs = tasks.findAll().stream();
-        var configTask = config.task();
-        if (configTask.isPresent()){
-            var task = configTask.get();
-            taskConfigs = taskConfigs.filter(t -> t.name().equals(task));
-        } else {
-            msg.append("\nHere are all the tasks you can run, using -t <task-name>, setting CJ_TASK or equivalent configuration.");
+        var configTasks = config.tasks();
+        if (configTasks.isPresent()){
+            var showTasks = configTasks.get();
+            taskConfigs = taskConfigs.filter(t -> showTasks.contains(t.name()));
+
+        }else {
+            msg.append("\nHere are all the tasks you can run:");
         }
         taskConfigs.forEach(tc -> this.showConfig(tc, msg));
         log.info(msg.toString());

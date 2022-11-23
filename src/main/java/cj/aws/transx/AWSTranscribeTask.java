@@ -3,7 +3,6 @@ package cj.aws.transx;
 import cj.TaskDescription;
 import cj.aws.AWSWrite;
 import cj.aws.s3.GetDataBucketTask;
-import cj.fs.FilterLocalVideos;
 import cj.spi.Task;
 import software.amazon.awssdk.services.s3.model.Bucket;
 import software.amazon.awssdk.services.transcribe.model.*;
@@ -11,44 +10,39 @@ import software.amazon.awssdk.services.transcribe.model.*;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Map;
 
-import static cj.LocalInput.fileExtension;
 import static cj.Output.aws.S3Bucket;
-import static cj.Output.local.FilesMatch;
 
 
-@Named("aws-transcribe-videos")
+@Named("aws-transcribe")
 @Dependent
 @TaskDescription("Transcribe videos from local directory")
 @SuppressWarnings("unused")
-public class TranscribeVideosTask extends AWSWrite {
-    @Inject
-    FilterLocalVideos filterFiles;
-
+public class AWSTranscribeTask extends AWSWrite {
     @Inject
     GetDataBucketTask getDataBucket;
 
     static final String prefix = "transcribe/";
 
     @Override
-    public List<Task> getDependencies() {
-        return List.of(
-                filterFiles.withInput(fileExtension, "mp4"),
-                getDataBucket
-        );
+    public Task getDependency() {
+        return getDataBucket;
     }
 
     @Override
     public void apply() {
-        var files = filterFiles.outputList(FilesMatch, Path.class);
-        debug("Found {} videos to transcribe: {}", files.size(), files);
-        files.stream().parallel().forEach(this::transcribe);
+        var files = findFiles("mp4");
+        checkpoint("Found {} videos to transcribe: {}", files.size(), files);
+        tryParallel(files, this::transcribe);
     }
+
+
 
     private void transcribe(Path path) {
         var tc = new Transcription();
@@ -61,14 +55,22 @@ public class TranscribeVideosTask extends AWSWrite {
     }
 
     private void download(Transcription tc) {
+        debug("Downloading transcription {}", tc);
         try(var s3tx = aws().s3tm()) {
             var job = tc.transcriptionJob;
             var transcriptUri = job.transcript().transcriptFileUri();
-            var srtPath = tc.getOutputSrtFilePath();
+            var srtPath = tc.getLangOutputSrtFilePath();
             var download = s3tx.downloadFile(b -> b.destination(srtPath)
                     .getObjectRequest(req -> req.bucket(tc.bucketName)
-                            .key(tc.getOutputSrtKey())));
+                    .key(tc.getOutputSrtKey())));
+
             download.completionFuture().join();
+            var srtCopyPath = tc.getNolangOutputSrtFilePath();
+            try {
+                Files.copy(srtPath, srtCopyPath);
+            } catch (IOException e) {
+                error("Failed to copy {} to {}", srtPath, srtCopyPath);
+            }
             debug("Transcription downloaded. {}", srtPath.toAbsolutePath().toString());
         }
     }
@@ -92,6 +94,7 @@ public class TranscribeVideosTask extends AWSWrite {
     }
 
     private void requestTranscribe(Transcription tc) {
+        debug("Downloading transcripton result for {}", tc.transcriptionJobName());
         try (var transcribe = aws().transcribe()){
             var jobName = tc.transcriptionJobName();
             var req = StartTranscriptionJobRequest.builder()
@@ -170,11 +173,20 @@ public class TranscribeVideosTask extends AWSWrite {
             return uri;
         }
 
-        public Path getOutputSrtFilePath() {
+        public Path getLangOutputSrtFilePath() {
             var sourceName = sourcePath.getFileName().toString();
             var filebase = sourceName.substring(0, sourceName.lastIndexOf('.'));
             var langCode = transcriptionJob.languageCode().toString();
             var srtFile = "%s.%s.srt".formatted(filebase, langCode);
+            @SuppressWarnings("UnnecessaryLocalVariable")
+            var srtPath = sourcePath.getParent().resolve(srtFile);
+            return srtPath;
+        }
+
+        public Path getNolangOutputSrtFilePath() {
+            var sourceName = sourcePath.getFileName().toString();
+            var filebase = sourceName.substring(0, sourceName.lastIndexOf('.'));
+            var srtFile = "%s.srt".formatted(filebase);
             @SuppressWarnings("UnnecessaryLocalVariable")
             var srtPath = sourcePath.getParent().resolve(srtFile);
             return srtPath;

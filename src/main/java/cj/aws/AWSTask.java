@@ -33,7 +33,7 @@ public abstract class   AWSTask
 
     public AWSClients aws(){
         var identity = getIdentity();
-        var config = getConfig().aws();
+        var config = config().aws();
         return AWSClients.of(config, identity);
     }
 

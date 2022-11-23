@@ -14,6 +14,7 @@ import static org.awaitility.Awaitility.await;
 
 @Named("convert-to-spot")
 @Dependent
+@SuppressWarnings("unused")
 public class ConvertEC2ToSpot extends AWSWrite {
     @Override
     public void apply() {
@@ -32,6 +33,7 @@ public class ConvertEC2ToSpot extends AWSWrite {
 
     }
 
+    @SuppressWarnings("all")
     private void swapENIs(String targetInstanceId, String newInstanceId) {
         var targetInstance = getInstance(targetInstanceId);
         var newInstance = getInstance(newInstanceId);
@@ -50,48 +52,52 @@ public class ConvertEC2ToSpot extends AWSWrite {
     }
 
     private void attachENI(String instanceId, String eniId) {
-        var ec2 = aws().ec2();
-        debug("Attaching ENI {} to {}", eniId, instanceId);
-        ec2.attachNetworkInterface(AttachNetworkInterfaceRequest.builder()
-                .instanceId(instanceId)
-                .networkInterfaceId(eniId)
-                .build());
+        try(var ec2 = aws().ec2()){
+            debug("Attaching ENI {} to {}", eniId, instanceId);
+            ec2.attachNetworkInterface(AttachNetworkInterfaceRequest.builder()
+                    .instanceId(instanceId)
+                    .networkInterfaceId(eniId)
+                    .build());
+        }
     }
 
     private void detachENI(String targetAttachmentId) {
-        var ec2 = aws().ec2();
-        var detachRequest = DetachNetworkInterfaceRequest.builder()
-                .attachmentId(targetAttachmentId)
-                .force(true)
-                .build();
-        debug("Detaching ENI {}", targetAttachmentId);
-        ec2.detachNetworkInterface(detachRequest);
+        try(var ec2 = aws().ec2()){
+            var detachRequest = DetachNetworkInterfaceRequest.builder()
+                    .attachmentId(targetAttachmentId)
+                    .force(true)
+                    .build();
+            debug("Detaching ENI {}", targetAttachmentId);
+            ec2.detachNetworkInterface(detachRequest);
+        }
     }
 
     private NetworkInterfaceAttachment getENIAttachment(String targetENI) {
-        var ec2 = aws().ec2();
-        var targetENIAttachment = ec2.describeNetworkInterfaces(
-                DescribeNetworkInterfacesRequest.builder()
-                        .networkInterfaceIds(targetENI)
-                        .build()
-        ).networkInterfaces().get(0).attachment();
-        return targetENIAttachment;
+        try(var ec2 = aws().ec2()){
+            var targetENIAttachment = ec2.describeNetworkInterfaces(
+                    DescribeNetworkInterfacesRequest.builder()
+                            .networkInterfaceIds(targetENI)
+                            .build()
+            ).networkInterfaces().get(0).attachment();
+            return targetENIAttachment;
+        }
     }
 
     private Instance getInstance(String targetInstanceId) {
-        var ec2 = aws().ec2();
-        var targetInstance = ec2.describeInstances(
-                DescribeInstancesRequest.builder()
-                        .instanceIds(targetInstanceId)
-                        .build()
-        ).reservations().get(0).instances().get(0);
-        debug("Got instance {}", targetInstance);
-        return targetInstance;
+        try(var ec2 = aws().ec2()){
+            var targetInstance = ec2.describeInstances(
+                    DescribeInstancesRequest.builder()
+                            .instanceIds(targetInstanceId)
+                            .build()
+            ).reservations().get(0).instances().get(0);
+            debug("Got instance {}", targetInstance);
+            return targetInstance;
+        }
     }
 
     private void waitInstanceStopped(String instanceId) {
-        await().atMost(getConfig().largeAtMostTimeoutMs(), MILLISECONDS)
-                .pollInterval(getConfig().largePollIntervalMs(), MILLISECONDS)
+        await().atMost(config().largeAtMostTimeoutMs(), MILLISECONDS)
+                .pollInterval(config().largePollIntervalMs(), MILLISECONDS)
                 .until(() -> instanceState(instanceId, "STOPPED"));
     }
 
@@ -111,6 +117,7 @@ public class ConvertEC2ToSpot extends AWSWrite {
 
     private boolean canStop(String targetInstanceId) {
         var state = lookupInstanceStateName(targetInstanceId);
+        @SuppressWarnings("redundant")
         boolean canStop = state.equalsIgnoreCase("RUNNING");
         return canStop;
     }
@@ -182,8 +189,8 @@ public class ConvertEC2ToSpot extends AWSWrite {
     }
 
     private void awaitImageAvailable(String imageId) {
-        var atMost = getConfig().largeAtMostTimeoutMs();
-        var pollInterval = getConfig().largePollIntervalMs();
+        var atMost = config().largeAtMostTimeoutMs();
+        var pollInterval = config().largePollIntervalMs();
         debug("Awaiting for {} to be available ({}|{}).", imageId, msToStr(pollInterval), msToStr(atMost));
         await().atMost(atMost, MILLISECONDS)
                 .pollInterval(pollInterval, MILLISECONDS)
@@ -214,8 +221,8 @@ public class ConvertEC2ToSpot extends AWSWrite {
 
 
     private void waitInstanceRunning(String newInstanceId) {
-        await().atMost(getConfig().largeAtMostTimeoutMs(), MILLISECONDS)
-                .pollInterval(getConfig().largePollIntervalMs(), MILLISECONDS)
+        await().atMost(config().largeAtMostTimeoutMs(), MILLISECONDS)
+                .pollInterval(config().largePollIntervalMs(), MILLISECONDS)
                 .until(() -> instanceState(newInstanceId, "RUNNING"));
     }
 

@@ -16,8 +16,8 @@ public class CommandJanitor implements Callable<Integer> {
     private static final Logger log = LoggerFactory.getLogger(CommandJanitor.class);
 
     @SuppressWarnings("all")
-    @CommandLine.Option(names = { "-t", "--task" }, description = "task to be executed. Try '-t hello'")
-    String taskName;
+    @CommandLine.Parameters
+    List<String> taskNames;
 
     @CommandLine.Option(names = { "-i", "--input" },
             description = "input parameters for the task, repeatable.")
@@ -56,7 +56,10 @@ public class CommandJanitor implements Callable<Integer> {
 
     public void parseArgs() {
         trySetProperty("quarkus.log.console.level", logLevel);
-        trySetProperty("cj.task", taskName);
+        if (taskNames != null && ! taskNames.isEmpty()) {
+            var tasksStr = String.join(",", taskNames);
+            trySetProperty("cj.tasks", tasksStr);
+        }
         trySetProperty("cj.capabilities", capabilities);
         trySetProperty("cj.showVersion", showVersion);
         trySetProperty("cj.showHelp", showHelp);

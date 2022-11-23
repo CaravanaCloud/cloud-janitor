@@ -1,6 +1,8 @@
 package cj;
 
+import cj.fs.FSInput;
 import cj.fs.FSUtils;
+import cj.fs.FindFiles;
 import cj.ocp.CapabilityNotFoundException;
 import cj.qute.Templates;
 import cj.spi.Task;
@@ -20,6 +22,7 @@ import java.util.stream.Stream;
 
 import static cj.Errors.Type;
 import static cj.Errors.Type.Message;
+import static cj.Output.local.FilesMatch;
 
 @Dependent
 public class BaseTask implements Task {
@@ -140,7 +143,7 @@ public class BaseTask implements Task {
 
     }
 
-    public Configuration getConfig() {
+    public Configuration config() {
         return config;
     }
 
@@ -348,7 +351,7 @@ public class BaseTask implements Task {
 
     protected <T> void forEach(List<T> list, Consumer<T> consumer) {
         var stream = list.stream();
-        if (getConfig().parallel()) {
+        if (config().parallel()) {
             stream = stream.parallel();
         }
         stream.forEach(consumer);
@@ -394,14 +397,39 @@ public class BaseTask implements Task {
         return getClass().getPackageName().replaceAll("cj.", "");
     }
 
-    protected void checkpoint(@SuppressWarnings("SameParameterValue") String message){
+    protected void checkpoint(@SuppressWarnings("SameParameterValue") String message,
+                              Object... args){
+
+        info(message, args);
         var sleep = config.checkpointSleep();
-        debug("Checkpoint [{}s]: {}", sleep ,message);
-        try {
-            Thread.sleep(sleep * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+        if (sleep > 0){
+            debug("Waiting {}s", sleep);
+            try {
+                Thread.sleep(sleep * 1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
         }
+    }
+
+    protected <T> void tryParallel(List<T> list, Consumer<T> consumer) {
+        tryParallel(list).forEach(consumer);
+    }
+
+    protected <T> Stream<T> tryParallel(List<T> list) {
+        if (list == null) return Stream.empty();
+        var result = list.stream();
+        if (config().parallel()){
+            result = result.parallel();
+        }
+        return result;
+    }
+
+    @Inject
+    Instance<FindFiles> filterFiles;
+    protected List<Path> findFiles(String extension) {
+        return submitInstance(filterFiles, FSInput.extension, extension)
+                .outputList(FilesMatch, Path.class);
     }
 }

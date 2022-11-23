@@ -41,6 +41,17 @@ public class FSUtils {
         return false;
     }
 
+    public static Path getLookupPath() {
+        return getCurrentDir();
+    }
+
+    public static String basename(Path path) {
+        var name = path.getFileName();
+        var names = name.toString().split("\\.");
+        var base = names[0];
+        return base;
+    }
+
 
     static class FilterVisitor extends SimpleFileVisitor<Path> {
         List<Path> results = new ArrayList<>();
@@ -52,7 +63,7 @@ public class FSUtils {
 
         @Override
         public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
-            System.out.println(path);
+            log.trace("visiting file: {}", path);
             if (filterMatch(path)){
                 results.add(path);
             }
@@ -73,9 +84,9 @@ public class FSUtils {
         }
     }
 
-    public static List<Path> filterLocalFiles(Path dir, String extension) {
+    public static List<Path> findByExtension(Path dir, String extension) {
         if(dir.toFile().exists()){
-            log.debug("Starting visitor on {}", dir);
+            log.debug("Looking for files on {}", dir);
             var visitor = new FilterVisitor(extension);
             try{
                 Files.walkFileTree(dir, visitor);
@@ -92,10 +103,8 @@ public class FSUtils {
 
     public static List<Path> filterLocalVideos(){
         var extension = "mp4";
-        var dataDirMatch = filterLocalFiles(getApplicationDir(), extension);
-        var videosDirMatch = filterLocalFiles(getVideosDir(), extension);
-        var currentDirMatch = filterLocalFiles(getCurrentDir(), extension);
-        return Stream.of(dataDirMatch, videosDirMatch, currentDirMatch)
+        var currentDirMatch = findByExtension(getCurrentDir(), extension);
+        return Stream.of(currentDirMatch)
                 .flatMap(Collection::stream)
                 .toList();
     }

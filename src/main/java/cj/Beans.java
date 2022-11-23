@@ -88,6 +88,7 @@ public class Beans {
 
     public List<Input> getExpectedInputs(Task task) {
         var expectedInputs = (String[]) getAnnotationValue(task.getClass(), ExpectedInputs.class);
+        if (expectedInputs == null) return List.of();
         @SuppressWarnings("redundant")
         var taskInputs = Arrays.stream(expectedInputs)
                 .map(inputs::findInputByName)

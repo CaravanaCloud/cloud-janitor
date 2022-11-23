@@ -23,6 +23,7 @@ public interface Configuration {
     float MEDIUM_POLL_FACTOR = 4.0f;
     float LARGE_POLL_FACTOR = 8.0f;
 
+
     @WithName("pollInterval")
     @WithDefault("10.00")
     float pollInterval();
@@ -36,15 +37,14 @@ public interface Configuration {
 
     @WithName("ocp")
     OCPConfiguration ocp();
+    @WithName("translate")
+    TranslateConfiguration translate();
 
     @WithName("report")
     ReportConfiguration report();
 
     @WithName("tasks")
     Optional<List<String>>  tasks();
-
-    @WithName("task")
-    Optional<String> task();
 
     @WithName("capabilities")
     Optional<List<String>> capabilities();
@@ -54,7 +54,7 @@ public interface Configuration {
     boolean parallel();
 
     @WithName("checkpointSleep")
-    @WithDefault("5")
+    @WithDefault("15")
     long checkpointSleep();
 
     @WithName("showVersion")

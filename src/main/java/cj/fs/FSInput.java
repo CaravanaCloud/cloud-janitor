@@ -5,5 +5,5 @@ import cj.Input;
 public enum FSInput implements Input {
     glob,
     globPath,
-    paths
+    extension, paths
 }

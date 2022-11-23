@@ -52,8 +52,8 @@ public class DeleteSecurityGroups extends AWSWrite {
     }
 
     private void waitUntilEmpty(SecurityGroup sg) {
-        var atMost = getConfig().largeAtMostTimeoutMs();
-        var pollInterval = getConfig().mediumPollIntervalMs();
+        var atMost = config().largeAtMostTimeoutMs();
+        var pollInterval = config().mediumPollIntervalMs();
         debug("Waiting until sg is empty {} ({}|{}).", sg.groupId(), msToStr(pollInterval), msToStr(atMost));
         await().atMost(atMost, MILLISECONDS)
                     .pollInterval(pollInterval, MILLISECONDS)
