@@ -1,5 +1,6 @@
 package cj.aws.transx;
 
+import cj.TaskMaturity;
 import cj.Tasks;
 import cj.aws.AWSWrite;
 import cj.aws.s3.GetDataBucketTask;
@@ -20,6 +21,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
 
+import static cj.TaskMaturity.Level.experimental;
 import static cj.aws.AWSInput.s3Prefix;
 import static cj.aws.AWSInput.targetBucketName;
 import static cj.fs.FSInput.paths;
@@ -27,6 +29,7 @@ import static cj.fs.FSInput.paths;
 
 @Dependent
 @Named("aws-translate")
+@TaskMaturity(experimental)
 @SuppressWarnings("unused")
 public class AWSTranslateTask extends AWSWrite {
 

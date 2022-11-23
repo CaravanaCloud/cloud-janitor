@@ -1,6 +1,7 @@
 package cj.aws.transx;
 
 import cj.TaskDescription;
+import cj.TaskMaturity;
 import cj.aws.AWSWrite;
 import cj.aws.s3.GetDataBucketTask;
 import cj.spi.Task;
@@ -18,11 +19,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static cj.Output.aws.S3Bucket;
+import static cj.TaskMaturity.Level.experimental;
 
 
 @Named("aws-transcribe")
 @Dependent
 @TaskDescription("Transcribe videos from local directory")
+@TaskMaturity(experimental)
 @SuppressWarnings("unused")
 public class AWSTranscribeTask extends AWSWrite {
     @Inject
