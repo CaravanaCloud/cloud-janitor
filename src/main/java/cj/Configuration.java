@@ -65,7 +65,13 @@ public interface Configuration {
     @WithDefault("false")
     boolean showHelp();
 
+    @WithName("timestampPattern")
+    @WithDefault("yyMMddHHmmss")
+    String timestampPattern();
 
+    @WithName("namingPrefix")
+    @WithDefault("cj")
+    String getNamingPrefix();
 
     default Path getApplicationPath(){
         var home = System.getProperty("user.home");
@@ -78,7 +84,6 @@ public interface Configuration {
         }
         return appPath;
     }
-
 
     default Path getReportsPath(){
         var execPath = getExecutionPath();

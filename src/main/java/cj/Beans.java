@@ -18,7 +18,7 @@ public class Beans {
     Logger log;
 
     @Inject
-    Inputs inputs;
+    InputsMap inputs;
 
     public TaskConfiguration configFromBean(Bean<?> bean) {
         var name = bean.getName();

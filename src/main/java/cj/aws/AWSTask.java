@@ -28,9 +28,6 @@ public abstract class   AWSTask
     @Inject
     Instance<GetCallerIdentityTask> getCallerIdInstance;
 
-    @Inject
-    Tasks tasks;
-
     public AWSClients aws(){
         var identity = getIdentity();
         var config = config().aws();
@@ -156,10 +153,6 @@ public abstract class   AWSTask
         @SuppressWarnings("redundant")
         var identities = task.outputList(Output.aws.Identities, AWSIdentity.class);
         return identities;
-    }
-
-    protected Tasks tasks(){
-        return tasks;
     }
 
 }

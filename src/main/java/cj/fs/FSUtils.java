@@ -33,7 +33,7 @@ public class FSUtils {
     public static boolean isEmptyDir(Path path) {
         if (Files.isDirectory(path)) {
             try (Stream<Path> entries = Files.list(path)) {
-                return !entries.findFirst().isPresent();
+                return entries.findFirst().isEmpty();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -48,21 +48,43 @@ public class FSUtils {
     public static String basename(Path path) {
         var name = path.getFileName();
         var names = name.toString().split("\\.");
+        @SuppressWarnings("UnnecessaryLocalVariable")
         var base = names[0];
         return base;
+    }
+
+    public static void writeEnv(String varName, Path varValue) {
+        var envFile = getCurrentDir().resolve(".env");
+        if (! envFile.toFile().exists()) {
+            try {
+                Files.createFile(envFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        }
+        var content = "%s=%s".formatted(varName, varValue);
+        try {
+            Files.write(envFile,
+                    content.getBytes(),
+                    StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
 
     static class FilterVisitor extends SimpleFileVisitor<Path> {
         List<Path> results = new ArrayList<>();
-        String extension = null;
+        String extension;
 
         public FilterVisitor(String extension) {
             this.extension = extension;
         }
 
         @Override
-        public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
+        public FileVisitResult visitFile(Path path, BasicFileAttributes attrs){
             log.trace("visiting file: {}", path);
             if (filterMatch(path)){
                 results.add(path);
@@ -73,9 +95,9 @@ public class FSUtils {
         private boolean filterMatch(Path path) {
             var match=true;
             if (extension != null){
-                match = match && path.toFile().getName().endsWith(extension);
+                match = path.toFile().getName().endsWith(extension);
             }
-            log.trace("Found path {} match? {}", path, match);
+            log.trace("Path {} match? {}", path, match);
             return match;
         }
 
@@ -93,6 +115,7 @@ public class FSUtils {
             }catch (IOException e){
                 log.error(e.getMessage(), e);
             }
+            @SuppressWarnings("VariableTypeCanBeExplicit")
             var results = visitor.getResults();
             return  results;
         }else{

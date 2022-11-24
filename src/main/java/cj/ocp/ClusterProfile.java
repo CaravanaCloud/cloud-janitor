@@ -1,6 +1,8 @@
 package cj.ocp;
 
 enum ClusterProfile {
+        singleNode(false),
+
         sts(true),
         standard(false);
 

@@ -81,11 +81,27 @@ public class ShellTask extends ReadTask {
 
     private String redact(String s) {
         s = redactRedundantLogLevel(s);
-        //TODO: Redact secrets
+        s = redactSecrets(s);
+        s = redactExports(s);
+        return "[*] " + s;
+    }
+
+    private String redactExports(String s) {
+        if (s.contains("export")) {
+            debug("Export readacted");
+            debug(s);
+        }
         return s;
     }
 
-    static final String redundantLogLevelRegex = "level=([\\S]+) msg= [\\s?]";
+    private String redactSecrets(String s) {
+        if (s.contains("password")) {
+            s = s.replaceAll(".*", "*");
+        }
+        return s;
+    }
+
+    static final String redundantLogLevelRegex = "level=(\\S+) msg=";
     private String redactRedundantLogLevel(String s) {
         return s.replaceAll(redundantLogLevelRegex,"");
     }

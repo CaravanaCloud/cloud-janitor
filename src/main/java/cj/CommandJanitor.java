@@ -8,7 +8,7 @@ import picocli.CommandLine;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(version = "1.5.0",
+@CommandLine.Command(version = CloudJanitor.VERSION,
         mixinStandardHelpOptions = true,
         name = "cloud-janitor",
         description = "Cloud Janitor at your service.")
@@ -49,12 +49,11 @@ public class CommandJanitor implements Callable<Integer> {
     @SuppressWarnings("RedundantThrows")
     @Override
     public Integer call() throws Exception {
-        parseArgs();
         return 0;
     }
 
 
-    public void parseArgs() {
+    public void parseArgs(CommandLine command) {
         trySetProperty("quarkus.log.console.level", logLevel);
         if (taskNames != null && ! taskNames.isEmpty()) {
             var tasksStr = String.join(",", taskNames);

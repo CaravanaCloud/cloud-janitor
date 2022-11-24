@@ -2,6 +2,7 @@ package cj.ocp;
 
 import io.quarkus.runtime.annotations.StaticInitSafe;
 import io.smallrye.config.ConfigMapping;
+import io.smallrye.config.WithDefault;
 import io.smallrye.config.WithName;
 
 import java.util.Optional;
@@ -27,6 +28,11 @@ public interface OCPConfiguration {
     @WithName("clusterProfile")
     Optional<ClusterProfile> clusterProfile();
 
+    @WithName("infrastructureProvider")
+    @WithDefault("ipi")
+    Optional<OCPInfrastructureProvider> infrastructureProvider();
+
     @WithName("instanceType")
+    @WithDefault("m5.xlarge")
     Optional<String> instanceType();
 }

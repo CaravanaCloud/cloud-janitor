@@ -12,13 +12,13 @@ import java.util.function.Supplier;
 @Dependent
 public abstract class StartupObserver implements  Logging{
     @Inject
-    Inputs inputs;
+    InputsMap inputs;
 
-    public Inputs putConfig(Input input,
-                            String configKey,
-                            Function<Configuration, Optional<?>> configFn,
-                            Supplier<?> defaultFn){
-        return inputs.putConfig(input, configKey, configFn, defaultFn);
+    public void putConfig(Input input,
+                               String configKey,
+                               Function<Configuration, Optional<?>> configFn,
+                               Supplier<?> defaultFn){
+        inputs.putConfig(input, configKey, configFn, defaultFn);
     }
 
     @SuppressWarnings("unused")

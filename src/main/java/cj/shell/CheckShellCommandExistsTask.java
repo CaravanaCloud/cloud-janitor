@@ -14,7 +14,7 @@ public class CheckShellCommandExistsTask extends SafeTask {
     public void apply() {
         var cmdIn = getInputString(ShellInput.cmd);
         var cmdList = List.of("which", cmdIn);
-        var shellTask = tasks.shellTask(cmdList);
+        var shellTask = tasks().shellTask(cmdList);
         submit(shellTask, cmds, cmdList);
         var code = shellTask.outputAs(Output.shell.exitCode, Integer.class);
         if (code.isEmpty() || code.get() != 0) {

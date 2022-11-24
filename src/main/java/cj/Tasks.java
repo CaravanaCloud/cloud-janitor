@@ -16,6 +16,7 @@ import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,6 +26,7 @@ import java.util.*;
 import static cj.Errors.Type.Message;
 
 @ApplicationScoped
+@Named("tasks")
 public class Tasks {
     static final LocalDateTime startTime = LocalDateTime.now();
 
@@ -49,7 +51,7 @@ public class Tasks {
     private String executionId;
 
     @Inject
-    Inputs inputs;
+    InputsMap inputs;
 
     @Inject
     Instance<ShellTask> shellInstance;
@@ -152,8 +154,10 @@ public class Tasks {
 
     public synchronized String getExecutionId() {
         if (executionId == null) {
-            var sdf = new SimpleDateFormat("yyMMddHHmmss");
-            executionId = "cj" + sdf.format(new Date());
+            var prefix = getConfig().getNamingPrefix();
+            var pattern = getConfig().timestampPattern();
+            var sdf = new SimpleDateFormat(pattern);
+            executionId = prefix + sdf.format(new Date());
         }
         return executionId;
     }

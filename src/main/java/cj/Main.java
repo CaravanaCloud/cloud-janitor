@@ -9,10 +9,10 @@ import picocli.CommandLine;
 @StaticInitSafe
 public class Main {
     public static void main(String[] args) {
-        var janitor = CommandJanitor.of();
-        var command = janitor.commandLine();
-        parseArgs(janitor, command,  args);
-        execute(command, args);
+        var commandJanitor = CommandJanitor.of();
+        var commandLine = commandJanitor.commandLine();
+        parseArgs(commandJanitor, commandLine,  args);
+        execute(commandLine, args);
     }
 
     private static void execute(CommandLine command, String[] args) {
@@ -31,14 +31,6 @@ public class Main {
             CommandLine command,
             String... args) {
         command.parseArgs(args);
-        var isVersionRequested = command.isVersionHelpRequested();
-        if (isVersionRequested){
-            System.setProperty("cj.showVersion", "true");
-        }
-        var isHelpRequested = command.isUsageHelpRequested();
-        if (isHelpRequested){
-            System.setProperty("cj.showHelp", "true");
-            janitor.parseArgs();
-        }
+        janitor.parseArgs(command);
     }
 }

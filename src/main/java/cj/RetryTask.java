@@ -11,7 +11,7 @@ public class RetryTask extends BaseTask {
         var task = getInput(CJInput.task, Task.class);
         try {
             info("Trying task {}", task);
-            tasks.submit(task);
+            tasks().submit(task);
         } catch (Exception e){
             //TODO: Consider TaskFailedException instead of Exception
             info("Task {} failed {}", task.getName() , e.getMessage());

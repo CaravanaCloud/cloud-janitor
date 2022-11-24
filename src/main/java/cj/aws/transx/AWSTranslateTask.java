@@ -1,5 +1,6 @@
 package cj.aws.transx;
 
+import cj.TaskDescription;
 import cj.TaskMaturity;
 import cj.Tasks;
 import cj.aws.AWSWrite;
@@ -30,6 +31,7 @@ import static cj.fs.FSInput.paths;
 @Dependent
 @Named("aws-translate")
 @TaskMaturity(experimental)
+@TaskDescription("Translates files using AWS Translate")
 @SuppressWarnings("unused")
 public class AWSTranslateTask extends AWSWrite {
 

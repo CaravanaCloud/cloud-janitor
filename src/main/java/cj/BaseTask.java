@@ -7,7 +7,6 @@ import cj.ocp.CapabilityNotFoundException;
 import cj.qute.Templates;
 import cj.spi.Task;
 import io.quarkus.qute.Template;
-import org.slf4j.Logger;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
@@ -25,22 +24,12 @@ import static cj.Output.local.FilesMatch;
 
 @Dependent
 public class BaseTask
-        implements Task, Logging {
-    @Inject
-    transient Logger logger;
-
-    @Override
-    public Logger logger() {
-        return logger;
-    }
-
-    @Inject
-    transient protected Tasks tasks;
-
+        implements Task,
+            TaskManagement,
+            Logging {
     @Inject
     Configuration config;
 
-    // TODO: Use null instead of Optional in fields
     LocalDateTime startTime = null;
     LocalDateTime endTime = null;
 
@@ -48,20 +37,21 @@ public class BaseTask
     Map<Output, Object> outputs = new HashMap<>();
     Map<Errors, Object> errors = new HashMap<>();
 
-    // TODO move to task inputs
     @Inject
-    Inputs inputss;
+    InputsMap inputsMap;
 
     @Inject
     Templates templates;
 
-    /* Submits a delegate task for execution */
-    public Task submit(Task delegate) {
-        delegate.getInputs().putAll(getInputs());
-        return tasks.submit(delegate);
+
+    /* Delegate Methods */
+
+    /* TaskManagement Delegates */
+    protected Task submit(Task delegate) {
+        return submit(this, delegate);
     }
 
-    /* Task Interface Methods */
+    /* Task Properties */
     @Override
     public LocalDateTime getStartTime() {
         return startTime;
@@ -72,6 +62,7 @@ public class BaseTask
         startTime = localDateTime;
     }
 
+    /******* REFACTORING RULER **********/
     @Override
     public LocalDateTime getEndTime() {
         return endTime;
@@ -194,13 +185,13 @@ public class BaseTask
             value = cfgInputString(key);
         }
         if (value == null) {
-            value = inputss.getFromDefault(key);
+            value = inputsMap.getFromDefault(key);
         }
         return Optional.ofNullable(value);
     }
 
     public Object cfgInputString(Input key) {
-        return inputss.getFromConfig(key);
+        return inputsMap.getFromConfig(key);
     }
 
     @SuppressWarnings("all")
@@ -265,11 +256,11 @@ public class BaseTask
     }
 
     protected Task submitInstance(Instance<? extends Task> delegate, Input input, Object value) {
-        return tasks.submit(delegate.get().withInput(input, value));
+        return tasks().submit(delegate.get().withInput(input, value));
     }
 
     protected Task submit(Task delegate, Input input, Object value) {
-        return tasks.submit(delegate.withInput(input, value));
+        return tasks().submit(delegate.withInput(input, value));
     }
 
     protected void success(Output key, Object value) {
@@ -300,7 +291,7 @@ public class BaseTask
 
 
     protected String getExecutionId() {
-        return tasks.getExecutionId();
+        return tasks().getExecutionId();
     }
 
     protected Task withInput(Instance<? extends Task> instance, Input input, Object value) {
@@ -323,7 +314,7 @@ public class BaseTask
     }
 
     protected boolean hasCapabilities(Capabilities... cs) {
-        return tasks.hasCapabilities(cs);
+        return tasks().hasCapabilities(cs);
     }
 
     protected <T> void forEach(List<T> list, Consumer<T> consumer) {
@@ -340,7 +331,7 @@ public class BaseTask
 
     protected Map<String, String> getInputsMap() {
         @SuppressWarnings("redundant")
-        var inputsMap = inputss.getExpectedInputs(this)
+        var inputsMap = this.inputsMap.getExpectedInputs(this)
                 .stream()
                 .collect(Collectors.toMap(
                         Input::toString,

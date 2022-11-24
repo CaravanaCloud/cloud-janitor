@@ -15,7 +15,7 @@ import javax.inject.Inject;
 
 @ApplicationScoped
 public class CloudJanitor implements QuarkusApplication {
-    public static final String VERSION = "1.4.1";
+    public static final String VERSION = "1.5.0";
     @Inject
     Logger log;
 
@@ -35,10 +35,8 @@ public class CloudJanitor implements QuarkusApplication {
     public int run(String... args) throws Exception {
         log.trace("CloudJanitor.run(...)");
         try {
-            if (config.showHelp()){
+            if (config.showHelp() || config.showVersion()){
                 showHelp();
-            } else if (config.showVersion()) {
-                showVersion();
             } else {
                 tasks.run();
             }
@@ -49,11 +47,6 @@ public class CloudJanitor implements QuarkusApplication {
         }
         return 0;
     }
-
-    private void showVersion() {
-        log.info(CloudJanitor.VERSION);
-    }
-
     private void showHelp() {
         help.get().showHelp();
     }

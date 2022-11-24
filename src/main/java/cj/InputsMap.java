@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 @Singleton
 @Startup
-public class Inputs {
+public class InputsMap {
     @Inject
     Configuration configuration;
 
@@ -33,10 +33,10 @@ public class Inputs {
     public void init(){
         log.debug("Initializing input mappings.");
     }
-    public Inputs putConfig(Input input,
-                            String configKey,
-                            Function<Configuration, Optional<?>> configFn,
-                            Supplier<?> defaultFn){
+    public InputsMap putConfig(Input input,
+                               String configKey,
+                               Function<Configuration, Optional<?>> configFn,
+                               Supplier<?> defaultFn){
         var inputConfig = new InputConfig(input, configKey, configFn, defaultFn);
         inputConfigs.put(input, inputConfig);
         return this;
