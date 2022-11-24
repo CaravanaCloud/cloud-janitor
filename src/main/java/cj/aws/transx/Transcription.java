@@ -13,7 +13,7 @@ public class Transcription {
     Path sourcePath;
     String bucketName;
     String sourceKey;
-    String prefix = "transcribe/";
+    String prefix = "aws-transcribe";
 
     TranscriptionJob transcriptionJob;
 

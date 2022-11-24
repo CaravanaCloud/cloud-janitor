@@ -3,7 +3,7 @@
   "configurations": [
     {
       "type": "java",
-      "name": "openshift-create-cluster",
+      "name": "aws-transcribe",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
