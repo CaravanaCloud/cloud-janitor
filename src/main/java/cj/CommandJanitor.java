@@ -8,7 +8,7 @@ import picocli.CommandLine;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-@CommandLine.Command(version = "1.4.0",
+@CommandLine.Command(version = "1.5.0",
         mixinStandardHelpOptions = true,
         name = "cloud-janitor",
         description = "Cloud Janitor at your service.")

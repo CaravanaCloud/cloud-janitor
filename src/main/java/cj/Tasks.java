@@ -127,9 +127,9 @@ public class Tasks {
             // TODO: How to signal failure across tasks? See RetryTask
             throw new RuntimeException(e);
         } catch (Exception e) {
-            task.getErrors().put(Message, e.getMessage());
-            log.error("Error executing {}: {}", task, e.getMessage());
             e.printStackTrace();
+            task.getErrors().put(Message, e.getMessage());
+            log.error("Error executing {}: {}", task, e.getMessage());    
             throw new RuntimeException(e);
         } finally {
             task.setEndTime(LocalDateTime.now());

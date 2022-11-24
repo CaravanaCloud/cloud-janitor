@@ -5,17 +5,22 @@ import cj.TaskMaturity;
 import cj.aws.AWSWrite;
 import cj.aws.s3.GetDataBucketTask;
 import cj.spi.Task;
+import software.amazon.awssdk.core.exception.SdkException;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.model.Bucket;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.transcribe.model.*;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
 
 import static cj.Output.aws.S3Bucket;
@@ -31,7 +36,6 @@ public class AWSTranscribeTask extends AWSWrite {
     @Inject
     GetDataBucketTask getDataBucket;
 
-    static final String prefix = "transcribe/";
 
     @Override
     public Task getDependency() {
@@ -47,9 +51,15 @@ public class AWSTranscribeTask extends AWSWrite {
 
 
 
-    private void transcribe(Path path) {
+    private synchronized void transcribe(Path path) {
         var tc = new Transcription();
         tc.sourcePath = path;
+        var bucketIn = getDataBucket.outputAs(S3Bucket, Bucket.class)
+                    .map(Bucket::name);
+        if(bucketIn.isEmpty()){
+            throw new IllegalStateException("No bucket found");
+        }
+        tc.bucketName = bucketIn.get();
         putObject(tc);
         requestTranscribe(tc);
         awaitTranscribe(tc);
@@ -118,86 +128,41 @@ public class AWSTranscribeTask extends AWSWrite {
         }
     }
 
-
     private void putObject(Transcription tc) {
-        try(var s3 = aws().s3tm()){
-            var bucketIn = getDataBucket.outputAs(S3Bucket, Bucket.class)
-                    .map(Bucket::name);
-            if(bucketIn.isEmpty()){
-                throw new IllegalStateException("No bucket found");
-            }
-            var bucketName = bucketIn.get();
-            var path = tc.sourcePath;
-            var objKey = path.getFileName().toString();
+        var bucketName = tc.bucketName;
+        var prefix = tc.prefix;
+        var path = tc.sourcePath;
+        var objKey = path.getFileName().toString();
+        debug("putObject[{}] => s3://{}/{}/{}",path, bucketName, prefix, objKey);
+
+        try(var s3 = aws().s3()){                       
             var sourceKey = prefix+objKey;
+            Map<String, String> metadata = new HashMap<>();
+            metadata.put("x-amz-meta-source", "cloud-janitor");
+            var req = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(sourceKey)
+                .metadata(metadata)
+                .build();
+            byte[] bytes = Files.readAllBytes(path);
+            var res = s3.putObject(req, RequestBody.fromBytes(bytes));
+            var etag = res.eTag();
+            /* sounds good, doesnt work
             var upload = s3.uploadFile(b -> b.source(path)
                     .putObjectRequest(r -> r.bucket(bucketName).key(sourceKey) ) );
             var completeUpload = upload.completionFuture().join();
-            var objUrl = "s3://%s/%s%s".formatted(bucketName, prefix, objKey);
-            tc.bucketName = bucketName;
+             */
+            var objUrl = "s3://%s/%s%s".formatted(bucketName, prefix, objKey);       
             tc.sourceKey = objKey;
-            debug("Uploaded {} as {} ", path, objUrl);
+            debug("Uploaded {} as {}: etag {}", path, objUrl, etag);
+        }catch(SdkException ex){
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
+        }catch(IOException ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 
-    static class Transcription {
-        TranscriptionJob transcriptionJob;
-        static DateTimeFormatter fmt = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-        LocalDateTime createTime = LocalDateTime.now();
-        Path sourcePath;
-        String bucketName;
-        String sourceKey;
 
-
-        public String getOutputSrtKey(){
-            return getOutputKey() + ".srt";
-        }
-        public String getOutputKey(){
-            var filename = sourcePath.getFileName().toString();
-            var filebase = filename.substring(0, filename.lastIndexOf('.'));
-            var outputkey = "%s%s".formatted(prefix,filebase);
-            outputkey = validKey(outputkey);
-            return outputkey;
-        }
-
-        private String validKey(String key) {
-            return key.replaceAll("[^0-9a-zA-Z._-]", "_");
-        }
-
-        public String transcriptionJobName(){
-            var jobBaseName = sourceKey + "-" +createTime.format(fmt);
-            @SuppressWarnings("VariableTypeCanBeExplicit")
-            var jobName = validKey(jobBaseName);
-            return jobName;
-        }
-        public String sourceMediaUri() {
-            @SuppressWarnings("UnnecessaryLocalVariable")
-            var uri = "s3://%s/%s%s".formatted(bucketName, prefix, sourceKey);
-            return uri;
-        }
-
-        public Path getLangOutputSrtFilePath() {
-            var sourceName = sourcePath.getFileName().toString();
-            var filebase = sourceName.substring(0, sourceName.lastIndexOf('.'));
-            var langCode = transcriptionJob.languageCode().toString();
-            var srtFile = "%s.%s.srt".formatted(filebase, langCode);
-            @SuppressWarnings("UnnecessaryLocalVariable")
-            var srtPath = sourcePath.getParent().resolve(srtFile);
-            return srtPath;
-        }
-
-        public Path getNolangOutputSrtFilePath() {
-            var sourceName = sourcePath.getFileName().toString();
-            var filebase = sourceName.substring(0, sourceName.lastIndexOf('.'));
-            var srtFile = "%s.srt".formatted(filebase);
-            @SuppressWarnings("UnnecessaryLocalVariable")
-            var srtPath = sourcePath.getParent().resolve(srtFile);
-            return srtPath;
-        }
-
-        @Override
-        public String toString() {
-            return Map.of("jobName", transcriptionJobName()).toString();
-        }
-    }
 }
