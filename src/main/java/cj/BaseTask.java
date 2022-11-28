@@ -184,6 +184,9 @@ public class BaseTask
         if (value == null) {
             value = cfgInputString(key);
         }
+        if(key.toString().contains("clusterProfile")){
+            System.out.println("  ");
+        }
         if (value == null) {
             value = inputsMap.getFromDefault(key);
         }

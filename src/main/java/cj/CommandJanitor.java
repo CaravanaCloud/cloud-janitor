@@ -52,7 +52,6 @@ public class CommandJanitor implements Callable<Integer> {
         return 0;
     }
 
-
     public void parseArgs(CommandLine command) {
         trySetProperty("quarkus.log.console.level", logLevel);
         if (taskNames != null && ! taskNames.isEmpty()) {
