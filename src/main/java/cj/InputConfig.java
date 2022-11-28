@@ -1,14 +1,18 @@
 package cj;
 
+import java.util.*;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public record InputConfig(
         Input input,
+        String description,
         String configKey,
         Function<Configuration, Optional<?>> configFn,
-        Supplier<?> defaultFn
+        Supplier<?> defaultFn,
+        String defaultDescription,
+        List<String> allowedValues
 ) {
     public String getEnvVarName(){
         return toEnvVarName(getConfigKey());
@@ -41,5 +45,25 @@ public record InputConfig(
         if (defaultFn != null)
             return defaultFn.get();
         return null;
+    }
+
+    public static InputConfig of(Input key, 
+        String description, 
+        String configKey,
+        Function<Configuration, Optional<?>> configFn, 
+        Supplier<?> defaultFn, 
+        String defaultDescription,
+        Object[] allowedValues) {
+        var allowedStrings = (List<String>) null;
+        if(allowedValues != null){
+            allowedStrings = Arrays.stream(allowedValues).map(Object::toString).toList();
+        }
+        return new InputConfig(key, 
+            description, 
+            configKey, 
+            configFn, 
+            defaultFn, 
+            defaultDescription, 
+            allowedStrings);
     }
 }

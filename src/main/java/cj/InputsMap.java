@@ -34,10 +34,13 @@ public class InputsMap {
         log.debug("Initializing input mappings.");
     }
     public InputsMap putConfig(Input input,
+                               String description,
                                String configKey,
                                Function<Configuration, Optional<?>> configFn,
-                               Supplier<?> defaultFn){
-        var inputConfig = new InputConfig(input, configKey, configFn, defaultFn);
+                               Supplier<?> defaultFn,
+                               String defaultDescription,
+                               Object[] allowedValues){
+        var inputConfig = InputConfig.of(input,description, configKey, configFn, defaultFn, defaultDescription, allowedValues);
         inputConfigs.put(input, inputConfig);
         return this;
     }

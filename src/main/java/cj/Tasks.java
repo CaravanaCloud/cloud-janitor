@@ -356,5 +356,9 @@ public class Tasks {
         return tasks;
      }
 
+    public String generateResourceName() {
+        return getExecutionId();
+    }
+
 
 }

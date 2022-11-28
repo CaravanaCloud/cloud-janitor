@@ -1,6 +1,7 @@
 {
   "version": "0.2.0",
   "configurations": [
+
     {
       "type": "java",
       "name": "aws-transcribe",
@@ -15,7 +16,15 @@
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
-      "args": "-t openshift-create-cluster"
+      "args": "openshift-create-cluster"
+    },
+    {
+      "type": "java",
+      "name": "openshift-create-cluster --help",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "--help openshift-create-cluster"
     },
     {
       "type": "java",

@@ -48,7 +48,19 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         createCluster(clusterName, clusterDir);
         var kubeconfig = clusterDir.resolve("auth").resolve("kubeconfig");
         export("KUBECONFIG", kubeconfig);
+        var defaultKubeconfig = FSUtils.getHomePath().resolve(".kube");
+        link(kubeconfig, defaultKubeconfig);
         debug("ocp-create-cluster done");
+    }
+
+    private void link(Path kubeconfig, Path defaultKubeconfig) {
+        var cmd = new String[]{
+            "ln",
+            "-sf",
+            kubeconfig.toString(),
+            defaultKubeconfig.toString()
+        };
+        tasks().exec(cmd);
     }
 
     private void export(String varName, Path varValue) {

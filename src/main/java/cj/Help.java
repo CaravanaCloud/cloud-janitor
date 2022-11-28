@@ -39,9 +39,15 @@ public class Help {
         msg.append("\ndescription: %s".formatted(task.description()));
         msg.append("\nmaturity: %s".formatted(task.maturityLevel()));
         task.inputs().forEach(input -> {
-            msg.append("\n    input: %s".formatted(input.input().toString()));
-            msg.append("\n  yml key: %s".formatted(input.configKey()));
-            msg.append("\n  env var: %s".formatted(input.getEnvVarName()));
+            msg.append("\n       input: %s".formatted(input.input().toString()));
+            msg.append("\n description: %s".formatted(input.description()));
+            msg.append("\n     yml key: %s".formatted(input.configKey()));
+            msg.append("\n     env var: %s".formatted(input.getEnvVarName()));
+            msg.append("\n     default: %s".formatted(input.defaultDescription()));
+            var allowedValues = input.allowedValues();
+            if(allowedValues != null && allowedValues.size() > 0){
+                msg.append("\n     allowed: %s".formatted(allowedValues));
+            }
             msg.append("\n");
         });
     }

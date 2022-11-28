@@ -63,7 +63,7 @@ public class FSUtils {
                 throw new RuntimeException(e);
             }
         }
-        var content = "%s=%s".formatted(varName, varValue);
+        var content = "\n%s=%s".formatted(varName, varValue);
         try {
             Files.write(envFile,
                     content.getBytes(),
@@ -175,9 +175,10 @@ public class FSUtils {
     }
 
 
-    private static Path getHomePath() {
+    public static Path getHomePath() {
         var home = System.getProperty("user.home");
         var homePath = Path.of(home);
         return homePath;
     }
+
 }
