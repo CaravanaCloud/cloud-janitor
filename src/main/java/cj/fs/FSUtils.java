@@ -143,6 +143,10 @@ public class FSUtils {
         var appPath = resolve(configPath, "cloud-janitor");
         return appPath;
     }
+    
+    public static Path getTasksDir(){
+        return getApplicationDir();
+    }
 
     public static Path getTaskDir(String context, String dirName){
         return resolve(getContextPath(context), dirName);

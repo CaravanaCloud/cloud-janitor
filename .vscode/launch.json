@@ -1,7 +1,14 @@
 {
   "version": "0.2.0",
   "configurations": [
-
+    {
+      "type": "java",
+      "name": "aws-nuke",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "aws-nuke"
+    },
     {
       "type": "java",
       "name": "aws-transcribe",
