@@ -74,12 +74,89 @@ public class FSUtils {
         }
     }
 
+    public static void copyDirWithBackup(Path src, Path dst) {
+        var visitor = new CopyWithBackup(src, dst);
+        try{
+            Files.walkFileTree(src, visitor);
+        }catch (IOException e){
+            log.error(e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
 
-    static class FilterVisitor extends SimpleFileVisitor<Path> {
+    public static void copyFileWithBackup(Path newkubeconfig, Path newconfig) {
+        if (newconfig.toFile().exists()){
+            var newFileName = newconfig.getFileName() + "." + System.currentTimeMillis() + ".bak";
+            var backup = newconfig.getParent().resolve(newFileName);
+            try {
+                Files.copy(newconfig, backup, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
+                throw new RuntimeException(e);
+            }
+        }
+        try {
+            Files.copy(newkubeconfig, newconfig, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    static class CopyWithBackup extends SimpleFileVisitor<Path>{
+        private final Path src;
+        private final Path dst;
+
+        public CopyWithBackup(Path src, Path dst) {
+            this.src = src;
+            this.dst = dst;
+        }
+
+        @Override
+        public FileVisitResult visitFile(Path path, BasicFileAttributes attrs){
+            log.trace("Copying file: {}", path);
+            var relative = src.relativize(path);
+            var dstPath = dst.resolve(relative);
+            backup(dstPath);
+            copy(path, dstPath);
+            return FileVisitResult.CONTINUE;
+        }
+
+        private void copy(Path path, Path dstPath) {
+            try {
+                Files.copy(path, dstPath, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
+                throw new RuntimeException(e);
+            }
+            log.debug("copy {} => {}", path, dstPath);
+        }
+
+        private void backup(Path dstPath) {
+            if (dstPath.toFile().exists()) {
+                var timestamp = ""+System.currentTimeMillis();
+                var backupstamp = "."+timestamp+".bak";
+                var backupPath = dstPath.resolveSibling(dstPath.getFileName() +  backupstamp);
+                log.trace("Backing up file: {}", dstPath);
+                try {
+                    Files.move(dstPath, backupPath, StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+
+    }
+
+
+    static class FindFiles extends SimpleFileVisitor<Path> {
         List<Path> results = new ArrayList<>();
         String extension;
 
-        public FilterVisitor(String extension) {
+        public FindFiles(String extension) {
             this.extension = extension;
         }
 
@@ -109,7 +186,7 @@ public class FSUtils {
     public static List<Path> findByExtension(Path dir, String extension) {
         if(dir.toFile().exists()){
             log.debug("Looking for files on {}", dir);
-            var visitor = new FilterVisitor(extension);
+            var visitor = new FindFiles(extension);
             try{
                 Files.walkFileTree(dir, visitor);
             }catch (IOException e){
@@ -158,6 +235,14 @@ public class FSUtils {
 
     public static Path getDataDir(){
         return resolve(getApplicationDir(), "data");
+    }
+
+    public static Path getDataDir(String... context) {
+        var dataDir = getDataDir();
+        for (String s : context) {
+            dataDir = resolve(dataDir, s);
+        }
+        return dataDir;
     }
 
     public static Path resolve(Path parent, String target) {

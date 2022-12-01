@@ -44,12 +44,15 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         checkCommands(clusterProfile);
         var data = getInputsMap();
         preCreate(clusterName, clusterDir, credsDir, outputDir, clusterProfile, data);
-
         createCluster(clusterName, clusterDir);
-        var kubeconfig = clusterDir.resolve("auth").resolve("kubeconfig");
-        export("KUBECONFIG", kubeconfig);
-        var defaultKubeconfig = FSUtils.getHomePath().resolve(".kube");
-        link(kubeconfig, defaultKubeconfig);
+        var kubeconfigdir = clusterDir.resolve("auth");
+        export("KUBECONFIG", kubeconfigdir);
+        var home = FSUtils.getHomePath();
+        var defaultkubedir = FSUtils.resolve(home,".kube");
+        FSUtils.copyDirWithBackup(kubeconfigdir, defaultkubedir);
+        var newkubeconfig = defaultkubedir.resolve("kubeconfig");
+        var newconfig = defaultkubedir.resolve("config");
+        FSUtils.copyFileWithBackup(newkubeconfig, newconfig);
         debug("ocp-create-cluster done");
     }
 
@@ -89,9 +92,9 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         };
         debug("Running command: {}", String.join(" ", cmdArgs));
         checkpoint("Creating openshift cluster using openshift-install");
-        var output = tasks().exec(90L, cmdArgs);
-        if (output.isPresent()) {
-            logger().debug("openshift-install output: {}", output.get());
+        var exec = tasks().exec(90L, cmdArgs);
+        if (exec.isSuccess()) {
+            logger().debug("openshift-install output size: {}", exec.stdout().length());
         } else {
             throw fail("openshift-install failed.");
         }
@@ -137,7 +140,7 @@ public class OpenshiftCreateClusterTask extends BaseTask {
     }
 
     private Path getClusterDir(String clusterName) {
-        var clusterDir = getTaskDir(clusterName);
+        var clusterDir = FSUtils.getDataDir("openshift-cluster", clusterName);
         debug("Creating cluster using dir {} ", clusterDir);
         return clusterDir;
     }
@@ -152,8 +155,8 @@ public class OpenshiftCreateClusterTask extends BaseTask {
                 "--region=" + inputString(OCPInput.awsRegion),
                 "--credentials-requests-dir=" + credsDir.toString(),
                 "--output-dir=" + outputDir);
-        if (ccoctlExec.isPresent()) {
-            logger().debug("ccoctl output: {}", ccoctlExec.get());
+        if (ccoctlExec.isSuccess()) {
+            logger().debug("ccoctl output: {}", ccoctlExec.stdout().length());
         } else {
             throw fail("ccoctl failed.");
         }

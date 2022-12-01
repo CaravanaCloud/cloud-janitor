@@ -8,5 +8,5 @@ public enum ShellInput implements Input {
     timeout,
     dryRun;
 
-    public static final Long DEFAULT_TIMEOUT_MINS = 5L;
+    public static final Long DEFAULT_TIMEOUT_MINS = 1L;
 }

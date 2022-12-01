@@ -12,8 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static cj.CJInput.dryRun;
-import static cj.Output.shell.exitCode;
-import static cj.Output.shell.stdout;
+import static cj.Output.shell.*;
 import static cj.shell.ShellInput.*;
 
 @Dependent
@@ -64,8 +63,10 @@ public class ShellTask extends ReadTask {
             var processOutput = output.toString().trim();
             var processError = error.toString().trim();
             debug("[{}]$ {}\n{}\n{}", processExitCode, cmdLine, processOutput, processError);
-            success(stdout, processOutput);
             success(exitCode, processExitCode);
+            success(stdout, processOutput);
+            success(stderr, processError);
+
         } catch (Exception e) {
             throw fail(e);
         }
@@ -79,11 +80,14 @@ public class ShellTask extends ReadTask {
         debug(s);
     }
 
-    private String redact(String s) {
-        s = redactRedundantLogLevel(s);
-        s = redactSecrets(s);
-        s = redactExports(s);
-        return "[*] " + s;
+    private String redact(String line) {
+        var original = ""+line;
+        line = redactRedundantLogLevel(line);
+        line = redactSecrets(line);
+        line = redactExports(line);
+        var redacted = ! original.equals(line);
+        var flag = redacted ? "*" : "?";
+        return "[%s] %s".formatted(flag, line);
     }
 
     private String redactExports(String s) {

@@ -3,9 +3,11 @@ package cj;
 import cj.ocp.CapabilityNotFoundException;
 import cj.reporting.Reporting;
 import cj.shell.CheckShellCommandExistsTask;
+import cj.shell.ExecResult;
 import cj.shell.ShellInput;
 import cj.shell.ShellTask;
 import cj.spi.Task;
+import com.google.common.base.Preconditions;
 import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -279,21 +281,21 @@ public class Tasks {
         return Optional.ofNullable(inputs.getFromConfig(input));
     }
 
-    public Optional<String> exec(String... cmdArgs) {
+    public ExecResult exec(String... cmdArgs) {
         return exec(ShellInput.DEFAULT_TIMEOUT_MINS, false, cmdArgs);
     }
 
     @SuppressWarnings("unused")
-    protected Optional<String> exec(Boolean dryRun, String... cmdArgs) {
+    protected ExecResult exec(Boolean dryRun, String... cmdArgs) {
         return exec(ShellInput.DEFAULT_TIMEOUT_MINS, dryRun, cmdArgs);
     }
 
     @SuppressWarnings("all")
-    public Optional<String> exec(Long timeout, String... cmdArgs) {
+    public ExecResult exec(Long timeout, String... cmdArgs) {
         return exec(timeout, false, cmdArgs);
     }
 
-    public Optional<String> exec(Long timeoutMins, Boolean isDryRun, String... cmdArgs) {
+    public ExecResult exec(Long timeoutMins, Boolean isDryRun, String... cmdArgs) {
         if (cmdArgs.length == 1) {
             var cmd = cmdArgs[0];
             if (cmd.contains(" ")) {
@@ -304,8 +306,13 @@ public class Tasks {
                 .withInput(ShellInput.timeout, timeoutMins);
         submit(shellTask);
         @SuppressWarnings("all")
-        var output = shellTask.outputString(Output.shell.stdout);
-        return output;
+        var stdout = shellTask.outputString(Output.shell.stdout);
+        Preconditions.checkArgument(stdout.isPresent(), "No stdout from shell task");
+        var stderr = shellTask.outputString(Output.shell.stderr);
+        Preconditions.checkArgument(stderr.isPresent(), "No stderr from shell task");
+        var exitCode = shellTask.outputAs(Output.shell.exitCode, Integer.class);
+        Preconditions.checkArgument(stderr.isPresent(), "No exit code from shell task");
+        return new ExecResult(exitCode.get(), stdout.get(), stderr.get());
     }
 
     public ShellTask shellTask(List<String> cmdsList) {
