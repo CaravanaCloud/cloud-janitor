@@ -10,4 +10,8 @@ public record CallerIdentity(
             return accountAlias;
         return accountId;
     }
+
+    public String getAccountId() {
+        return accountId;
+    }
 }

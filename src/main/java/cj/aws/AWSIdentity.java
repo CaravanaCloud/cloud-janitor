@@ -19,7 +19,7 @@ public abstract class AWSIdentity {
     }
 
     public String getAccountName() {
-        return callerId == null ? "" : callerId.getAccountName();
+        return callerId == null ? "???" : callerId.getAccountName();
     }
 
     @Override
@@ -29,5 +29,9 @@ public abstract class AWSIdentity {
 
     public void setCallerIdentity(CallerIdentity callerIdentity) {
         this.callerId = callerIdentity;
+    }
+
+    public String getAccountId() {
+        return callerId == null ? "???" : callerId.getAccountId();
     }
 }

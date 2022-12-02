@@ -42,6 +42,7 @@ public class BaseTask
 
     @Inject
     Templates templates;
+    LocalDateTime createTime = LocalDateTime.now();
 
 
     /* Delegate Methods */
@@ -55,6 +56,11 @@ public class BaseTask
     @Override
     public LocalDateTime getStartTime() {
         return startTime;
+    }
+
+    @Override
+    public LocalDateTime getCreateTime() {
+        return createTime;
     }
 
     @Override
@@ -312,8 +318,8 @@ public class BaseTask
         }
     }
 
-    protected Path getTaskDir(String dirName) {
-        return FSUtils.getTaskDir(getContextName(), dirName);
+    protected Path getTaskDir(String context) {
+        return FSUtils.taskDir(this, context);
     }
 
     protected boolean hasCapabilities(Capabilities... cs) {
@@ -390,4 +396,30 @@ public class BaseTask
         return submitInstance(filterFiles, FSInput.extension, extension)
                 .outputList(FilesMatch, Path.class);
     }
+
+    protected Path taskDir(){
+        return FSUtils.taskDir(this);
+    }
+
+    protected String render(String location, Map<String, String> inputs) {
+        debug("Rendering template from {} with {} inputs", location, inputs.size());
+        var installConfigTemplate = getTemplate(location);
+        if (installConfigTemplate == null){
+            warn("Failed to load template from {}", location);
+            throw fail("Failed to load template from %s", location);
+        }
+        var data = new HashMap<String, Object>();
+        data.putAll(inputs);
+        data.putAll(getInputsMap());
+        data.put("config",config());
+        String render = installConfigTemplate
+                .data(data)
+                .render();
+        return render;
+    }
+
+    protected String render(String location) {
+        return render(location, Map.of());
+    }
+
 }

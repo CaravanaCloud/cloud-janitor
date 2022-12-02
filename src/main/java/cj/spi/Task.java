@@ -3,6 +3,7 @@ package cj.spi;
 import cj.Errors;
 import cj.Input;
 import cj.Output;
+import cj.fs.FSUtils;
 
 import javax.inject.Named;
 import java.time.Duration;
@@ -16,6 +17,8 @@ import java.util.Optional;
  * A task is a function to be executed, as a basic unit of work.
  */
 public interface Task {
+    DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+
     /**
      * The code to be executed by the Task, if considered *safe* by the TaskManager.
      */
@@ -27,6 +30,10 @@ public interface Task {
      * Task start time, if started
      */
     default LocalDateTime getStartTime() {
+        return null;
+    }
+
+    default LocalDateTime getCreateTime() {
         return null;
     }
 
@@ -126,11 +133,11 @@ public interface Task {
 
 
     @SuppressWarnings("unused")
+
     default String getStartTimeFmt() {
         return getDateFormat().format(getStartTime());
     }
 
-    DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
     default DateTimeFormatter getDateFormat() {
         return dateTimeFormat;
@@ -167,4 +174,13 @@ public interface Task {
     default <T> List<T> outputList(Output key, Class<T> valueClass) {
         return List.of();
     }
+
+    default String getPathName(){
+        var createTime = FSUtils.format(getCreateTime());
+        var dirname = String.format("%s-%s", createTime, getName());
+        var safeName = dirname.toLowerCase().replaceAll("[^a-zA-Z0-9]", "_");
+        return safeName;
+    }
+
+
 }

@@ -39,8 +39,8 @@ public class OpenshiftCreateClusterTask extends BaseTask {
             throw fail("Cluster directory already exists %s ", clusterDir);
         else
             debug("Using cluster dir {}", clusterDir);
-        var credsDir = FSUtils.resolve(clusterDir, "ccoctl-creds");
-        var outputDir = FSUtils.resolve(clusterDir, "ccoctl-output");
+        var credsDir = FSUtils.resolveDir(clusterDir, "ccoctl-creds");
+        var outputDir = FSUtils.resolveDir(clusterDir, "ccoctl-output");
         checkCommands(clusterProfile);
         var data = getInputsMap();
         preCreate(clusterName, clusterDir, credsDir, outputDir, clusterProfile, data);
@@ -48,7 +48,7 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         var kubeconfigdir = clusterDir.resolve("auth");
         export("KUBECONFIG", kubeconfigdir);
         var home = FSUtils.getHomePath();
-        var defaultkubedir = FSUtils.resolve(home,".kube");
+        var defaultkubedir = FSUtils.resolveDir(home,".kube");
         FSUtils.copyDirWithBackup(kubeconfigdir, defaultkubedir);
         var newkubeconfig = defaultkubedir.resolve("kubeconfig");
         var newconfig = defaultkubedir.resolve("config");
@@ -126,21 +126,9 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         debug("Wrote [{}] install-config.yaml [{}] to {}", profile, output.length(), installConfigPath);
     }
 
-    private String render(String location, Map<String, String> inputs) {
-        debug("Rendering template from {} with {} inputs", location, inputs.size());
-        var installConfigTemplate = getTemplate(location);
-        if (installConfigTemplate == null){
-            warn("Failed to load template from {}", location);
-            throw fail("Failed to load template from %s", location);
-        }
-        String render = installConfigTemplate
-                .data(inputs)
-                .render();
-        return render;
-    }
 
     private Path getClusterDir(String clusterName) {
-        var clusterDir = FSUtils.getDataDir("openshift-cluster", clusterName);
+        var clusterDir = FSUtils.dataDir("openshift-cluster", clusterName);
         debug("Creating cluster using dir {} ", clusterDir);
         return clusterDir;
     }

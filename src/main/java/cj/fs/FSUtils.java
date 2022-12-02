@@ -1,11 +1,14 @@
 package cj.fs;
 
+import cj.spi.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,12 +18,14 @@ public class FSUtils {
     private static final Logger log = LoggerFactory.getLogger(FSUtils.class);
 
     public static Path getLocalConfigDir() {
-        return getApplicationDir().resolve("config");
+        return applicationDir().resolve("config");
     }
 
     public static String cwd() {
         return System.getProperty("user.dir");
     }
+
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_SSS");
 
     public static void writeFile(Path path, String content) {
         try {
@@ -42,7 +47,7 @@ public class FSUtils {
     }
 
     public static Path getLookupPath() {
-        return getCurrentDir();
+        return currentDir();
     }
 
     public static String basename(Path path) {
@@ -54,7 +59,7 @@ public class FSUtils {
     }
 
     public static void writeEnv(String varName, Path varValue) {
-        var envFile = getCurrentDir().resolve(".env");
+        var envFile = currentDir().resolve(".env");
         if (! envFile.toFile().exists()) {
             try {
                 Files.createFile(envFile);
@@ -101,6 +106,10 @@ public class FSUtils {
             log.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
+    }
+
+    public static String format(LocalDateTime createTime) {
+        return formatter.format(createTime);
     }
 
 
@@ -203,49 +212,49 @@ public class FSUtils {
 
     public static List<Path> filterLocalVideos(){
         var extension = "mp4";
-        var currentDirMatch = findByExtension(getCurrentDir(), extension);
+        var currentDirMatch = findByExtension(currentDir(), extension);
         return Stream.of(currentDirMatch)
                 .flatMap(Collection::stream)
                 .toList();
     }
 
-    private static Path getCurrentDir() {
+    private static Path currentDir() {
         Path userPath = Paths.get(System.getProperty("user.dir"));
         return userPath;
     }
 
-    public static Path getApplicationDir() {
+    public static Path applicationDir() {
         Path homePath = getHomePath();
         var configPath = homePath.resolve(".config");
-        var appPath = resolve(configPath, "cloud-janitor");
+        var appPath = resolveDir(configPath, "cloud-janitor");
         return appPath;
     }
     
-    public static Path getTasksDir(){
-        return getApplicationDir();
+    public static Path tasksDir(){
+        return resolveDir(applicationDir(), "tasks");
     }
 
-    public static Path getTaskDir(String context, String dirName){
-        return resolve(getContextPath(context), dirName);
+    public static Path taskDir(Task task, String context){
+        return resolveDir(taskDir(task), context);
     }
 
-    public static Path getContextPath(String context){
-        return resolve(getDataDir(), context);
+    public static Path taskDir(Task task) {
+        return resolveDir(tasksDir(), task.getPathName());
     }
 
-    public static Path getDataDir(){
-        return resolve(getApplicationDir(), "data");
+    public static Path dataDir(){
+        return resolveDir(applicationDir(), "data");
     }
 
-    public static Path getDataDir(String... context) {
-        var dataDir = getDataDir();
+    public static Path dataDir(String... context) {
+        var dataDir = dataDir();
         for (String s : context) {
-            dataDir = resolve(dataDir, s);
+            dataDir = resolveDir(dataDir, s);
         }
         return dataDir;
     }
 
-    public static Path resolve(Path parent, String target) {
+    public static Path resolveDir(Path parent, String target) {
         if (parent == null || target == null) {
             throw new IllegalArgumentException("Parent and target must not be null");
         }

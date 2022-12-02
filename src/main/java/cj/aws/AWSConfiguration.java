@@ -19,6 +19,10 @@ public interface AWSConfiguration {
         return null;
     }
 
+    default List<String> regionsList(){
+        return regions().orElse(List.of());
+    }
+
     @WithName("filter.prefix")
     Optional<String> filterPrefix();
 

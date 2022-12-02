@@ -9,6 +9,7 @@ import cj.shell.ShellTask;
 import cj.spi.Task;
 import com.google.common.base.Preconditions;
 import io.quarkus.runtime.StartupEvent;
+import io.quarkus.runtime.annotations.CommandLineArguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,12 +63,17 @@ public class Tasks {
     Beans beans;
 
     public void run() {
-        log.trace("Tasks.run()");
-        log.debug("Capabilities: {}", getCapabilities());
-        log.debug("Parallel: {}", config.parallel());
+        init();
         var tasks = config.tasks();
         tasks.ifPresent(ts -> ts.forEach(this::run));
         report();
+    }
+
+
+    private void init() {
+        log.trace("Tasks.run()");
+        log.debug("Capabilities: {}", getCapabilities());
+        log.debug("Parallel: {}", config.parallel());
     }
 
     // TODO: Consider async execution
