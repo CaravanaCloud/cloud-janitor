@@ -49,7 +49,7 @@ public class GetCallerIdentityTask extends AWSFilter {
             return accountId;
         }else{
             var aliasesStr = String.join(",", aliases);
-            logger().debug("Found alias for account {}: {}", accountId, aliasesStr);
+            log().debug("Found alias for account {}: {}", accountId, aliasesStr);
             return aliasesStr;
         }
     }

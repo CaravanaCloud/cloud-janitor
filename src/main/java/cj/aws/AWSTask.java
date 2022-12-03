@@ -2,7 +2,6 @@ package cj.aws;
 
 import cj.BaseTask;
 import cj.Output;
-import cj.Tasks;
 import cj.aws.sts.CallerIdentity;
 import cj.aws.sts.GetCallerIdentityTask;
 import cj.aws.sts.LoadAWSIdentitiesTask;
@@ -13,6 +12,7 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
@@ -28,7 +28,7 @@ public abstract class   AWSTask
     @Inject
     Instance<GetCallerIdentityTask> getCallerIdInstance;
 
-    public AWSClients aws(){
+    public AWSClients aws() {
         var identity = getIdentity();
         var config = config().aws();
         return AWSClients.of(config, identity);
@@ -36,21 +36,20 @@ public abstract class   AWSTask
 
     protected AWSIdentity getIdentity() {
         var id = inputAs(identity, AWSIdentity.class);
-        if (id.isPresent()){
+        if (id.isPresent()) {
             @SuppressWarnings("redundant")
             var awsId = id.get();
             return awsId;
-        }
-        else{
+        } else {
             if (defaultIdentity == null) {
-                logger().info("Loading default AWS Identity for task.");
+                log().info("Loading default AWS Identity for task.");
                 defaultIdentity = loadDefaultAWSIdentity();
             }
             return defaultIdentity;
         }
     }
 
-    protected void setIdentity(AWSIdentity id){
+    protected void setIdentity(AWSIdentity id) {
         getInputs().put(identity, id);
     }
 
@@ -68,13 +67,13 @@ public abstract class   AWSTask
         return null;
     }
 
-    protected <T> T create(Instance<T> instance){
+    protected <T> T create(Instance<T> instance) {
         @SuppressWarnings("redundant")
         var result = instance.get();
         return result;
     }
 
-    protected Region getRegion(){
+    protected Region getRegion() {
         var regionIn = inputAs(AWSInput.targetRegion, Region.class);
         return regionIn.orElse(aws().getRegion());
     }
@@ -91,18 +90,17 @@ public abstract class   AWSTask
     private List<String> getContext() {
         var id = getIdentity();
         if (id != null && id.hasCallerIdentity()) {
-            String acctName = ""+id.getAccountName();
-            String region = ""+getRegionName();
+            String acctName = "" + id.getAccountName();
+            String region = "" + getRegionName();
             return List.of("aws",
                     acctName,
                     region);
-        }
-        else return List.of("aws");
+        } else return List.of("aws");
     }
 
     private String getRegionName() {
         var region = getRegion();
-        return region != null? region.toString() : "-null-region-";
+        return region != null ? region.toString() : "-null-region-";
     }
 
     protected Duration getPollInterval() {
@@ -133,13 +131,13 @@ public abstract class   AWSTask
         return Duration.ofMinutes(60L);
     }
 
-    protected void awaitUntil(Callable<Boolean> condition){
+    protected void awaitUntil(Callable<Boolean> condition) {
         await().atMost(getAtMost())
                 .pollInterval(getPollInterval())
                 .until(condition);
     }
 
-    protected void awaitUntilLong(Callable<Boolean> condition){
+    protected void awaitUntilLong(Callable<Boolean> condition) {
         await().atMost(getAtMostLong())
                 .pollInterval(getPollIntervalLong())
                 .until(condition);
@@ -147,7 +145,8 @@ public abstract class   AWSTask
 
     @Inject
     Instance<LoadAWSIdentitiesTask> loadAWSIdentitiesTask;
-    protected List<AWSIdentity> loadAWSIdentities(){
+
+    protected List<AWSIdentity> loadAWSIdentities() {
         var task = loadAWSIdentitiesTask.get();
         submit(task);
         @SuppressWarnings("redundant")
@@ -155,4 +154,12 @@ public abstract class   AWSTask
         return identities;
     }
 
+    @Override
+    protected Map<String, String> getInputsMap() {
+        var inputs = super.getInputsMap();
+        var awsIdentity = getIdentity();
+        var accountId = awsIdentity.getAccountId();
+        inputs.put("accountId", accountId);
+        return inputs;
+    }
 }

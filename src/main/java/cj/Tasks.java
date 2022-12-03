@@ -7,9 +7,7 @@ import cj.shell.ExecResult;
 import cj.shell.ShellInput;
 import cj.shell.ShellTask;
 import cj.spi.Task;
-import com.google.common.base.Preconditions;
 import io.quarkus.runtime.StartupEvent;
-import io.quarkus.runtime.annotations.CommandLineArguments;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +25,7 @@ import java.util.*;
 
 
 import static cj.Errors.Type.Message;
+import static com.google.common.base.Preconditions.checkArgument;
 
 @ApplicationScoped
 @Named("tasks")
@@ -61,6 +60,7 @@ public class Tasks {
 
     @Inject
     Beans beans;
+    Map<String, Map<OS, String[]>> installMap = new HashMap<>();
 
     public void run() {
         init();
@@ -288,12 +288,12 @@ public class Tasks {
     }
 
     public ExecResult exec(String... cmdArgs) {
-        return exec(ShellInput.DEFAULT_TIMEOUT_MINS, false, cmdArgs);
+        return exec(false, cmdArgs);
     }
 
     @SuppressWarnings("unused")
     protected ExecResult exec(Boolean dryRun, String... cmdArgs) {
-        return exec(ShellInput.DEFAULT_TIMEOUT_MINS, dryRun, cmdArgs);
+        return exec(getConfig().execTimeout(),dryRun, cmdArgs);
     }
 
     @SuppressWarnings("all")
@@ -308,16 +308,19 @@ public class Tasks {
                 cmdArgs = cmd.split(" ");
             }
         }
+        if (timeoutMins == null) {
+            timeoutMins = getConfig().execTimeout();
+        }
         var shellTask = shellTask(isDryRun, cmdArgs)
                 .withInput(ShellInput.timeout, timeoutMins);
         submit(shellTask);
         @SuppressWarnings("all")
         var stdout = shellTask.outputString(Output.shell.stdout);
-        Preconditions.checkArgument(stdout.isPresent(), "No stdout from shell task");
+        checkArgument(stdout.isPresent(), "No stdout from shell task");
         var stderr = shellTask.outputString(Output.shell.stderr);
-        Preconditions.checkArgument(stderr.isPresent(), "No stderr from shell task");
+        checkArgument(stderr.isPresent(), "No stderr from shell task");
         var exitCode = shellTask.outputAs(Output.shell.exitCode, Integer.class);
-        Preconditions.checkArgument(stderr.isPresent(), "No exit code from shell task");
+        checkArgument(stderr.isPresent(), "No exit code from shell task");
         return new ExecResult(exitCode.get(), stdout.get(), stderr.get());
     }
 
@@ -374,4 +377,14 @@ public class Tasks {
     }
 
 
+    public void shell(String[] cmd) {
+        checkArgument(cmd.length > 0, "No command provided");
+        var binary = cmd[0];
+        checkCmd(binary, installMap.get(binary));
+        exec(cmd);
+    }
+
+    public void mapInstall(String binary, Map<OS, String[]> commands) {
+        installMap.put(binary, commands);
+    }
 }

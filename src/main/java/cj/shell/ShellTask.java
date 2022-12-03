@@ -44,7 +44,8 @@ public class ShellTask extends ReadTask {
                 info("Dry run, shell command not executed.");
                 return;
             }
-            var timeoutIn = inputAs(timeout, Long.class).orElse(DEFAULT_TIMEOUT_MINS);
+            var timeoutIn = inputAs(timeout, Long.class)
+                    .orElse(config().execTimeout());
             var process = runtime.exec(cmdArr);
             var output = new StringBuffer();
             var error = new StringBuffer();
@@ -110,6 +111,7 @@ public class ShellTask extends ReadTask {
         return s.replaceAll(redundantLogLevelRegex,"");
     }
 
+    @Deprecated
     public static Optional<String> execute(String... cmdArr){
         try {
             var process = Runtime.getRuntime().exec(cmdArr);

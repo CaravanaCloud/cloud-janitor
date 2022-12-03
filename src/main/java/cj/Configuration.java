@@ -73,6 +73,11 @@ public interface Configuration {
     @WithDefault("cj")
     String getNamingPrefix();
 
+    @WithName("execTimeout")
+    @WithDefault("5")
+    Long execTimeout();
+
+
     default Path getApplicationPath(){
         var home = System.getProperty("user.home");
         var homePath = Path.of(home);
@@ -97,6 +102,7 @@ public interface Configuration {
         var execPath = appPath.resolve(execId);
         return existing(execPath);
     }
+
 
     final class StaticConfig {
         static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddss_hhmmss");

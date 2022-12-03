@@ -290,7 +290,7 @@ public class BaseTask
 
 
     protected RuntimeException fail(Exception ex) {
-        logger().error(ex.getMessage(), ex);
+        log().error(ex.getMessage(), ex);
         if (Configuration.PRINT_STACK_TRACE) {
             ex.printStackTrace();
         }
@@ -318,9 +318,11 @@ public class BaseTask
         }
     }
 
+    /*
     protected Path getTaskDir(String context) {
         return FSUtils.taskDir(this, context);
     }
+    */
 
     protected boolean hasCapabilities(Capabilities... cs) {
         return tasks().hasCapabilities(cs);
@@ -401,6 +403,17 @@ public class BaseTask
         return FSUtils.taskDir(this);
     }
 
+    protected void render(String profile, String template, Path outputFile){
+        var location = "%s/%s/%s".formatted(
+                getName(),
+                profile,
+                template
+        );
+        var content = render(location, Map.of());
+        debug("Rendering template {} to [{}] {}", template, content.length() ,outputFile);
+        FSUtils.writeFile(outputFile, content);
+    }
+
     protected String render(String location, Map<String, String> inputs) {
         debug("Rendering template from {} with {} inputs", location, inputs.size());
         var installConfigTemplate = getTemplate(location);
@@ -412,7 +425,8 @@ public class BaseTask
         data.putAll(inputs);
         data.putAll(getInputsMap());
         data.put("config",config());
-        String render = installConfigTemplate
+        @SuppressWarnings("redundant")
+        var render = installConfigTemplate
                 .data(data)
                 .render();
         return render;
@@ -420,6 +434,10 @@ public class BaseTask
 
     protected String render(String location) {
         return render(location, Map.of());
+    }
+
+    protected Path taskFile(String fileName){
+        return taskDir().resolve(fileName);
     }
 
 }

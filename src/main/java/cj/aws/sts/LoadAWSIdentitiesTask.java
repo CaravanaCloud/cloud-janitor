@@ -34,7 +34,7 @@ public class LoadAWSIdentitiesTask extends AWSTask {
             var result = ids
                .filter(AWSIdentity::hasCallerIdentity)
                .toList();
-            logger().debug("{} aws identities loaded: {}", result.size(), result);
+            log().debug("{} aws identities loaded: {}", result.size(), result);
             success(Identities, result);
         }
     }

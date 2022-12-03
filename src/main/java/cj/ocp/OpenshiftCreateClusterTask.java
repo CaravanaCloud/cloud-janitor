@@ -94,7 +94,7 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         checkpoint("Creating openshift cluster using openshift-install");
         var exec = tasks().exec(90L, cmdArgs);
         if (exec.isSuccess()) {
-            logger().debug("openshift-install output size: {}", exec.stdout().length());
+            log().debug("openshift-install output size: {}", exec.stdout().length());
         } else {
             throw fail("openshift-install failed.");
         }
@@ -144,7 +144,7 @@ public class OpenshiftCreateClusterTask extends BaseTask {
                 "--credentials-requests-dir=" + credsDir.toString(),
                 "--output-dir=" + outputDir);
         if (ccoctlExec.isSuccess()) {
-            logger().debug("ccoctl output: {}", ccoctlExec.stdout().length());
+            log().debug("ccoctl output: {}", ccoctlExec.stdout().length());
         } else {
             throw fail("ccoctl failed.");
         }

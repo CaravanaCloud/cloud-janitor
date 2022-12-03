@@ -6,7 +6,6 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -40,7 +39,6 @@ public abstract class StartupObserver implements  Logging{
             allowedValues);
     }
     
-    @Deprecated
     public void putConfig(Input input,
                                String configKey,
                                Function<Configuration, Optional<?>> configFn,
@@ -49,7 +47,7 @@ public abstract class StartupObserver implements  Logging{
     }
 
     @SuppressWarnings("unused")
-    public void onStartupEvent(@Observes StartupEvent ev){
+    protected void onStartupEvent(@Observes StartupEvent ev){
         onStart();
     }
 
