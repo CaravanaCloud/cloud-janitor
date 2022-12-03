@@ -21,8 +21,7 @@ public class AWSNukeTask extends AWSTask {
     @Override
     public void apply() {
         debug("aws-nuke started.");
-        var cfgFile = renderConfig();
-        runNuke(cfgFile);
+        runNuke(renderConfig());
         debug("aws-nuke completed.");
     }
 
