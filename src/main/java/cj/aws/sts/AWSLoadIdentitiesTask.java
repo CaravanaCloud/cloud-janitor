@@ -26,7 +26,7 @@ public class AWSLoadIdentitiesTask extends BaseTask {
             var ids = Stream.concat(
                Stream.of(id.get()),
                loadRoles().stream()).toList();
-            log().debug("{} aws identities loaded: {}", ids.size(), ids);
+            trace("{} aws identities loaded: {}", ids.size(), ids);
             success(Identities, ids);
         }
     }

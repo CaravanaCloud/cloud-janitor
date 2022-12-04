@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static cj.aws.AWSInput.identity;
 import static java.util.Optional.ofNullable;
 
 @ApplicationScoped
@@ -45,7 +44,7 @@ public class AWSClientsManager {
         var key = AWSClientIdentity.of(identity, region);
         var clients= clientsById.get(key);
         if (clients == null ){
-            log.debug("Creating new AWSClients for {} - {}", identity, region);
+            log.trace("Creating new AWSClients for {} - {}", identity, region);
             clients = clientsInstance.get();
             clients.setClientIdentity(key);
             clientsById.put(key, clients);
@@ -55,31 +54,25 @@ public class AWSClientsManager {
         return clients;
     }
 
-    private Region getCLIRegion() {
+    private Region awsCLIRegion() {
         var exec = tasks.exec("aws", "configure", "get", "region");
         var regionName = exec.stdout().trim();
+        @SuppressWarnings("UnnecessaryLocalVariable")
         var region = ofNullable(regionName).map(Region::of).orElse(null);
-        return region;
-    }
-
-    private Region getRegion(AWSConfiguration config) {
-        var region = defaultRegion(config);
-        if (region == null){
-            region = getCLIRegion();
-        }else {
-            log.debug("No region found, fallback to us-east-1.");
-            region = Region.US_EAST_1;
-        }
         return region;
     }
 
     public Region defaultRegion() {
         return defaultRegion(config.aws());
     }
-    protected static Region defaultRegion(AWSConfiguration config){
+    protected Region defaultRegion(AWSConfiguration config){
         var defaultRegion = config.defaultRegion();
         if (defaultRegion != null){
             return Region.of(defaultRegion);
+        }
+        var cliRegion = awsCLIRegion();
+        if (cliRegion != null){
+            return cliRegion;
         }
         return Region.US_EAST_1;
     }
@@ -96,7 +89,7 @@ public class AWSClientsManager {
             awsIdentities = tasks.submit(loadIds.get())
                     .outputList(AWSOutput.Identities, AWSIdentity.class);
             if (awsIdentities != null && awsIdentities.size() > 0){
-                log.debug("Loaded {} AWS identities", awsIdentities.size());
+                log.info("Loaded {} AWS identities", awsIdentities.size());
             }else{
                 log.warn("No AWS identities found.");
                 awsIdentities = List.of();

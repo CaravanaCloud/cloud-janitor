@@ -31,9 +31,9 @@ public class InputsMap {
     @PostConstruct
     @SuppressWarnings("unused")
     public void init(){
-        log.debug("Initializing input mappings.");
+        log.trace("Initializing input mappings.");
     }
-    public InputsMap putConfig(Input input,
+    public void putConfig(Input input,
                                String description,
                                String configKey,
                                Function<Configuration, Optional<?>> configFn,
@@ -42,7 +42,6 @@ public class InputsMap {
                                Object[] allowedValues){
         var inputConfig = InputConfig.of(input,description, configKey, configFn, defaultFn, defaultDescription, allowedValues);
         inputConfigs.put(input, inputConfig);
-        return this;
     }
 
     public Object getFromConfig(Input input) {

@@ -20,7 +20,7 @@ public class Main {
         if (exitCode == 0) {
             System.out.println("[Main] Command line parsed.");
             Quarkus.run(CloudJanitor.class, args);
-            System.out.println("[Main] Quarkus run() returned, exiting application.");
+            System.out.println("[Main] Quarkus run() returned.");
         } else {
             System.out.println("[Main] Command line failed to parse.");
         }

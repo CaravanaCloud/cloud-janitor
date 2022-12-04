@@ -1,27 +1,27 @@
 package cj.qute;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
+
+import cj.StartupObserver;
 import io.quarkus.qute.Engine;
 import io.quarkus.runtime.Startup;
-import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
 
-@Startup
+@SuppressWarnings("unused")
+@Startup()
 @ApplicationScoped
-public class QuteStartupObserver {
+public class QuteStartup extends StartupObserver {
     @Inject
     Logger log;
     @Inject
     Engine engine;
 
-    public void checkEngine(@Observes StartupEvent ev) {
+    @Override
+    public void onStart() {
         if (engine != null) {
-            log.debug("Qute Engine checked OK");
+            log.trace("Qute Engine checked OK");
             GlobalQuoteEngine.engine = engine;
         } else {
             throw new RuntimeException("Failed to initialize Qute Engine");

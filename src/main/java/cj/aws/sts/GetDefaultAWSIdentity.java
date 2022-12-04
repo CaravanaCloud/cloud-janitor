@@ -14,10 +14,10 @@ import static cj.aws.AWSOutput.*;
 public class GetDefaultAWSIdentity extends BaseTask {
     @Override
     public void apply() {
-        try(var sts = StsClient.builder().build();){
+        try(var sts = StsClient.builder().build()){
             var callerId = getCallerIdentity(sts);
             if (callerId != null){
-                debug("Found default AWS identity: {}", callerId);
+                trace("Found default AWS identity: {}", callerId);
                 success(CallerIdentity, callerId);
             }else {
                 warn("Failed to load default aws identity.");
@@ -32,6 +32,7 @@ public class GetDefaultAWSIdentity extends BaseTask {
         var userId = resp.userId();
         var accountAlias = lookupAccountAlias(accountId);
 
+        @SuppressWarnings("VariableTypeCanBeExplicit")
         var callerId = new SimpleIdentity(accountId,
                 userARN,
                 userId,
@@ -51,11 +52,11 @@ public class GetDefaultAWSIdentity extends BaseTask {
     private String lookupAccountAlias(IamClient iam, String accountId) {
         var aliases = iam.listAccountAliases().accountAliases();
         if (aliases.isEmpty()){
-            log().debug("Alias not found for account {}.", accountId);
+            trace("Alias not found for account {}.", accountId);
             return accountId;
         }else{
             var aliasesStr = String.join(",", aliases);
-            log().debug("Alias found for account {}: {}", accountId, aliasesStr);
+            trace("Alias found for account {}: {}", accountId, aliasesStr);
             return aliasesStr;
         }
     }

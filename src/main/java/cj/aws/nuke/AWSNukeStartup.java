@@ -15,7 +15,7 @@ public class AWSNukeStartup extends StartupObserver {
     Tasks tasks;
     @Override
     public void onStart() {
-        log().debug("AWS Nuke Startup");
+        log().trace("AWS Nuke Startup");
         tasks.mapInstall("aws-nuke", Map.of(OS.linux, INSTALL_LINUX));
     }
 }
