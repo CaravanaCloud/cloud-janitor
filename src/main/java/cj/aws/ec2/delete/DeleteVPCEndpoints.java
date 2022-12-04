@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.ec2.model.VpcEndpoint;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import static cj.aws.AWSOutput.*;
 
 @Dependent
 public class DeleteVPCEndpoints extends AWSTask {
@@ -26,7 +27,7 @@ public class DeleteVPCEndpoints extends AWSTask {
 
     @Override
     public void apply() {
-        var xs = filterVPCEs.outputList(Output.aws.VPCEndpointsMatch, VpcEndpoint.class);
+        var xs = filterVPCEs.outputList(VPCEndpointsMatch, VpcEndpoint.class);
         xs.forEach(this::deleteResource);
     }
 

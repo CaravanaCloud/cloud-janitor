@@ -7,6 +7,7 @@ import software.amazon.awssdk.services.ec2.model.CreateVpcRequest;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
+import static cj.aws.AWSOutput.*;
 
 @Named("create-vpc")
 @Dependent
@@ -23,8 +24,8 @@ public class CreateVPC extends AWSWrite {
         var resp = ec2.createVpc(req);
         var vpc = resp.vpc();
         var vpcId = vpc.vpcId();
-        success(Output.aws.VPCId, vpcId);
+        success(VPCId, vpcId);
         
-        debug("VPC {} / {} created", aws().getRegion(), vpcId);
+        debug("VPC {} / {} created", aws().region(), vpcId);
     }
 }

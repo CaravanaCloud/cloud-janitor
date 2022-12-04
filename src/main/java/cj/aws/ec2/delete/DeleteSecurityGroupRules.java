@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.ec2.model.SecurityGroupRule;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import static cj.aws.AWSOutput.*;
 
 @Dependent
 public class DeleteSecurityGroupRules extends AWSTask {
@@ -25,7 +26,7 @@ public class DeleteSecurityGroupRules extends AWSTask {
 
     @Override
     public void apply() {
-        var rules = filterRules.outputList(Output.aws.SecurityGroupRulesMatch, SecurityGroupRule.class);
+        var rules = filterRules.outputList(SecurityGroupRulesMatch, SecurityGroupRule.class);
         rules.forEach(this::deleteRule);
     }
 

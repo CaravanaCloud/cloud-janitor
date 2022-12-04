@@ -8,6 +8,7 @@ import software.amazon.awssdk.regions.Region;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import static cj.aws.AWSOutput.*;
 
 @Dependent
 public class AWSFilterIdentityTask extends AWSTask {
@@ -19,9 +20,9 @@ public class AWSFilterIdentityTask extends AWSTask {
 
     @Override
     public void apply() {
-        info("Filtering AWS identity - {}", getIdentity());
+        info("Filtering AWS identity - {}", identity());
         var regions = submit(filterRegions)
-                .outputList(Output.aws.RegionMatches, Region.class);
+                .outputList(RegionMatches, Region.class);
         forEach(regions, this::filterRegion);
     }
 

@@ -2,9 +2,7 @@ package cj.aws.ec2.cleanup;
 
 import cj.BaseTask;
 import cj.aws.AWSIdentity;
-import cj.aws.AWSInput;
-import cj.aws.DefaultAWSIdentity;
-import cj.aws.sts.LoadAWSIdentitiesTask;
+import cj.aws.sts.AWSLoadIdentitiesTask;
 import cj.spi.Task;
 
 import javax.enterprise.context.Dependent;
@@ -12,22 +10,17 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static cj.Output.aws.Identities;
+import static cj.aws.AWSOutput.*;
 import static cj.aws.AWSInput.identity;
 
 @Named("cleanup-aws")
 @Dependent
 public class CleanupAWS extends BaseTask {
     @Inject
-    LoadAWSIdentitiesTask loadIdsTask;
+    AWSLoadIdentitiesTask loadIdsTask;
 
     @Inject
     Instance<CleanupAWSIdentity> cleanupAWSIdentityInstance;
-
-    private void setDefaultIdentity() {
-        var identity = DefaultAWSIdentity.of();
-        getInputs().put(AWSInput.identity, identity);
-    }
 
     @Override
     public void apply() {

@@ -6,6 +6,7 @@ import cj.aws.AWSInput;
 import software.amazon.awssdk.services.ec2.model.SecurityGroup;
 
 import javax.enterprise.context.Dependent;
+import static cj.aws.AWSOutput.*;
 
 @Dependent
 public class FilterSecurityGroups extends AWSFilter {
@@ -14,7 +15,7 @@ public class FilterSecurityGroups extends AWSFilter {
         var ec2 = aws().ec2();
         var resources = ec2.describeSecurityGroups().securityGroups();
         var matches = resources.stream().filter(this::match).toList();
-        success(Output.aws.SecurityGroupsMatch, matches);
+        success(SecurityGroupsMatch, matches);
     }
 
     private boolean match(SecurityGroup securityGroup) {

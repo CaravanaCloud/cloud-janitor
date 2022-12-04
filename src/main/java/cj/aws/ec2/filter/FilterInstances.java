@@ -7,7 +7,7 @@ import software.amazon.awssdk.services.ec2.model.Instance;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.Output.aws.InstancesMatch;
+import static cj.aws.AWSOutput.*;
 
 
 @Dependent

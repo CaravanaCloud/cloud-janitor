@@ -64,6 +64,6 @@ public class DeleteRouteTable extends AWSWrite {
         var request = DeleteRouteTableRequest.builder()
                 .routeTableId(resource.routeTableId())
                 .build();
-        aws().ec2(getRegion()).deleteRouteTable(request);
+        aws().ec2(region()).deleteRouteTable(request);
     }
 }

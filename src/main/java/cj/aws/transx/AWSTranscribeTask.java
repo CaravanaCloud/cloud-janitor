@@ -23,7 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-import static cj.Output.aws.S3Bucket;
+import static cj.aws.AWSOutput.*;
 import static cj.TaskMaturity.Level.experimental;
 
 

@@ -9,7 +9,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import static cj.Output.aws.ELBV2Match;
+import static cj.aws.AWSOutput.*;
 import static cj.aws.AWSInput.targetLoadBalancerArn;
 
 @Dependent

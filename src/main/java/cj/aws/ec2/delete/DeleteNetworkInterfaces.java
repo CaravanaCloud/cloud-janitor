@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.ec2.model.NetworkInterface;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import static cj.aws.AWSOutput.*;
 
 @Dependent
 public class DeleteNetworkInterfaces extends AWSTask {
@@ -26,7 +27,7 @@ public class DeleteNetworkInterfaces extends AWSTask {
 
     @Override
     public void apply() {
-        var lbs = filterENIs.outputList(Output.aws.NetworkINterfacesMatch, NetworkInterface.class);
+        var lbs = filterENIs.outputList(NetworkINterfacesMatch, NetworkInterface.class);
         lbs.stream().forEach(this::deleteNetworkInterface);
     }
 

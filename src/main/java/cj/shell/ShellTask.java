@@ -111,24 +111,5 @@ public class ShellTask extends ReadTask {
         return s.replaceAll(redundantLogLevelRegex,"");
     }
 
-    @Deprecated
-    public static Optional<String> execute(String... cmdArr){
-        try {
-            var process = Runtime.getRuntime().exec(cmdArr);
-            var output = new StringBuilder();
-            var streamGobbler =
-                    new StreamGobbler(process.getInputStream(), output::append);
-            var future = Executors.newWorkStealingPool().submit(streamGobbler);
-            var processExitCode = process.waitFor();
-            if (processExitCode != 0){
-                System.out.println("Process failed. exit code: " + processExitCode);
-                return Optional.empty();
-            }
-            var processOutput = output.toString().trim();
-            future.get();
-            return Optional.of(processOutput);
-        } catch (Exception e) {
-            return Optional.empty();
-        }
-    }
+
 }

@@ -1,7 +1,7 @@
 package cj;
 
 import cj.aws.AWSClients;
-import cj.aws.DefaultAWSIdentity;
+import cj.aws.AWSClientsManager;
 import cj.spi.Task;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,6 +22,9 @@ public class TaskTest {
     @Inject
     protected Configuration config;
 
+    @Inject
+    protected AWSClientsManager aws;
+
     public Logger log() {
         return log;
     }
@@ -31,10 +34,11 @@ public class TaskTest {
         //TODO: config.dryRun(false);
     }
 
+    //TODO: Fix tests
     protected AWSClients aws(){
-        var id = DefaultAWSIdentity.of();
-        var region = config.aws().defaultRegion();
-        return AWSClients.of(config.aws(), id);
+        // var id = DefaultAWSIdentity.of();
+        // var region = config.aws().defaultRegion();
+        return null; //aws.of(id, region);
     }
 
     protected Configuration config(){

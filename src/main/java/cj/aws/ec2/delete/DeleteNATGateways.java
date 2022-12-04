@@ -10,6 +10,8 @@ import software.amazon.awssdk.services.ec2.model.NatGateway;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import static cj.aws.AWSOutput.*;
+
 @Dependent
 public class DeleteNATGateways extends AWSTask {
     @Inject
@@ -25,7 +27,7 @@ public class DeleteNATGateways extends AWSTask {
 
     @Override
     public void apply() {
-        var xs = filterNATs.outputList(Output.aws.NatGatewaysMatch, NatGateway.class);
+        var xs = filterNATs.outputList(NatGatewaysMatch, NatGateway.class);
         xs.forEach(this::deleteResource);
     }
 

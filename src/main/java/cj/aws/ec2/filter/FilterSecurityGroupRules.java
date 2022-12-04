@@ -8,7 +8,7 @@ import software.amazon.awssdk.services.ec2.model.SecurityGroupRule;
 import javax.enterprise.context.Dependent;
 import java.util.ArrayList;
 
-import static cj.Output.aws.SecurityGroupRulesMatch;
+import static cj.aws.AWSOutput.*;
 import static cj.aws.AWSInput.targetVPCId;
 
 @Dependent

@@ -1,3 +1,5 @@
+// RETHINK AWS Credentials Loading / consider pre-pply rendering
+
 # Cloud Janitor
 
 TL;DR: A convenience tool to automate operations in cloud computing, like creating clusters or cleaning up accounts.
@@ -6,7 +8,7 @@ For example, consider a 'create-cluster' task. Cloud janitor will lookup reasona
 install dependencies, create account-level resources, create cluster-level resources, wait for health check, install plugins and verify the application. 
 All that from a single invocation, using a command line like `cloud-janitor -t openshift-create-cluster` or the equivalent inside a container, github action or gitpod.io workspace.
 
-Start you gitpod worspace in the link below and try `cloud-jantor --help`:
+Start you gitpod workspace in the link below and try `cloud-jantor --help`:
 https://gitpod.io/#github.com/CaravanaCloud/cloud-janitor
 
 ## Features

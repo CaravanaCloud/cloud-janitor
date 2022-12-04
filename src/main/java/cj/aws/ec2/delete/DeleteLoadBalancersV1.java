@@ -1,4 +1,5 @@
 package cj.aws.ec2.delete;
+import static cj.aws.AWSOutput.*;
 
 import cj.Output;
 import cj.aws.AWSTask;
@@ -26,7 +27,7 @@ public class DeleteLoadBalancersV1 extends AWSTask {
 
     @Override
     public void apply() {
-        var lbs = filterLoadBalancer.outputList(Output.aws.LBDescriptionMatch, LoadBalancerDescription.class);
+        var lbs = filterLoadBalancer.outputList(LBDescriptionMatch, LoadBalancerDescription.class);
         lbs.stream().forEach(this::deleteLoadBalancer);
     }
 

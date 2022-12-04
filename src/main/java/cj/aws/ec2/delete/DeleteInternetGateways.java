@@ -11,7 +11,7 @@ import software.amazon.awssdk.services.ec2.model.InternetGatewayAttachment;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import static cj.Output.aws.InternetGatewayMatch;
+import static cj.aws.AWSOutput.*;
 
 @Dependent
 public class DeleteInternetGateways extends AWSWrite {
@@ -44,7 +44,7 @@ public class DeleteInternetGateways extends AWSWrite {
                 .internetGatewayId(resource.internetGatewayId())
                 .vpcId(att.vpcId())
                 .build();
-        aws().ec2(getRegion()).detachInternetGateway(request);
+        aws().ec2(region()).detachInternetGateway(request);
     }
 
     private void deleteInternetGateway(InternetGateway resource) {
@@ -52,7 +52,7 @@ public class DeleteInternetGateways extends AWSWrite {
         var request = DeleteInternetGatewayRequest.builder()
                 .internetGatewayId(resource.internetGatewayId())
                 .build();
-        aws().ec2(getRegion()).deleteInternetGateway(request);
+        aws().ec2(region()).deleteInternetGateway(request);
     }
 
 }

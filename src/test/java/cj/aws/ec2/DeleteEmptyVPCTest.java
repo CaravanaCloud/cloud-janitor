@@ -17,6 +17,8 @@ import javax.inject.Inject;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
+import static cj.aws.AWSOutput.*;
+import static cj.aws.AWSOutput.*;
 
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -63,7 +65,7 @@ public class DeleteEmptyVPCTest extends TaskTest {
     private boolean vpcExists(String vpcId) {
         filterVPCs.withInput(AWSInput.targetVPCId, vpcId);
         tasks.submit(filterVPCs);
-        var vpcs = filterVPCs.outputList(Output.aws.VPCMatch, Vpc.class);
+        var vpcs = filterVPCs.outputList(VPCMatch, Vpc.class);
         if (! vpcs.isEmpty()){
             var vpcExists = vpcs.get(0).vpcId().equals(vpcId);
             return vpcExists;
@@ -73,7 +75,7 @@ public class DeleteEmptyVPCTest extends TaskTest {
     private String createVPC() {
         var vpcId = tasks
                 .submit(createVPC)
-                .outputString(Output.aws.VPCId);
+                .outputString(VPCId);
         if (vpcId.isEmpty()) fail();
         var result = vpcId.get();
         log.debug("Created VPC {}", result);

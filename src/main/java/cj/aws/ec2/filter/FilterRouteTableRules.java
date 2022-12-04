@@ -6,6 +6,7 @@ import cj.aws.AWSInput;
 import software.amazon.awssdk.services.ec2.model.RouteTable;
 
 import javax.enterprise.context.Dependent;
+import static cj.aws.AWSOutput.*;
 
 @Dependent
 public class FilterRouteTableRules extends AWSFilter {
@@ -30,7 +31,7 @@ public class FilterRouteTableRules extends AWSFilter {
         var client = aws().ec2();
         var resources = client.describeRouteTables().routeTables();
         var matches = resources.stream().filter(this::match).toList();
-        success(Output.aws.RouteTableRulesMatch, matches);
+        success(RouteTableRulesMatch, matches);
     }
 }
 

@@ -2,9 +2,8 @@ package cj.aws;
 
 import cj.BaseTask;
 import cj.Output;
-import cj.aws.sts.CallerIdentity;
-import cj.aws.sts.GetCallerIdentityTask;
-import cj.aws.sts.LoadAWSIdentitiesTask;
+import cj.aws.sts.AWSLoadIdentitiesTask;
+import cj.aws.sts.GetDefaultAWSIdentity;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.model.Filter;
 
@@ -18,54 +17,39 @@ import java.util.concurrent.Callable;
 
 import static cj.aws.AWSInput.identity;
 import static org.awaitility.Awaitility.await;
+import static cj.aws.AWSOutput.*;
 
-public abstract class   AWSTask
+public abstract class AWSTask
         extends BaseTask {
     static final Random rand = new Random();
 
-    static AWSIdentity defaultIdentity = null;
+    @Inject
+    Instance<GetDefaultAWSIdentity> lookupIdentity;
 
     @Inject
-    Instance<GetCallerIdentityTask> getCallerIdInstance;
-
+    AWSClientsManager aws;
     public AWSClients aws() {
-        var identity = getIdentity();
-        var config = config().aws();
-        return AWSClients.of(config, identity);
+        return aws.of(identity(), region());
     }
 
-    protected AWSIdentity getIdentity() {
-        var id = inputAs(identity, AWSIdentity.class);
-        if (id.isPresent()) {
-            @SuppressWarnings("redundant")
-            var awsId = id.get();
-            return awsId;
-        } else {
-            if (defaultIdentity == null) {
-                log().info("Loading default AWS Identity for task.");
-                defaultIdentity = loadDefaultAWSIdentity();
-            }
-            return defaultIdentity;
-        }
+    protected AWSIdentity identity() {
+        var idIn = inputAs(identity, AWSIdentity.class);
+        var id = (AWSIdentity) null;
+        if (idIn.isEmpty()){
+            id = aws.defaultIdentity();
+            if (id != null)
+                setIdentity(id);
+        } else id = idIn.get();
+        if(id == null)
+            throw fail("AWS Identity not found");
+        return id;
     }
 
     protected void setIdentity(AWSIdentity id) {
         getInputs().put(identity, id);
     }
 
-    private synchronized AWSIdentity loadDefaultAWSIdentity() {
-        var id = DefaultAWSIdentity.of();
-        var callerIdTask = (BaseTask) getCallerIdInstance.get()
-                .withInput(identity, id);
-        submit(callerIdTask);
-        var callerId = callerIdTask.outputAs(Output.aws.CallerIdentity, CallerIdentity.class);
-        if (callerId.isPresent()) {
-            id = id.withCallerIdentity(callerId.get());
-            setIdentity(id);
-            return id;
-        }
-        return null;
-    }
+
 
     protected <T> T create(Instance<T> instance) {
         @SuppressWarnings("redundant")
@@ -73,9 +57,9 @@ public abstract class   AWSTask
         return result;
     }
 
-    protected Region getRegion() {
+    protected Region region() {
         var regionIn = inputAs(AWSInput.targetRegion, Region.class);
-        return regionIn.orElse(aws().getRegion());
+        return regionIn.orElse(aws.defaultRegion());
     }
 
     protected Filter filter(String filterName, String filterValue) {
@@ -88,18 +72,18 @@ public abstract class   AWSTask
     }
 
     private List<String> getContext() {
-        var id = getIdentity();
-        if (id != null && id.hasCallerIdentity()) {
-            String acctName = "" + id.getAccountName();
+        var id = identity();
+        if (id != null) {
+            String acctAlias = "" + id.accountAlias();
             String region = "" + getRegionName();
             return List.of("aws",
-                    acctName,
+                    acctAlias,
                     region);
         } else return List.of("aws");
     }
 
     private String getRegionName() {
-        var region = getRegion();
+        var region = region();
         return region != null ? region.toString() : "-null-region-";
     }
 
@@ -144,21 +128,23 @@ public abstract class   AWSTask
     }
 
     @Inject
-    Instance<LoadAWSIdentitiesTask> loadAWSIdentitiesTask;
+    Instance<AWSLoadIdentitiesTask> loadAWSIdentitiesTask;
 
     protected List<AWSIdentity> loadAWSIdentities() {
         var task = loadAWSIdentitiesTask.get();
         submit(task);
         @SuppressWarnings("redundant")
-        var identities = task.outputList(Output.aws.Identities, AWSIdentity.class);
+        var identities = task.outputList(Identities, AWSIdentity.class);
         return identities;
     }
 
     @Override
     protected Map<String, String> getInputsMap() {
         var inputs = super.getInputsMap();
-        var awsIdentity = getIdentity();
-        var accountId = awsIdentity.getAccountId();
+        var awsIdentity = identity();
+        var accountAlias = awsIdentity.accountAlias();
+        var accountId = awsIdentity.accountId();
+        inputs.put("accountAlias", accountAlias);
         inputs.put("accountId", accountId);
         return inputs;
     }

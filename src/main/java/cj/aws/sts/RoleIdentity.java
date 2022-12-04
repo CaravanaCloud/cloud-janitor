@@ -12,7 +12,7 @@ import software.amazon.awssdk.services.sts.model.AssumeRoleRequest;
 import software.amazon.awssdk.services.sts.model.AssumeRoleResponse;
 
 public class RoleIdentity
-        extends AWSIdentity {
+        implements AWSIdentity {
     static final Logger log = LoggerFactory.getLogger(RoleIdentity.class);
     static final String ROLE_SESSION_REGEX = "[^a-zA-Z0-9\\w+=,.@-]";
     private final AWSRoleConfig roleCfg;
@@ -57,6 +57,16 @@ public class RoleIdentity
                 .stsClient(sts)
                 .refreshRequest(assumeRoleRequest())
                 .build();
+    }
+    //TODO
+    @Override
+    public String accountId() {
+        return "ACCOUNT_ID";
+    }
+
+    @Override
+    public String accountAlias() {
+        return "ACCOUNT_ALIAS";
     }
 
     public static RoleIdentity of(AWSRoleConfig awsRole, StsClient sts) {

@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.ec2.model.Address;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import static cj.aws.AWSOutput.*;
 
 @Dependent
 public class ReleaseAddresses extends AWSTask {
@@ -26,7 +27,7 @@ public class ReleaseAddresses extends AWSTask {
 
     @Override
     public void apply() {
-        var eips = filterEIPs.outputList(Output.aws.AddressMatch, Address.class);
+        var eips = filterEIPs.outputList(AddressMatch, Address.class);
         eips.stream().forEach(this::deleteAddress);
     }
 

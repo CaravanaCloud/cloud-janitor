@@ -11,7 +11,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import static cj.Output.aws.VPCMatch;
+import static cj.aws.AWSOutput.*;
 
 @Dependent
 public class CleanupVPCs extends AWSTask {
@@ -25,7 +25,7 @@ public class CleanupVPCs extends AWSTask {
 
     @Override
     public void apply() {
-        var id = getIdentity();
+        var id = identity();
         var vpcs = outputList(VPCMatch, Vpc.class);
         vpcs.forEach(this::deleteVPC);
     }

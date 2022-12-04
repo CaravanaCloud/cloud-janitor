@@ -1,8 +1,6 @@
 package cj.aws;
 
-import cj.shell.ShellTask;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.athena.AthenaClient;
@@ -18,68 +16,25 @@ import software.amazon.awssdk.services.transcribe.TranscribeClient;
 import software.amazon.awssdk.services.translate.TranslateClient;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
+@ApplicationScoped
 public class AWSClients {
-    static final Logger log = LoggerFactory.getLogger(AWSClients.class);
 
-    static final Map<Map<AWSIdentity, Region>, AWSClients> clients = new HashMap<>();
+    @Inject
+    Logger log;
 
-    private AWSClients(AWSConfiguration cfg,
-                      AWSIdentity id){
-        this.cfg = cfg;
-        this.id = id;
-    }
+    @Inject
+    AWSConfiguration cfg;
 
-    private final AWSConfiguration cfg;
+    AWSClientIdentity cid;
 
-    private final AWSIdentity id;
-    //TODO: consider caching AWSClients by identity / region
-    public static AWSClients of(AWSConfiguration config, AWSIdentity identity) {
-        var region = getRegion(config);
-        var key = Map.of(identity, region);
-        var value = clients.get(key);
-        if (value == null ){
-            log.debug("Creating new AWSClients for {} - {}", identity, region);
-            value = new AWSClients(config, identity);
-            clients.put(key, value);
-        }else {
-            log.trace("Using cached AWSClients for {} - {}", identity, region);
-        }
-        return value;
-    }
-
-    public static Region getRegion(AWSConfiguration config) {
-        var region = getDefaultRegion(config);
-        if (region == null){
-            region = getCLIRegion();
-        }else {
-            region = Region.US_EAST_1;
-        }
-        return region;
-    }
-
-    private static Region getCLIRegion() {
-        var cliRegion = ShellTask.execute("aws", "configure", "get", "region");
-        return cliRegion.map(Region::of).orElse(null);
-    }
-
-
-    protected static Region getDefaultRegion(AWSConfiguration config){
-        //TODO: Use "aws configure get region" to get configured region
-        var defaultRegion = config.defaultRegion();
-        if (defaultRegion != null){
-            return Region.of(defaultRegion);
-        }
-        return null;
-    }
-    // Clients //
 
     public StsClient sts() {
         @SuppressWarnings("redundant")
         var sts = StsClient.builder()
-                .region(getRegion())
+                .region(region())
                 .credentialsProvider(getCredentialsProvider())
                 .build();
         return sts;
@@ -95,7 +50,7 @@ public class AWSClients {
     }
 
     public Ec2Client ec2(){
-        return ec2(getRegion());
+        return ec2(region());
     }
 
     public Ec2Client ec2(Region region){
@@ -110,7 +65,7 @@ public class AWSClients {
 
     public CloudFormationClient cloudFormation(){
         return CloudFormationClient.builder()
-                .region(getRegion())
+                .region(region())
                 .credentialsProvider(getCredentialsProvider())
                 .build();
     }
@@ -120,18 +75,18 @@ public class AWSClients {
         var tx = S3TransferManager
                 .builder()
                 .s3ClientConfiguration(c -> {
-                    c.region(getRegion());
+                    c.region(region());
                     c.credentialsProvider(getCredentialsProvider());
                 })
                 .build();
         return tx;
     }
     public S3Client s3(){
-        return s3(getRegion());
+        return s3(region());
     }
 
     public TranscribeClient transcribe(){
-        return transcribe(getRegion());
+        return transcribe(region());
     }
 
     private TranscribeClient transcribe(Region region) {
@@ -144,7 +99,7 @@ public class AWSClients {
     }
 
     public TranslateClient translate(){
-        return translate(getRegion());
+        return translate(region());
     }
 
     private TranslateClient translate(Region region) {
@@ -174,14 +129,14 @@ public class AWSClients {
 
     public ElasticLoadBalancingClient elbv1() {
         return ElasticLoadBalancingClient.builder()
-                .region(getRegion())
+                .region(region())
                 .credentialsProvider(getCredentialsProvider())
                 .build();
     }
 
     public ElasticLoadBalancingV2Client elbv2() {
         return ElasticLoadBalancingV2Client.builder()
-                .region(getRegion())
+                .region(region())
                 .credentialsProvider(getCredentialsProvider())
                 .build();
     }
@@ -190,7 +145,7 @@ public class AWSClients {
     public AthenaClient athena() {
         @SuppressWarnings("redundant")
         var athena = AthenaClient.builder()
-                .region(getRegion())
+                .region(region())
                 .credentialsProvider(getCredentialsProvider())
                 .build();
         return athena;
@@ -201,11 +156,18 @@ public class AWSClients {
     }
 
     public AwsCredentialsProvider getCredentialsProvider() {
-        return id.toCredentialsProvider();
+        return identity().toCredentialsProvider();
     }
 
+    public AWSIdentity identity() {
+        return cid.identity();
+    }
 
-    public Region getRegion() {
-        return getRegion(config());
+    public Region region() {
+        return cid.region();
+    }
+
+    public void setClientIdentity(AWSClientIdentity cid) {
+        this.cid = cid;
     }
 }

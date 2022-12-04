@@ -7,6 +7,7 @@ import software.amazon.awssdk.services.ec2.model.DescribeSubnetsRequest;
 import software.amazon.awssdk.services.ec2.model.Subnet;
 
 import javax.enterprise.context.Dependent;
+import static cj.aws.AWSOutput.*;
 
 @Dependent
 public class FilterSubnets extends AWSFilter {
@@ -32,6 +33,6 @@ public class FilterSubnets extends AWSFilter {
         var describeNets = DescribeSubnetsRequest.builder().build();
         var nets = ec2.describeSubnets(describeNets).subnets().stream();
         var matches = nets.filter(this::match).toList();
-        success(Output.aws.SubnetMatch, matches);
+        success(SubnetMatch, matches);
     }
 }

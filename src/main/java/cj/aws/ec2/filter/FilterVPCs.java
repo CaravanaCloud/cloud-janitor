@@ -8,6 +8,7 @@ import software.amazon.awssdk.services.ec2.model.Vpc;
 
 import javax.enterprise.context.Dependent;
 import java.util.List;
+import static cj.aws.AWSOutput.*;
 
 @Dependent
 public class FilterVPCs extends AWSFilter {
@@ -15,7 +16,7 @@ public class FilterVPCs extends AWSFilter {
     @Override
     public void apply() {
         var vpcs = filterResources();
-        success(Output.aws.VPCMatch, vpcs);
+        success(VPCMatch, vpcs);
     }
 
     private boolean matchVPCId(Vpc vpc){

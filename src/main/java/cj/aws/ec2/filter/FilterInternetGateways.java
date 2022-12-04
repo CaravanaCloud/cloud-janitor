@@ -6,7 +6,7 @@ import software.amazon.awssdk.services.ec2.model.InternetGateway;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.Output.aws.InternetGatewayMatch;
+import static cj.aws.AWSOutput.*;
 
 @Dependent
 public class FilterInternetGateways extends AWSFilter {
@@ -36,7 +36,7 @@ public class FilterInternetGateways extends AWSFilter {
 
     @Override
     public void apply() {
-        var client = aws().ec2(getRegion());
+        var client = aws().ec2(region());
         var resources = client.describeInternetGateways().internetGateways();
         var matches = resources.stream().filter(this::match).toList();
         success(InternetGatewayMatch, matches);

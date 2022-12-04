@@ -17,6 +17,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static software.amazon.awssdk.services.ec2.model.InstanceStateName.RUNNING;
 import static software.amazon.awssdk.services.ec2.model.InstanceStateName.SHUTTING_DOWN;
+import static cj.aws.AWSOutput.*;
 
 @Dependent
 public class DeleteSubnets extends AWSWrite {
@@ -33,7 +34,7 @@ public class DeleteSubnets extends AWSWrite {
 
     @Override
     public void apply() {
-        var subnets = outputList(Output.aws.SubnetMatch, Subnet.class);
+        var subnets = outputList(SubnetMatch, Subnet.class);
         subnets.forEach(this::deleteSubnet);
     }
 

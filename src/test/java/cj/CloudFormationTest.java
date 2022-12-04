@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static cj.aws.AWSOutput.VPCMatch;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -49,7 +50,7 @@ public class CloudFormationTest extends TaskTest{
     }
 
     protected void createStack(){
-        log.info("Creating stack {} on {}", getStackName(), aws().getRegion());
+        log.info("Creating stack {} on {}", getStackName(), aws().region());
         var cf = aws().cloudFormation();
         var stackName = getStackName();
         var createReq = CreateStackRequest.builder()
@@ -210,7 +211,7 @@ public class CloudFormationTest extends TaskTest{
     protected List<Vpc> filterVPCs(String vpcId) {
         filterVPCs.setTargetVPC(vpcId);
         tasks.submit(filterVPCs);
-        var matches = filterVPCs.outputList(Output.aws.VPCMatch, Vpc.class);
+        var matches = filterVPCs.outputList(VPCMatch, Vpc.class);
         log.debug("filterVPCs {} finished", vpcId);
         return matches;
     }

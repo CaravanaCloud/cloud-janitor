@@ -55,7 +55,7 @@ public class DeleteVPC extends AWSWrite {
                 .vpcId(vpcId)
                 .build();
         aws().ec2().deleteVpc(request);
-        debug("Deleted VPC {}/{}", getRegion(), vpcId);
+        debug("Deleted VPC {}/{}", region(), vpcId);
     }
 
 

@@ -7,8 +7,7 @@ import software.amazon.awssdk.services.ec2.Ec2Client;
 import javax.enterprise.context.Dependent;
 import java.util.Comparator;
 
-import static cj.Output.aws.RegionMatches;
-
+import static cj.aws.AWSOutput.*;
 @Dependent
 public class FilterRegions extends AWSFilter {
 

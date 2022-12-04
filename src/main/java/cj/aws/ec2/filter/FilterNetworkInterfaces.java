@@ -6,7 +6,7 @@ import software.amazon.awssdk.services.ec2.model.NetworkInterface;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.Output.aws.NetworkINterfacesMatch;
+import static cj.aws.AWSOutput.*;
 @Dependent
 public class FilterNetworkInterfaces extends AWSFilter {
 

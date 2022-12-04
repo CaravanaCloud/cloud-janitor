@@ -10,7 +10,7 @@ import software.amazon.awssdk.services.ec2.model.SecurityGroup;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import static cj.Output.aws.SecurityGroupsMatch;
+import static cj.aws.AWSOutput.*;
 import static cj.Utils.msToStr;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.awaitility.Awaitility.await;

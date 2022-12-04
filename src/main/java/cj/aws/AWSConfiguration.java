@@ -7,7 +7,7 @@ import io.smallrye.config.WithName;
 import java.util.List;
 import java.util.Optional;
 
-@ConfigMapping
+@ConfigMapping(prefix = "cj.aws")
 @StaticInitSafe
 public interface AWSConfiguration {
     default String defaultRegion(){

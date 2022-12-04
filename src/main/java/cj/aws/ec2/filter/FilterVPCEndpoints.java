@@ -5,7 +5,7 @@ import software.amazon.awssdk.services.ec2.model.VpcEndpoint;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.Output.aws.VPCEndpointsMatch;
+import static cj.aws.AWSOutput.*;
 import static cj.aws.AWSInput.targetVPCId;
 
 @Dependent

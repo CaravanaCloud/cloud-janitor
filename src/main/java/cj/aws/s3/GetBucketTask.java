@@ -9,6 +9,7 @@ import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
 import javax.enterprise.context.Dependent;
 
 import static cj.aws.AWSInput.targetBucketName;
+import static cj.aws.AWSOutput.*;
 
 @Dependent
 public class GetBucketTask extends AWSTask {
@@ -27,7 +28,7 @@ public class GetBucketTask extends AWSTask {
         if (match.isPresent()) {
             debug("Found bucket {}", bucketName);
             if (headBucket(bucketName))
-                success(Output.aws.S3Bucket, match.get());
+                success(S3Bucket, match.get());
         } else {
             debug("Bucket not found");
             success();

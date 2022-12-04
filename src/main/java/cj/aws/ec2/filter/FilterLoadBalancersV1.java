@@ -5,7 +5,7 @@ import software.amazon.awssdk.services.elasticloadbalancing.model.LoadBalancerDe
 
 import javax.enterprise.context.Dependent;
 
-import static cj.Output.aws.LBDescriptionMatch;
+import static cj.aws.AWSOutput.*;
 import static cj.aws.AWSInput.targetVPCId;
 
 @Dependent

@@ -35,6 +35,7 @@ public class Beans {
                     .map(inputs::findInputConfigByName)
                     .toList();
         }
+        //TODO: remove this hack
         return new SimpleTaskConfiguration(name,
                 taskDescription,
                 taskMaturity,

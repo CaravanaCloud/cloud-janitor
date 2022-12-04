@@ -10,6 +10,7 @@ import software.amazon.awssdk.regions.Region;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import static cj.aws.AWSOutput.*;
 
 import static cj.aws.AWSInput.targetRegion;
 @Dependent
@@ -27,7 +28,7 @@ public class CleanupRegions extends AWSTask {
 
     @Override
     public void apply() {
-        var regions = filterRegions.outputList(Output.aws.RegionMatches, Region.class);
+        var regions = filterRegions.outputList(RegionMatches, Region.class);
         var tasks = regions.stream().map(this::mapTask);
         tasks.forEach(this::submit);
     }
