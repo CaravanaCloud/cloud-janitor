@@ -27,6 +27,7 @@ public class BaseTask
         implements Task,
             TaskManagement,
             Logging {
+    static final String DEFAULT_PROFILE = "default";
     @Inject
     Configuration config;
 
@@ -403,7 +404,14 @@ public class BaseTask
         return FSUtils.taskDir(this);
     }
 
-    protected void render(String profile, String template, Path outputFile){
+    protected Path render(String template, String outputFileName){
+        return render(DEFAULT_PROFILE, template, taskFile(outputFileName));
+    }
+    protected Path render(String profile, String template, String outputFileName){
+        return render(profile, template, taskFile(outputFileName));
+    }
+
+    protected Path render(String profile, String template, Path outputFile){
         var location = "%s/%s/%s".formatted(
                 getName(),
                 profile,
@@ -412,6 +420,7 @@ public class BaseTask
         var content = render(location, Map.of());
         debug("Rendering template {} to [{}] {}", template, content.length() ,outputFile);
         FSUtils.writeFile(outputFile, content);
+        return outputFile;
     }
 
     protected String render(String location, Map<String, String> inputs) {

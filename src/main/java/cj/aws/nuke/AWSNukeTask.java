@@ -42,10 +42,6 @@ public class AWSNukeTask extends AWSTask {
     }
 
     private Path renderConfig() {
-        var cfgFile = taskFile("aws-nuke.yaml");
-        var profile = "default";
-        var template = "aws-nuke.qute.yaml";
-        render(profile, template, cfgFile);
-        return cfgFile;
+        return render("aws-nuke.qute.yaml", "aws-nuke.yaml");
     }
 }
