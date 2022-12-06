@@ -6,7 +6,7 @@ tasks:
   - name: Build cloud-janitor
     init: |
       mvn clean verify -DskipTests &&
-      sudo ln -s /workspace/cloud-janitor/target/jpackage/app_image/cloud-janitor/bin/cloud-janitor /usr/local/bin/cloud-janitor &&
+      sudo ln -s /workspace/cloud-janitor/target/jpackage/app_image/cloud-janitor/bin/cloud-janitor /usr/local/bin/cloud-janitor
     command: cloud-janitor -v
 
 ports:
