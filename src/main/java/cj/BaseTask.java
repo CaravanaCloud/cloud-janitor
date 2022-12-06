@@ -110,6 +110,9 @@ public class BaseTask
         }
     }
 
+
+
+
     @SuppressWarnings("all")
     public <T> List<T> inputList(Input key, Class<T> valueClass) {
         var in = input(key);
@@ -178,10 +181,6 @@ public class BaseTask
     public Task withInputs(Map<Input, Object> inputs) {
         this.inputs = inputs;
         return this;
-    }
-
-    public Object withInput(Input key) {
-        return inputs.get(key);
     }
 
     public Optional<Object> input(Input key) {
@@ -449,4 +448,22 @@ public class BaseTask
         return taskDir().resolve(fileName);
     }
 
-}
+    protected String composeName(String... context) {
+        var prefix = config().namingPrefix().orElse("");
+        var separator = config().namingSeparator().orElse("");
+        var result = prefix
+                + separator
+                + String.join(separator, context);
+        return result;
+    }
+    protected String join(String separator, String... context) {
+        return String.join(separator, context);
+    }
+
+    protected <T> T success(T result) {
+        success(TaskOutput.main, result);
+        return result;
+    }
+
+
+    }

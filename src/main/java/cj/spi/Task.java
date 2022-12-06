@@ -3,6 +3,7 @@ package cj.spi;
 import cj.Errors;
 import cj.Input;
 import cj.Output;
+import cj.TaskOutput;
 import cj.fs.FSUtils;
 
 import javax.inject.Named;
@@ -183,4 +184,7 @@ public interface Task {
     }
 
 
+    default <T> List<T> outputList(Class<T> valueClass) {
+        return outputList(TaskOutput.main, valueClass);
+    }
 }

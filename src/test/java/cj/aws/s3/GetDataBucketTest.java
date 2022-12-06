@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class GetDataBucketTest extends TaskTest {
 
     @Inject
-    GetDataBucketTask getDataBucket;
+    AWSGetBucketTask getDataBucket;
 
     @Test
     public void testGetDataBucket(){

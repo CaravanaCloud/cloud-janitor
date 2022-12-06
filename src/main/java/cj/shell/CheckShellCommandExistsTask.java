@@ -1,6 +1,5 @@
 package cj.shell;
 
-import cj.Output;
 import cj.SafeTask;
 
 import javax.enterprise.context.Dependent;
@@ -16,7 +15,7 @@ public class CheckShellCommandExistsTask extends SafeTask {
         var cmdList = List.of("which", cmdIn);
         var shellTask = tasks().shellTask(cmdList);
         submit(shellTask, cmds, cmdList);
-        var code = shellTask.outputAs(Output.shell.exitCode, Integer.class);
+        var code = shellTask.outputAs(ShellOutput.exitCode, Integer.class);
         if (code.isEmpty() || code.get() != 0) {
             debug("Command {} does not exist", cmdIn);
             throw fail("Command '%s' not found".formatted(cmdIn));

@@ -6,13 +6,11 @@ import cj.StreamGobbler;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static cj.CJInput.dryRun;
-import static cj.Output.shell.*;
+import static cj.shell.ShellOutput.*;
 import static cj.shell.ShellInput.*;
 
 @Dependent

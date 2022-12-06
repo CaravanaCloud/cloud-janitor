@@ -5,6 +5,7 @@ import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.athena.AthenaClient;
 import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
+import software.amazon.awssdk.services.cloudtrail.CloudTrailClient;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.elasticloadbalancing.ElasticLoadBalancingClient;
 import software.amazon.awssdk.services.elasticloadbalancingv2.ElasticLoadBalancingV2Client;
@@ -169,5 +170,12 @@ public class AWSClients {
 
     public void setClientIdentity(AWSClientIdentity cid) {
         this.cid = cid;
+    }
+
+    public CloudTrailClient cloudtrail() {
+        return CloudTrailClient.builder()
+                .region(region())
+                .credentialsProvider(getCredentialsProvider())
+                .build();
     }
 }

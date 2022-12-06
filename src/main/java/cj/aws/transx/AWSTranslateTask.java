@@ -4,7 +4,7 @@ import cj.TaskDescription;
 import cj.TaskMaturity;
 import cj.Tasks;
 import cj.aws.AWSWrite;
-import cj.aws.s3.GetDataBucketTask;
+import cj.aws.s3.AWSGetBucketTask;
 import cj.aws.s3.PutObjectsTask;
 import cj.fs.FSUtils;
 import cj.spi.Task;
@@ -39,7 +39,7 @@ public class AWSTranslateTask extends AWSWrite {
     Tasks tasks;
 
     @Inject
-    GetDataBucketTask getDataBucket;
+    AWSGetBucketTask getDataBucket;
 
     @Inject
     PutObjectsTask putObjects;
@@ -226,7 +226,7 @@ public class AWSTranslateTask extends AWSWrite {
             Path file = dir.resolve(filename);
             FSUtils.writeFile(file, content.toString());
         } catch (IOException e) {
-            onCatch("Failed to translate SRT", e);
+           throw fail("Failed to translate SRT", e);
         }
         debug("SRT translated to {}", path);
     }
@@ -238,76 +238,41 @@ public class AWSTranslateTask extends AWSWrite {
         return Character.isDigit(line.charAt(0));
     }
 
-    private void onCatch(String message, Exception e) {
-        error(message);
-        error(e.getMessage());
-        e.printStackTrace();
-        throw new RuntimeException(e);
-    }
-
-
-    /*
-    public void old_apply() {
-
-
-
-
-        var targetLangCodesStr = expectInputString(targetLanguages);
-        var targetLangCodesArr = targetLangCodesStr.split(",");
-        var contentTypeIn = inputString(contentType).orElse("text/plain");
-        var files = globFiles.outputList(Output.fs.paths, Path.class);
-        checkpoint("Traslating {} files from {} to {}", files.size(), sourceLang, targetLangCodesArr);
-        if (files.isEmpty()){
-            return;
-        }
-        var bucket = getDataBucket.outputAs(S3Bucket, Bucket.class);
-        if (bucket.isPresent()){
-            var bucketName = bucket.get().name();
-            var role = checkTranslateDataRole(bucketName);
-            debug("Uploading files to {}", bucketName);
-            var prefix = putObjects(files, bucketName);
-
-            debug("Creating translate job");
-            var jobId = startTranslation(sourceLang, targetLangCodesArr, contentTypeIn, bucketName, role, prefix);
-
-            debug("Wait translate job {}", jobId);
-            waitTranslate(jobId);
-
-            debug("Download translations");
-            debug("check bucket {} / {}", bucket, prefix);
-
-            info("Translation job started: {}", jobId);
-        }else {
-            throw fail("Data bucket not found");
-        }
-    }
-    */
     private void waitTranslate(String jobId) {
         awaitUntilLong(() -> translateDone(jobId));
     }
 
     private boolean translateDone(String jobId) {
-        var translate = aws().translate();
+        try(var translate = aws().translate()){
+          return translateDone(translate, jobId);
+        }
+    }
+
+    private boolean translateDone(TranslateClient translate, String jobId) {
         var req = DescribeTextTranslationJobRequest.builder().jobId(jobId).build();
         var job = translate.describeTextTranslationJob(req).textTranslationJobProperties();
         var status = job.jobStatus();
         debug("Translation {} status is {}", jobId, status);
-        switch (status){
-            case UNKNOWN_TO_SDK_VERSION:
-            case STOPPED:
-            case STOP_REQUESTED:
-            case FAILED:
-            case COMPLETED_WITH_ERROR:
-            case COMPLETED: return true;
-            case SUBMITTED:
-            case IN_PROGRESS: return false;
-        }
-        return false;
+        return switch (status){
+            case UNKNOWN_TO_SDK_VERSION,
+                    STOPPED,
+                    STOP_REQUESTED,
+                    FAILED,
+                    COMPLETED_WITH_ERROR,
+                    COMPLETED ->  true;
+            case SUBMITTED,
+             IN_PROGRESS -> false;
+        };
     }
 
 
     private String startTranslation(String sourceLang, String[] targetLangCodesArr, String contentTypeIn, String bucketName, Role role, String prefix) {
-        var translate = aws().translate();
+        try(var translate = aws().translate()){
+            return startTranslation(translate, sourceLang, targetLangCodesArr, contentTypeIn, bucketName, role, prefix);
+        }
+    }
+
+    private String startTranslation(TranslateClient translate, String sourceLang, String[] targetLangCodesArr, String contentTypeIn, String bucketName, Role role, String prefix) {
         var jobName = getExecutionId();
         var s3in = "s3://%s/%s".formatted(bucketName, prefix);
         var inCfg = InputDataConfig.builder()
@@ -366,7 +331,7 @@ public class AWSTranslateTask extends AWSWrite {
       "Action": "sts:AssumeRole"
     }
   ]
-}            
+}
             """;
 
     String permissionsPolicy = """
@@ -376,7 +341,7 @@ public class AWSTranslateTask extends AWSWrite {
                 {
                   "Effect": "Allow",
                   "Action": "s3:*",
-                  "Resource": "*" 
+                  "Resource": "*"
                 }
               ]
             }
@@ -403,7 +368,12 @@ public class AWSTranslateTask extends AWSWrite {
     }
 
     private Role getRole(String roleName) {
-        var iam = aws().iam();
+        try(var iam = aws().iam()){
+            return getRole(iam, roleName);
+        }
+    }
+
+    private Role getRole(IamClient iam, String roleName) {
         var req = GetRoleRequest
                 .builder()
                 .roleName(roleName)

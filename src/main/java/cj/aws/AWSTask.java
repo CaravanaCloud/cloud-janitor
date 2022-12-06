@@ -1,9 +1,7 @@
 package cj.aws;
 
 import cj.BaseTask;
-import cj.Output;
 import cj.aws.sts.AWSLoadIdentitiesTask;
-import cj.aws.sts.GetDefaultAWSIdentity;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.model.Filter;
 
@@ -23,13 +21,15 @@ public abstract class AWSTask
         extends BaseTask {
     static final Random rand = new Random();
 
-    @Inject
-    Instance<GetDefaultAWSIdentity> lookupIdentity;
 
     @Inject
     AWSClientsManager aws;
-    public AWSClients aws() {
+    protected AWSClients aws() {
         return aws.of(identity(), region());
+    }
+
+    protected AWSClients aws(Region region) {
+        return aws.of(identity(), region);
     }
 
     protected AWSIdentity identity() {
@@ -147,5 +147,15 @@ public abstract class AWSTask
         inputs.put("accountAlias", accountAlias);
         inputs.put("accountId", accountId);
         return inputs;
+    }
+
+    protected String regionName(){
+        var region = region();
+        return region != null ? region.toString() : "";
+    }
+
+    protected String accountId(){
+        var identity = identity();
+        return identity != null ? identity.accountId() : "";
     }
 }

@@ -2,10 +2,7 @@ package cj;
 
 import cj.ocp.CapabilityNotFoundException;
 import cj.reporting.Reporting;
-import cj.shell.CheckShellCommandExistsTask;
-import cj.shell.ExecResult;
-import cj.shell.ShellInput;
-import cj.shell.ShellTask;
+import cj.shell.*;
 import cj.spi.Task;
 import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
@@ -25,7 +22,7 @@ import java.util.*;
 
 
 import static cj.Errors.Type.Message;
-import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.*;
 
 @ApplicationScoped
 @Named("tasks")
@@ -162,7 +159,7 @@ public class Tasks {
 
     public synchronized String getExecutionId() {
         if (executionId == null) {
-            var prefix = getConfig().getNamingPrefix();
+            var prefix = getConfig().namingPrefix();
             var pattern = getConfig().timestampPattern();
             var sdf = new SimpleDateFormat(pattern);
             executionId = prefix + sdf.format(new Date());
@@ -315,12 +312,12 @@ public class Tasks {
                 .withInput(ShellInput.timeout, timeoutMins);
         submit(shellTask);
         @SuppressWarnings("all")
-        var stdout = shellTask.outputString(Output.shell.stdout);
+        var stdout = shellTask.outputString(ShellOutput.stdout);
         checkArgument(stdout.isPresent(), "No stdout from shell task");
-        var stderr = shellTask.outputString(Output.shell.stderr);
+        var stderr = shellTask.outputString(ShellOutput.stderr);
         checkArgument(stderr.isPresent(), "No stderr from shell task");
-        var exitCode = shellTask.outputAs(Output.shell.exitCode, Integer.class);
-        checkArgument(stderr.isPresent(), "No exit code from shell task");
+        var exitCode = shellTask.outputAs(ShellOutput.exitCode, Integer.class);
+        checkArgument(exitCode.isPresent(), "No exit code from shell task");
         return new ExecResult(exitCode.get(), stdout.get(), stderr.get());
     }
 

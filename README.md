@@ -31,6 +31,10 @@ All settings are exposed as environment variables, yaml and others, as supported
 **Resource Filtering & Resolution**
 Only the matched resources, and their dependents, are affected.
 
+**Multi-region, Multi-account and Multi-cloud**
+Cloud janitor will use your configured cloud credentials an any extra configuration 
+to repeat actions across different contexts, such as cleaning up multiple cloud accounts.
+
 **Logs & Reporting**
 Keep a record of invocations and their results for queries, visualization and audits.
 

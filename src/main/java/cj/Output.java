@@ -1,10 +1,8 @@
 package cj;
 
 public interface Output {
-    enum shell implements Output {
-        exitCode, stderr, stdout
 
-    }
+
 
     enum fs implements Output {
         paths

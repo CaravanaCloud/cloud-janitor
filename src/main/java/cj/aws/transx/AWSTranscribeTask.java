@@ -3,9 +3,8 @@ package cj.aws.transx;
 import cj.TaskDescription;
 import cj.TaskMaturity;
 import cj.aws.AWSWrite;
-import cj.aws.s3.GetDataBucketTask;
+import cj.aws.s3.AWSGetBucketTask;
 import cj.spi.Task;
-import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.model.Bucket;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -18,8 +17,6 @@ import javax.inject.Named;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +31,7 @@ import static cj.TaskMaturity.Level.experimental;
 @SuppressWarnings("unused")
 public class AWSTranscribeTask extends AWSWrite {
     @Inject
-    GetDataBucketTask getDataBucket;
+    AWSGetBucketTask getDataBucket;
 
 
     @Override
@@ -155,12 +152,8 @@ public class AWSTranscribeTask extends AWSWrite {
             var objUrl = "s3://%s/%s%s".formatted(bucketName, prefix, objKey);       
             tc.sourceKey = objKey;
             debug("Uploaded {} as {}: etag {}", path, objUrl, etag);
-        }catch(SdkException ex){
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
-        }catch(IOException ex) {
-            ex.printStackTrace();
-            throw new RuntimeException(ex);
+        }catch(Exception ex){
+            throw fail("Failed to put object to S3", ex);
         }
     }
 

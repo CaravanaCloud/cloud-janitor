@@ -71,7 +71,15 @@ public interface Configuration {
 
     @WithName("namingPrefix")
     @WithDefault("cj")
-    String getNamingPrefix();
+    Optional<String> namingPrefix();
+
+    @WithName("namingSeparator")
+    @WithDefault("-")
+    Optional<String> namingSeparator();
+
+    @WithName("altSeparator")
+    @WithDefault("_")
+    Optional<String> altSeparator();
 
     @WithName("execTimeout")
     @WithDefault("5")
@@ -102,6 +110,8 @@ public interface Configuration {
         var execPath = appPath.resolve(execId);
         return existing(execPath);
     }
+
+
 
 
     final class StaticConfig {
