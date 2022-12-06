@@ -4,8 +4,6 @@ import io.quarkus.runtime.LaunchMode;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.TimeUnit;
 import io.quarkus.runtime.QuarkusApplication;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -35,8 +33,10 @@ public class CloudJanitor implements QuarkusApplication {
     public int run(String... args) throws Exception {
         log.trace("CloudJanitor.run(...)");
         try {
-            if (config.showHelp() || config.showVersion()){
+            if (config.showHelp()){
                 showHelp();
+            } else if(config.showVersion()){
+                showVersion();
             } else {
                 tasks.run();
             }
@@ -47,6 +47,11 @@ public class CloudJanitor implements QuarkusApplication {
         }
         return 0;
     }
+
+    private void showVersion() {
+        log.info(CloudJanitor.VERSION);
+    }
+
     private void showHelp() {
         help.get().showHelp();
     }
@@ -61,25 +66,7 @@ public class CloudJanitor implements QuarkusApplication {
 
     @SuppressWarnings("unused")
     void onStop(@Observes ShutdownEvent ev) {
-        log.debug("Waiting for all tasks to finish.");
-        // forceSleep();
-        // TODO: Configurable timeout
-        // Default fork join pool is used by Quarkus
-        waitCommonForkJoinPool();
-        // executor
-        // log.debug("Waiting for executor ");
-        // awaitTerminationAfterShutdown(executor);
         log.info("Cloud Janitor stopped.");
-    }
-
-    private void waitCommonForkJoinPool() {
-        var pool = ForkJoinPool.commonPool();
-        var threadCount = pool.getActiveThreadCount();
-        if(threadCount > 0) {
-            log.debug("Waiting for {} common pool threads to finish.", threadCount);
-            var quiescent = pool.awaitQuiescence(60, TimeUnit.MINUTES);
-            log.trace("Quiescent: {}", quiescent);
-        }
     }
 
 }
