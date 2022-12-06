@@ -4,9 +4,8 @@ image:
 
 tasks:
   - name: Build cloud-janitor
-    init: mvn -B clean org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline
-    command: |
-      mvn clean verify &&
+    init: mvn clean verify -DskipTests
+    command: | 
       sudo ln -s /workspace/cloud-janitor/target/jpackage/app_image/cloud-janitor/bin/cloud-janitor /usr/local/bin/cloud-janitor &&
       cloud-janitor -v
 

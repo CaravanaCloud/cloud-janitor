@@ -1,5 +1,6 @@
 {
   "files.autoSave": "afterDelay",
   "editor.fontSize": 18,
-  "java.configuration.updateBuildConfiguration": "automatic"
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.compile.nullAnalysis.mode": "automatic"
 }
