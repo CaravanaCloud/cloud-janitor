@@ -159,7 +159,7 @@ public class Tasks {
 
     public synchronized String getExecutionId() {
         if (executionId == null) {
-            var prefix = getConfig().namingPrefix();
+            var prefix = getConfig().namingPrefix().orElse("");
             var pattern = getConfig().timestampPattern();
             var sdf = new SimpleDateFormat(pattern);
             executionId = prefix + sdf.format(new Date());

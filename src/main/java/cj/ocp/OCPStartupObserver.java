@@ -14,6 +14,7 @@ public class OCPStartupObserver extends StartupObserver {
 
     @Override
     public void onStart(){
+        //TODO: Reconsider default cluster name
         putConfig(clusterName,
             "Name of the cluster to be created",
             "cj.ocp.clusterName",
