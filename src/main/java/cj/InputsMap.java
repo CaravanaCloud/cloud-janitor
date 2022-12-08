@@ -26,7 +26,7 @@ public class InputsMap {
     Map<Input, InputConfig> inputConfigs = new HashMap<>();
 
     @Inject
-    Beans beans;
+    Objects beans;
 
     @PostConstruct
     @SuppressWarnings("unused")

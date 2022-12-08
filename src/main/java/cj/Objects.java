@@ -1,6 +1,7 @@
 package cj;
 
 import cj.spi.Task;
+import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -12,8 +13,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.*;
+
 @ApplicationScoped
-public class Beans {
+public class Objects {
     @Inject
     Logger log;
 
@@ -58,6 +61,8 @@ public class Beans {
         return getAnnotationValue(clazz, annotation);
     }
 
+
+
     public <A extends Annotation> Object getAnnotationValue(Class<?> clazz, Class<A> annotation) {
         A annot = getAnnotation(clazz, annotation);
         if (annot == null) return null;
@@ -78,7 +83,13 @@ public class Beans {
         return null;
     }
 
-    private static <A extends Annotation> A getAnnotation(Class<?> clazz, Class<A> annotation) {
+    public <A extends Annotation> A getAnnotation(Object object, Class<A> annotation) {
+        checkNotNull(object);
+        return getAnnotation(object.getClass(), annotation);
+    }
+
+
+    public <A extends Annotation> A getAnnotation(Class<?> clazz, Class<A> annotation) {
         var annot = clazz.getAnnotation(annotation);
         if (annot == null){
             var superclazz = clazz.getSuperclass();

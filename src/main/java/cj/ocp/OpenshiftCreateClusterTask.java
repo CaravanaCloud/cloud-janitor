@@ -42,8 +42,7 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         var credsDir = FSUtils.resolveDir(clusterDir, "ccoctl-creds");
         var outputDir = FSUtils.resolveDir(clusterDir, "ccoctl-output");
         checkCommands(clusterProfile);
-        var data = getInputsMap();
-        preCreate(clusterName, clusterDir, credsDir, outputDir, clusterProfile, data);
+        preCreate(clusterName, clusterDir, credsDir, outputDir, clusterProfile);
         createCluster(clusterName, clusterDir);
         var kubeconfigdir = clusterDir.resolve("auth");
         export("KUBECONFIG", kubeconfigdir);
@@ -100,30 +99,23 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         }
     }
 
-    private void preCreate(String clusterName, Path clusterDir, Path credsDir, Path outputDir, ClusterProfile profile,
-            Map<String, String> configData) {
+    private void preCreate(String clusterName, Path clusterDir, Path credsDir, Path outputDir, ClusterProfile profile) {
         debug("Preparing to create cluster {} with profile {}", clusterName, profile);
         if (profile.ccoctl) {
             createAllCcoctlResources(clusterName, credsDir, outputDir);
         }
-        createInstallConfigFromTemplate(clusterDir, clusterName, profile, configData);
+        createInstallConfigFromTemplate(clusterDir, clusterName, profile);
     }
 
-    private void createInstallConfigFromTemplate(Path clusterDir, String clusterName, ClusterProfile profile,
-            Map<String, String> data) {
+    private void createInstallConfigFromTemplate(Path clusterDir, String clusterName, ClusterProfile profile) {
         var cloudProvider = getInput(CloudInputs.cloudProvider, CloudProvider.class);
-        var infrastrucutreProvider = getInput(OCPInput.infrastructureProvider, OCPInfrastructureProvider.class);
-        var templateName =  "%s_%s_%s".formatted(
-                cloudProvider.name().toLowerCase(),
-                infrastrucutreProvider.name().toLowerCase(),
-                profile.name().toLowerCase());
-        var location = "ocp/%s/install-config.yaml".formatted(templateName);
-        String output = render(location, data);
-        Path installConfigPath = clusterDir.resolve("install-config.yaml");
-        FSUtils.writeFile(installConfigPath, output);
-        Path backupConfigPath = clusterDir.resolve("install-config.bak.yaml");
-        FSUtils.writeFile(backupConfigPath, output);
-        debug("Wrote [{}] install-config.yaml [{}] to {}", profile, output.length(), installConfigPath);
+        var infrastructureProvider = getInput(OCPInput.infrastructureProvider, OCPInfrastructureProvider.class);
+        var profileName = profile.toString();
+        var output = render(profileName, "install-config.quote.yaml", "install-config.yaml");
+        var installConfigPath = clusterDir.resolve("install-config.yaml");
+        var backupConfigPath = clusterDir.resolve("install-config.bak.yaml");
+        FSUtils.copyFileWithBackup(installConfigPath, backupConfigPath);
+        debug("Wrote [{}] install-config.yaml to {}", profile, installConfigPath);
     }
 
 

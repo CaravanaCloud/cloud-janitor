@@ -1,7 +1,6 @@
 package cj;
 
 import cj.fs.FSInput;
-import cj.fs.FSUtils;
 import cj.fs.FindFiles;
 import cj.ocp.CapabilityNotFoundException;
 import cj.qute.Templates;
@@ -15,7 +14,6 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static cj.Errors.Type;
@@ -27,7 +25,6 @@ public class BaseTask
         implements Task,
             TaskManagement,
             Logging {
-    static final String DEFAULT_PROFILE = "default";
     @Inject
     Configuration config;
 
@@ -191,9 +188,6 @@ public class BaseTask
         if (value == null) {
             value = cfgInputString(key);
         }
-        if(key.toString().contains("instance")){
-            System.out.println("  ");
-        }
         if (value == null) {
             value = inputsMap.getFromDefault(key);
         }
@@ -341,20 +335,6 @@ public class BaseTask
         return templates.getTemplate(location);
     }
 
-    protected Map<String, String> getInputsMap() {
-        @SuppressWarnings("redundant")
-        var inputsMap = this.inputsMap.getExpectedInputs(this)
-                .stream()
-                .collect(Collectors.toMap(
-                        Input::toString,
-                        this::inputString))
-                .entrySet()
-                .stream()
-                .filter(e -> e.getValue().isPresent())
-                .collect(Collectors.toMap(Map.Entry::getKey,
-                        e -> e.getValue().get()));
-        return inputsMap;
-    }
 
     protected void expectCapability(@SuppressWarnings("SameParameterValue") Capabilities capability) {
         if (!hasCapabilities(capability)) {
@@ -400,54 +380,6 @@ public class BaseTask
                 .outputList(FilesMatch, Path.class);
     }
 
-    protected Path taskDir(){
-        return FSUtils.taskDir(this);
-    }
-
-    protected Path render(String template, String outputFileName){
-        return render(DEFAULT_PROFILE, template, taskFile(outputFileName));
-    }
-    protected Path render(String profile, String template, String outputFileName){
-        return render(profile, template, taskFile(outputFileName));
-    }
-
-    protected Path render(String profile, String template, Path outputFile){
-        var location = "%s/%s/%s".formatted(
-                getName(),
-                profile,
-                template
-        );
-        var content = render(location, Map.of());
-        debug("Rendering template {} to [{}] {}", template, content.length() ,outputFile);
-        FSUtils.writeFile(outputFile, content);
-        return outputFile;
-    }
-
-    protected String render(String location, Map<String, String> inputs) {
-        debug("Rendering template from {} with {} inputs", location, inputs.size());
-        var installConfigTemplate = getTemplate(location);
-        if (installConfigTemplate == null){
-            warn("Failed to load template from {}", location);
-            throw fail("Failed to load template from %s", location);
-        }
-        var data = new HashMap<String, Object>();
-        data.putAll(inputs);
-        data.putAll(getInputsMap());
-        data.put("config",config());
-        @SuppressWarnings("redundant")
-        var render = installConfigTemplate
-                .data(data)
-                .render();
-        return render;
-    }
-
-    protected String render(String location) {
-        return render(location, Map.of());
-    }
-
-    protected Path taskFile(String fileName){
-        return taskDir().resolve(fileName);
-    }
 
     protected String composeName(String... tokens) {
         return compose(namingSeparator(), altSeparator(), tokens);
@@ -488,5 +420,14 @@ public class BaseTask
         return result;
     }
 
-
+    protected Path render(String profile, String template, String output) {
+        return templates.render(this, profile, template, output);
     }
+    protected Path render(String template, String output) {
+        return templates.render(this, template, output);
+    }
+
+    public Path taskFile(String fileName) {
+        return templates.taskFile(this, fileName);
+    }
+}

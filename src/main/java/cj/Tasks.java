@@ -1,6 +1,7 @@
 package cj;
 
 import cj.ocp.CapabilityNotFoundException;
+import cj.qute.Templates;
 import cj.reporting.Reporting;
 import cj.shell.*;
 import cj.spi.Task;
@@ -56,7 +57,10 @@ public class Tasks {
     Instance<ShellTask> shellInstance;
 
     @Inject
-    Beans beans;
+    Objects objects;
+
+    @Inject
+    Templates templates;
     Map<String, Map<OS, String[]>> installMap = new HashMap<>();
 
     public void run() {
@@ -76,8 +80,8 @@ public class Tasks {
     // TODO: Consider async execution
     public Task submit(Task task) {
         try {
-            submitNow(task);
-            return task;
+            var result = submitNow(task);
+            return result;
         } catch (Exception e) {
             log.info("Exception running task {}: {}", task, e.getMessage());
             e.printStackTrace();
@@ -87,6 +91,23 @@ public class Tasks {
 
     @SuppressWarnings("all")
     public Task submitNow(Task task) {
+        runDependencies(task);
+        renderTemplates(task);
+        runSingle(task);
+        return task;
+    }
+
+    private void renderTemplates(Task task) {
+        var template = objects.getAnnotation(task, TaskTemplate.class);
+        if (template != null)
+            renderTemplate(task, template.value(), template.output());
+    }
+
+    private void renderTemplate(Task task, String value, String output) {
+        templates.render(task, value, output);
+    }
+
+    private void runDependencies(Task task) {
         var thisInputs = task.getInputs();
         var dependencies = task.getDependencies();
         dependencies.forEach(d -> {
@@ -94,8 +115,6 @@ public class Tasks {
             d.getInputs().putAll(thisInputs);
             submit(d);
         });
-        runSingle(task);
-        return task;
     }
 
     // TODO: Consider retries
@@ -362,8 +381,8 @@ public class Tasks {
         @SuppressWarnings("redundant")
         var tasks = bm.getBeans(Task.class)
                 .stream()
-                .map(beans::configFromBean)
-                .filter(Objects::nonNull)
+                .map(objects::configFromBean)
+                .filter(java.util.Objects::nonNull)
                 .sorted(Comparator.comparing(TaskConfiguration::name))
                 .toList();
         return tasks;

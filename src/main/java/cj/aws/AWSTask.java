@@ -12,19 +12,17 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
 import static cj.aws.AWSInput.identity;
+import static com.google.common.base.Preconditions.*;
 import static org.awaitility.Awaitility.await;
 import static cj.aws.AWSOutput.*;
 
 public abstract class AWSTask
         extends BaseTask {
     static final Random rand = new Random();
-
-
     @Inject
     AWSClientsManager aws;
     protected AWSClients aws() {
@@ -51,8 +49,6 @@ public abstract class AWSTask
     protected void setIdentity(AWSIdentity id) {
         getInputs().put(identity, id);
     }
-
-
 
     protected <T> T create(Instance<T> instance) {
         @SuppressWarnings("redundant")
@@ -141,16 +137,7 @@ public abstract class AWSTask
         return identities;
     }
 
-    @Override
-    protected Map<String, String> getInputsMap() {
-        var inputs = super.getInputsMap();
-        var awsIdentity = identity();
-        var accountAlias = awsIdentity.accountAlias();
-        var accountId = awsIdentity.accountId();
-        inputs.put("accountAlias", accountAlias);
-        inputs.put("accountId", accountId);
-        return inputs;
-    }
+
 
     protected String regionName(){
         var region = region();
@@ -167,7 +154,13 @@ public abstract class AWSTask
     Instance<AWSIteratorTask> iteratorInstance;
 
     protected <T extends Task> void forEachRegion(Instance<T> taskInstance) {
-        Preconditions.checkArgument(taskInstance.isResolvable(), "Task instance is not resolvable");
-        submitInstance(iteratorInstance, CJInput.instance, taskInstance);
+        checkArgument(taskInstance.isResolvable(), "Task instance is not resolvable");
+        submitInstance(iteratorInstance, CJInput.regionTask, taskInstance);
+    }
+
+    protected <T extends Task> void forEachIdentity(Instance<T> taskInstance) {
+        checkNotNull(taskInstance);
+        checkArgument(taskInstance.isResolvable(), "Task instance is not resolvable");
+        submitInstance(iteratorInstance, CJInput.identityTask, taskInstance);
     }
 }
