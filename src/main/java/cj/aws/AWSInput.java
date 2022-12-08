@@ -25,5 +25,5 @@ public enum AWSInput implements Input {
     s3Prefix,
     targetLanguages,
     sourceLanguage,
-    contentType, bucketPolicy, securityGroupRule
+    contentType, bucketPolicy, regions, securityGroupRule
 }

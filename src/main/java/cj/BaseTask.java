@@ -184,13 +184,14 @@ public class BaseTask
     }
 
     public Optional<Object> input(Input key) {
+
         if (key == null)
             return Optional.empty();
         var value = inputs.get(key);
         if (value == null) {
             value = cfgInputString(key);
         }
-        if(key.toString().contains("clusterProfile")){
+        if(key.toString().contains("instance")){
             System.out.println("  ");
         }
         if (value == null) {
@@ -448,14 +449,36 @@ public class BaseTask
         return taskDir().resolve(fileName);
     }
 
-    protected String composeName(String... context) {
+    protected String composeName(String... tokens) {
+        return compose(namingSeparator(), altSeparator(), tokens);
+    }
+    protected String composeNameAlt(String... tokens) {
+        return compose(altSeparator(), namingSeparator(),  tokens);
+    }
+
+    private String namingSeparator() {
+        return config().namingSeparator().orElse("-");
+    }
+
+    private String altSeparator() {
+        return config().altSeparator().orElse("_");
+    }
+
+    private String compose(String separator, String altSeparator, String[] context) {
+        var name = composeNameSep(separator, context);
+        name = name.replaceAll(altSeparator, separator);
+        return name;
+    }
+
+
+    protected String composeNameSep(String separator, String... context) {
         var prefix = config().namingPrefix().orElse("");
-        var separator = config().namingSeparator().orElse("");
         var result = prefix
                 + separator
                 + String.join(separator, context);
         return result;
     }
+
     protected String join(String separator, String... context) {
         return String.join(separator, context);
     }

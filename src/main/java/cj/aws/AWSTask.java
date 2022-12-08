@@ -1,7 +1,10 @@
 package cj.aws;
 
 import cj.BaseTask;
+import cj.CJInput;
 import cj.aws.sts.AWSLoadIdentitiesTask;
+import cj.spi.Task;
+import com.google.common.base.Preconditions;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.model.Filter;
 
@@ -157,5 +160,14 @@ public abstract class AWSTask
     protected String accountId(){
         var identity = identity();
         return identity != null ? identity.accountId() : "";
+    }
+
+
+    @Inject
+    Instance<AWSIteratorTask> iteratorInstance;
+
+    protected <T extends Task> void forEachRegion(Instance<T> taskInstance) {
+        Preconditions.checkArgument(taskInstance.isResolvable(), "Task instance is not resolvable");
+        submitInstance(iteratorInstance, CJInput.instance, taskInstance);
     }
 }

@@ -2,7 +2,6 @@ package cj.aws.attribution;
 
 import cj.aws.AWSOutput;
 import cj.aws.AWSTask;
-import cj.aws.filter.FilterRegions;
 import cj.aws.s3.AWSGetBucketTask;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.athena.model.QueryExecutionContext;
@@ -15,34 +14,21 @@ import software.amazon.awssdk.services.cloudtrail.model.StartLoggingRequest;
 import software.amazon.awssdk.services.s3.model.Bucket;
 
 import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import static cj.aws.AWSInput.*;
+import static cj.aws.AWSInput.bucketPolicy;
+import static cj.aws.AWSInput.targetBucketName;
 
-//TODO: Multi-identity support
 @Dependent
-@Named("aws-get-trails")
-public class AWSGetTrailsTask extends AWSTask {
+public class AWSAttributionRegionTask extends AWSTask {
     @Inject
-    FilterRegions filterRegions;
-
-    @Inject
-    Instance<AWSGetBucketTask> getBucketTasks;
+    AWSGetBucketTask getBucketTask;
 
     @Override
     public void apply() {
-        var regions = submit(filterRegions)
-                .outputList(AWSOutput.RegionMatches, Region.class);
-        debug("Looking for aws trails in {} regions: {}", regions.size(), regions);
-        regions.forEach(this::getTrailForRegion);
-    }
-
-    private void getTrailForRegion(Region region) {
         var trailName = composeName(accountId(), regionName());
-        try (var cloudtrail = aws(region).cloudtrail()){
-            getTrailForRegion(cloudtrail, region, trailName);
+        try (var cloudtrail = aws().cloudtrail()){
+            getTrailForRegion(cloudtrail, region(), trailName);
         }
     }
 
@@ -99,7 +85,7 @@ public class AWSGetTrailsTask extends AWSTask {
                 .replace("$ACCOUNT_ID", accountId)
                 .replace("$BUCKET_PREFIX", keyPrefix);
         log().debug(policy);
-        var task = getBucketTasks.get()
+        var task = getBucketTask
                 .withInput(targetBucketName, bucketName)
                 .withInput(bucketPolicy, policy);
         task = submit(task);
@@ -198,7 +184,7 @@ OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
 LOCATION 's3://$BUCKET_NAME/$BUCKET_PREFIX/AWSLogs/$ACCOUNT_ID/CloudTrail/'
 TBLPROPERTIES ('classification'='cloudtrail');
 """;
-        var tableName = trailName;
+        var tableName = composeNameAlt("attribution", accountId() , regionName());
         var ddl = ddlTemplate.replace("$TABLE_NAME", tableName)
                 .replace("$BUCKET_NAME", bucketName)
                 .replace("$BUCKET_PREFIX", bucketPrefix)
@@ -213,6 +199,9 @@ TBLPROPERTIES ('classification'='cloudtrail');
                             .outputLocation("s3://" + bucketName + "/" + bucketPrefix + "/athena/")
                             .build())
                     .build();
+            debug("Creating athena attribution table: {}", tableName);
+            debug(ddl);
+            checkpoint("Creating athena attribution table");
             athena.startQueryExecution(req);
             debug("Athena table created for trail {}", trailName);
         }

@@ -84,7 +84,7 @@ public class AWSClientsManager {
         return id;
     }
 
-    private synchronized List<? extends AWSIdentity> identities() {
+    public synchronized List<? extends AWSIdentity> identities() {
         if (awsIdentities == null){
             awsIdentities = tasks.submit(loadIds.get())
                     .outputList(AWSOutput.Identities, AWSIdentity.class);
@@ -99,4 +99,7 @@ public class AWSClientsManager {
     }
 
 
+    public List<Region> regions() {
+        return config.aws().regionsList().stream().map(Region::of).toList();
+    }
 }
