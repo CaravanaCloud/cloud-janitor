@@ -1,7 +1,5 @@
 package cj.aws.ec2.delete;
-import static cj.aws.AWSOutput.*;
 
-import cj.Output;
 import cj.aws.AWSTask;
 import cj.aws.ec2.filter.FilterLoadBalancersV1;
 import cj.spi.Task;
@@ -12,6 +10,7 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import static cj.aws.AWSInput.targetLoadBalancerName;
+import static cj.aws.AWSOutput.LBDescriptionMatch;
 @Dependent
 public class DeleteLoadBalancersV1 extends AWSTask {
     @Inject

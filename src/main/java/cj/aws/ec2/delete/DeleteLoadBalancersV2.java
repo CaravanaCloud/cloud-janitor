@@ -9,8 +9,8 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import static cj.aws.AWSOutput.*;
 import static cj.aws.AWSInput.targetLoadBalancerArn;
+import static cj.aws.AWSOutput.ELBV2Match;
 
 @Dependent
 public class DeleteLoadBalancersV2 extends AWSTask {

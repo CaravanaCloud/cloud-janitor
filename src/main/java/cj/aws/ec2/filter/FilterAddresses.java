@@ -6,7 +6,7 @@ import software.amazon.awssdk.services.ec2.model.DescribeAddressesRequest;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.aws.AWSOutput.*;
+import static cj.aws.AWSOutput.AddressMatch;
 
 @Dependent
 public class FilterAddresses extends AWSFilter {

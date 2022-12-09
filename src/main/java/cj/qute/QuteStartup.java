@@ -1,13 +1,12 @@
 package cj.qute;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
-
 import cj.StartupObserver;
 import io.quarkus.qute.Engine;
 import io.quarkus.runtime.Startup;
 import org.slf4j.Logger;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 @SuppressWarnings("unused")
 @Startup()

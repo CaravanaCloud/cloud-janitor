@@ -14,6 +14,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 @Singleton
 @Startup
 public class InputsMap {
@@ -39,8 +41,9 @@ public class InputsMap {
                                Function<Configuration, Optional<?>> configFn,
                                Supplier<?> defaultFn,
                                String defaultDescription,
-                               Object[] allowedValues){
-        var inputConfig = InputConfig.of(input,description, configKey, configFn, defaultFn, defaultDescription, allowedValues);
+                               Object[] allowedValues,
+                               boolean enrichBypass){
+        var inputConfig = InputConfig.of(input,description, configKey, configFn, defaultFn, defaultDescription, allowedValues, enrichBypass);
         inputConfigs.put(input, inputConfig);
     }
 
@@ -85,5 +88,23 @@ public class InputsMap {
 
     public List<Input> getExpectedInputs(Task task) {
         return beans.getExpectedInputs(task);
+    }
+
+    public Optional<Object> valueOf(Task task, Input input) {
+        checkNotNull(task);
+        checkNotNull(input);
+        var value = task.inputs().get(input);
+        if (value == null) {
+            value = valueOf(input);
+        }
+        return Optional.ofNullable(value);
+    }
+
+    public Object valueOf(Input input) {
+        Object value = getFromConfig(input);
+        if (value == null) {
+            value = getFromDefault(input);
+        }
+        return value;
     }
 }

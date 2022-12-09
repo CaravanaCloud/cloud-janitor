@@ -12,7 +12,10 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -154,7 +157,7 @@ public class BaseTask
     }
 
     @Override
-    public Map<Input, Object> getInputs() {
+    public Map<Input, Object> inputs() {
         return inputs;
     }
 
@@ -181,21 +184,7 @@ public class BaseTask
     }
 
     public Optional<Object> input(Input key) {
-
-        if (key == null)
-            return Optional.empty();
-        var value = inputs.get(key);
-        if (value == null) {
-            value = cfgInputString(key);
-        }
-        if (value == null) {
-            value = inputsMap.getFromDefault(key);
-        }
-        return Optional.ofNullable(value);
-    }
-
-    public Object cfgInputString(Input key) {
-        return inputsMap.getFromConfig(key);
+        return inputsMap.valueOf(this, key);
     }
 
     @SuppressWarnings("all")
@@ -228,12 +217,12 @@ public class BaseTask
 
     public List<Task> delegateAll(Task... tasks) {
         return Stream.of(tasks)
-                .map(t -> t.withInputs(getInputs()))
+                .map(t -> t.withInputs(inputs()))
                 .toList();
     }
 
     public Task delegate(Task task) {
-        return task.withInputs(getInputs());
+        return task.withInputs(inputs());
     }
 
     public void submitAll(Task... delegates) {
@@ -344,7 +333,7 @@ public class BaseTask
     }
 
 
-    protected void checkpoint(@SuppressWarnings("SameParameterValue") String message,
+    protected void checkpoint(String message,
                               Object... args){
 
         info(message, args);
@@ -427,7 +416,7 @@ public class BaseTask
         return templates.render(this, template, output);
     }
 
-    public Path taskFile(String fileName) {
-        return templates.taskFile(this, fileName);
+    protected Path taskFile(String filename){
+        return tasks().taskFile(this,filename);
     }
 }

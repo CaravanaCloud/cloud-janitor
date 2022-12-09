@@ -14,12 +14,9 @@ public class ConfigurationNotFoundException extends RuntimeException {
         var msg = new StringBuilder();
         for (var input: missingInputs) {
             var configKey = input.configKey();
-            var envVarName = input.getEnvVarName();
             msg.append("Missing input, try setting ");
             msg.append(configKey);
             msg.append(" (yaml) or ");
-            msg.append( envVarName);
-            msg.append(" (env)");
             msg.append("\n");
         }
         @SuppressWarnings("redundant")

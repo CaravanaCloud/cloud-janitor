@@ -11,7 +11,7 @@ import software.amazon.awssdk.services.ec2.model.InternetGatewayAttachment;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import static cj.aws.AWSOutput.*;
+import static cj.aws.AWSOutput.InternetGatewayMatch;
 
 @Dependent
 public class DeleteInternetGateways extends AWSWrite {

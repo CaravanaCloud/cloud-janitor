@@ -1,11 +1,11 @@
 package cj.aws.transx;
 
+import software.amazon.awssdk.services.transcribe.model.TranscriptionJob;
+
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
-
-import software.amazon.awssdk.services.transcribe.model.TranscriptionJob;
 
 public class Transcription {    
     static DateTimeFormatter fmt = DateTimeFormatter.ISO_LOCAL_DATE_TIME;

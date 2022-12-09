@@ -1,6 +1,5 @@
 package cj.aws.filter;
 
-import cj.Output;
 import cj.aws.AWSInput;
 import cj.aws.AWSTask;
 import software.amazon.awssdk.regions.Region;
@@ -8,7 +7,8 @@ import software.amazon.awssdk.regions.Region;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import static cj.aws.AWSOutput.*;
+
+import static cj.aws.AWSOutput.RegionMatches;
 
 @Dependent
 public class AWSFilterIdentityTask extends AWSTask {

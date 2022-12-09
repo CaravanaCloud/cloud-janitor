@@ -8,8 +8,8 @@ import software.amazon.awssdk.services.ec2.model.SecurityGroupRule;
 import javax.enterprise.context.Dependent;
 import java.util.ArrayList;
 
-import static cj.aws.AWSOutput.*;
 import static cj.aws.AWSInput.targetVPCId;
+import static cj.aws.AWSOutput.SecurityGroupRulesMatch;
 
 @Dependent
 public class FilterSecurityGroupRules extends AWSFilter {

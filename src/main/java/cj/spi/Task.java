@@ -77,7 +77,7 @@ public interface Task {
         return null;
     }
 
-    default Map<Input, Object> getInputs() {
+    default Map<Input, Object> inputs() {
         return Map.of();
     }
 

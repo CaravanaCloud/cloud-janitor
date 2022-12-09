@@ -1,10 +1,10 @@
 package cj;
 
 import io.quarkus.runtime.LaunchMode;
+import io.quarkus.runtime.QuarkusApplication;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
-import io.quarkus.runtime.QuarkusApplication;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;

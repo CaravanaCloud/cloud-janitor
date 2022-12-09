@@ -1,7 +1,6 @@
 package cj;
 
 import cj.spi.Task;
-import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -9,11 +8,10 @@ import javax.enterprise.inject.spi.Bean;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @ApplicationScoped
 public class Objects {
@@ -23,26 +21,13 @@ public class Objects {
     @Inject
     InputsMap inputs;
 
+    @Inject
+    Tasks tasks;
+
     public TaskConfiguration configFromBean(Bean<?> bean) {
-        var name = bean.getName();
-        var taskDescription = getAnnotationString(bean, TaskDescription.class);
-        var taskMaturity = getAnnotationString(bean, TaskMaturity.class);
-        if (name == null || taskDescription == null) {
-            log.trace("Ignoring bean {}.", bean);
-            return null;
-        }
-        var taskInputNames = getAnnotationStrings(bean, ExpectedInputs.class);
-        List<InputConfig> taskInputs = new ArrayList<>();
-        if (taskInputNames != null) {
-            taskInputs = Arrays.stream(taskInputNames)
-                    .map(inputs::findInputConfigByName)
-                    .toList();
-        }
-        //TODO: remove this hack
-        return new SimpleTaskConfiguration(name,
-                taskDescription,
-                taskMaturity,
-                taskInputs);
+        var taskName = bean.getName();
+        var taskConfig = tasks.getTaskConfig(taskName);
+        return taskConfig.orElse(null);
     }
 
     public <A extends Annotation> String[] getAnnotationStrings(Bean<?> bean, Class<A> annotation) {

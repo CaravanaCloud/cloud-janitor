@@ -4,15 +4,18 @@ import io.quarkus.runtime.annotations.StaticInitSafe;
 import io.smallrye.config.ConfigMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @ConfigMapping
 @StaticInitSafe
 public interface TaskConfiguration {
     String name();
 
-    String description();
+    Optional<String> description();
 
-    String maturityLevel();
+    Optional<String> maturity();
 
-    List<InputConfig> inputs();
+    Optional<List<InputConfiguration>> inputs();
+
+    Optional<List<String>> bypass();
 }

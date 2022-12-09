@@ -5,8 +5,8 @@ import software.amazon.awssdk.services.elasticloadbalancing.model.LoadBalancerDe
 
 import javax.enterprise.context.Dependent;
 
-import static cj.aws.AWSOutput.*;
 import static cj.aws.AWSInput.targetVPCId;
+import static cj.aws.AWSOutput.LBDescriptionMatch;
 
 @Dependent
 public class FilterLoadBalancersV1 extends AWSFilter {

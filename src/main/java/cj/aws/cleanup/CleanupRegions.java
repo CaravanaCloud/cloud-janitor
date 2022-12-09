@@ -1,6 +1,5 @@
 package cj.aws.cleanup;
 
-import cj.Output;
 import cj.aws.AWSTask;
 import cj.aws.filter.FilterRegion;
 import cj.aws.filter.FilterRegions;
@@ -10,9 +9,9 @@ import software.amazon.awssdk.regions.Region;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import static cj.aws.AWSOutput.*;
 
 import static cj.aws.AWSInput.targetRegion;
+import static cj.aws.AWSOutput.RegionMatches;
 @Dependent
 public class CleanupRegions extends AWSTask {
     @Inject

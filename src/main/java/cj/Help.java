@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.util.List;
 
 @ApplicationScoped
 public class Help {
@@ -37,14 +38,14 @@ public class Help {
         msg.append("\n== Task ");
         msg.append("\nname: %s".formatted(task.name()));
         msg.append("\ndescription: %s".formatted(task.description()));
-        msg.append("\nmaturity: %s".formatted(task.maturityLevel()));
-        task.inputs().forEach(input -> {
-            msg.append("\n       input: %s".formatted(input.input().toString()));
-            msg.append("\n description: %s".formatted(input.description()));
-            msg.append("\n     yml key: %s".formatted(input.configKey()));
-            msg.append("\n     env var: %s".formatted(input.getEnvVarName()));
-            msg.append("\n     default: %s".formatted(input.defaultDescription()));
-            var allowedValues = input.allowedValues();
+        msg.append("\nmaturity: %s".formatted(task.maturity()));
+        task.inputs().orElse(List.of()).forEach(input -> {
+            msg.append("\n       input: %s".formatted(input.name()));
+            msg.append("\n description: %s".formatted(input.description().orElse("")));
+            msg.append("\n     yml key: %s".formatted(input.configKey().orElse("")));
+            msg.append("\n     env var: %s".formatted(input.getEnvVarName().orElse("")));
+            msg.append("\n     default: %s".formatted(input.defaultDescription().orElse("")));
+            var allowedValues = input.allowedValues().orElse(List.of());
             if(allowedValues != null && allowedValues.size() > 0){
                 msg.append("\n     allowed: %s".formatted(allowedValues));
             }

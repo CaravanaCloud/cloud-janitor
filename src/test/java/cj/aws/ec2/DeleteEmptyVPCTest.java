@@ -1,6 +1,5 @@
 package cj.aws.ec2;
 
-import cj.Output;
 import cj.TaskTest;
 import cj.aws.AWSInput;
 import cj.aws.ec2.cleanup.CleanupVPCs;
@@ -14,11 +13,11 @@ import software.amazon.awssdk.services.ec2.model.Vpc;
 
 import javax.inject.Inject;
 
+import static cj.aws.AWSOutput.VPCId;
+import static cj.aws.AWSOutput.VPCMatch;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
-import static cj.aws.AWSOutput.*;
-import static cj.aws.AWSOutput.*;
 
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

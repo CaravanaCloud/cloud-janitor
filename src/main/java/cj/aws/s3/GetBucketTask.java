@@ -1,15 +1,13 @@
 package cj.aws.s3;
 
-import cj.Output;
 import cj.aws.AWSTask;
 import software.amazon.awssdk.services.s3.model.HeadBucketRequest;
 import software.amazon.awssdk.services.s3.model.ListBucketsRequest;
-import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
 
 import javax.enterprise.context.Dependent;
 
 import static cj.aws.AWSInput.targetBucketName;
-import static cj.aws.AWSOutput.*;
+import static cj.aws.AWSOutput.S3Bucket;
 
 @Dependent
 public class GetBucketTask extends AWSTask {

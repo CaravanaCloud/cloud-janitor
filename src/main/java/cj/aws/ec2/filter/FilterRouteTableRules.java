@@ -1,12 +1,12 @@
 package cj.aws.ec2.filter;
 
-import cj.Output;
 import cj.aws.AWSFilter;
 import cj.aws.AWSInput;
 import software.amazon.awssdk.services.ec2.model.RouteTable;
 
 import javax.enterprise.context.Dependent;
-import static cj.aws.AWSOutput.*;
+
+import static cj.aws.AWSOutput.RouteTableRulesMatch;
 
 @Dependent
 public class FilterRouteTableRules extends AWSFilter {

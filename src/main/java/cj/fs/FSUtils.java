@@ -239,7 +239,11 @@ public class FSUtils {
     }
 
     public static Path taskDir(Task task) {
-        return resolveDir(tasksDir(), task.getPathName());
+        return taskDir(task.getPathName());
+    }
+
+    public static Path taskDir(String path) {
+        return resolveDir(tasksDir(), path);
     }
 
     public static Path dataDir(){

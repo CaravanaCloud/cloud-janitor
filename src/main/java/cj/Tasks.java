@@ -1,10 +1,13 @@
 package cj;
 
+import cj.fs.FSUtils;
 import cj.ocp.CapabilityNotFoundException;
 import cj.qute.Templates;
 import cj.reporting.Reporting;
 import cj.shell.*;
 import cj.spi.Task;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,14 +19,15 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
+import java.util.stream.Stream;
 
 import static cj.Errors.Type.Message;
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkArgument;
 
 @ApplicationScoped
 @Named("tasks")
@@ -51,7 +55,7 @@ public class Tasks {
     private String executionId;
 
     @Inject
-    InputsMap inputs;
+    InputsMap inputsMap;
 
     @Inject
     Instance<ShellTask> shellInstance;
@@ -61,15 +65,17 @@ public class Tasks {
 
     @Inject
     Templates templates;
+
     Map<String, Map<OS, String[]>> installMap = new HashMap<>();
 
+    Multimap<String, Input> bypassMap = ArrayListMultimap.create();
 
     public void run() {
         init();
         var tasks = lookupTasks();
-        if (! tasks.isEmpty()){
+        if (!tasks.isEmpty()) {
             runAll(tasks);
-        }else if (config.bypass()){
+        } else if (config.bypass()) {
             bypass();
         }
         report();
@@ -77,7 +83,7 @@ public class Tasks {
 
     private List<Task> lookupTasks() {
         var argsList = config.argsList();
-        if (! argsList.isEmpty()){
+        if (!argsList.isEmpty()) {
             var taskName = argsList.get(0);
             var tasks = lookupTasks(taskName);
             return tasks;
@@ -88,9 +94,8 @@ public class Tasks {
     private void bypass() {
         var argsList = config.argsList();
         var enriched = enrich(argsList);
-        log.debug("{} => {}", join(argsList), join(enriched));
+        log.debug("Bypassing `{}` as `{}`", join(argsList), join(enriched));
         if (enriched.isEmpty()) return;
-        log.debug("Bypassing: {}", join(enriched));
         var enrichedArr = enriched.toArray(new String[enriched.size()]);
         exec(enrichedArr);
     }
@@ -100,9 +105,44 @@ public class Tasks {
     }
 
     private List<String> enrich(List<String> args) {
-        return args;
+        if (args.isEmpty()) return args;
+        var taskName = args.get(0);
+        var taskArgs = args.subList(1, args.size());
+        var taskCfg = getTaskConfig(taskName);
+        var bypass = taskCfg.flatMap(TaskConfiguration::bypass);
+        var bypassList = bypass
+                .map(xs -> xs.stream()
+                        .flatMap(expr -> bypassValues(expr, taskArgs))
+                        .toList());
+        var result = bypassList.orElse(List.of());
+        return result;
     }
 
+    private Stream<String> bypassValues(String value, List<String> taskArgs) {
+        if("{args}".equals(value)){
+            return taskArgs.stream();
+        }
+        return Stream.of(value);
+    }
+
+    public Optional<TaskConfiguration> getTaskConfig(String taskName) {
+        var taskCfgs = config.tasks();
+        if (taskCfgs.isEmpty()) return Optional.empty();
+        var taskCfg = taskCfgs.get()
+                .stream()
+                .filter(t -> t.name().equals(taskName))
+                .findFirst();
+        return taskCfg;
+    }
+
+    private Object valueOf(Input input) {
+        var value = inputsMap.valueOf(input);
+        return value;
+    }
+
+    public Stream<Input> bypassInputs(String taskName) {
+        return bypassMap.get(taskName).stream();
+    }
 
     private void init() {
         log.trace("Tasks.run()");
@@ -141,11 +181,11 @@ public class Tasks {
     }
 
     private void runDependencies(Task task) {
-        var thisInputs = task.getInputs();
+        var thisInputs = task.inputs();
         var dependencies = task.getDependencies();
         dependencies.forEach(d -> {
             // TODO: Consider if dependencies should inherit inputs
-            d.getInputs().putAll(thisInputs);
+            d.inputs().putAll(thisInputs);
             submit(d);
         });
     }
@@ -188,7 +228,7 @@ public class Tasks {
         } catch (Exception e) {
             e.printStackTrace();
             task.getErrors().put(Message, e.getMessage());
-            log.error("Error executing {}: {}", task, e.getMessage());    
+            log.error("Error executing {}: {}", task, e.getMessage());
             throw new RuntimeException(e);
         } finally {
             task.setEndTime(LocalDateTime.now());
@@ -244,7 +284,7 @@ public class Tasks {
         return capabilities;
     }
 
-    public boolean hasCapabilities(Capabilities[] cs) {
+    public boolean hasCapabilities(Capabilities... cs) {
         for (var c : cs) {
             if (!capabilities.contains(c)) {
                 return false;
@@ -304,7 +344,7 @@ public class Tasks {
     }
 
     private void checkInputs(Task task) {
-        List<Input> expected = inputs.getExpectedInputs(task);
+        List<Input> expected = inputsMap.getExpectedInputs(task);
 
         List<InputConfig> missing = new ArrayList<>();
         Map<Input, String> present = new HashMap<>();
@@ -314,7 +354,7 @@ public class Tasks {
             if (inputValue.isPresent()) {
                 present.put(inputKey, inputValue.get().toString());
             } else {
-                missing.add(inputs.getConfig(inputKey));
+                missing.add(inputsMap.getConfig(inputKey));
             }
         }
         if (!expected.isEmpty())
@@ -327,7 +367,7 @@ public class Tasks {
     }
 
     private Optional<?> fromConfig(Input input) {
-        return Optional.ofNullable(inputs.getFromConfig(input));
+        return Optional.ofNullable(inputsMap.getFromConfig(input));
     }
 
     public ExecResult exec(String... cmdArgs) {
@@ -336,7 +376,7 @@ public class Tasks {
 
     @SuppressWarnings("unused")
     protected ExecResult exec(Boolean dryRun, String... cmdArgs) {
-        return exec(getConfig().execTimeout(),dryRun, cmdArgs);
+        return exec(getConfig().execTimeout(), dryRun, cmdArgs);
     }
 
     @SuppressWarnings("all")
@@ -398,13 +438,15 @@ public class Tasks {
         var installTask = shellTask(OS.get(fixMap));
         return retry(checkTask, installTask);
     }
+
     public Task retry(Task theMainTask, Task theFixTask) {
-      var retryTask = retry.get()
-        .withInput(CJInput.task, theMainTask)
-        .withInput(CJInput.fixTask, theFixTask);
-      return submit(retryTask);
-     }
-     public List<TaskConfiguration> findAll(){
+        var retryTask = retry.get()
+                .withInput(CJInput.task, theMainTask)
+                .withInput(CJInput.fixTask, theFixTask);
+        return submit(retryTask);
+    }
+
+    public List<TaskConfiguration> findAll() {
         @SuppressWarnings("redundant")
         var tasks = bm.getBeans(Task.class)
                 .stream()
@@ -413,7 +455,7 @@ public class Tasks {
                 .sorted(Comparator.comparing(TaskConfiguration::name))
                 .toList();
         return tasks;
-     }
+    }
 
     public String generateResourceName() {
         return getExecutionId();
@@ -429,5 +471,17 @@ public class Tasks {
 
     public void mapInstall(String binary, Map<OS, String[]> commands) {
         installMap.put(binary, commands);
+    }
+
+    public void enrichBypass(String taskName, Input... input) {
+        bypassMap.putAll(taskName, Arrays.asList(input));
+    }
+
+    public Path taskFile(Task task, String fileName) {
+        return taskFile(task.getPathName(), fileName);
+    }
+
+    public Path taskFile(String taskName, String fileName) {
+        return FSUtils.taskDir(taskName).resolve(fileName);
     }
 }

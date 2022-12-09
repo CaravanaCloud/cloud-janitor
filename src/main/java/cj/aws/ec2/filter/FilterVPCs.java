@@ -1,6 +1,5 @@
 package cj.aws.ec2.filter;
 
-import cj.Output;
 import cj.aws.AWSFilter;
 import cj.aws.AWSInput;
 import software.amazon.awssdk.services.ec2.model.DescribeVpcsRequest;
@@ -8,7 +7,8 @@ import software.amazon.awssdk.services.ec2.model.Vpc;
 
 import javax.enterprise.context.Dependent;
 import java.util.List;
-import static cj.aws.AWSOutput.*;
+
+import static cj.aws.AWSOutput.VPCMatch;
 
 @Dependent
 public class FilterVPCs extends AWSFilter {
@@ -56,6 +56,6 @@ public class FilterVPCs extends AWSFilter {
     }
 
     public void setTargetVPC(String vpcId) {
-        getInputs().put(AWSInput.targetVPCId, vpcId);
+        inputs().put(AWSInput.targetVPCId, vpcId);
     }
 }

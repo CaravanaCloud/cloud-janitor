@@ -1,0 +1,16 @@
+cj:
+  tasks:
+    - name: "cowsay"
+      maturity: "stable"
+      description: "Cowsay is a configurable talking cow"
+      bypass:
+        - "cowsay"
+        - "-s"
+        - "{args}"
+
+    - name: "aws-nuke-"
+      bypass:
+        - "--force"
+        - "{dryRunFlag}"
+        - "--config"
+        - "{configFilePath}"

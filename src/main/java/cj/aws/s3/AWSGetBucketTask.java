@@ -4,8 +4,8 @@ import cj.TaskDescription;
 import cj.TaskMaturity;
 import cj.aws.AWSInput;
 import cj.aws.AWSWrite;
-import cj.aws.sts.SimpleIdentity;
 import cj.aws.sts.GetCallerIdentityTask;
+import cj.aws.sts.SimpleIdentity;
 import cj.spi.Task;
 import software.amazon.awssdk.services.s3.model.Bucket;
 
@@ -16,7 +16,8 @@ import java.util.Optional;
 
 import static cj.aws.AWSInput.bucketPolicy;
 import static cj.aws.AWSInput.targetBucketName;
-import static cj.aws.AWSOutput.*;
+import static cj.aws.AWSOutput.CallerIdentity;
+import static cj.aws.AWSOutput.S3Bucket;
 
 @Dependent
 @Named("aws-get-bucket")

@@ -10,7 +10,7 @@ public class CloudStartupObserver extends StartupObserver {
     @Override
     public void onStart(){
         // TODO: Support other cloud providers :)
-        putConfig(CloudInputs.cloudProvider,
+        describeInput(CloudInputs.cloudProvider,
                 "cloud.provider",
                 null,
                 () -> CloudProvider.aws);

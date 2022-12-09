@@ -1,11 +1,11 @@
 package cj.aws.ec2.filter;
 
-import cj.Output;
 import cj.aws.AWSFilter;
 import software.amazon.awssdk.services.elasticloadbalancingv2.model.LoadBalancer;
 
 import javax.enterprise.context.Dependent;
-import static cj.aws.AWSOutput.*;
+
+import static cj.aws.AWSOutput.ELBV2Match;
 
 @Dependent
 public class FilterLoadBalancersV2 extends AWSFilter {

@@ -1,13 +1,13 @@
 package cj.aws.ec2.create;
 
-import cj.Output;
 import cj.aws.AWSInput;
 import cj.aws.AWSWrite;
 import software.amazon.awssdk.services.ec2.model.CreateVpcRequest;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
-import static cj.aws.AWSOutput.*;
+
+import static cj.aws.AWSOutput.VPCId;
 
 @Named("create-vpc")
 @Dependent

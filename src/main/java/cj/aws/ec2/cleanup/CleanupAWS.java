@@ -10,8 +10,8 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static cj.aws.AWSOutput.*;
 import static cj.aws.AWSInput.identity;
+import static cj.aws.AWSOutput.Identities;
 
 @Named("cleanup-aws")
 @Dependent

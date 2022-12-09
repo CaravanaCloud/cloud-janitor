@@ -5,7 +5,6 @@ import io.quarkus.runtime.StartupEvent;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -15,35 +14,49 @@ public abstract class StartupObserver implements  Logging{
     @Inject
     InputsMap inputs;
 
-    public void putConfig(Input input,
-                               String description,
-                               String configKey,
-                               Function<Configuration, Optional<?>> configFn,
-                               Supplier<?> defaultFn,
-                               String defaultDescription){
-        putConfig(input, description, configKey, configFn, defaultFn, defaultDescription, new Object[]{});
+    @Inject
+    Tasks tasks;
+
+    public void describeInput(Input input,
+                              String description,
+                              String configKey,
+                              Function<Configuration, Optional<?>> configFn,
+                              Supplier<?> defaultFn,
+                              String defaultDescription){
+        describeInput(input, description, configKey, configFn, defaultFn, defaultDescription, new Object[]{}, false);
     }
-    public void putConfig(Input input,
-                               String description,
-                               String configKey,
-                               Function<Configuration, Optional<?>> configFn,
-                               Supplier<?> defaultFn,
-                               String defaultDescription,
-                               Object[] allowedValues){
-        inputs.putConfig(input, 
+    public void describeInput(Input input,
+                              String description,
+                              String configKey,
+                              Function<Configuration, Optional<?>> configFn,
+                              Supplier<?> defaultFn,
+                              String defaultDescription,
+                              Object[] allowedValues){
+        describeInput(input, description, configKey, configFn, defaultFn, defaultDescription, allowedValues, false);
+    }
+    public void describeInput(Input input,
+                              String description,
+                              String configKey,
+                              Function<Configuration, Optional<?>> configFn,
+                              Supplier<?> defaultFn,
+                              String defaultDescription,
+                              Object[] allowedValues,
+                              boolean enrichBypass){
+        inputs.putConfig(input,
             description, 
             configKey, 
             configFn, 
             defaultFn,
             defaultDescription,
-            allowedValues);
+            allowedValues,
+                enrichBypass);
     }
     
-    public void putConfig(Input input,
-                               String configKey,
-                               Function<Configuration, Optional<?>> configFn,
-                               Supplier<?> defaultFn){
-        inputs.putConfig(input, "", configKey, configFn, defaultFn, "" , new Object[]{});
+    public void describeInput(Input input,
+                              String configKey,
+                              Function<Configuration, Optional<?>> configFn,
+                              Supplier<?> defaultFn){
+        describeInput(input, "", configKey, configFn, defaultFn, "" , new Object[]{}, false);
     }
 
     @SuppressWarnings("unused")
@@ -53,5 +66,9 @@ public abstract class StartupObserver implements  Logging{
 
     protected void onStart() {
         debug("Startup observer completed.");
+    }
+
+    public Tasks tasks() {
+        return tasks;
     }
 }

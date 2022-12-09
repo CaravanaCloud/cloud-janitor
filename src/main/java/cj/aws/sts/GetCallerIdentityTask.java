@@ -7,7 +7,8 @@ import software.amazon.awssdk.services.sts.model.StsException;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
-import static cj.aws.AWSOutput.*;
+
+import static cj.aws.AWSOutput.CallerIdentity;
 
 @Dependent
 @Named("aws-get-caller-identity")

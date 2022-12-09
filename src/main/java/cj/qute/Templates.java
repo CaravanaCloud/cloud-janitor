@@ -6,14 +6,12 @@ import cj.fs.FSUtils;
 import cj.spi.Task;
 import io.quarkus.qute.Engine;
 import io.quarkus.qute.Template;
-import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class Templates implements Logging {
@@ -27,6 +25,9 @@ public class Templates implements Logging {
 
     @Inject
     InputsMap inputsMap;
+
+    @Inject
+    Tasks tasks;
 
 
     public Template getTemplate(String location) {
@@ -47,10 +48,6 @@ public class Templates implements Logging {
             error("Failed to get template engine for {}", location);
             throw new RuntimeException(ex);
         }
-    }
-
-    public Path taskDir(Task task) {
-        return FSUtils.taskDir(task);
     }
 
     public Path render(Task task, String template, String outputFileName) {
@@ -101,7 +98,7 @@ public class Templates implements Logging {
                 putString(result, i, val);
             }
         });
-        var actual = task.getInputs();
+        var actual = task.inputs();
         actual.forEach((i, o) -> {
             putString(result, i, o);
         });
@@ -121,6 +118,6 @@ public class Templates implements Logging {
     }
 
     public Path taskFile(Task task, String fileName) {
-        return taskDir(task).resolve(fileName);
+        return tasks.taskFile(task, fileName);
     }
 }

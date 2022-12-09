@@ -97,6 +97,8 @@ public interface Configuration {
     @WithName("consoleLevel")
     @WithDefault("info")
     String consoleLevel();
+    @WithName("tasks")
+    Optional<List<TaskConfiguration>> tasks();
 
     default Path getApplicationPath() {
         var home = System.getProperty("user.home");

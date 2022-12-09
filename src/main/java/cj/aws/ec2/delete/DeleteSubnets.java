@@ -1,6 +1,5 @@
 package cj.aws.ec2.delete;
 
-import cj.Output;
 import cj.aws.AWSWrite;
 import cj.aws.ec2.filter.FilterSubnets;
 import cj.spi.Task;
@@ -12,12 +11,12 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import static cj.aws.AWSOutput.SubnetMatch;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static software.amazon.awssdk.services.ec2.model.InstanceStateName.RUNNING;
 import static software.amazon.awssdk.services.ec2.model.InstanceStateName.SHUTTING_DOWN;
-import static cj.aws.AWSOutput.*;
 
 @Dependent
 public class DeleteSubnets extends AWSWrite {

@@ -4,7 +4,6 @@ import cj.BaseTask;
 import cj.CJInput;
 import cj.aws.sts.AWSLoadIdentitiesTask;
 import cj.spi.Task;
-import com.google.common.base.Preconditions;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.model.Filter;
 
@@ -16,9 +15,10 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 
 import static cj.aws.AWSInput.identity;
-import static com.google.common.base.Preconditions.*;
+import static cj.aws.AWSOutput.Identities;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.awaitility.Awaitility.await;
-import static cj.aws.AWSOutput.*;
 
 public abstract class AWSTask
         extends BaseTask {
@@ -47,7 +47,7 @@ public abstract class AWSTask
     }
 
     protected void setIdentity(AWSIdentity id) {
-        getInputs().put(identity, id);
+        inputs().put(identity, id);
     }
 
     protected <T> T create(Instance<T> instance) {

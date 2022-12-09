@@ -13,15 +13,14 @@ import software.amazon.awssdk.services.transcribe.model.*;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-import static cj.aws.AWSOutput.*;
 import static cj.TaskMaturity.Level.experimental;
+import static cj.aws.AWSOutput.S3Bucket;
 
 
 @Named("aws-transcribe")

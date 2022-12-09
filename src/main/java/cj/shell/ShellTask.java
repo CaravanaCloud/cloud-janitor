@@ -10,8 +10,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static cj.CJInput.dryRun;
-import static cj.shell.ShellOutput.*;
 import static cj.shell.ShellInput.*;
+import static cj.shell.ShellOutput.*;
 
 @Dependent
 @Named("shell")
@@ -36,7 +36,6 @@ public class ShellTask extends BaseTask {
         }
         if(cmdArr != null && cmdArr.length > 0) try {
             var cmdLine = String.join(" ", cmdArr);
-            debug(cmdLine);
             var isDryRun = inputAs(dryRun, Boolean.class).orElse(false);
             if (isDryRun) {
                 info("Dry run, shell command not executed.");
@@ -44,6 +43,7 @@ public class ShellTask extends BaseTask {
             }
             var timeoutIn = inputAs(timeout, Long.class)
                     .orElse(config().execTimeout());
+            checkpoint(cmdLine);
             var process = runtime.exec(cmdArr);
             var output = new StringBuffer();
             var error = new StringBuffer();

@@ -1,6 +1,5 @@
 package cj.aws.ec2.delete;
 
-import cj.Output;
 import cj.aws.AWSInput;
 import cj.aws.AWSWrite;
 import cj.aws.ec2.filter.FilterRouteTables;
@@ -10,7 +9,8 @@ import software.amazon.awssdk.services.ec2.model.RouteTable;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import static cj.aws.AWSOutput.*;
+
+import static cj.aws.AWSOutput.RouteTablesMatch;
 
 @Dependent
 public class DeleteRouteTables extends AWSWrite {

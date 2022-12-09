@@ -7,7 +7,8 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static cj.aws.AWSOutput.*;
+import static cj.aws.AWSOutput.CallerIdentity;
+import static cj.aws.AWSOutput.Identities;
 
 @Dependent
 public class AWSLoadIdentitiesTask extends BaseTask {

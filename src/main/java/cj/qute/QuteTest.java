@@ -1,9 +1,9 @@
 package cj.qute;
 
+import cj.BaseTask;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
-
-import cj.BaseTask;
 
 @Dependent
 @Named("qute-test")

@@ -5,7 +5,7 @@ import software.amazon.awssdk.services.elasticloadbalancingv2.model.TargetGroup;
 
 import javax.enterprise.context.Dependent;
 
-import static cj.aws.AWSOutput.*;
+import static cj.aws.AWSOutput.TargetGroupsMatch;
 
 @Dependent
 public class FilterTargetGroups extends AWSFilter {

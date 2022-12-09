@@ -1,6 +1,7 @@
 package cj;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -12,11 +13,8 @@ public record InputConfig(
         Function<Configuration, Optional<?>> configFn,
         Supplier<?> defaultFn,
         String defaultDescription,
-        List<String> allowedValues
-) {
-    public String getEnvVarName(){
-        return toEnvVarName(getConfigKey());
-    }
+        List<String> allowedValues,
+        boolean enrichBypass) {
 
     private String getConfigKey() {
         if (configKey == null) {
@@ -25,15 +23,8 @@ public record InputConfig(
         } else return configKey;
     }
 
-    private static String toEnvVarName(String configKey) {
-        return (""+configKey)
-                .replaceAll("[^a-zA-Z0-9]","_")
-                .toUpperCase();
-    }
 
-    public static void main(String[] args) {
-        System.out.println(toEnvVarName("cj.ocp.clusterName"));
-    }
+
 
     public Optional<?> applyConfigFn(Configuration configuration) {
         if (configFn != null)
@@ -47,13 +38,13 @@ public record InputConfig(
         return null;
     }
 
-    public static InputConfig of(Input key, 
-        String description, 
-        String configKey,
-        Function<Configuration, Optional<?>> configFn, 
-        Supplier<?> defaultFn, 
-        String defaultDescription,
-        Object[] allowedValues) {
+    public static InputConfig of(Input key,
+                                 String description,
+                                 String configKey,
+                                 Function<Configuration, Optional<?>> configFn,
+                                 Supplier<?> defaultFn,
+                                 String defaultDescription,
+                                 Object[] allowedValues, boolean enrichBypass) {
         var allowedStrings = (List<String>) null;
         if(allowedValues != null){
             allowedStrings = Arrays.stream(allowedValues).map(Object::toString).toList();
@@ -64,6 +55,6 @@ public record InputConfig(
             configFn, 
             defaultFn, 
             defaultDescription, 
-            allowedStrings);
+            allowedStrings, enrichBypass);
     }
 }

@@ -8,11 +8,8 @@ import software.amazon.awssdk.regions.Region;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-
 import java.util.List;
 import java.util.Optional;
-
-import static com.google.common.base.Preconditions.checkArgument;
 
 @Dependent
 public class AWSIteratorTask extends AWSTask {
