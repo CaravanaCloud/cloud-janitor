@@ -114,7 +114,7 @@ public class Tasks {
                 .map(xs -> xs.stream()
                         .flatMap(expr -> bypassValues(expr, taskArgs))
                         .toList());
-        var result = bypassList.orElse(List.of());
+        var result = bypassList.orElse(args);
         return result;
     }
 
