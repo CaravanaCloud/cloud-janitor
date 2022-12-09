@@ -93,7 +93,7 @@ public class ShellTask extends BaseTask {
     }
 
     private String redactProfanity(String line) {
-        line = line.replaceAll("fuck", "f***");
+        line = line.replaceAll("[fF]uck", "f***");
         return line;
     }
 
