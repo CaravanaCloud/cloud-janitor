@@ -86,9 +86,15 @@ public class ShellTask extends BaseTask {
         line = redactRedundantLogLevel(line);
         line = redactSecrets(line);
         line = redactExports(line);
+        line = redactProfanity(line);
         var redacted = ! original.equals(line);
-        var flag = redacted ? "*" : "?";
+        var flag = redacted ? "?" : " ";
         return "[%s] %s".formatted(flag, line);
+    }
+
+    private String redactProfanity(String line) {
+        line = line.replaceAll("fuck", "f***");
+        return line;
     }
 
     private String redactExports(String s) {
