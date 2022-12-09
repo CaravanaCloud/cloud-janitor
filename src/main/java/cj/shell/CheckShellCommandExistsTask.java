@@ -1,6 +1,6 @@
 package cj.shell;
 
-import cj.SafeTask;
+import cj.BaseTask;
 
 import javax.enterprise.context.Dependent;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 import static cj.shell.ShellInput.cmds;
 
 @Dependent
-public class CheckShellCommandExistsTask extends SafeTask {
+public class CheckShellCommandExistsTask extends BaseTask {
     @Override
     public void apply() {
         var cmdIn = getInputString(ShellInput.cmd);

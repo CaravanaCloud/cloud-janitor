@@ -1,7 +1,7 @@
 package cj.fs;
 
+import cj.BaseTask;
 import cj.Output;
-import cj.SafeTask;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
@@ -21,7 +21,7 @@ import static cj.fs.FSUtils.cwd;
  */
 @Dependent
 @Named("glob-files")
-public class GlobFilesTask extends SafeTask {
+public class GlobFilesTask extends BaseTask {
     @Override
     public void apply() {
         var inGlob = expectInputString(glob);

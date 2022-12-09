@@ -21,7 +21,7 @@ public class Help {
         msg.append("\n=== Cloud Janitor Help ===");
 
         var taskConfigs = tasks.findAll().stream();
-        var configTasks = config.tasks();
+        var configTasks = config.args();
         if (configTasks.isPresent()){
             var showTasks = configTasks.get();
             taskConfigs = taskConfigs.filter(t -> showTasks.contains(t.name()));

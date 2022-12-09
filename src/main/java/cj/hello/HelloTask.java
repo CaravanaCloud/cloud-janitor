@@ -1,7 +1,7 @@
 package cj.hello;
 
+import cj.BaseTask;
 import cj.Output;
-import cj.ReadTask;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.Dependent;
@@ -12,7 +12,7 @@ import static cj.LocalInput.message;
 
 @Named("hello")
 @Dependent
-public class HelloTask extends ReadTask {
+public class HelloTask extends BaseTask {
     static final String initialMsg = "Hello World!";
     @Inject
     Logger log;

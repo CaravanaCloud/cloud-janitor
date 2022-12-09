@@ -59,14 +59,15 @@ public class CloudJanitor implements QuarkusApplication {
     @SuppressWarnings("unused")
     void onStart(@Observes StartupEvent ev) {
         var execId = tasks.getExecutionId();
-        log.info("Thank you for running cloud-janitor. This execution id is {}", execId);
+        log.info("Thank you for running cloud-janitor.");
+        log.debug("This execution id is {}", execId);
         log.debug("Quarkus launch mode: {}", launchMode);
         log.trace("Startup Event {}", ev);
     }
 
     @SuppressWarnings("unused")
     void onStop(@Observes ShutdownEvent ev) {
-        log.info("Cloud Janitor stopped.");
+        log.debug("Cloud Janitor stopped.");
     }
 
 }

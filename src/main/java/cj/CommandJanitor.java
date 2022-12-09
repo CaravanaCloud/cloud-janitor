@@ -17,7 +17,7 @@ public class CommandJanitor implements Callable<Integer> {
 
     @SuppressWarnings("all")
     @CommandLine.Parameters
-    List<String> taskNames;
+    List<String> args;
 
     @CommandLine.Option(names = { "-i", "--input" },
             description = "input parameters for the task, repeatable.")
@@ -54,9 +54,9 @@ public class CommandJanitor implements Callable<Integer> {
 
     public void parseArgs(CommandLine command) {
         trySetProperty("quarkus.log.console.level", logLevel);
-        if (taskNames != null && ! taskNames.isEmpty()) {
-            var tasksStr = String.join(",", taskNames);
-            trySetProperty("cj.tasks", tasksStr);
+        if (args != null && ! args.isEmpty()) {
+            var argsList = String.join(",", args);
+            trySetProperty("cj.args", argsList);
         }
         trySetProperty("cj.capabilities", capabilities);
         trySetProperty("cj.showVersion", showVersion);

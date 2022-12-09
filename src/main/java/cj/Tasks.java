@@ -63,11 +63,44 @@ public class Tasks {
     Templates templates;
     Map<String, Map<OS, String[]>> installMap = new HashMap<>();
 
+
     public void run() {
         init();
-        var tasks = config.tasks();
-        tasks.ifPresent(ts -> ts.forEach(this::run));
+        var tasks = lookupTasks();
+        if (! tasks.isEmpty()){
+            runAll(tasks);
+        }else if (config.bypass()){
+            bypass();
+        }
         report();
+    }
+
+    private List<Task> lookupTasks() {
+        var argsList = config.argsList();
+        if (! argsList.isEmpty()){
+            var taskName = argsList.get(0);
+            var tasks = lookupTasks(taskName);
+            return tasks;
+        }
+        return List.of();
+    }
+
+    private void bypass() {
+        var argsList = config.argsList();
+        var enriched = enrich(argsList);
+        log.debug("{} => {}", join(argsList), join(enriched));
+        if (enriched.isEmpty()) return;
+        log.info("Bypassing: {}", join(enriched));
+        var enrichedArr = enriched.toArray(new String[enriched.size()]);
+        exec(enrichedArr);
+    }
+
+    private String join(List<String> argsList) {
+        return String.join(" ", argsList);
+    }
+
+    private List<String> enrich(List<String> args) {
+        return args;
     }
 
 
@@ -228,12 +261,6 @@ public class Tasks {
     public void loadCapabilities(@Observes StartupEvent ev) {
         getConfig().capabilities().ifPresent(this::addAll);
         log.debug("Loaded {} capabilities: {}", capabilities.size(), capabilities);
-    }
-
-    private void run(String taskName) {
-        log.info("Running task: {}", taskName);
-        var matches = lookupTasks(taskName);
-        runAll(matches);
     }
 
     private void report() {

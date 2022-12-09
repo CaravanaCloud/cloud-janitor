@@ -22,7 +22,7 @@ public class ExecutorServiceProducer {
         if (pool == null) {
             pool = Executors.newWorkStealingPool();
         }
-        log.debug("Asked for new ExecutorService, returning singleton.");
+        log.trace("Asked for new ExecutorService, returning singleton.");
         return pool;
     }
 }

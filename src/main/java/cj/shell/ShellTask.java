@@ -1,6 +1,6 @@
 package cj.shell;
 
-import cj.ReadTask;
+import cj.BaseTask;
 import cj.StreamGobbler;
 
 import javax.enterprise.context.Dependent;
@@ -15,7 +15,7 @@ import static cj.shell.ShellInput.*;
 
 @Dependent
 @Named("shell")
-public class ShellTask extends ReadTask {
+public class ShellTask extends BaseTask {
     @Inject
     Runtime runtime;
     @Inject
@@ -61,7 +61,7 @@ public class ShellTask extends ReadTask {
             var processExitCode = process.waitFor();
             var processOutput = output.toString().trim();
             var processError = error.toString().trim();
-            debug("[{}]$ {}\n{}\n{}", processExitCode, cmdLine, processOutput, processError);
+            trace("[{}]$ {}\n{}\n{}", processExitCode, cmdLine, processOutput, processError);
             success(exitCode, processExitCode);
             success(stdout, processOutput);
             success(stderr, processError);
@@ -76,8 +76,10 @@ public class ShellTask extends ReadTask {
         s = redact(s);
         output.append(s);
         output.append("\n");
-        debug(s);
+        log(s);
     }
+
+
 
     private String redact(String line) {
         var original = ""+line;
@@ -109,5 +111,13 @@ public class ShellTask extends ReadTask {
         return s.replaceAll(redundantLogLevelRegex,"");
     }
 
-
+    private void log(String msg, Object... args) {
+        switch (config().consoleLevel().toLowerCase()){
+            case "trace" -> trace(msg, args);
+            case "debug" -> debug(msg, args);
+            case "info" -> info(msg, args);
+            case "warn" -> warn(msg, args);
+            case "error" -> error(msg, args);
+        }
+    }
 }

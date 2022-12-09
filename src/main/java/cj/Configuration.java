@@ -16,7 +16,7 @@ import java.util.Random;
 
 import static cj.Utils.existing;
 
-@ConfigMapping(prefix = "cj" )
+@ConfigMapping(prefix = "cj")
 @StaticInitSafe
 public interface Configuration {
     boolean PRINT_STACK_TRACE = false;
@@ -37,14 +37,19 @@ public interface Configuration {
 
     @WithName("ocp")
     OCPConfiguration ocp();
+
     @WithName("translate")
     TranslateConfiguration translate();
 
     @WithName("report")
     ReportConfiguration report();
 
-    @WithName("tasks")
-    Optional<List<String>>  tasks();
+    @WithName("args")
+    Optional<List<String>> args();
+
+    default List<String> argsList() {
+        return args().orElse(List.of());
+    }
 
     @WithName("capabilities")
     Optional<List<String>> capabilities();
@@ -85,52 +90,50 @@ public interface Configuration {
     @WithDefault("5")
     Long execTimeout();
 
+    @WithName("bypass")
+    @WithDefault("true")
+    boolean bypass();
 
-    default Path getApplicationPath(){
+    @WithName("consoleLevel")
+    @WithDefault("info")
+    String consoleLevel();
+
+    default Path getApplicationPath() {
         var home = System.getProperty("user.home");
         var homePath = Path.of(home);
         var appPath = homePath.resolve(".cj");
         var appDir = appPath.toFile();
-        if (! appDir.exists()){
+        if (!appDir.exists()) {
             //noinspection ResultOfMethodCallIgnored
             appDir.mkdirs();
         }
         return appPath;
     }
 
-    default Path getReportsPath(){
+    default Path getReportsPath() {
         var execPath = getExecutionPath();
         var reportsPath = execPath.resolve("reports");
         return existing(reportsPath);
     }
 
-    default Path getExecutionPath(){
+    default Path getExecutionPath() {
         var appPath = getApplicationPath();
         var execId = StaticConfig.executionId;
         var execPath = appPath.resolve(execId);
         return existing(execPath);
     }
 
-
-
-
-    final class StaticConfig {
-        static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddss_hhmmss");
-        static final LocalDateTime loadTime = LocalDateTime.now();
-        static final String executionId = dtf.format(loadTime);
-    }
-
-
     default long mediumPollIntervalMs() {
         return pollIntervalMs(MEDIUM_POLL_FACTOR);
     }
+
     default long largePollIntervalMs() {
         return pollIntervalMs(LARGE_POLL_FACTOR);
 
     }
 
     @SuppressWarnings("redundant")
-    default long pollIntervalMs(float sizeFactor){
+    default long pollIntervalMs(float sizeFactor) {
         float pollInterval = pollInterval();
         float result = sizeFactor * pollInterval * noise() * 1000;
         @SuppressWarnings("redundant")
@@ -149,6 +152,12 @@ public interface Configuration {
         var atMostMin = 30;
         var atMostMs = atMostMin * 60 * 1000;
         return Float.valueOf(atMostMs).longValue();
+    }
+
+    final class StaticConfig {
+        static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddss_hhmmss");
+        static final LocalDateTime loadTime = LocalDateTime.now();
+        static final String executionId = dtf.format(loadTime);
     }
 
 }
