@@ -90,7 +90,7 @@ public class Tasks {
         var enriched = enrich(argsList);
         log.debug("{} => {}", join(argsList), join(enriched));
         if (enriched.isEmpty()) return;
-        log.info("Bypassing: {}", join(enriched));
+        log.debug("Bypassing: {}", join(enriched));
         var enrichedArr = enriched.toArray(new String[enriched.size()]);
         exec(enrichedArr);
     }
