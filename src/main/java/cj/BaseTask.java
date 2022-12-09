@@ -234,7 +234,12 @@ public class BaseTask
     }
 
     public Optional<String> inputString(Input key) {
-        return input(key).map(Object::toString);
+        var value = input(key);
+        var result = value.map(Object::toString);
+        if("bucketPolicy".equals(key.toString())){
+            System.out.println();
+        }
+        return result;
     }
 
     public Object output(Output key, Object value) {

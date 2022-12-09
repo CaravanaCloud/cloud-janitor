@@ -53,8 +53,10 @@ public class AWSGetBucketTask extends AWSWrite {
         }else {
             debug("Data bucket not found {}. Creating...", bucketName);
             var policy = inputString(bucketPolicy);
-            var task = createBucket.withInput(targetBucketName, bucketName)
-                            .withInput(AWSInput.bucketPolicy, policy);
+            var task = createBucket.withInput(targetBucketName, bucketName);
+            if (policy.isPresent()){
+                task = task.withInput(AWSInput.bucketPolicy, policy.get());
+            }
             submit(task);
             debug("Checking if bucket was created");
             bucket = getBucket(bucketName);
