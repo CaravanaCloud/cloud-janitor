@@ -1,0 +1,42 @@
+---
+name: 0 Janitor sandbox AWS (nightly, by action)
+
+on:
+  workflow_dispatch: { }
+  schedule:
+    - cron: "20 4 * * *"
+
+jobs:
+  build:
+    name: Cloud Janitor Job
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-west-2
+      URL: https://github.com/rebuy-de/aws-nuke/releases/download/v2.21.2/aws-nuke-v2.21.2-linux-amd64.tar.gz
+      OUTPUT: /tmp/aws-nuke/aws-nuke-v2.21.2-linux-amd64.tar.gz
+
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+
+      - name: Check AWS Authentication
+        run: aws sts get-caller-identity
+
+      - name: Check AWS Authentication
+        run: aws sts get-caller-identity
+
+      # TODO: https://github.com/CaravanaCloud/cloud-janitor/issues/100
+      - name: Nuke AWS Account
+        uses: CaravanaCloud/cloud-janitor@v1.7.1
+        env:
+          CJ_TASK: "aws-nuke"
+          CJ_CAPABILITIES: "all"
+          CJ_AWS_REGIONS_0_: "ap-northeast-1"
+          CJ_AWS_REGIONS_1_: "eu-south-2"
+          CJ_AWS_REGIONS_2_: "us-west-2"
+          CJ_AWS_REGIONS_3_: "eu-west-1"
+          QUARKUS_LOG_CONSOLE_LEVEL: "DEBUG"
