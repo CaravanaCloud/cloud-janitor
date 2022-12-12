@@ -25,3 +25,4 @@ jobs:
         uses: CaravanaCloud/cloud-janitor@v1.7.0
         env:
           CJ_TASK: "aws-nuke"
+          CJ_AWS_REGION: "us-west-2"
