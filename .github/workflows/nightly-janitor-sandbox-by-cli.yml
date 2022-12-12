@@ -42,7 +42,8 @@ jobs:
         run: sudo mv /tmp/cloud-janitor/cloud-janitor/bin/cloud-janitor  /usr/local/bin/cloud-janitor
 
       - name: Go cloud-janitor
-        run: cloud-janitor
+        run: ./cloud-janitor
+        working-directory: /usr/local/bin/
         env:
           CJ_TASK: "aws-nuke"
           CJ_CAPABILITIES: "all"
