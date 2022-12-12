@@ -1,5 +1,5 @@
 ---
-name: 0 Janitor AWS sandbox [action]
+name: 2 Janitor AWS sandbox [action]
 
 on:
   workflow_dispatch: { }
