@@ -45,9 +45,12 @@ jobs:
         run: which cloud-janitor
         continue-on-error: true
 
+      - name: ls cloud-janitor
+        run: ls -liah /usr/local/bin/cloud-janitor
+        continue-on-error: true
+
       - name: Go cloud-janitor
-        run: ./cloud-janitor
-        working-directory: /usr/local/bin/
+        run: /usr/local/bin/cloud-janitor
         env:
           CJ_TASK: "aws-nuke"
           CJ_CAPABILITIES: "all"
