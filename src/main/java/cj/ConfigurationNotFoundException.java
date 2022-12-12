@@ -3,9 +3,9 @@ package cj;
 import java.util.List;
 
 public class ConfigurationNotFoundException extends RuntimeException {
-    private final List<InputConfig> missingInputs;
+    private final List<InputFunctions> missingInputs;
 
-    public ConfigurationNotFoundException(List<InputConfig> missingInputs) {
+    public ConfigurationNotFoundException(List<InputFunctions> missingInputs) {
         this.missingInputs = missingInputs;
     }
 

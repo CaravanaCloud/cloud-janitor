@@ -25,7 +25,7 @@ public class InputsMap {
     @Inject
     Logger log;
 
-    Map<Input, InputConfig> inputConfigs = new HashMap<>();
+    Map<Input, InputFunctions> inputConfigs = new HashMap<>();
 
     @Inject
     Objects beans;
@@ -43,7 +43,7 @@ public class InputsMap {
                                String defaultDescription,
                                Object[] allowedValues,
                                boolean enrichBypass){
-        var inputConfig = InputConfig.of(input,description, configKey, configFn, defaultFn, defaultDescription, allowedValues, enrichBypass);
+        var inputConfig = InputFunctions.of(input,description, configKey, configFn, defaultFn, defaultDescription, allowedValues, enrichBypass);
         inputConfigs.put(input, inputConfig);
     }
 
@@ -67,11 +67,11 @@ public class InputsMap {
         return null;
     }
 
-    public InputConfig getConfig(Input inputKey) {
+    public InputFunctions getConfig(Input inputKey) {
         return inputConfigs.get(inputKey);
     }
 
-    public InputConfig findInputConfigByName(String inputName) {
+    public InputFunctions findInputConfigByName(String inputName) {
         return inputConfigs.get(findInputByName(inputName));
     }
 
@@ -87,7 +87,7 @@ public class InputsMap {
     }
 
     public List<Input> getExpectedInputs(Task task) {
-        return beans.getExpectedInputs(task);
+        return beans.getExpectedInputs(task.getClass());
     }
 
     public Optional<Object> valueOf(Task task, Input input) {
@@ -106,5 +106,11 @@ public class InputsMap {
             value = getFromDefault(input);
         }
         return value;
+    }
+
+
+    public List<InputConfiguration> getInputsForTask(String name) {
+        //TODO: Implement this method
+        return List.of();
     }
 }
