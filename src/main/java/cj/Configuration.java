@@ -1,16 +1,19 @@
 package cj;
 
 import cj.aws.AWSConfiguration;
+import cj.hello.HelloConfiguration;
 import cj.ocp.OCPConfiguration;
 import io.quarkus.runtime.annotations.StaticInitSafe;
 import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithDefault;
 import io.smallrye.config.WithName;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -90,11 +93,16 @@ public interface Configuration {
     @WithName("consoleLevel")
     @WithDefault("info")
     String consoleLevel();
+
     @WithName("tasks")
     Optional<List<TaskConfiguration>> tasks();
 
     @WithName("task")
     Optional<String> task();
+
+    @WithName("hello")
+    HelloConfiguration hello();
+
 
     default Path getApplicationPath() {
         var home = System.getProperty("user.home");

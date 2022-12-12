@@ -24,6 +24,4 @@ public class Main {
     private static void execute(String... args) {
         Quarkus.run(CloudJanitor.class, args);
     }
-
-
 }

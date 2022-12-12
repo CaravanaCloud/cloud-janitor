@@ -102,6 +102,7 @@ public class InputsMap {
 
     public Object valueOf(Input input) {
         Object value = getFromConfig(input);
+
         if (value == null) {
             value = getFromDefault(input);
         }
