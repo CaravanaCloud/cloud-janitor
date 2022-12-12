@@ -28,7 +28,7 @@ jobs:
 
       # TODO: https://github.com/CaravanaCloud/cloud-janitor/issues/100
       - name: find . [inside action]
-        uses: CaravanaCloud/cloud-janitor@v1.7.2
+        uses: CaravanaCloud/cloud-janitor@v1.7.3
         env:
           QUARKUS_LOG_CONSOLE_LEVEL: "DEBUG"
           QUARKUS_ARGS: "find ."

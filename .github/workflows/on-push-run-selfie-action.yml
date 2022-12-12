@@ -13,5 +13,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cloud Janitor
-        uses: CaravanaCloud/cloud-janitor@v1.7.2
+        uses: CaravanaCloud/cloud-janitor@v1.7.3
 

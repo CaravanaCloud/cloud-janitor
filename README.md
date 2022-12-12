@@ -102,7 +102,7 @@ docker run --pull=always caravanacloud/cloud-janitor
 ### Github Action
 ```
 - name: Cloud Janitor
-  uses: CaravanaCloud/cloud-janitor@v1.4.0
+  uses: CaravanaCloud/cloud-janitor@v1.7.3
 ```
 
 ## Configuring Cloud Janitor
