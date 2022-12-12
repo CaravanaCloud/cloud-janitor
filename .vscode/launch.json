@@ -7,7 +7,7 @@
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
-      "args": "--version"
+      "args": "-cj:version"
     },
     {
       "type": "java",
@@ -15,15 +15,26 @@
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
-      "args": "--help"
+      "args": "-cj:help"
     },
     {
       "type": "java",
-      "name": "hello",
+      "name": "hello world",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
       "args": "hello"
+    },
+    {
+      "type": "java",
+      "name": "hola mundo",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "hello",
+      "env": {
+        "CJ_HELLO_MESSAGE": "hola mundo!!!"
+      }
     },
     {
       "type": "java",
@@ -35,11 +46,95 @@
     },
     {
       "type": "java",
+      "name": "find . [env]",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "",
+      "env": {
+        "QUARKUS_ARGS": "find ."
+      }
+    },
+    {
+      "type": "java",
+      "name": "cowsay hello",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "cowsay hello"
+    },
+    {
+      "type": "java",
+      "name": "ls -liah",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "cowsay fuck the fucking fuckers"
+    },
+    {
+      "type": "java",
       "name": "aws-transcribe",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
       "args": "aws-transcribe"
+    },
+    {
+      "type": "java",
+      "name": "aws-translate",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "aws-translate"
+    },
+    {
+      "type": "java",
+      "name": "aws-get-caller-identity",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "aws-get-caller-identity"
+    },
+    {
+      "type": "java",
+      "name": "aws-get-data-bucket",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "aws-get-data-bucket"
+    },
+    {
+      "type": "java",
+      "name": "aws-attribution-provision",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "aws-attribution-provision"
+    },
+    {
+      "type": "java",
+      "name": "aws-nuke",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "aws-nuke"
+    },
+    {
+      "type": "java",
+      "name": "aws-nuke",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "aws-nuke with config",
+      "env": {
+        "CJ_TASK": "aws-nuke",
+        "CJ_CAPABILITIES": "all",
+        "CJ_AWS_REGIONS_0_": "ap-northeast-1",
+        "CJ_AWS_REGIONS_1_": "eu-south-2",
+        "CJ_AWS_REGIONS_2_": "us-west-2",
+        "CJ_AWS_REGIONS_3_": "eu-west-1",
+        "QUARKUS_LOG_CONSOLE_LEVEL": "DEBUG"
+      }
     },
     {
       "type": "java",
