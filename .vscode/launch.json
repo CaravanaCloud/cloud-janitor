@@ -122,19 +122,11 @@
     },
     {
       "type": "java",
-      "name": "aws-nuke [no config]",
+      "name": "aws-nuke",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
-      "args": "aws-nuke"
-    },
-    {
-      "type": "java",
-      "name": "aws-nuke [with config]",
-      "request": "launch",
-      "mainClass": "cj.Main",
-      "projectName": "cloud-janitor",
-      "args": "aws-nuke with config",
+      "args": "aws-nuke",
       "env": {
         "CJ_TASK": "aws-nuke",
         "CJ_CAPABILITIES": "all",
