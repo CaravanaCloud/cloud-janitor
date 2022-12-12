@@ -99,8 +99,8 @@ public class ShellTask extends BaseTask {
 
     private String redactExports(String s) {
         if (s.contains("export")) {
-            debug("Export readacted");
-            debug(s);
+            trace("Export readacted");
+            trace(s);
         }
         return s;
     }
