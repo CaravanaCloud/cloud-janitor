@@ -1,5 +1,8 @@
 name: 'Cloud Janitor'
 description: 'Automating cleanup, maintenance and troubleshooting tasks in Cloud Computing'
+branding:
+    icon: 'cloud-drizzle'
+    color: 'purple'
 
 runs:
   using: 'docker'
