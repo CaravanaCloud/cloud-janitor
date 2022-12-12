@@ -13,7 +13,7 @@ import javax.inject.Inject;
 
 @ApplicationScoped
 public class CloudJanitor implements QuarkusApplication {
-    public static final String VERSION = "1.7.0";
+    public static final String VERSION = "1.7.1";
     @Inject
     Logger log;
 

@@ -12,9 +12,6 @@ jobs:
     name: Cloud Janitor Job
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
       - name: Cloud Janitor
-        uses: CaravanaCloud/cloud-janitor@v1.7.0
+        uses: CaravanaCloud/cloud-janitor@v1.7.1
 
