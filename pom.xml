@@ -5,7 +5,7 @@
   <groupId>caravanacloud</groupId>
   <artifactId>cloud-janitor</artifactId>
   <!-- Also change CloudJanitor.VERSION and jreleaser.yml -->
-  <version>1.7.2</version>
+  <version>1.7.3</version>
 
   <description>Automating cleanup, maintenance and troubleshooting tasks in Cloud Computing</description>
   <url>https://github.com/CaravanaCloud/cloud-janitor</url>
