@@ -70,21 +70,20 @@ public class Tasks {
 
     Multimap<String, Input> bypassMap = ArrayListMultimap.create();
 
-    public void run() {
+    public void run(String[] args) {
         init();
-        var tasks = lookupTasks();
+        var tasks = lookupTasks(args);
         if (!tasks.isEmpty()) {
             runAll(tasks);
         } else if (config.bypass()) {
-            bypass();
+            bypass(args);
         }
         report();
     }
 
-    private List<Task> lookupTasks() {
-        var argsList = config.argsList();
-        if (! argsList.isEmpty()) {
-            var taskName = argsList.get(0);
+    private List<Task> lookupTasks(String[] args) {
+        if (args != null && args.length > 0) {
+            var taskName = args[0];
             var tasks = lookupTasks(taskName);
             return tasks;
         }
@@ -96,8 +95,8 @@ public class Tasks {
         return List.of();
     }
 
-    private void bypass() {
-        var argsList = config.argsList();
+    private void bypass(String[] args) {
+        var argsList = List.of(args);
         var enriched = enrich(argsList);
         if (enriched.isEmpty()) {
             log.debug("Empty bypass");
@@ -116,7 +115,7 @@ public class Tasks {
         if (args.isEmpty()) return args;
         var taskName = args.get(0);
         var taskArgs = args.subList(1, args.size());
-        var taskCfg = getTaskConfig(taskName);
+        var taskCfg = getTaskFromConfig(taskName);
         var bypass = taskCfg.flatMap(TaskConfiguration::bypass);
         var bypassList = bypass
                 .map(xs -> xs.stream()
@@ -133,7 +132,7 @@ public class Tasks {
         return Stream.of(value);
     }
 
-    public Optional<TaskConfiguration> getTaskConfig(String taskName) {
+    public Optional<TaskConfiguration> getTaskFromConfig(String taskName) {
         var taskCfgs = config.tasks();
         if (taskCfgs.isEmpty()) return Optional.empty();
         var taskCfg = taskCfgs.get()
@@ -353,8 +352,7 @@ public class Tasks {
 
     private void checkInputs(Task task) {
         List<Input> expected = inputsMap.getExpectedInputs(task);
-
-        List<InputConfig> missing = new ArrayList<>();
+        List<InputFunctions> missing = new ArrayList<>();
         Map<Input, String> present = new HashMap<>();
         for (var inputKey : expected) {
             var inputValue = task.input(inputKey)
@@ -455,14 +453,7 @@ public class Tasks {
     }
 
     public List<TaskConfiguration> findAll() {
-        @SuppressWarnings("redundant")
-        var tasks = bm.getBeans(Task.class)
-                .stream()
-                .map(objects::configFromBean)
-                .filter(java.util.Objects::nonNull)
-                .sorted(Comparator.comparing(TaskConfiguration::name))
-                .toList();
-        return tasks;
+        return objects.allTaskConfigurations();
     }
 
     public String generateResourceName() {

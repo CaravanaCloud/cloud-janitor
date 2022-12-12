@@ -38,7 +38,7 @@ public class CloudJanitor implements QuarkusApplication {
             } else if(config.showVersion()){
                 showVersion();
             } else {
-                tasks.run();
+                tasks.run(args);
             }
         } catch (Exception e) {
             e.printStackTrace();

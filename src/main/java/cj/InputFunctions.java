@@ -6,7 +6,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public record InputConfig(
+//TODO: Map separately from input config
+public record InputFunctions(
         Input input,
         String description,
         String configKey,
@@ -38,18 +39,18 @@ public record InputConfig(
         return null;
     }
 
-    public static InputConfig of(Input key,
-                                 String description,
-                                 String configKey,
-                                 Function<Configuration, Optional<?>> configFn,
-                                 Supplier<?> defaultFn,
-                                 String defaultDescription,
-                                 Object[] allowedValues, boolean enrichBypass) {
+    public static InputFunctions of(Input key,
+                                    String description,
+                                    String configKey,
+                                    Function<Configuration, Optional<?>> configFn,
+                                    Supplier<?> defaultFn,
+                                    String defaultDescription,
+                                    Object[] allowedValues, boolean enrichBypass) {
         var allowedStrings = (List<String>) null;
         if(allowedValues != null){
             allowedStrings = Arrays.stream(allowedValues).map(Object::toString).toList();
         }
-        return new InputConfig(key, 
+        return new InputFunctions(key,
             description, 
             configKey, 
             configFn, 

@@ -9,6 +9,7 @@ import java.util.Optional;
 @ConfigMapping
 @StaticInitSafe
 public interface TaskConfiguration {
+
     String name();
 
     Optional<String> description();

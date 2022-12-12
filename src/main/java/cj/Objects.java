@@ -5,11 +5,15 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -24,10 +28,49 @@ public class Objects {
     @Inject
     Tasks tasks;
 
-    public TaskConfiguration configFromBean(Bean<?> bean) {
-        var taskName = bean.getName();
-        var taskConfig = tasks.getTaskConfig(taskName);
-        return taskConfig.orElse(null);
+    @Inject
+    BeanManager bm;
+
+    @Inject
+    Configuration config;
+
+    @Inject
+    InputsMap inputsMap;
+
+    public List<TaskConfiguration> allTaskConfigurations() {
+        //TODO: Unified Java + Config task configurations
+        var taskBeans = bm.getBeans(Task.class);
+        var taskConfigsJava = taskBeans
+                .stream()
+                .map(this::getJavaTaskConfig);
+        var fromJava = taskConfigsJava
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .toList();
+        var fromConfig = config.tasks().orElse(List.of());
+        var result = Stream.concat(fromJava.stream(),
+                        fromConfig.stream())
+                .toList();
+        var sorted = result.stream()
+                .filter(java.util.Objects::nonNull)
+                .sorted(Comparator.comparing(TaskConfiguration::name))
+                .toList();
+        return sorted;
+    }
+
+    private Optional<TaskConfiguration> getJavaTaskConfig(Bean<?> bean) {
+        var name = bean.getName();
+        var description = getAnnotationString(bean, TaskDescription.class);
+        var maturity = getAnnotationString(bean, TaskMaturity.class);
+        //TODO: Build annotations for input config and bypass
+        var inputs = inputsMap.getInputsForTask(name);
+        var bypass = (List<String>) null;
+        var taskConfig = SimpleTaskConfiguration.of(name,
+                description,
+                maturity,
+                inputs,
+                bypass);
+        return Optional.ofNullable(taskConfig);
     }
 
     public <A extends Annotation> String[] getAnnotationStrings(Bean<?> bean, Class<A> annotation) {
@@ -83,8 +126,8 @@ public class Objects {
         return annot;
     }
 
-    public List<Input> getExpectedInputs(Task task) {
-        var expectedInputs = (String[]) getAnnotationValue(task.getClass(), ExpectedInputs.class);
+    public List<Input> getExpectedInputs(Class<? extends Task> clazz) {
+        var expectedInputs = (String[]) getAnnotationValue(clazz, ExpectedInputs.class);
         if (expectedInputs == null) return List.of();
         @SuppressWarnings("redundant")
         var taskInputs = Arrays.stream(expectedInputs)
@@ -92,4 +135,6 @@ public class Objects {
                 .toList();
         return taskInputs;
     }
+
+
 }

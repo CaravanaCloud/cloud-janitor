@@ -44,13 +44,6 @@ public interface Configuration {
     @WithName("report")
     ReportConfiguration report();
 
-    @WithName("args")
-    Optional<List<String>> args();
-
-    default List<String> argsList() {
-        return args().orElse(List.of());
-    }
-
     @WithName("capabilities")
     Optional<List<String>> capabilities();
 
