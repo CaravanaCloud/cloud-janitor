@@ -1,5 +1,5 @@
 ---
-name: 0 Janitor sandbox AWS account (nightly)
+name: 0 Nuke AWS sandbox
 
 on:
   workflow_dispatch: { }

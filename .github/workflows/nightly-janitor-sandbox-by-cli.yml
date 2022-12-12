@@ -1,5 +1,5 @@
 ---
-name: 0 Janitor sandbox AWS account (nightly, by CLI)
+name: 0 Janitor AWS sandbox [CLI]
 
 on:
   workflow_dispatch: { }
