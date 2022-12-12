@@ -83,9 +83,14 @@ public class Tasks {
 
     private List<Task> lookupTasks() {
         var argsList = config.argsList();
-        if (!argsList.isEmpty()) {
+        if (! argsList.isEmpty()) {
             var taskName = argsList.get(0);
             var tasks = lookupTasks(taskName);
+            return tasks;
+        }
+        var cfgTask = config.task();
+        if (cfgTask.isPresent()){
+            var tasks = lookupTasks(cfgTask.get());
             return tasks;
         }
         return List.of();
@@ -94,8 +99,11 @@ public class Tasks {
     private void bypass() {
         var argsList = config.argsList();
         var enriched = enrich(argsList);
+        if (enriched.isEmpty()) {
+            log.debug("Empty bypass");
+            return;
+        }
         log.debug("Bypassing `{}` as `{}`", join(argsList), join(enriched));
-        if (enriched.isEmpty()) return;
         var enrichedArr = enriched.toArray(new String[enriched.size()]);
         exec(enrichedArr);
     }
@@ -147,7 +155,7 @@ public class Tasks {
     private void init() {
         log.trace("Tasks.run()");
         log.debug("Capabilities: {}", getCapabilities());
-        log.debug("Parallel: {}", config.parallel());
+        log.trace("Parallel: {}", config.parallel());
     }
 
     // TODO: Consider async execution

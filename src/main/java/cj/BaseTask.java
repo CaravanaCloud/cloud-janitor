@@ -344,7 +344,7 @@ public class BaseTask
         info(message, args);
         var sleep = config.checkpointSleep();
         if (sleep > 0){
-            debug("Waiting {}s", sleep);
+            debug("Waiting {}s in checkpoint", sleep);
             try {
                 Thread.sleep(sleep * 1000);
             } catch (InterruptedException e) {

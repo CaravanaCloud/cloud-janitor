@@ -100,6 +100,9 @@ public interface Configuration {
     @WithName("tasks")
     Optional<List<TaskConfiguration>> tasks();
 
+    @WithName("task")
+    Optional<String> task();
+
     default Path getApplicationPath() {
         var home = System.getProperty("user.home");
         var homePath = Path.of(home);
