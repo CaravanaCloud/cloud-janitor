@@ -44,6 +44,9 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v2
 
+      - name: check config
+        run: cat ./config/aws-nuke/ccsandbox.yaml
+
       - name: MKDIR
         run: mkdir /tmp/aws-nuke
 
@@ -60,7 +63,7 @@ jobs:
       #       run: aws-nuke resource-types
 
       - name: Try aws-nuke
-        run: aws-nuke -c ./config/aws-nuke/ccsandbox.yml --no-dry-run --force --force-sleep 3 | tee aws-nuke.log
+        run: aws-nuke -c ./config/aws-nuke/ccsandbox.yaml --no-dry-run --force --force-sleep 3 | tee aws-nuke.log
         continue-on-error: true
 
       - name: Preserve log
