@@ -16,4 +16,5 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Cloud Janitor
-        uses: CaravanaCloud/cloud-janitor@v1.4.0
+        uses: CaravanaCloud/cloud-janitor@v1.7.0
+

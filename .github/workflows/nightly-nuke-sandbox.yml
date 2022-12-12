@@ -22,6 +22,6 @@ jobs:
         run: aws sts get-caller-identity
 
       - name: Nuke AWS Account
-        uses: CaravanaCloud/cloud-janitor@v1.4.0
+        uses: CaravanaCloud/cloud-janitor@v1.7.0
         env:
           CJ_TASK: "aws-nuke"
