@@ -70,6 +70,10 @@ public class AWSClientsManager {
         if (defaultRegion != null){
             return Region.of(defaultRegion);
         }
+        var envRegion = System.getenv("AWS_REGION");
+        if (envRegion != null){
+            return Region.of(envRegion);
+        }
         var cliRegion = awsCLIRegion();
         if (cliRegion != null){
             return cliRegion;

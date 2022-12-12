@@ -73,11 +73,25 @@
     },
     {
       "type": "java",
+      "name": "aws-get-caller-identity",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "aws-get-caller-identity",
+      "env": {
+        "CJ_CAPABILITIES": "all"
+      }
+    },
+    {
+      "type": "java",
       "name": "aws-transcribe",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
-      "args": "aws-transcribe"
+      "args": "aws-transcribe",
+      "env": {
+        "CJ_CAPABILITIES": "all"
+      }
     },
     {
       "type": "java",
@@ -85,16 +99,12 @@
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
-      "args": "aws-translate"
+      "args": "aws-translate",
+      "env": {
+        "CJ_CAPABILITIES": "all"
+      }
     },
-    {
-      "type": "java",
-      "name": "aws-get-caller-identity",
-      "request": "launch",
-      "mainClass": "cj.Main",
-      "projectName": "cloud-janitor",
-      "args": "aws-get-caller-identity"
-    },
+
     {
       "type": "java",
       "name": "aws-get-data-bucket",
