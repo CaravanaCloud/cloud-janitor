@@ -2,6 +2,7 @@ package cj.aws.nuke;
 
 import cj.TaskDescription;
 import cj.TaskMaturity;
+import cj.TaskTemplate;
 import cj.aws.AWSTask;
 
 import javax.enterprise.context.Dependent;
@@ -9,10 +10,13 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static cj.TaskMaturity.Level.experimental;
+
 @Dependent
 @Named("aws-nuke")
 @TaskDescription("Runs aws-nuke")
-@TaskMaturity(TaskMaturity.Level.experimental)
+@TaskMaturity(experimental)
+@TaskTemplate(value="aws-nuke.qute.yaml", output="aws-nuke.yaml")
 public class AWSNukeTask extends AWSTask {
     @Inject
     Instance<AWSNukeAccountTask> nuke;

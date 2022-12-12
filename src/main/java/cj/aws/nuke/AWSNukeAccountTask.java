@@ -13,7 +13,6 @@ import static cj.TaskMaturity.Level.experimental;
 
 @Dependent
 @Named("aws-nuke-account")
-@TaskTemplate(value="aws-nuke.qute.yaml", output="aws-nuke.yaml")
 @TaskMaturity(experimental)
 @TaskDescription("Runs aws-nuke for a single account")
 @SuppressWarnings("unused")
