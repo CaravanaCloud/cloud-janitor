@@ -1,5 +1,3 @@
-// RETHINK AWS Credentials Loading / consider pre-pply rendering
-
 # Cloud Janitor
 
 TL;DR: A convenience tool to automate operations in cloud computing, like creating clusters or cleaning up accounts.
