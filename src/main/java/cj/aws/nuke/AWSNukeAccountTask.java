@@ -32,7 +32,7 @@ public class AWSNukeAccountTask extends AWSTask {
                 , dryRun
                 ,"--force"
                 ,"--config"
-                , taskFile("aws-nuke.yaml").toString()
+                , taskFile("ccsandbox.yaml").toString()
         };
         checkpoint("Executing aws-nuke: {}",
                 String.join(" ", cmd));

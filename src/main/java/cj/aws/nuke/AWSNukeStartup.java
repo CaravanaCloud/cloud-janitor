@@ -36,13 +36,13 @@ public class AWSNukeStartup extends StartupObserver {
                 "aws-nuke config file setting",
                 "not available",
                 null,
-                () -> "--config=" + tasks().taskFile(TASK_NAME, "aws-nuke.yaml").toString(),
+                () -> "--config=" + tasks().taskFile(TASK_NAME, "ccsandbox.yaml").toString(),
                 "Dry run unless CLOUD_DELETE_RESOURCES capability is set",
                 null,
                 true);
 
         //TODO: Create metadata maps for
-        //@TaskTemplate(value="aws-nuke.qute.yaml", output="aws-nuke.yaml")
+        //@TaskTemplate(value="aws-nuke.qute.yaml", output="ccsandbox.yaml")
         //@TaskMaturity(experimental)
         //@TaskDescription("Runs aws-nuke for a single account")
         //forEachIdentity

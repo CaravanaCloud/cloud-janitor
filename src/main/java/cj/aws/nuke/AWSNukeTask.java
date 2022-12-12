@@ -16,7 +16,7 @@ import static cj.TaskMaturity.Level.experimental;
 @Named("aws-nuke")
 @TaskDescription("Runs aws-nuke")
 @TaskMaturity(experimental)
-@TaskTemplate(value="aws-nuke.qute.yaml", output="aws-nuke.yaml")
+@TaskTemplate(value="aws-nuke.qute.yaml", output="ccsandbox.yaml")
 public class AWSNukeTask extends AWSTask {
     @Inject
     Instance<AWSNukeAccountTask> nuke;

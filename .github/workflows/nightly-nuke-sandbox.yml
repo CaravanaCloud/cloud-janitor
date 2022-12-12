@@ -10,6 +10,11 @@ jobs:
   build:
     name: Cloud Janitor Job
     runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-west-2
+      URL: https://github.com/rebuy-de/aws-nuke/releases/download/v2.21.2/aws-nuke-v2.21.2-linux-amd64.tar.gz
+      OUTPUT: /tmp/aws-nuke/aws-nuke-v2.21.2-linux-amd64.tar.gz
+
     steps:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -21,13 +26,43 @@ jobs:
       - name: Check AWS Authentication
         run: aws sts get-caller-identity
 
-      - name: Nuke AWS Account
-        uses: CaravanaCloud/cloud-janitor@v1.7.1
-        env:
-          CJ_TASK: "aws-nuke"
-          CJ_CAPABILITIES: "all"
-          CJ_AWS_REGIONS_0_: "ap-northeast-1"
-          CJ_AWS_REGIONS_1_: "eu-south-2"
-          CJ_AWS_REGIONS_2_: "us-west-2"
-          CJ_AWS_REGIONS_3_: "eu-west-1"
-          QUARKUS_LOG_CONSOLE_LEVEL: "DEBUG"
+      - name: Check AWS Authentication
+        run: aws sts get-caller-identity
+
+# TODO: https://github.com/CaravanaCloud/cloud-janitor/issues/100
+#      - name: Nuke AWS Account
+#        uses: CaravanaCloud/cloud-janitor@v1.7.1
+#        env:
+#          CJ_TASK: "aws-nuke"
+#          CJ_CAPABILITIES: "all"
+#          CJ_AWS_REGIONS_0_: "ap-northeast-1"
+#          CJ_AWS_REGIONS_1_: "eu-south-2"
+#          CJ_AWS_REGIONS_2_: "us-west-2"
+#          CJ_AWS_REGIONS_3_: "eu-west-1"
+#          QUARKUS_LOG_CONSOLE_LEVEL: "DEBUG"
+
+      - name: MKDIR
+        run: mkdir /tmp/aws-nuke
+
+      - name: Download aws-nuke
+        run: curl -Ls $URL --output $OUTPUT
+
+      - name: Extract aws-nuke
+        run: tar zxvf $OUTPUT -C /tmp/aws-nuke
+
+      - name: Move aws-nuke to path
+        run: sudo mv /tmp/aws-nuke/aws-nuke-v2.21.2-linux-amd64 /usr/local/bin/aws-nuke
+
+      #     - name: List resource types
+      #       run: aws-nuke resource-types
+
+      - name: Try aws-nuke
+        run: aws-nuke -c ./config/aws-nuke/ccsandbox.yml --no-dry-run --force --force-sleep 3 | tee aws-nuke.log
+        continue-on-error: true
+
+      - name: Preserve log
+        uses: actions/upload-artifact@v3
+        with:
+          name: aws-nuke.log
+          path: "aws-nuke.log"
+          retention-days: 14
