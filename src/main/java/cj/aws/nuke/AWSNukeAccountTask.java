@@ -15,6 +15,7 @@ import static cj.TaskMaturity.Level.experimental;
 @Named("aws-nuke-account")
 @TaskMaturity(experimental)
 @TaskDescription("Runs aws-nuke for a single account")
+@TaskTemplate(value="aws-nuke.qute.yaml", output="ccsandbox.yaml")
 @SuppressWarnings("unused")
 public class AWSNukeAccountTask extends AWSTask {
     @Override
