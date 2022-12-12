@@ -84,6 +84,14 @@
     },
     {
       "type": "java",
+      "name": "aws-get-data-bucket",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "aws-get-data-bucket"
+    },
+    {
+      "type": "java",
       "name": "aws-transcribe",
       "request": "launch",
       "mainClass": "cj.Main",
@@ -104,15 +112,6 @@
         "CJ_CAPABILITIES": "all"
       }
     },
-
-    {
-      "type": "java",
-      "name": "aws-get-data-bucket",
-      "request": "launch",
-      "mainClass": "cj.Main",
-      "projectName": "cloud-janitor",
-      "args": "aws-get-data-bucket"
-    },
     {
       "type": "java",
       "name": "aws-attribution-provision",
@@ -123,7 +122,7 @@
     },
     {
       "type": "java",
-      "name": "aws-nuke",
+      "name": "aws-nuke [no config]",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
@@ -131,7 +130,7 @@
     },
     {
       "type": "java",
-      "name": "aws-nuke",
+      "name": "aws-nuke [with config]",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
@@ -156,11 +155,11 @@
     },
     {
       "type": "java",
-      "name": "openshift-create-cluster --help",
+      "name": "[help] openshift-create-cluster",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
-      "args": "--help openshift-create-cluster"
+      "args": "-cj:help openshift-create-cluster"
     },
     {
       "type": "java",
