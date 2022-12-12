@@ -7,7 +7,7 @@ tasks:
     init: mvn clean verify -DskipTests
     command: | 
       sudo ln -s /workspace/cloud-janitor/target/jpackage/app_image/cloud-janitor/bin/cloud-janitor /usr/local/bin/cloud-janitor &&
-      cloud-janitor -v
+      cloud-janitor -cj:version
 
 ports:
   - port: 3306
