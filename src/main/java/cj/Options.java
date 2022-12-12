@@ -22,7 +22,7 @@ public enum Options {
     }
 
     public void parse(String value) {
-        log.info("Parsing option {} with value {}", this, value);
+        log.debug("Parsing option {} with value {}", this, value);
         parser.accept(value);
     }
 
