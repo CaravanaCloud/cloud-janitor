@@ -41,6 +41,10 @@ jobs:
       - name: Move to path
         run: sudo mv /tmp/cloud-janitor/cloud-janitor/bin/cloud-janitor  /usr/local/bin/cloud-janitor
 
+      - name: which cloud-janitor
+        run: which cloud-janitor
+        continue-on-error: true
+
       - name: Go cloud-janitor
         run: ./cloud-janitor
         working-directory: /usr/local/bin/
