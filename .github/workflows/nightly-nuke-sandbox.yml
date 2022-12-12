@@ -41,6 +41,9 @@ jobs:
 #          CJ_AWS_REGIONS_3_: "eu-west-1"
 #          QUARKUS_LOG_CONSOLE_LEVEL: "DEBUG"
 
+      - name: checkout code
+        uses: actions/checkout@v2
+
       - name: MKDIR
         run: mkdir /tmp/aws-nuke
 
