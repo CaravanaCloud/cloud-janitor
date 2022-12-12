@@ -26,13 +26,7 @@ jobs:
       - name: Check AWS Authentication
         run: aws sts get-caller-identity
 
-      - name: checkout code
-        uses: actions/checkout@v2
-
-      - name: check config
-        run: cat ./config/aws-nuke/ccsandbox.yaml
-
-      - name: MKDIR
+      - name: Create temp directory for installation
         run: mkdir /tmp/cloud-janitor
 
       - name: Download aws-nuke
