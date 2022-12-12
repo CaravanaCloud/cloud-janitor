@@ -1,0 +1,44 @@
+{#let regions=config.aws.regionsList}
+regions:
+{#for region in regions}
+  - {region}
+{/for}
+{/let}
+
+accounts:
+  "{accountId}": {}
+
+resource-types:
+  excludes:
+    - IAMGroup
+    - IAMGroupPolicy
+    - IAMGroupPolicyAttachment
+    - IAMInstanceProfile
+    - IAMInstanceProfileRole
+    - IAMLoginProfile
+    - IAMOpenIDConnectProvider
+    - IAMPolicy
+    - IAMRole
+    - IAMRolePolicy
+    - IAMRolePolicyAttachment
+    - IAMSAMLProvider
+    - IAMServerCertificate
+    - IAMServiceSpecificCredential
+    - IAMSigningCertificate
+    - IAMUser
+    - IAMUserAccessKey
+    - IAMUserGroupAttachment
+    - IAMUserPolicy
+    - IAMUserPolicyAttachment
+    - IAMUserSSHPublicKey
+    - IAMVirtualMFADevice
+    - Route53HealthCheck
+    - Route53HostedZone
+    - Route53ResolverEndpoint
+    - Route53ResolverRule
+    - Route53ResourceRecordSet
+    - Route53TrafficPolicy
+
+account-blocklist:
+  - "999999999999"
+
