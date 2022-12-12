@@ -38,8 +38,8 @@ jobs:
       - name: debug
         run: find /tmp/cloud-janitor
 
-      - name: Move to path
-        run: sudo mv /tmp/cloud-janitor/cloud-janitor/bin/cloud-janitor  /usr/local/bin/cloud-janitor
+      - name: Link to path
+        run: sudo ln -s /tmp/cloud-janitor/cloud-janitor/bin/cloud-janitor  /usr/local/bin/cloud-janitor
 
       - name: which cloud-janitor
         run: which cloud-janitor
@@ -49,8 +49,9 @@ jobs:
         run: ls -liah /usr/local/bin/cloud-janitor
         continue-on-error: true
 
-      - name: Go cloud-janitor
-        run: /usr/local/bin/cloud-janitor
+      - name: Execute cloud-janitor
+        run: ./bin/cloud-janitor
+        working-directory: /tmp/cloud-janitor/cloud-janitor
         env:
           CJ_TASK: "aws-nuke"
           CJ_CAPABILITIES: "all"
