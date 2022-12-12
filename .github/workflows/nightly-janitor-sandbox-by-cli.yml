@@ -26,9 +26,6 @@ jobs:
       - name: Check AWS Authentication
         run: aws sts get-caller-identity
 
-      - name: Check AWS Authentication
-        run: aws sts get-caller-identity
-
       - name: checkout code
         uses: actions/checkout@v2
 
