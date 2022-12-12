@@ -16,7 +16,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2
+          aws-region: us-west-2
 
       - name: Check AWS Authentication
         run: aws sts get-caller-identity
@@ -25,4 +25,9 @@ jobs:
         uses: CaravanaCloud/cloud-janitor@v1.7.0
         env:
           CJ_TASK: "aws-nuke"
-          CJ_AWS_REGION: "us-west-2"
+          CJ_CAPABILITIES: "all"
+          CJ_AWS_REGIONS_0_: "ap-northeast-1"
+          CJ_AWS_REGIONS_1_: "eu-south-2"
+          CJ_AWS_REGIONS_2_: "us-west-2"
+          CJ_AWS_REGIONS_3_: "eu-west-1"
+          QUARKUS_LOG_CONSOLE_LEVEL: "DEBUG"
