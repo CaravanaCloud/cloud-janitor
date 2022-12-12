@@ -47,9 +47,8 @@ jobs:
       - name: Move to path
         run: sudo mv /tmp/cloud-janitor/cloud-janitor/bin/cloud-janitor  /usr/local/bin/cloud-janitor
 
-      - name: Go jantor
+      - name: Go cloud-janitor
         run: cloud-janitor
-        continue-on-error: true
         env:
           CJ_TASK: "aws-nuke"
           CJ_CAPABILITIES: "all"
@@ -58,10 +57,3 @@ jobs:
           CJ_AWS_REGIONS_2_: "us-west-2"
           CJ_AWS_REGIONS_3_: "eu-west-1"
           QUARKUS_LOG_CONSOLE_LEVEL: "DEBUG"
-
-      - name: Preserve log
-        uses: actions/upload-artifact@v3
-        with:
-          name: cloud-janitor.log
-          path: "cloud-janitor.log"
-          retention-days: 14
