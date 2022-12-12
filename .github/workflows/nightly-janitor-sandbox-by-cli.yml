@@ -1,10 +1,10 @@
 ---
-name: 0 Janitor sandbox AWS account (nightly)
+name: 0 Janitor sandbox AWS account (nightly, by CLI)
 
 on:
   workflow_dispatch: { }
   schedule:
-    - cron: "00 5 * * *"
+    - cron: "00 4 * * *"
 
 jobs:
   build:
@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AWS_REGION: us-west-2
-      URL: https://github.com/rebuy-de/aws-nuke/releases/download/v2.21.2/aws-nuke-v2.21.2-linux-amd64.tar.gz
-      OUTPUT: /tmp/aws-nuke/aws-nuke-v2.21.2-linux-amd64.tar.gz
+      URL: https://github.com/CaravanaCloud/cloud-janitor/releases/download/v1.7.1/cloud-janitor.zip
+      OUTPUT: /tmp/cloud-janitor/cloud-janitor.zip
 
     steps:
       - name: Configure AWS Credentials
@@ -36,27 +36,35 @@ jobs:
         run: cat ./config/aws-nuke/ccsandbox.yaml
 
       - name: MKDIR
-        run: mkdir /tmp/aws-nuke
+        run: mkdir /tmp/cloud-janitor
 
       - name: Download aws-nuke
         run: curl -Ls $URL --output $OUTPUT
 
-      - name: Extract aws-nuke
-        run: tar zxvf $OUTPUT -C /tmp/aws-nuke
+      - name: Extract cloud-janitor
+        run: unzip -d /tmp/cloud-janitor $OUTPUT
 
-      - name: Move aws-nuke to path
-        run: sudo mv /tmp/aws-nuke/aws-nuke-v2.21.2-linux-amd64 /usr/local/bin/aws-nuke
+      - name: debug
+        run: find /tmp/cloud-janitor
 
-      #     - name: List resource types
-      #       run: aws-nuke resource-types
+      - name: Move to path
+        run: sudo mv /tmp/cloud-janitor/bin/cloud-janitor /usr/local/bin/cloud-janitor
 
-      - name: Try aws-nuke
-        run: aws-nuke -c ./config/aws-nuke/ccsandbox.yaml --no-dry-run --force --force-sleep 3 | tee aws-nuke.log
+      - name: Go jantor
+        run: cloud-janitor
         continue-on-error: true
+        env:
+          CJ_TASK: "aws-nuke"
+          CJ_CAPABILITIES: "all"
+          CJ_AWS_REGIONS_0_: "ap-northeast-1"
+          CJ_AWS_REGIONS_1_: "eu-south-2"
+          CJ_AWS_REGIONS_2_: "us-west-2"
+          CJ_AWS_REGIONS_3_: "eu-west-1"
+          QUARKUS_LOG_CONSOLE_LEVEL: "DEBUG"
 
       - name: Preserve log
         uses: actions/upload-artifact@v3
         with:
-          name: aws-nuke.log
-          path: "aws-nuke.log"
+          name: cloud-janitor.log
+          path: "cloud-janitor.log"
           retention-days: 14
