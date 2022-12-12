@@ -4,10 +4,10 @@ TL;DR: A convenience tool to automate operations in cloud computing, like creati
 
 For example, consider a 'create-cluster' task. Cloud janitor will lookup reasonable defaults, validate and backup configuration,
 install dependencies, create account-level resources, create cluster-level resources, wait for health check, install plugins and verify the application. 
-All that from a single invocation, using a command line like `cloud-janitor -t openshift-create-cluster` or the equivalent inside a container, github action or gitpod.io workspace.
+All that from a single invocation, using a command line like `cloud-janitor openshift-create-cluster` or the equivalent inside a container, github action or gitpod.io workspace.
 
 Start you gitpod workspace in the link below and try `cloud-jantor --help`:
-https://gitpod.io/#github.com/CaravanaCloud/cloud-janitor
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#github.com/CaravanaCloud/cloud-janitor)
 
 ## Features
 
@@ -67,7 +67,7 @@ Here are multiple ways you can execute this project.
 
 All mentioned binaries can be found in the [project releases page](https://github.com/CaravanaCloud/cloud-janitor/releases).
 
-### Homebrew
+### Homebrew (todo)
 Install it:
 ```
 brew tap caravanacloud/homebrew-tap
