@@ -1,0 +1,27 @@
+---
+name: 0 Build every push
+
+on:
+  workflow_dispatch: { }
+  push:
+    branches:
+      - "**"
+
+jobs:
+  build:
+    name: Cloud Janitor Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: 'latest'
+          java-version: '17'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Maven build
+        run: ./mvnw clean verify
+
