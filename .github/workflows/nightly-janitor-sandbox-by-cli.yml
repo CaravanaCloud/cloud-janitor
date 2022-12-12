@@ -45,7 +45,7 @@ jobs:
         run: find /tmp/cloud-janitor
 
       - name: Move to path
-        run: sudo mv /tmp/cloud-janitor/bin/cloud-janitor /usr/local/bin/cloud-janitor
+        run: sudo mv /tmp/cloud-janitor/cloud-janitor/bin/cloud-janitor  /usr/local/bin/cloud-janitor
 
       - name: Go jantor
         run: cloud-janitor
