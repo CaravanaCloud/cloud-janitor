@@ -3,11 +3,35 @@
   "configurations": [
     {
       "type": "java",
-      "name": "aws-nuke",
+      "name": "version",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
-      "args": "aws-nuke"
+      "args": "--version"
+    },
+    {
+      "type": "java",
+      "name": "help",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "--help"
+    },
+    {
+      "type": "java",
+      "name": "hello",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "hello"
+    },
+    {
+      "type": "java",
+      "name": "ls -liah",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "ls -liah"
     },
     {
       "type": "java",
