@@ -1,0 +1,5 @@
+cj:
+  task: aws-get-caller-identity
+  aws:
+    roles:
+      - arn: arn:aws:iam::192912639870:role/sampleRole1

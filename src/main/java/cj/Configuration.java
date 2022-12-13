@@ -57,13 +57,11 @@ public class Configuration {
     }
 
     public List<TaskConfiguration> taskConfigs() {
-        //TODO: Also load task configs fom java annotations
-        var result = config.tasks()
-                .orElse(List.of());
-        return result;
+        return objects.allTaskConfigurations();
     }
 
     public Optional<TaskConfiguration> taskConfigForQuery(String... query) {
+        if(query == null || query.length == 0) return Optional.empty();
         var taskCfgs = taskConfigs();
         if (taskCfgs.isEmpty()) return Optional.empty();
         var taskName = query[0];

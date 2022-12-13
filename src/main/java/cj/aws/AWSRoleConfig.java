@@ -13,4 +13,13 @@ public interface AWSRoleConfig {
     @WithName("alias")
     Optional<String> alias();
 
+    default String getAlias(){
+        return alias().orElse(nameFrom(arn()));
+    }
+
+    default String nameFrom(String roleArn){
+        var roleName = arn().split("/")[1];
+        return roleName;
+    }
+
 }

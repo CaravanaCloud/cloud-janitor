@@ -10,6 +10,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import java.util.List;
+
 import static cj.TaskRepeat.once;
 
 @ApplicationScoped
@@ -22,7 +24,9 @@ public class Repeat {
         var repeat = taskConfig
                 .flatMap(TaskConfiguration::repeat)
                 .orElse(once);
-        var repeater = taskForRepeater(repeat);
+        var queryList = List.of(query);
+        var repeater = taskForRepeater(repeat)
+                .withInput(CJInput.query, queryList);
         return repeater;
     }
 

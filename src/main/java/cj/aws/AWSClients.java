@@ -36,7 +36,6 @@ public class AWSClients {
         @SuppressWarnings("redundant")
         var sts = StsClient.builder()
                 .region(region())
-                .credentialsProvider(getCredentialsProvider())
                 .build();
         return sts;
     }
@@ -157,7 +156,12 @@ public class AWSClients {
     }
 
     public AwsCredentialsProvider getCredentialsProvider() {
-        return identity().toCredentialsProvider();
+        try(var sts = sts()){
+            return identity().toCredentialsProvider(sts);
+        }catch (Exception e){
+            log.error("Failed to get credentials provider", e);
+            throw e;
+        }
     }
 
     public AWSIdentity identity() {

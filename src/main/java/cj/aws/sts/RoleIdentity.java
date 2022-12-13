@@ -14,27 +14,34 @@ import software.amazon.awssdk.services.sts.model.AssumeRoleResponse;
 public class RoleIdentity
         implements AWSIdentity {
     static final Logger log = LoggerFactory.getLogger(RoleIdentity.class);
-    static final String ROLE_SESSION_REGEX = "[^a-zA-Z0-9\\w+=,.@-]";
     private final AWSRoleConfig roleCfg;
-    private final StsClient sts;
 
-    private static String roleSessionName(String str) {
-        return str.replaceAll(ROLE_SESSION_REGEX, "-");
-    }
 
-    public RoleIdentity(AWSRoleConfig roleCfg, StsClient sts){
+    public RoleIdentity(AWSRoleConfig roleCfg){
         this.roleCfg = roleCfg;
-        this.sts = sts;
     }
 
-    public AssumeRoleResponse assumeRole() {
-        var req = assumeRoleRequest();
-        return sts.assumeRole(req);
+    @Override
+    public AwsCredentialsProvider toCredentialsProvider(StsClient sts) {
+        return StsAssumeRoleCredentialsProvider.builder()
+                .stsClient(sts)
+                .refreshRequest(assumeRoleRequest())
+                .build();
+    }
+
+    @Override
+    public String accountId() {
+        return "ROLE ACCOUNT ID";
+    }
+
+    @Override
+    public String accountAlias() {
+        return "ROLE ACCOUNT ALIAS";
     }
 
     private AssumeRoleRequest assumeRoleRequest() {
         var stamp = Utils.nowStamp();
-        var sessionName = roleSessionName(roleCfg.alias() + stamp);
+        var sessionName = "cloud-janitor-session-"+System.currentTimeMillis();
         var req = AssumeRoleRequest.builder()
                 .roleArn(roleCfg.arn())
                 .roleSessionName(sessionName)
@@ -42,34 +49,21 @@ public class RoleIdentity
         return req;
     }
 
-    public boolean canAssume() {
-        try {
-            assumeRole();
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+
+    public static RoleIdentity of(AWSRoleConfig awsRole) {
+        return new RoleIdentity(awsRole);
     }
 
-    @Override
-    public AwsCredentialsProvider toCredentialsProvider() {
-        return StsAssumeRoleCredentialsProvider.builder()
-                .stsClient(sts)
-                .refreshRequest(assumeRoleRequest())
-                .build();
-    }
-    //TODO
-    @Override
-    public String accountId() {
-        return "ACCOUNT_ID";
+    public String roleArn() {
+        return roleCfg.arn();
     }
 
-    @Override
-    public String accountAlias() {
-        return "ACCOUNT_ALIAS";
+    public String roleName() {
+        return roleCfg.alias().orElse(roleCfg.arn());
     }
 
-    public static RoleIdentity of(AWSRoleConfig awsRole, StsClient sts) {
-        return new RoleIdentity(awsRole, sts);
+    public void assumeRole(StsClient sts) {
+        sts.assumeRole(assumeRoleRequest());
+        log.debug("Assumed role: {}", roleCfg.arn());
     }
 }

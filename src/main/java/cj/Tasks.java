@@ -69,13 +69,23 @@ public class Tasks {
         log.trace("Configuration: {}", config);
     }
 
-    private void repeat(String... query) {
+    private void repeat(String... args) {
         //MOVE TO ITERATOR var tasks = config.lookupTasks(args);
         //runAll(tasks);
-        var queryList = List.of(query);
-        var repeater = repeat.forQuery(query)
-                        .withInput(CJInput.query, queryList);
+        var query = queryFrom(args);
+        var repeater = repeat.forQuery(query);
         submitTask(repeater);
+    }
+
+    private String[] queryFrom(String[] args) {
+        if (args != null && args.length > 0)
+            return args;
+        var cfgTask = config.raw().task();
+        if (cfgTask.isPresent()) {
+            var query = cfgTask.get().split(" ");
+            return query;
+        }
+        return new String[]{};
     }
 
     public void submitQuery(List<String> query) {

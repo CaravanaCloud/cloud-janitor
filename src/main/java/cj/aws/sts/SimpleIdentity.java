@@ -1,6 +1,7 @@
 package cj.aws.sts;
 
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.services.sts.StsClient;
 
 public record SimpleIdentity(
         String accountId,
@@ -18,7 +19,7 @@ public record SimpleIdentity(
     }
 
     @Override
-    public AwsCredentialsProvider toCredentialsProvider() {
+    public AwsCredentialsProvider toCredentialsProvider(StsClient sts) {
         return software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider.create();
     }
 }
