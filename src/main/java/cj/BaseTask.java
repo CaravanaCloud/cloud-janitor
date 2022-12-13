@@ -1,6 +1,7 @@
 package cj;
 
 import cj.fs.FSInput;
+import cj.fs.FSUtils;
 import cj.fs.FindFiles;
 import cj.ocp.CapabilityNotFoundException;
 import cj.qute.Templates;
@@ -187,7 +188,7 @@ public class BaseTask
     }
 
     public Task withInputs(Map<Input, Object> inputs) {
-        this.inputs = inputs;
+        this.inputs.putAll(inputs);
         return this;
     }
 
@@ -262,11 +263,11 @@ public class BaseTask
     }
 
     protected Task submitInstance(Instance<? extends Task> delegate, Input input, Object value) {
-        return tasks().submit(delegate.get().withInput(input, value));
+        return tasks().submitTask(delegate.get().withInput(input, value));
     }
 
     protected Task submit(Task delegate, Input input, Object value) {
-        return tasks().submit(delegate.withInput(input, value));
+        return tasks().submitTask(delegate.withInput(input, value));
     }
 
     protected void success(Output key, Object value) {
@@ -404,6 +405,14 @@ public class BaseTask
     }
 
     protected Path taskFile(String filename){
-        return tasks().taskFile(this,filename);
+        return taskFile(this,filename);
+    }
+
+    public Path taskFile(Task task, String fileName) {
+        return taskFile(task.getPathName(), fileName);
+    }
+
+    public Path taskFile(String taskName, String fileName) {
+        return FSUtils.taskDir(taskName).resolve(fileName);
     }
 }

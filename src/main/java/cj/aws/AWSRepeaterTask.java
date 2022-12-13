@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Dependent
-public class AWSIteratorTask extends AWSTask {
+public class AWSRepeaterTask extends AWSTask {
     @Inject
     AWSClientsManager aws;
 
@@ -38,7 +38,7 @@ public class AWSIteratorTask extends AWSTask {
         if (idAction.isEmpty()) return;
         var obj = idAction.get().get();
         if (obj instanceof Task task){
-            debug("Submiting task {} for {} in {}", task, id, regions);
+            debug("Submitting task {} for {} in {}", task, id, regions);
             submit(task
                     .withInput(AWSInput.regions, regions)
                     .withInput(AWSInput.identity, id)
@@ -50,7 +50,7 @@ public class AWSIteratorTask extends AWSTask {
         if (regionAction.isEmpty()) return;
         var obj = regionAction.get().get();
         if (obj instanceof Task task){
-            debug("Submiting task {} for {} in {}", task, id, region);
+            debug("Submitting task {} for {} in {}", task, id, region);
             submit(task
                     .withInput(AWSInput.targetRegion, region)
                     .withInput(AWSInput.identity, id));

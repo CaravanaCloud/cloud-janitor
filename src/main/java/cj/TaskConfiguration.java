@@ -19,4 +19,6 @@ public interface TaskConfiguration {
     Optional<List<InputConfiguration>> inputs();
 
     Optional<List<String>> bypass();
+
+    Optional<TaskRepeat> repeat();
 }

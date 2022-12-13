@@ -21,7 +21,7 @@ public class HelloTaskTest {
 
     @Test
     public void testHello(){
-        tasks.submit(helloTask);
+        tasks.submitTask(helloTask);
         var message = helloTask.outputString(Message);
         assertTrue(message.isPresent());
         assertEquals("hello world!", message.get());

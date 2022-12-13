@@ -151,7 +151,7 @@ public abstract class AWSTask
 
 
     @Inject
-    Instance<AWSIteratorTask> iteratorInstance;
+    Instance<AWSRepeaterTask> iteratorInstance;
 
     protected <T extends Task> void forEachRegion(Instance<T> taskInstance) {
         checkArgument(taskInstance.isResolvable(), "Task instance is not resolvable");

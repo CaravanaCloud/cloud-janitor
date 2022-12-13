@@ -8,14 +8,16 @@ public record SimpleTaskConfiguration(
         Optional<String> description,
         Optional<String> maturity,
         Optional<List<InputConfiguration>> inputs,
-        Optional<List<String>> bypass
+        Optional<List<String>> bypass,
+        Optional<TaskRepeat> repeat
 ) implements TaskConfiguration {
 
     public static SimpleTaskConfiguration of(String taskName,
                                              String description,
                                              String maturity,
                                              List<InputConfiguration> inputs,
-                                             List<String> bypass) {
+                                             List<String> bypass,
+                                             TaskRepeat repeat) {
         if (taskName == null) {
             return null;
         }
@@ -23,6 +25,7 @@ public record SimpleTaskConfiguration(
                 Optional.ofNullable(maturity),
                 Optional.ofNullable(description),
                 Optional.ofNullable(inputs),
-                Optional.empty());
+                Optional.empty(),
+                Optional.ofNullable(repeat));
     }
 }

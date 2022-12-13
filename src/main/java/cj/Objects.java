@@ -67,6 +67,7 @@ public class Objects {
         var name = bean.getName();
         var description = getAnnotationString(bean, TaskDescription.class);
         var maturity = getAnnotationString(bean, TaskMaturity.class);
+        var repeat = (TaskRepeat) getAnnotationValue(bean, TaskRepeater.class);
         //TODO: Build annotations for input config and bypass
         var inputs = inputsMap.getInputsForTask(name);
         var bypass = (List<String>) null;
@@ -74,7 +75,8 @@ public class Objects {
                 description,
                 maturity,
                 inputs,
-                bypass);
+                bypass,
+                repeat);
         return Optional.ofNullable(taskConfig);
     }
 

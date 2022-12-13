@@ -30,13 +30,13 @@ public class Configuration {
     Shell shell;
 
 
-    private Multimap<String, Input> bypassMap = ArrayListMultimap.create();
-    private Set<Capabilities> capabilities = new HashSet<>();
+    private final Multimap<String, Input> bypassMap = ArrayListMultimap.create();
+    private final Set<Capabilities> capabilities = new HashSet<>();
 
     private String executionId;
 
 
-    public List<? extends Task> lookupTasks(String[] args) {
+    public List<? extends Task> lookupTasks(String... args) {
         var tasks = Stream.concat(
                 tasksFromArgs(args).stream(),
                 tasksFromConfig().stream()
@@ -63,12 +63,13 @@ public class Configuration {
         return result;
     }
 
-    public Optional<TaskConfiguration> taskConfigByName(String taskName) {
+    public Optional<TaskConfiguration> taskConfigForQuery(String... query) {
         var taskCfgs = taskConfigs();
         if (taskCfgs.isEmpty()) return Optional.empty();
+        var taskName = query[0];
         var taskCfg = taskCfgs
                 .stream()
-                .filter(t -> t.equals(taskName))
+                .filter(t -> t.name().equals(taskName))
                 .findFirst();
         return taskCfg;
     }
@@ -85,36 +86,38 @@ public class Configuration {
         return List.of();
     }
 
-    private List<? extends Task> bypass(String[] args) {
-        var argsList = List.of(args);
-        var enriched = enrich(argsList);
+    private List<? extends Task> bypass(String... args) {
+        var enriched = enrich(args);
         if (enriched.isEmpty()) {
             log.debug("Empty bypass");
             return List.of();
         }
-        log.debug("Bypassing `{}` as `{}`", join(argsList), join(enriched));
+        log.debug("Bypassing `{}` as `{}`", join(args), join(enriched));
         var enrichedArr = enriched.toArray(new String[enriched.size()]);
         var result = List.of(shell.shellTask(enrichedArr));
         return result;
     }
 
-    private List<String> enrich(List<String> args) {
-        if (args.isEmpty()) return args;
-        var taskName = args.get(0);
-        var taskArgs = args.subList(1, args.size());
-        var taskCfg = taskConfigByName(taskName);
+    private List<String> enrich(String... args) {
+        if (args == null  || args.length == 0) return List.of();
+        var taskCfg = taskConfigForQuery(args);
+        if (taskCfg.isEmpty()) return List.of(args);
+        var taskName = taskCfg.get().name();
+        var taskArgs = Arrays.copyOfRange(args, 1, args.length);
         var bypass = taskCfg.flatMap(TaskConfiguration::bypass);
-        var bypassList = bypass
-                .map(xs -> xs.stream()
-                        .flatMap(expr -> bypassValues(expr, taskArgs))
-                        .toList());
-        var result = bypassList.orElse(args);
+        if (bypass.isEmpty()) return List.of(args);
+        var bypassList = bypass.get()
+                .stream()
+                .flatMap(expr -> bypassValues(expr, args))
+                .toList();
+        var result = bypassList;
         return result;
     }
 
-    private Stream<String> bypassValues(String value, List<String> taskArgs) {
+    private Stream<String> bypassValues(String value, String... query) {
+        //TODO: Parse qute expressions
         if("{args}".equals(value)){
-            return taskArgs.stream();
+            return Stream.of(query);
         }
         return Stream.of(value);
     }
@@ -124,7 +127,7 @@ public class Configuration {
 
     @Override
     public String toString() {
-        var buf = new StringBuffer();
+        var buf = new StringBuilder();
         buf.append("Configuration{");
         buf.append("bypassMap=").append(bypassMap);
         buf.append(", capabilities=").append(capabilities);

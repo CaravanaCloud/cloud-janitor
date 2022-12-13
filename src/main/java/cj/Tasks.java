@@ -1,34 +1,23 @@
 package cj;
 
-import cj.fs.FSUtils;
 import cj.ocp.CapabilityNotFoundException;
 import cj.qute.Templates;
 import cj.reporting.Reporting;
-import cj.shell.*;
 import cj.spi.Task;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Instance;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.nio.file.Path;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static cj.Errors.Type.Message;
-import static cj.StringUtils.join;
-import static com.google.common.base.Preconditions.checkArgument;
 
 @ApplicationScoped
 @Named("tasks")
@@ -44,17 +33,12 @@ public class Tasks {
     @Inject
     Reporting reporting;
 
-
-
     List<Task> history = new ArrayList<>();
 
     String task;
 
-
     @Inject
     InputsMap inputsMap;
-
-
 
     @Inject
     Objects objects;
@@ -65,11 +49,19 @@ public class Tasks {
     @Inject
     Shell shell;
 
+    @Inject
+    Repeat repeat;
+
     // run methods
+
+    public void run(List<String> args){
+        var arr = args.toArray(new String[0]);
+        run(arr);
+    }
 
     public void run(String[] args) {
         init();
-        runTasks(args);
+        repeat(args);
         report();
     }
 
@@ -77,17 +69,29 @@ public class Tasks {
         log.trace("Configuration: {}", config);
     }
 
-    private void runTasks(String[] args) {
-        var tasks = config.lookupTasks(args);
-        runAll(tasks);
+    private void repeat(String... query) {
+        //MOVE TO ITERATOR var tasks = config.lookupTasks(args);
+        //runAll(tasks);
+        var queryList = List.of(query);
+        var repeater = repeat.forQuery(query)
+                        .withInput(CJInput.query, queryList);
+        submitTask(repeater);
     }
 
-    private void runAll(List<? extends Task> tasks) {
-        tasks.forEach(this::submit);
+    public void submitQuery(List<String> query) {
+        submitQuery(query, Map.of());
+    }
+    public void submitQuery(List<String> query, Map<Input, Object> inputs) {
+        var arr = query.toArray(new String[0]);
+        var tasks = config.lookupTasks(arr);
+        submitAll(tasks, inputs);
+    }
+    private void submitAll(List<? extends Task> tasks, Map<Input, Object> inputs) {
+        tasks.forEach(t -> submitTask(t.withInputs(inputs)));
     }
 
     // TODO: Consider async execution
-    public Task submit(Task task) {
+    public Task submitTask(Task task) {
         try {
             var result = submitNow(task);
             return result;
@@ -109,11 +113,7 @@ public class Tasks {
     private void renderTemplates(Task task) {
         var template = objects.getAnnotation(task, TaskTemplate.class);
         if (template != null)
-            renderTemplate(task, template.value(), template.output());
-    }
-
-    private void renderTemplate(Task task, String value, String output) {
-        templates.render(task, value, output);
+            templates.render(task, template.value(), template.output());
     }
 
     private void runDependencies(Task task) {
@@ -122,7 +122,7 @@ public class Tasks {
         dependencies.forEach(d -> {
             // TODO: Consider if dependencies should inherit inputs
             d.inputs().putAll(thisInputs);
-            submit(d);
+            submitTask(d);
         });
     }
 
@@ -187,8 +187,6 @@ public class Tasks {
         return config.getExecutionId();
     }
 
-    //////////////////////////////////////////////
-
     private void report() {
         if (config.reportEnabled())
             try {
@@ -205,7 +203,7 @@ public class Tasks {
         Map<Input, String> present = new HashMap<>();
         for (var inputKey : expected) {
             var inputValue = task.input(inputKey)
-                    .or(() -> fromConfig(inputKey));
+                    .or(() -> inputsMap.fromConfig(inputKey));
             if (inputValue.isPresent()) {
                 present.put(inputKey, inputValue.get().toString());
             } else {
@@ -221,15 +219,5 @@ public class Tasks {
         }
     }
 
-    private Optional<?> fromConfig(Input input) {
-        return Optional.ofNullable(inputsMap.getFromConfig(input));
-    }
 
-    public Path taskFile(Task task, String fileName) {
-        return taskFile(task.getPathName(), fileName);
-    }
-
-    public Path taskFile(String taskName, String fileName) {
-        return FSUtils.taskDir(taskName).resolve(fileName);
-    }
 }

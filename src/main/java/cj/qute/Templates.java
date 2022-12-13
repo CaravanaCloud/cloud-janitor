@@ -29,14 +29,14 @@ public class Templates implements Logging {
     @Inject
     Tasks tasks;
 
+    @Inject
+    Shell shell;
+
 
     public Template getTemplate(String location) {
         if (engine == null) {
-            warn("Failed to inject template engine, trying global engine.");
-            engine = GlobalQuoteEngine.engine;
-            if (engine == null) {
-                throw new RuntimeException("Failed to resolve template engine");
-            }
+            warn("Failed to inject template engine.");
+            return null;
         }
         if (location == null) {
             error("Template requested for null location");
@@ -99,9 +99,7 @@ public class Templates implements Logging {
             }
         });
         var actual = task.inputs();
-        actual.forEach((i, o) -> {
-            putString(result, i, o);
-        });
+        actual.forEach((i, o) -> putString(result, i, o));
         return result;
     }
 
@@ -118,6 +116,6 @@ public class Templates implements Logging {
     }
 
     public Path taskFile(Task task, String fileName) {
-        return tasks.taskFile(task, fileName);
+        return shell.taskFile(task, fileName);
     }
 }

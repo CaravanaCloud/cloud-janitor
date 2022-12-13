@@ -1,6 +1,5 @@
 package cj.aws.nuke;
 
-import cj.Input;
 import cj.OS;
 import cj.StartupObserver;
 
@@ -36,7 +35,7 @@ public class AWSNukeStartup extends StartupObserver {
                 "aws-nuke config file setting",
                 "not available",
                 null,
-                () -> "--config=" + tasks().taskFile(TASK_NAME, "ccsandbox.yaml").toString(),
+                () -> "--config=" + shell().taskFile(TASK_NAME, "ccsandbox.yaml").toString(),
                 "Dry run unless CLOUD_DELETE_RESOURCES capability is set",
                 null,
                 true);

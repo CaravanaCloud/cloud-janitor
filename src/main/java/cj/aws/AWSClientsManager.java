@@ -94,7 +94,7 @@ public class AWSClientsManager {
 
     public synchronized List<? extends AWSIdentity> identities() {
         if (awsIdentities == null){
-            awsIdentities = tasks.submit(loadIds.get())
+            awsIdentities = tasks.submitTask(loadIds.get())
                     .outputList(AWSOutput.Identities, AWSIdentity.class);
             if (awsIdentities != null && awsIdentities.size() > 0){
                 log.info("Loaded {} AWS identities", awsIdentities.size());

@@ -15,7 +15,7 @@ import static cj.TaskMaturity.Level.experimental;
 @Named("aws-nuke-account")
 @TaskMaturity(experimental)
 @TaskDescription("Runs aws-nuke for a single account")
-@TaskTemplate(value="aws-nuke.qute.yaml", output="ccsandbox.yaml")
+@TaskTemplate(value="aws-nuke.qute.yaml", output="aws-nuke.yaml")
 @SuppressWarnings("unused")
 public class AWSNukeAccountTask extends AWSTask {
     @Override
@@ -33,7 +33,7 @@ public class AWSNukeAccountTask extends AWSTask {
                 , dryRun
                 ,"--force"
                 ,"--config"
-                , taskFile("ccsandbox.yaml").toString()
+                , taskFile("aws-nuke.yaml").toString()
         };
         checkpoint("Executing aws-nuke: {}",
                 String.join(" ", cmd));

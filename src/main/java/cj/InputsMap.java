@@ -114,4 +114,8 @@ public class InputsMap {
         //TODO: Implement this method
         return List.of();
     }
+
+    public Optional<?> fromConfig(Input input) {
+        return Optional.ofNullable(getFromConfig(input));
+    }
 }

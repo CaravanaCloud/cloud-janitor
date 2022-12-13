@@ -1,11 +1,13 @@
 package cj;
 
+import cj.fs.FSUtils;
 import cj.shell.*;
 import cj.spi.Task;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +62,7 @@ public class Shell {
         }
         var shellTask = shellTask(isDryRun, cmdArgs)
                 .withInput(ShellInput.timeout, timeoutMins);
-        tasks.submit(shellTask);
+        tasks.submitTask(shellTask);
         @SuppressWarnings("all")
         var stdout = shellTask.outputString(ShellOutput.stdout);
         checkArgument(stdout.isPresent(), "No stdout from shell task");
@@ -104,7 +106,7 @@ public class Shell {
         var retryTask = retry.get()
                 .withInput(CJInput.task, theMainTask)
                 .withInput(CJInput.fixTask, theFixTask);
-        return tasks.submit(retryTask);
+        return tasks.submitTask(retryTask);
     }
 
     public void shell(String[] cmd) {
@@ -112,5 +114,13 @@ public class Shell {
         var binary = cmd[0];
         checkCmd(binary, installMap.get(binary));
         exec(cmd);
+    }
+
+    public Path taskFile(Task task, String fileName) {
+        return taskFile(task.getPathName(), fileName);
+    }
+
+    public Path taskFile(String taskName, String fileName) {
+        return FSUtils.taskDir(taskName).resolve(fileName);
     }
 }

@@ -14,7 +14,7 @@ public interface TaskManagement {
 
     default Task submit(Task self, Task delegate) {
         delegate.inputs().putAll(self.inputs());
-        return tasks().submit(delegate);
+        return tasks().submitTask(delegate);
     }
 
 }

@@ -1,5 +1,9 @@
 package cj.aws.sts;
 
+import cj.TaskDescription;
+import cj.TaskMaturity;
+import cj.TaskRepeat;
+import cj.TaskRepeater;
 import cj.aws.AWSFilter;
 import software.amazon.awssdk.services.iam.IamClient;
 import software.amazon.awssdk.services.sts.StsClient;
@@ -8,10 +12,14 @@ import software.amazon.awssdk.services.sts.model.StsException;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 
+import static cj.TaskMaturity.Level.experimental;
 import static cj.aws.AWSOutput.CallerIdentity;
 
 @Dependent
 @Named("aws-get-caller-identity")
+@TaskMaturity(experimental)
+@TaskDescription("Get the caller identity from AWS")
+@TaskRepeater(TaskRepeat.each_identity)
 public class GetCallerIdentityTask extends AWSFilter {
     @Override
     public void apply() {

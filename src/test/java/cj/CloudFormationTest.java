@@ -210,7 +210,7 @@ public class CloudFormationTest extends TaskTest{
 
     protected List<Vpc> filterVPCs(String vpcId) {
         filterVPCs.setTargetVPC(vpcId);
-        tasks.submit(filterVPCs);
+        tasks.submitTask(filterVPCs);
         var matches = filterVPCs.outputList(VPCMatch, Vpc.class);
         log.debug("filterVPCs {} finished", vpcId);
         return matches;
@@ -218,7 +218,7 @@ public class CloudFormationTest extends TaskTest{
 
     protected void cleanupVPC(String vpcId) {
         cleanupVPCs.setTargetVPC(vpcId);
-        tasks.submit(cleanupVPCs);
+        tasks.submitTask(cleanupVPCs);
         log.debug("cleanupVPC {} finished",vpcId);
     }
 

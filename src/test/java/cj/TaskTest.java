@@ -46,6 +46,6 @@ public class TaskTest {
     }
 
     protected Task submit(Task task){
-        return tasks.submit(task);
+        return tasks.submitTask(task);
     }
 }

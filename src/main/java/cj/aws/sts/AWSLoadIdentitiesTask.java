@@ -32,10 +32,8 @@ public class AWSLoadIdentitiesTask extends BaseTask {
         }
     }
 
-
-
     private List<? extends cj.aws.AWSIdentity> loadRoles() {
-        //TODO: Load roles from configuration
+        //TODO: 0 Load AWS roles from configuration
         return List.of();
     }
 

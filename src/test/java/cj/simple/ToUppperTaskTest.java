@@ -20,7 +20,7 @@ public class ToUppperTaskTest {
 
     @Test
     public void testUpMessage(){
-        tasks.submit(toUpper);
+        tasks.submitTask(toUpper);
         var message = toUpper.outputString(Output.sample.UpperMessage);
         assertEquals("HELLO WORLD!", message.get());
     }
