@@ -21,7 +21,7 @@ public class CloudJanitor implements QuarkusApplication {
     Tasks tasks;
 
     @Inject
-    Configuration config;
+    CJConfiguration config;
 
     @Inject
     LaunchMode launchMode;

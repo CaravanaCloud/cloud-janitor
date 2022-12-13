@@ -17,10 +17,24 @@ public abstract class StartupObserver implements  Logging{
     @Inject
     Tasks tasks;
 
+    @Inject
+    Shell shell;
+
+    @Inject
+    Configuration config;
+
+    protected Shell shell() {
+        return shell;
+    }
+
+    protected Configuration config() {
+        return config;
+    }
+
     public void describeInput(Input input,
                               String description,
                               String configKey,
-                              Function<Configuration, Optional<?>> configFn,
+                              Function<CJConfiguration, Optional<?>> configFn,
                               Supplier<?> defaultFn,
                               String defaultDescription){
         describeInput(input, description, configKey, configFn, defaultFn, defaultDescription, new Object[]{}, false);
@@ -28,7 +42,7 @@ public abstract class StartupObserver implements  Logging{
     public void describeInput(Input input,
                               String description,
                               String configKey,
-                              Function<Configuration, Optional<?>> configFn,
+                              Function<CJConfiguration, Optional<?>> configFn,
                               Supplier<?> defaultFn,
                               String defaultDescription,
                               Object[] allowedValues){
@@ -37,7 +51,7 @@ public abstract class StartupObserver implements  Logging{
     public void describeInput(Input input,
                               String description,
                               String configKey,
-                              Function<Configuration, Optional<?>> configFn,
+                              Function<CJConfiguration, Optional<?>> configFn,
                               Supplier<?> defaultFn,
                               String defaultDescription,
                               Object[] allowedValues,
@@ -54,7 +68,7 @@ public abstract class StartupObserver implements  Logging{
     
     public void describeInput(Input input,
                               String configKey,
-                              Function<Configuration, Optional<?>> configFn,
+                              Function<CJConfiguration, Optional<?>> configFn,
                               Supplier<?> defaultFn){
         describeInput(input, "", configKey, configFn, defaultFn, "" , new Object[]{}, false);
     }

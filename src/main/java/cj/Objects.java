@@ -1,9 +1,11 @@
 package cj;
 
+import cj.shell.ShellTask;
 import cj.spi.Task;
 import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
@@ -32,10 +34,13 @@ public class Objects {
     BeanManager bm;
 
     @Inject
-    Configuration config;
+    CJConfiguration config;
 
     @Inject
     InputsMap inputsMap;
+
+    @Inject
+    Instance<ShellTask> shellInstance;
 
     public List<TaskConfiguration> allTaskConfigurations() {
         //TODO: Unified Java + Config task configurations
@@ -137,4 +142,27 @@ public class Objects {
     }
 
 
+    public List<? extends Task> createTasksByName(String taskName) {
+        return bm.getBeans(taskName)
+                .stream()
+                .map(this::fromBean)
+                .toList();
+    }
+    
+    private Task fromBean(Bean<?> bean) {
+        var ctx = bm.createCreationalContext(bean);
+        try {
+            var ref = bm.getReference(bean, bean.getBeanClass(), ctx);
+            if (ref instanceof Task aTask) {
+                return aTask;
+            } else {
+                log.error("Bean {} is not a Task", bean);
+                throw new IllegalArgumentException("Bean is not a task");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            log.error("Failed to create task from bean {}", bean, ex);
+            throw ex;
+        }
+    }
 }

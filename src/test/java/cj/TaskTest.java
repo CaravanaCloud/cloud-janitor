@@ -20,7 +20,7 @@ public class TaskTest {
     protected Tasks tasks;
 
     @Inject
-    protected Configuration config;
+    protected CJConfiguration config;
 
     @Inject
     protected AWSClientsManager aws;
@@ -41,7 +41,7 @@ public class TaskTest {
         return null; //aws.of(id, region);
     }
 
-    protected Configuration config(){
+    protected CJConfiguration config(){
         return config;
     }
 

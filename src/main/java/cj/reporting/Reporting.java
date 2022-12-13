@@ -1,6 +1,6 @@
 package cj.reporting;
 
-import cj.Configuration;
+import cj.CJConfiguration;
 import cj.Tasks;
 import org.slf4j.Logger;
 
@@ -17,7 +17,7 @@ public class Reporting {
     Logger log;
 
     @Inject
-    Configuration config;
+    CJConfiguration config;
 
 
     //TODO

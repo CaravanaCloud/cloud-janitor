@@ -16,7 +16,7 @@ public class AWSNukeStartup extends StartupObserver {
     @Override
     public void onStart() {
         log().trace("AWS Nuke Startup");
-        tasks().mapInstall("aws-nuke", Map.of(OS.linux, INSTALL_LINUX));
+        shell().mapInstall("aws-nuke", Map.of(OS.linux, INSTALL_LINUX));
         describeInput(forceFlag,
                 "aws-nuke force setting",
                 "not available",
@@ -28,7 +28,7 @@ public class AWSNukeStartup extends StartupObserver {
                 "aws-nuke dry-run setting",
                 "not available",
                 null,
-                () -> tasks().hasCapabilities(CLOUD_DELETE_RESOURCES) ? "" : "--dry-run",
+                () -> config().hasCapabilities(CLOUD_DELETE_RESOURCES) ? "" : "--dry-run",
                 "Dry run unless CLOUD_DELETE_RESOURCES capability is set",
                 null,
                 true);
@@ -47,7 +47,5 @@ public class AWSNukeStartup extends StartupObserver {
         //@TaskDescription("Runs aws-nuke for a single account")
         //forEachIdentity
     }
-    protected void enrichBypass(String taskName, Input... inputs) {
-        tasks().enrichBypass(taskName, inputs);
-    }
+
 }

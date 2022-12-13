@@ -19,7 +19,7 @@ public class OCPStartupObserver extends StartupObserver {
             "Name of the cluster to be created",
             "cj.ocp.clusterName",
             c -> c.ocp().clusterName(),
-            () -> tasks.generateResourceName(),
+            () -> config().composeName("cluster", config().getExecutionId()),
             "Generated resource name");
         describeInput(baseDomain,
             "Base domain to use",

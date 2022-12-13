@@ -37,6 +37,6 @@ public class AWSNukeAccountTask extends AWSTask {
         };
         checkpoint("Executing aws-nuke: {}",
                 String.join(" ", cmd));
-        tasks().shell(cmd);
+        shell().exec(cmd);
     }
 }

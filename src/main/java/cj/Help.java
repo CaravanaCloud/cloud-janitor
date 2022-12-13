@@ -21,10 +21,10 @@ public class Help {
         var msg = new StringBuilder();
         msg.append("\n=== Cloud Janitor Help ===");
 
-        var taskConfigs = tasks.findAll().stream();
-        var configTask = config.task();
-        if (configTask.isPresent()){
-            var configTaskName = configTask.get();
+        var taskConfigs = config.taskConfigs().stream();
+        var helpTask = config.helpTask();
+        if (helpTask.isPresent()){
+            var configTaskName = helpTask.get();
             taskConfigs = taskConfigs.filter(t -> t.name().contains(configTaskName));
         }else {
             msg.append("\nHere are all the tasks you can run:");

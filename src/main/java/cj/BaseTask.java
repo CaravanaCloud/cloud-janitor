@@ -40,13 +40,12 @@ public class BaseTask
 
     @Inject
     InputsMap inputsMap;
-
     @Inject
     Templates templates;
+    @Inject
+    Shell shell;
+
     LocalDateTime createTime = LocalDateTime.now();
-
-
-    /* Delegate Methods */
 
     /* TaskManagement Delegates */
     protected Task submit(Task delegate) {
@@ -67,6 +66,10 @@ public class BaseTask
     @Override
     public void setStartTime(LocalDateTime localDateTime) {
         startTime = localDateTime;
+    }
+
+    public Shell shell() {
+        return shell;
     }
 
     /******* REFACTORING RULER **********/
@@ -152,9 +155,14 @@ public class BaseTask
 
     }
 
-    public Configuration config() {
+    public CJConfiguration config() {
+        return configuration().raw();
+    }
+
+    public Configuration configuration() {
         return config;
     }
+
 
     @Override
     public Map<Input, Object> inputs() {
@@ -280,7 +288,7 @@ public class BaseTask
 
     protected RuntimeException fail(Exception ex) {
         log().error(ex.getMessage(), ex);
-        if (Configuration.PRINT_STACK_TRACE) {
+        if (CJConfiguration.PRINT_STACK_TRACE) {
             ex.printStackTrace();
         }
         getErrors().put(Type.Exception, ex);
@@ -314,7 +322,7 @@ public class BaseTask
     */
 
     protected boolean hasCapabilities(Capabilities... cs) {
-        return tasks().hasCapabilities(cs);
+        return configuration().hasCapabilities(cs);
     }
 
     protected <T> void forEach(List<T> list, Consumer<T> consumer) {
@@ -376,38 +384,12 @@ public class BaseTask
 
 
     protected String composeName(String... tokens) {
-        return compose(namingSeparator(), altSeparator(), tokens);
+        return config.composeName(tokens);
     }
     protected String composeNameAlt(String... tokens) {
-        return compose(altSeparator(), namingSeparator(),  tokens);
+        return config.composeNameAlt(tokens);
     }
 
-    private String namingSeparator() {
-        return config().namingSeparator().orElse("-");
-    }
-
-    private String altSeparator() {
-        return config().altSeparator().orElse("_");
-    }
-
-    private String compose(String separator, String altSeparator, String[] context) {
-        var name = composeNameSep(separator, context);
-        name = name.replaceAll(altSeparator, separator);
-        return name;
-    }
-
-
-    protected String composeNameSep(String separator, String... context) {
-        var prefix = config().namingPrefix().orElse("");
-        var result = prefix
-                + separator
-                + String.join(separator, context);
-        return result;
-    }
-
-    protected String join(String separator, String... context) {
-        return String.join(separator, context);
-    }
 
     protected <T> T success(T result) {
         success(TaskOutput.main, result);

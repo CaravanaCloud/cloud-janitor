@@ -21,7 +21,7 @@ public class Templates implements Logging {
     Engine engine;
 
     @Inject
-    Configuration config;
+    CJConfiguration config;
 
     @Inject
     InputsMap inputsMap;

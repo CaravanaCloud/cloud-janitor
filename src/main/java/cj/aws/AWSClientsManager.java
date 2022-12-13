@@ -1,6 +1,7 @@
 package cj.aws;
 
-import cj.Configuration;
+import cj.CJConfiguration;
+import cj.Shell;
 import cj.Tasks;
 import cj.aws.sts.AWSLoadIdentitiesTask;
 import org.slf4j.Logger;
@@ -28,10 +29,13 @@ public class AWSClientsManager {
     Instance<AWSClients> clientsInstance;
 
     @Inject
-    Configuration config;
+    CJConfiguration config;
 
     @Inject
     Instance<AWSLoadIdentitiesTask> loadIds;
+
+    @Inject
+    Shell shell;
     Map<AWSClientIdentity, AWSClients> clientsById = new HashMap<>();
 
     List<AWSIdentity> awsIdentities = null;
@@ -55,7 +59,7 @@ public class AWSClientsManager {
     }
 
     private Region awsCLIRegion() {
-        var exec = tasks.exec("aws", "configure", "get", "region");
+        var exec = shell.exec("aws", "configure", "get", "region");
         var regionName = exec.stdout().trim();
         @SuppressWarnings("UnnecessaryLocalVariable")
         var region = ofNullable(regionName).map(Region::of).orElse(null);

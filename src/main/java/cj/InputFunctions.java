@@ -11,7 +11,7 @@ public record InputFunctions(
         Input input,
         String description,
         String configKey,
-        Function<Configuration, Optional<?>> configFn,
+        Function<CJConfiguration, Optional<?>> configFn,
         Supplier<?> defaultFn,
         String defaultDescription,
         List<String> allowedValues,
@@ -27,7 +27,7 @@ public record InputFunctions(
 
 
 
-    public Optional<?> applyConfigFn(Configuration configuration) {
+    public Optional<?> applyConfigFn(CJConfiguration configuration) {
         if (configFn != null)
             return configFn.apply(configuration);
         return Optional.empty();
@@ -42,7 +42,7 @@ public record InputFunctions(
     public static InputFunctions of(Input key,
                                     String description,
                                     String configKey,
-                                    Function<Configuration, Optional<?>> configFn,
+                                    Function<CJConfiguration, Optional<?>> configFn,
                                     Supplier<?> defaultFn,
                                     String defaultDescription,
                                     Object[] allowedValues, boolean enrichBypass) {

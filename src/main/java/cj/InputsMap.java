@@ -20,7 +20,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Startup
 public class InputsMap {
     @Inject
-    Configuration configuration;
+    CJConfiguration configuration;
 
     @Inject
     Logger log;
@@ -38,7 +38,7 @@ public class InputsMap {
     public void putConfig(Input input,
                                String description,
                                String configKey,
-                               Function<Configuration, Optional<?>> configFn,
+                               Function<CJConfiguration, Optional<?>> configFn,
                                Supplier<?> defaultFn,
                                String defaultDescription,
                                Object[] allowedValues,

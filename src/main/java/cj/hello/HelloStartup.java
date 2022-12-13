@@ -1,8 +1,5 @@
 package cj.hello;
 
-import cj.Configuration;
-import cj.Input;
-import cj.LocalInput;
 import cj.StartupObserver;
 
 import static cj.LocalInput.message;

@@ -62,7 +62,7 @@ public class OpenshiftCreateClusterTask extends BaseTask {
             kubeconfig.toString(),
             defaultKubeconfig.toString()
         };
-        tasks().exec(cmd);
+        shell().exec(cmd);
     }
 
     private void export(String varName, Path varValue) {
@@ -71,9 +71,9 @@ public class OpenshiftCreateClusterTask extends BaseTask {
 
     protected void checkCommands(ClusterProfile profile) {
         if (profile.ccoctl) {
-            tasks().checkCmd("ccoctl", Map.of(OS.linux, OCPCommands.INSTALL_CCOCTL));
+            shell().checkCmd("ccoctl", Map.of(OS.linux, OCPCommands.INSTALL_CCOCTL));
         }
-        tasks().checkCmd("openshift-install", Map.of(OS.linux,
+        shell().checkCmd("openshift-install", Map.of(OS.linux,
                 OCPCommands.INSTALL_OPENSHIFT_INSTALL));
     }
 
@@ -91,7 +91,7 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         };
         debug("Running command: {}", String.join(" ", cmdArgs));
         checkpoint("Creating openshift cluster using openshift-install");
-        var exec = tasks().exec(90L, cmdArgs);
+        var exec = shell().exec(90L, cmdArgs);
         if (exec.isSuccess()) {
             log().debug("openshift-install output size: {}", exec.stdout().length());
         } else {
@@ -128,7 +128,7 @@ public class OpenshiftCreateClusterTask extends BaseTask {
     private void createAllCcoctlResources(String clusterName,
             Path credsDir,
             Path outputDir) {
-        var ccoctlExec = tasks().exec("ccoctl",
+        var ccoctlExec = shell().exec("ccoctl",
                 "aws",
                 "create-all",
                 "--name=" + clusterName,

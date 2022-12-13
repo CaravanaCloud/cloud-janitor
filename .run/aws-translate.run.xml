@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="aws-translate" type="Application" factoryName="Application">
+  <configuration default="false" name="aws-translate" type="Application" factoryName="Application" folderName="aws">
     <option name="MAIN_CLASS_NAME" value="cj.Main" />
     <module name="cloud-janitor" />
     <option name="PROGRAM_PARAMETERS" value="hello" />
