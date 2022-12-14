@@ -24,26 +24,25 @@ public abstract class AWSTask
         extends BaseTask {
     static final Random rand = new Random();
     @Inject
-    AWSClientsManager aws;
+    AWSClientsManager awsManager;
     protected AWSClients aws() {
-        return aws.of(identity(), region());
+        return awsManager.of(identity(), region());
     }
 
     protected AWSClients aws(Region region) {
-        return aws.of(identity(), region);
+        return awsManager.of(identity(), region);
     }
 
     protected AWSIdentity identity() {
         var idIn = inputAs(identity, AWSIdentity.class);
-        var id = (AWSIdentity) null;
-        if (idIn.isEmpty()){
-            id = aws.defaultIdentity();
-            if (id != null)
-                setIdentity(id);
-        } else id = idIn.get();
-        if(id == null)
-            throw fail("AWS Identity not found");
-        return id;
+        if (idIn.isPresent())
+            return idIn.get();
+        var id = awsManager.defaultIdentity();
+        if (id != null){
+            setIdentity(id);
+            return id;
+        }
+        throw fail("AWS Identity not found for task {}", this);
     }
 
     protected void setIdentity(AWSIdentity id) {
@@ -58,7 +57,7 @@ public abstract class AWSTask
 
     protected Region region() {
         var regionIn = inputAs(AWSInput.targetRegion, Region.class);
-        return regionIn.orElse(aws.defaultRegion());
+        return regionIn.orElse(awsManager.defaultRegion());
     }
 
     protected Filter filter(String filterName, String filterValue) {
@@ -71,9 +70,9 @@ public abstract class AWSTask
     }
 
     private List<String> getContext() {
-        var id = identity();
-        if (id != null) {
-            String acctAlias = "" + id.accountAlias();
+        var info = identityInfo();
+        if (info != null) {
+            String acctAlias = "" + info.accountAlias();
             String region = "" + getRegionName();
             return List.of("aws",
                     acctAlias,
@@ -81,9 +80,15 @@ public abstract class AWSTask
         } else return List.of("aws");
     }
 
+    protected AWSIdentityInfo identityInfo() {
+        var id = identity();
+        var info = awsManager.getInfo(id);
+        return info;
+    }
+
     private String getRegionName() {
         var region = region();
-        return region != null ? region.toString() : "-null-region-";
+        return region.toString();
     }
 
     protected Duration getPollInterval() {
@@ -145,8 +150,8 @@ public abstract class AWSTask
     }
 
     protected String accountId(){
-        var identity = identity();
-        return identity != null ? identity.accountId() : "";
+        var info = identityInfo();
+        return info != null ? info.accountId() : "";
     }
 
 
@@ -162,5 +167,27 @@ public abstract class AWSTask
         checkNotNull(taskInstance);
         checkArgument(taskInstance.isResolvable(), "Task instance is not resolvable");
         submitInstance(iteratorInstance, CJInput.identityTask, taskInstance);
+    }
+
+    @Override
+    public void apply() {
+        var id = identity();
+        var awsClients = aws();
+        var defaultId = awsManager.defaultIdentity();
+        var defaultCreds = defaultId.toCredentialsProvider(null);
+        awsClients.setCredentialsProvider(defaultCreds);
+        try (var sts = awsClients.sts()){
+            var taskCreds = id.toCredentialsProvider(sts);
+            awsClients.setCredentialsProvider(taskCreds);
+            checkArgument(id.equals(identity()));
+            applyIdentity(id);
+        }catch(Exception ex){
+            throw fail("Failed to invoke aws task with STS client");
+        }
+
+    }
+
+    protected void applyIdentity(AWSIdentity id){
+        log().warn("applyIdentity not implemented for {}", this);
     }
 }

@@ -1,46 +1,37 @@
 package cj.aws.sts;
 
 import cj.BaseTask;
-import cj.Utils;
 import cj.aws.AWSClientsManager;
 import cj.aws.AWSIdentity;
-import software.amazon.awssdk.services.sts.model.AssumeRoleRequest;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static cj.aws.AWSOutput.CallerIdentity;
 import static cj.aws.AWSOutput.Identities;
 
 @Dependent
 public class AWSLoadIdentitiesTask extends BaseTask {
-    @Inject
-    GetDefaultAWSIdentity getDefaultIdentity;
 
     @Inject
     AWSClientsManager awsManager;
 
     @Override
     public void apply() {
-        var identityIn = submit(getDefaultIdentity)
-                .outputAs(CallerIdentity, SimpleIdentity.class);
-        if (identityIn.isEmpty()){
-            warn("Failed to load default AWS identity.");
-        }
-        else {
-            var identity = identityIn.get();
-            trace("Loading further AWS identities using default identity");
+            trace("Loading AWS identities.");
+            var defaultIdentity = DefaultIdentity.of();
+            awsManager.defaultIdentity(defaultIdentity);
             var ids = Stream.concat(
-               Stream.of(identity),
-               loadRoles(identity).stream()).toList();
-            trace("{} aws identities loaded: {}", ids.size(), ids);
+               Stream.of(defaultIdentity),
+               loadRoles(defaultIdentity).stream())
+                    .toList();
+            trace("{} AWS identities loaded: {}", ids.size(), ids);
             success(Identities, ids);
-        }
+
     }
 
-    private List<? extends cj.aws.AWSIdentity> loadRoles(SimpleIdentity identity) {
+    private List<? extends cj.aws.AWSIdentity> loadRoles(DefaultIdentity identity) {
         var rolesCfg = configuration().raw().aws().roles();
         if (rolesCfg.isEmpty()) return List.of();
         var roles = rolesCfg.get()
@@ -49,7 +40,7 @@ public class AWSLoadIdentitiesTask extends BaseTask {
                 .toList();
         var canAssume = roles
                 .stream()
-                .filter(role -> canAssumeRole(identity, role))
+                //TODO: Check if role can be assumed.filter(role -> canAssumeRole(identity, role))
                 .toList();
         return roles;
     }
@@ -63,7 +54,7 @@ public class AWSLoadIdentitiesTask extends BaseTask {
         var aws = awsManager.of(identity, region);
         try(var sts = aws.sts()){
             //TODO: Assume role on usage to avoid disconnected pool exception
-            role.assumeRole(sts);
+            //role.assumeRole(sts);
             return true;
         }catch (Exception e){
             warn("Failed to assume role: {}", role.roleArn());

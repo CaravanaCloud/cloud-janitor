@@ -29,16 +29,23 @@ public class AWSClients {
     @Inject
     AWSConfiguration cfg;
 
-    AWSClientIdentity cid;
+    @Inject
+    AWSClientsManager clientsManager;
 
+    AwsCredentialsProvider credentialsProvider;
+
+    Region region;
 
     public StsClient sts() {
         @SuppressWarnings("redundant")
         var sts = StsClient.builder()
                 .region(region())
+                .credentialsProvider(getCredentialsProvider())
                 .build();
         return sts;
     }
+
+
 
     public IamClient iam() {
         @SuppressWarnings("redundant")
@@ -156,30 +163,23 @@ public class AWSClients {
     }
 
     public AwsCredentialsProvider getCredentialsProvider() {
-        try(var sts = sts()){
-            return identity().toCredentialsProvider(sts);
-        }catch (Exception e){
-            log.error("Failed to get credentials provider", e);
-            throw e;
-        }
+        return credentialsProvider;
     }
 
-    public AWSIdentity identity() {
-        return cid.identity();
-    }
-
-    public Region region() {
-        return cid.region();
-    }
-
-    public void setClientIdentity(AWSClientIdentity cid) {
-        this.cid = cid;
-    }
 
     public CloudTrailClient cloudtrail() {
         return CloudTrailClient.builder()
-                .region(region())
+                .region(region)
                 .credentialsProvider(getCredentialsProvider())
                 .build();
     }
+
+    public Region region() {
+        return region;
+    }
+
+    public void setCredentialsProvider(AwsCredentialsProvider creds) {
+        this.credentialsProvider = creds;
+    }
+
 }

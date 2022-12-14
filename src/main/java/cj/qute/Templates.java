@@ -1,6 +1,7 @@
 package cj.qute;
 
 import cj.*;
+import cj.aws.AWSClientsManager;
 import cj.aws.AWSIdentity;
 import cj.fs.FSUtils;
 import cj.spi.Task;
@@ -32,6 +33,8 @@ public class Templates implements Logging {
     @Inject
     Shell shell;
 
+    @Inject
+    AWSClientsManager awsManager;
 
     public Template getTemplate(String location) {
         if (engine == null) {
@@ -105,7 +108,9 @@ public class Templates implements Logging {
 
     private void putString(HashMap<String, String> result, Input i, Object val) {
         if (val instanceof AWSIdentity id) {
-            result.put("accountId", id.accountId());
+            var info = awsManager.getInfo(id);
+            var accountId = info.accountId();
+            result.put("accountId", accountId);
         } else {
             result.put(i.toString(), val.toString());
         }

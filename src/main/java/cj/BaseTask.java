@@ -280,8 +280,8 @@ public class BaseTask
 
 
     protected RuntimeException fail(String message, Object... args) {
-        var msg = fmt(message).formatted(args);
-        error(msg);
+        var msg = fmt(message);
+        error(msg, args);
         getErrors().put(Message, msg);
         return new TaskFailedException(msg);
     }

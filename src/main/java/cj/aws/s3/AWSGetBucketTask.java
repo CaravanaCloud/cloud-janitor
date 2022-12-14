@@ -4,9 +4,7 @@ import cj.TaskDescription;
 import cj.TaskMaturity;
 import cj.aws.AWSInput;
 import cj.aws.AWSWrite;
-import cj.aws.sts.GetCallerIdentityTask;
-import cj.aws.sts.SimpleIdentity;
-import cj.spi.Task;
+
 import software.amazon.awssdk.services.s3.model.Bucket;
 
 import javax.enterprise.context.Dependent;
@@ -16,7 +14,6 @@ import java.util.Optional;
 
 import static cj.aws.AWSInput.bucketPolicy;
 import static cj.aws.AWSInput.targetBucketName;
-import static cj.aws.AWSOutput.CallerIdentity;
 import static cj.aws.AWSOutput.S3Bucket;
 
 @Dependent
@@ -24,8 +21,6 @@ import static cj.aws.AWSOutput.S3Bucket;
 @TaskMaturity(TaskMaturity.Level.experimental)
 @TaskDescription("Get an S3 bucket")
 public class AWSGetBucketTask extends AWSWrite {
-    @Inject
-    GetCallerIdentityTask getCallerId;
 
     @Inject
     GetBucketTask getBucket;
@@ -33,10 +28,6 @@ public class AWSGetBucketTask extends AWSWrite {
     @Inject
     CreateBucketTask createBucket;
 
-    @Override
-    public Task getDependency() {
-        return getCallerId;
-    }
 
     @Override
     public void apply() {
@@ -75,15 +66,12 @@ public class AWSGetBucketTask extends AWSWrite {
     }
 
     private String getDefaultBucketName() {
-        var callerId = getCallerId.outputAs(CallerIdentity, SimpleIdentity.class);
-        if (callerId.isEmpty()){
-            throw fail("Could not find data bucket without caller id");
-        } else {
-            var accountId = callerId.get().accountId();
+        var info = identityInfo();
+
+            var accountId = identityInfo().accountId();
             var region = region();
             var bucketName = composeName("data", accountId, region.toString());
             return bucketName;
-        }
     }
 
 }

@@ -4,6 +4,7 @@ import cj.CJConfiguration;
 import cj.Shell;
 import cj.Tasks;
 import cj.aws.sts.AWSLoadIdentitiesTask;
+import cj.aws.sts.DefaultIdentity;
 import org.slf4j.Logger;
 import software.amazon.awssdk.regions.Region;
 
@@ -13,6 +14,7 @@ import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
 
@@ -39,6 +41,8 @@ public class AWSClientsManager {
     Map<AWSClientIdentity, AWSClients> clientsById = new HashMap<>();
 
     List<AWSIdentity> awsIdentities = null;
+    private AWSIdentity defaultIdentity;
+    private final Map<AWSIdentity, AWSIdentityInfo> infoMap = new HashMap<>();
 
 
     public AWSClients of(AWSIdentity identity, Region region) {
@@ -50,7 +54,6 @@ public class AWSClientsManager {
         if (clients == null ){
             log.trace("Creating new AWSClients for {} - {}", identity, region);
             clients = clientsInstance.get();
-            clients.setClientIdentity(key);
             clientsById.put(key, clients);
         }else {
             log.trace("Using cached AWSClients for {} - {}", identity, region);
@@ -62,7 +65,9 @@ public class AWSClientsManager {
         var exec = shell.exec("aws", "configure", "get", "region");
         var regionName = exec.stdout().trim();
         @SuppressWarnings("UnnecessaryLocalVariable")
-        var region = ofNullable(regionName).map(Region::of).orElse(null);
+        var region = Optional.of(regionName)
+                .map(Region::of)
+                .orElse(null);
         return region;
     }
 
@@ -85,7 +90,9 @@ public class AWSClientsManager {
         return Region.US_EAST_1;
     }
 
-    public AWSIdentity defaultIdentity() {
+    public synchronized AWSIdentity defaultIdentity() {
+        if (defaultIdentity != null)
+            return defaultIdentity;
         var ids = identities();
         if (ids.isEmpty()) return null;
         var id = ids.get(0);
@@ -110,4 +117,20 @@ public class AWSClientsManager {
     public List<Region> regions() {
         return config.aws().regionsList().stream().map(Region::of).toList();
     }
+
+    public void defaultIdentity(DefaultIdentity identity) {
+        this.defaultIdentity = identity;
+    }
+
+    public AWSIdentityInfo putInfo(AWSIdentity id, String accountId, String accountAlias, String userARN) {
+        return putInfo(id, AWSIdentityInfo.of(accountId, accountAlias, userARN));
+    }
+    public AWSIdentityInfo putInfo(AWSIdentity id, AWSIdentityInfo info) {
+        return infoMap.put(id, info);
+    }
+    public AWSIdentityInfo getInfo(AWSIdentity id) {
+        return infoMap.get(id);
+    }
+
+
 }

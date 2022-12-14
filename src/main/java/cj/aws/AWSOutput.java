@@ -3,7 +3,6 @@ package cj.aws;
 import cj.Output;
 
 public enum AWSOutput implements Output {
-    CallerIdentity,
     VPCMatch,
     SubnetMatch,
     ELBV2Match,

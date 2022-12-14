@@ -9,13 +9,11 @@ import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.services.sts.StsClient;
 import software.amazon.awssdk.services.sts.auth.StsAssumeRoleCredentialsProvider;
 import software.amazon.awssdk.services.sts.model.AssumeRoleRequest;
-import software.amazon.awssdk.services.sts.model.AssumeRoleResponse;
 
 public class RoleIdentity
         implements AWSIdentity {
     static final Logger log = LoggerFactory.getLogger(RoleIdentity.class);
     private final AWSRoleConfig roleCfg;
-
 
     public RoleIdentity(AWSRoleConfig roleCfg){
         this.roleCfg = roleCfg;
@@ -27,16 +25,6 @@ public class RoleIdentity
                 .stsClient(sts)
                 .refreshRequest(assumeRoleRequest())
                 .build();
-    }
-
-    @Override
-    public String accountId() {
-        return "ROLE ACCOUNT ID";
-    }
-
-    @Override
-    public String accountAlias() {
-        return "ROLE ACCOUNT ALIAS";
     }
 
     private AssumeRoleRequest assumeRoleRequest() {
@@ -62,8 +50,10 @@ public class RoleIdentity
         return roleCfg.alias().orElse(roleCfg.arn());
     }
 
-    public void assumeRole(StsClient sts) {
-        sts.assumeRole(assumeRoleRequest());
-        log.debug("Assumed role: {}", roleCfg.arn());
+    @Override
+    public String toString() {
+        return "RoleIdentity{" +
+                "arn=" + roleCfg.arn() +
+                '}';
     }
 }

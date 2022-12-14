@@ -28,10 +28,12 @@ public class RepeatPerIdentityTask extends BaseTask {
     @Override
     public void apply() {
         var query = inputList(CJInput.query, String.class);
+        log().debug("Repeating {} per identity at {}", query, System.currentTimeMillis());
         var ids = aws.identities();
         var regions = submit(filterRegions)
                 .outputList(AWSOutput.RegionMatches, Region.class);
         for (var id: ids){
+            debug("Submitting query [{}] as [{}]", query, id);
             submitQuery(query, regions, id);
         }
     }

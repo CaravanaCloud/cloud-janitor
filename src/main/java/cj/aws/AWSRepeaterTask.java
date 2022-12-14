@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Dependent
+@Deprecated
 public class AWSRepeaterTask extends AWSTask {
     @Inject
     AWSClientsManager aws;
@@ -39,10 +40,11 @@ public class AWSRepeaterTask extends AWSTask {
         var obj = idAction.get().get();
         if (obj instanceof Task task){
             debug("Submitting task {} for {} in {}", task, id, regions);
+            var accountId = awsManager.getInfo(id).accountId();
             submit(task
                     .withInput(AWSInput.regions, regions)
                     .withInput(AWSInput.identity, id)
-                    .withInput(AWSInput.accountId, id.accountId()));
+                    .withInput(AWSInput.accountId, accountId));
         } else throw fail("Unsupported instance type: {}", obj.getClass());
     }
 

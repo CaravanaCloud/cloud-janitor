@@ -37,24 +37,19 @@ public class Configuration {
 
 
     public List<? extends Task> lookupTasks(String... args) {
-        var tasks = Stream.concat(
-                tasksFromArgs(args).stream(),
-                tasksFromConfig().stream()
-        ).toList();
-        return tasks;
+        if (args == null || args.length == 0)
+            return List.of();
+        var taskName = args[0];
+        var tasks = objects.createTasksByName(taskName);
+        if (!tasks.isEmpty())
+            return tasks;
+        if (config.bypass())
+            return bypass(args);
+        return List.of();
     }
 
-    private List<? extends Task> tasksFromConfig() {
-        var tasks = config.task()
-                .map(this::createTasks)
-                .orElse(List.of());
-        return tasks;
-    }
 
-    private List<? extends Task> tasksFromArgs(String[] args) {
-        var tasks = createTasks(args);
-        return tasks;
-    }
+
 
     public List<TaskConfiguration> taskConfigs() {
         return objects.allTaskConfigurations();
@@ -72,18 +67,6 @@ public class Configuration {
         return taskCfg;
     }
 
-    private List<? extends Task> createTasks(String... args) {
-        if (args == null || args.length == 0)
-            return List.of();
-        var taskName = args[0];
-        var tasks = objects.createTasksByName(taskName);
-        if (!tasks.isEmpty())
-            return tasks;
-        if (config.bypass())
-            return bypass(args);
-        return List.of();
-    }
-
     private List<? extends Task> bypass(String... args) {
         var enriched = enrich(args);
         if (enriched.isEmpty()) {
@@ -91,7 +74,7 @@ public class Configuration {
             return List.of();
         }
         log.debug("Bypassing `{}` as `{}`", join(args), join(enriched));
-        var enrichedArr = enriched.toArray(new String[enriched.size()]);
+        var enrichedArr = enriched.toArray(new String[0]);
         var result = List.of(shell.shellTask(enrichedArr));
         return result;
     }
@@ -125,14 +108,13 @@ public class Configuration {
 
     @Override
     public String toString() {
-        var buf = new StringBuilder();
-        buf.append("Configuration{");
-        buf.append("bypassMap=").append(bypassMap);
-        buf.append(", capabilities=").append(capabilities);
-        buf.append(", executionId='").append(executionId).append('\'');
-        buf.append(", paralel=").append(config.parallel());
-        buf.append('}');
-        return buf.toString();
+        String buf = "Configuration{" +
+                "bypassMap=" + bypassMap +
+                ", capabilities=" + capabilities +
+                ", executionId='" + executionId + '\'' +
+                ", paralel=" + config.parallel() +
+                '}';
+        return buf;
     }
 
     public Set<Capabilities> getCapabilities() {

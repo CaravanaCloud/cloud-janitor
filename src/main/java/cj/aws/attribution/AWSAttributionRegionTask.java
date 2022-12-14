@@ -74,7 +74,7 @@ public class AWSAttributionRegionTask extends AWSTask {
     ]
 }
                 """;
-        var accountId = identity().accountId();
+        var accountId = identityInfo().accountId();
         var bucketName = composeName("attribution", accountId, region.toString());
         var keyPrefix = "attribution";
         var policy = policyTemplate
