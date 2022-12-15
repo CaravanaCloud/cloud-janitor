@@ -1,4 +1,4 @@
-package cj.repeat;
+package cj;
 
 import cj.BaseTask;
 import cj.CJInput;

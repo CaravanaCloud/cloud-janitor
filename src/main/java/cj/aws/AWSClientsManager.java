@@ -1,10 +1,9 @@
 package cj.aws;
 
-import cj.CJConfiguration;
-import cj.Shell;
-import cj.Tasks;
+import cj.*;
 import cj.aws.sts.AWSLoadIdentitiesTask;
 import cj.aws.sts.DefaultIdentity;
+import cj.aws.sts.GetCallerIdentityTask;
 import org.slf4j.Logger;
 import software.amazon.awssdk.regions.Region;
 
@@ -129,8 +128,16 @@ public class AWSClientsManager {
         return infoMap.put(id, info);
     }
     public AWSIdentityInfo getInfo(AWSIdentity id) {
-        return infoMap.get(id);
+        var info = infoMap.get(id);
+        if (info == null){
+            log.warn("Failed to load user info for {}", id);
+        }
+        return info;
     }
+
+
+
+
 
 
 }

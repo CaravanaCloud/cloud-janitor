@@ -1,4 +1,4 @@
-package cj.repeat;
+package cj.aws.repeat;
 
 import cj.BaseTask;
 import cj.CJInput;

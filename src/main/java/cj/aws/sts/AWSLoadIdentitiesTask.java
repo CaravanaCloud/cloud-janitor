@@ -1,10 +1,14 @@
 package cj.aws.sts;
 
 import cj.BaseTask;
+import cj.TaskOutput;
 import cj.aws.AWSClientsManager;
 import cj.aws.AWSIdentity;
+import cj.aws.AWSIdentityInfo;
+import cj.aws.AWSInput;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Stream;
@@ -26,10 +30,24 @@ public class AWSLoadIdentitiesTask extends BaseTask {
                Stream.of(defaultIdentity),
                loadRoles(defaultIdentity).stream())
                     .toList();
+            ids.forEach(this::getCallerIdentity);
             trace("{} AWS identities loaded: {}", ids.size(), ids);
             success(Identities, ids);
-
     }
+
+    @Inject
+    Instance<GetCallerIdentityTask> getCallerIdentity;
+    private Object getCallerIdentity(AWSIdentity id) {
+        var task = getCallerIdentity
+                .get()
+                .withInput(AWSInput.identity, id);
+        var info = submit(task)
+                .outputAs(TaskOutput.main, AWSIdentityInfo.class)
+                .orElse(null);
+        awsManager.putInfo(id, info);
+        return info;
+    }
+
 
     private List<? extends cj.aws.AWSIdentity> loadRoles(DefaultIdentity identity) {
         var rolesCfg = configuration().raw().aws().roles();

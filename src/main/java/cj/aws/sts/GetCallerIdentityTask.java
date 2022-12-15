@@ -25,12 +25,14 @@ import static cj.TaskMaturity.Level.experimental;
 public class GetCallerIdentityTask extends AWSFilter {
     @Inject
     AWSClientsManager awsManager;
+
+
     @Override
     public void applyIdentity(AWSIdentity identity) {
-        trace("Looking up caller identity for {}", identity);
+        log().trace("Looking up caller identity for {}", identity);
         try (var sts = aws().sts()){
             var info = getCallerIdentity(sts, identity);
-            debug("Found caller identity {}", info);
+            log().debug("Found caller identity {}", info);
             success(info);
         }catch (Exception ex){
             ex.printStackTrace();

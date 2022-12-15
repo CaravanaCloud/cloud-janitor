@@ -1,5 +1,10 @@
 package cj.aws.attribution;
 
+import cj.TaskDescription;
+import cj.TaskMaturity;
+import cj.TaskRepeat;
+import cj.TaskRepeater;
+import cj.aws.AWSIdentity;
 import cj.aws.AWSOutput;
 import cj.aws.AWSTask;
 import cj.aws.s3.AWSGetBucketTask;
@@ -15,17 +20,24 @@ import software.amazon.awssdk.services.s3.model.Bucket;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.inject.Named;
 
+import static cj.TaskMaturity.Level.*;
+import static cj.TaskRepeat.*;
 import static cj.aws.AWSInput.bucketPolicy;
 import static cj.aws.AWSInput.targetBucketName;
 
 @Dependent
+@Named("aws-attribution-provision")
+@TaskDescription("Provisions attribution resources (bucket, trail and table)")
+@TaskMaturity(experimental)
+@TaskRepeater(each_identity_region)
 public class AWSAttributionRegionTask extends AWSTask {
     @Inject
     AWSGetBucketTask getBucketTask;
 
     @Override
-    public void apply() {
+    public void applyIdentity(AWSIdentity id){
         var trailName = composeName(accountId(), regionName());
         try (var cloudtrail = aws().cloudtrail()){
             getTrailForRegion(cloudtrail, region(), trailName);

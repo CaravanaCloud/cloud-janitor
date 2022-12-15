@@ -70,8 +70,6 @@ public class Tasks {
     }
 
     private void repeat(String... args) {
-        //MOVE TO ITERATOR var tasks = config.lookupTasks(args);
-        //runAll(tasks);
         var query = queryFrom(args);
         var repeater = repeat.forQuery(query);
         submitTask(repeater);

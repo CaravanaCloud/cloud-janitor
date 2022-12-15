@@ -41,7 +41,6 @@ public class CreateBucketTask extends AWSWrite {
                 s3.putBucketPolicy(policyReq);
                 debug("Bucket policy set [{}]", policy.length());
             }
-
         }
     }
 

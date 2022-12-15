@@ -1,9 +1,7 @@
 package cj;
 
-import cj.repeat.RepeatNeverTask;
-import cj.repeat.RepeatOnceTask;
-import cj.repeat.RepeatPerIdentityTask;
-import cj.repeat.RepeatPerRegionTask;
+import cj.aws.repeat.RepeatPerIdentityTask;
+import cj.aws.repeat.RepeatPerRegionTask;
 import cj.spi.Task;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -44,16 +42,17 @@ public class Repeat {
 
 
     private Task taskForRepeater(TaskRepeat repeat) {
-        var instance =  switch (repeat) {
+        var task =  instanceFor(repeat).get();
+        return task;
+    }
+
+    private Instance<? extends Task> instanceFor(TaskRepeat repeat) {
+        return switch (repeat) {
             case never -> neverInstance;
             case once -> onceInstance;
             case each_identity -> perIdentityInstance;
             case each_identity_region -> perRegionInstance;
         };
-        var object = instance.get();
-        if (object instanceof Task task)
-            return task;
-        else throw new IllegalArgumentException("Unsupported instance type: " + object.getClass());
     }
 
 }

@@ -89,7 +89,7 @@ public class Configuration {
         if (bypass.isEmpty()) return List.of(args);
         var bypassList = bypass.get()
                 .stream()
-                .flatMap(expr -> bypassValues(expr, args))
+                .flatMap(expr -> bypassValues(expr, taskArgs))
                 .toList();
         var result = bypassList;
         return result;
