@@ -43,7 +43,7 @@ public class ShellTask extends BaseTask {
             }
             var timeoutIn = inputAs(timeout, Long.class)
                     .orElse(config().execTimeout());
-            checkpoint(cmdLine);
+            checkpoint("$ %s".formatted(cmdLine));
             var process = runtime.exec(cmdArr);
             var output = new StringBuffer();
             var error = new StringBuffer();
@@ -54,7 +54,7 @@ public class ShellTask extends BaseTask {
                     s -> this.printAndAppend(error, s));
             var futureOut = executor.submit(outGobbler);
             var futureErr = executor.submit(errGobbler);
-            debug("Waiting up to [{}] minutes for shell command to complete.", timeoutIn);
+            trace("Waiting up to [{}] minutes for shell command to complete.", timeoutIn);
             futureOut.get(timeoutIn, TimeUnit.MINUTES);
             futureErr.get(timeoutIn, TimeUnit.MINUTES);
 

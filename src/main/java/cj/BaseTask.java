@@ -46,6 +46,13 @@ public class BaseTask
     @Inject
     Shell shell;
 
+    @Inject
+    org.slf4j.Logger log;
+
+    @Override
+    public org.slf4j.Logger log(){return log;}
+
+
     LocalDateTime createTime = LocalDateTime.now();
 
     /* TaskManagement Delegates */

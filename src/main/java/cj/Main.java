@@ -12,7 +12,13 @@ public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
+        initializeSystemProperties();
         execute(parse(args));
+    }
+
+    private static void initializeSystemProperties() {
+        //TODO: Suppress quarkus printStartupTime
+        System.setProperty("java.util.logging.manager","org.jboss.logmanager.LogManager");
     }
 
     private static String[] parse(String... args) {

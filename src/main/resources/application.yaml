@@ -8,9 +8,20 @@ cj:
         - "-s"
         - "{args}"
 
-    - name: "aws-nuke-"
+    - name: "aws-nuke-bypass"
       bypass:
+        - "aws-nuke-bypass"
         - "--force"
         - "{dryRunFlag}"
         - "--config"
         - "{configFilePath}"
+
+    - name: "aws-ping"
+      maturity: "experimental"
+      description: "Ping AWS to check authentication"
+      repeat: "each_identity_region"
+#      repeat: "once"
+      bypass:
+        - "aws"
+        - "sts"
+        - "get-caller-identity"
