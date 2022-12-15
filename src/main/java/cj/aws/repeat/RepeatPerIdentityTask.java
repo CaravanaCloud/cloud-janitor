@@ -33,7 +33,7 @@ public class RepeatPerIdentityTask extends BaseTask {
         var regions = submit(filterRegions)
                 .outputList(AWSOutput.RegionMatches, Region.class);
         for (var id: ids){
-            debug("Submitting query [{}] as [{}]", query, id);
+            debug("Submitting query {} as [{}]", query, id);
             submitQuery(query, regions, id);
         }
     }

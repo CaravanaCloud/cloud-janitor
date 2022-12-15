@@ -3,7 +3,6 @@ package cj.aws;
 import cj.*;
 import cj.aws.sts.AWSLoadIdentitiesTask;
 import cj.aws.sts.DefaultIdentity;
-import cj.aws.sts.GetCallerIdentityTask;
 import org.slf4j.Logger;
 import software.amazon.awssdk.regions.Region;
 
@@ -14,8 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import static java.util.Optional.ofNullable;
 
 @ApplicationScoped
 public class AWSClientsManager {
@@ -122,7 +119,7 @@ public class AWSClientsManager {
     }
 
     public AWSIdentityInfo putInfo(AWSIdentity id, String accountId, String accountAlias, String userARN) {
-        return putInfo(id, AWSIdentityInfo.of(accountId, accountAlias, userARN));
+        return putInfo(id, AWSIdentityInfo.of(userARN, accountId, accountAlias));
     }
     public AWSIdentityInfo putInfo(AWSIdentity id, AWSIdentityInfo info) {
         return infoMap.put(id, info);

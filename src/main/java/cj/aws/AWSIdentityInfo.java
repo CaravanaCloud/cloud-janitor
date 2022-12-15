@@ -1,9 +1,10 @@
 package cj.aws;
 
-public record AWSIdentityInfo(String accountId,
-                              String accountAlias,
-                              String userARN) {
-    public static AWSIdentityInfo of(String accountId, String accountAlias, String userARN) {
-        return new AWSIdentityInfo(accountId, accountAlias, userARN);
+public record AWSIdentityInfo(String userARN,
+                              String accountId,
+                              String accountAlias
+) {
+    public static AWSIdentityInfo of(String userARN, String accountId, String accountAlias) {
+        return new AWSIdentityInfo(userARN, accountId, accountAlias);
     }
 }

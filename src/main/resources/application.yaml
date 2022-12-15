@@ -17,10 +17,9 @@ cj:
         - "{configFilePath}"
 
     - name: "aws-ping"
-      maturity: "experimental"
       description: "Ping AWS to check authentication"
       repeat: "each_identity_region"
-#      repeat: "once"
+      #TODO: Support changing environment on bypass so that identity changes
       bypass:
         - "aws"
         - "sts"

@@ -1,5 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="aws-ping" type="Application" factoryName="Application" folderName="aws">
+    <envs>
+      <env name="QUARKUS_CONFIG_LOCATIONS" value="./config/aws/aws-ping.yaml" />
+    </envs>
     <option name="MAIN_CLASS_NAME" value="cj.Main" />
     <module name="cloud-janitor" />
     <option name="PROGRAM_PARAMETERS" value="aws-ping" />

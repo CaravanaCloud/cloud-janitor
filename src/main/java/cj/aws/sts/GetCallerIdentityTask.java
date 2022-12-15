@@ -32,7 +32,7 @@ public class GetCallerIdentityTask extends AWSFilter {
         log().trace("Looking up caller identity for {}", identity);
         try (var sts = aws().sts()){
             var info = getCallerIdentity(sts, identity);
-            log().debug("Found caller identity {}", info);
+            log().info("Found caller identity {}", info);
             success(info);
         }catch (Exception ex){
             ex.printStackTrace();
@@ -46,7 +46,7 @@ public class GetCallerIdentityTask extends AWSFilter {
         var userARN = resp.arn();
         var userId = resp.userId();
         var accountAlias = lookupAccountAlias(accountId);
-        var info = AWSIdentityInfo.of(accountId, accountAlias, userARN);
+        var info = AWSIdentityInfo.of(userARN, accountId, accountAlias);
         awsManager.putInfo(id, info);
         trace("Got caller identity [{}] [{}] [{}]",
                 accountId, accountAlias, userARN);
