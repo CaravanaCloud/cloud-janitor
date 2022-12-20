@@ -1,12 +1,13 @@
 package cj;
 
 import cj.fs.FSInput;
-import cj.fs.FSUtils;
+import cj.fs.TaskFiles;
 import cj.fs.FindFiles;
 import cj.ocp.CapabilityNotFoundException;
 import cj.qute.Templates;
 import cj.spi.Task;
 import io.quarkus.qute.Template;
+import org.slf4j.Logger;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
@@ -47,10 +48,10 @@ public class BaseTask
     Shell shell;
 
     @Inject
-    org.slf4j.Logger log;
+    Logger log;
 
     @Override
-    public org.slf4j.Logger log(){return log;}
+    public Logger log(){return log;}
 
 
     LocalDateTime createTime = LocalDateTime.now();
@@ -343,18 +344,24 @@ public class BaseTask
     }
 
 
-    protected void expectCapability(@SuppressWarnings("SameParameterValue") Capabilities capability) {
+    protected void checkCapability(@SuppressWarnings("SameParameterValue") Capabilities capability) {
         if (!hasCapabilities(capability)) {
             debug("Missing capability {} ", capability);
             throw new CapabilityNotFoundException(capability);
         }
     }
 
+    protected void checkpoint(
+        String message,
+        Object... args){
+        checkpoint(null,message,args);
+    }
 
-    protected void checkpoint(String message,
+    protected void checkpoint(Capabilities capability,
+                              String message,
                               Object... args){
-
-        info(message, args);
+        info("Checkpoint: "+message, args);
+        checkCapability(capability);
         var sleep = config.checkpointSleep();
         if (sleep > 0){
             debug("Waiting {}s in checkpoint", sleep);
@@ -417,6 +424,6 @@ public class BaseTask
     }
 
     public Path taskFile(String taskName, String fileName) {
-        return FSUtils.taskDir(taskName).resolve(fileName);
+        return TaskFiles.taskDir(taskName).resolve(fileName);
     }
 }

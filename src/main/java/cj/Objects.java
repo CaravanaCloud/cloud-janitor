@@ -71,7 +71,7 @@ public class Objects {
         //TODO: Build annotations for input config and bypass
         var inputs = inputsMap.getInputsForTask(name);
         var bypass = (List<String>) null;
-        var taskConfig = SimpleTaskConfiguration.of(name,
+        var taskConfig = TaskConfigurationRecord.of(name,
                 description,
                 maturity,
                 inputs,

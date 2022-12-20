@@ -3,8 +3,7 @@ package cj.shell;
 import cj.Input;
 
 public enum ShellInput implements Input {
-    cmd,
-    cmds,
+    prompt,
     timeout,
-    dryRun
+    executable
 }

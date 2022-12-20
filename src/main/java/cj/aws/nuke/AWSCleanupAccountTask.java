@@ -1,8 +1,6 @@
 package cj.aws.nuke;
 
-import cj.TaskDescription;
-import cj.TaskMaturity;
-import cj.TaskTemplate;
+import cj.*;
 import cj.aws.AWSInput;
 import cj.aws.AWSTask;
 
@@ -12,12 +10,13 @@ import javax.inject.Named;
 import static cj.TaskMaturity.Level.experimental;
 
 @Dependent
-@Named("aws-nuke-account")
+@Named("aws-cleanup")
 @TaskMaturity(experimental)
 @TaskDescription("Runs aws-nuke for a single account")
 @TaskTemplate(value="aws-nuke.qute.yaml", output="aws-nuke.yaml")
+@TaskRepeater(TaskRepeat.each_identity)
 @SuppressWarnings("unused")
-public class AWSNukeAccountTask extends AWSTask {
+public class AWSCleanupAccountTask extends AWSTask {
     @Override
     public void apply() {
         var accountId = getInputString(AWSInput.accountId);
@@ -28,6 +27,7 @@ public class AWSNukeAccountTask extends AWSTask {
 
     private void runNuke() {
         var dryRun = getInputString(AWSNukeInput.dryRunFlag);
+        //TODO: Add these replacements to bypass
         var cmd = new String[]{
                 "aws-nuke"
                 , dryRun

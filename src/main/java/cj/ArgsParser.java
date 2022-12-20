@@ -1,6 +1,6 @@
 package cj;
 
-import cj.fs.FSUtils;
+import cj.fs.TaskFiles;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -41,7 +41,7 @@ public class ArgsParser {
     }
 
     private static void loadLocalQuarkusConfig() {
-        var localConfigDir = FSUtils.getLocalConfigDir();
+        var localConfigDir = TaskFiles.getLocalConfigDir();
         var localConfigFile = localConfigDir.resolve("application.yaml");
         if (localConfigFile.toFile().exists()) {
             var configLocation = localConfigDir.toAbsolutePath().toString();

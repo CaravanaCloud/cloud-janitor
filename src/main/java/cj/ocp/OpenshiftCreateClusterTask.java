@@ -3,7 +3,7 @@ package cj.ocp;
 import cj.*;
 import cj.cloud.CloudInputs;
 import cj.cloud.CloudProvider;
-import cj.fs.FSUtils;
+import cj.fs.TaskFiles;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
@@ -35,23 +35,23 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         var clusterProfile = getInput(OCPInput.clusterProfile, ClusterProfile.class);
         debug("creating cluster [{}] with profile [{}]", clusterName, clusterProfile);
         var clusterDir = getClusterDir(clusterName);
-        if (!FSUtils.isEmptyDir(clusterDir))
+        if (!TaskFiles.isEmptyDir(clusterDir))
             throw fail("Cluster directory already exists %s ", clusterDir);
         else
             debug("Using cluster dir {}", clusterDir);
-        var credsDir = FSUtils.resolveDir(clusterDir, "ccoctl-creds");
-        var outputDir = FSUtils.resolveDir(clusterDir, "ccoctl-output");
+        var credsDir = TaskFiles.resolveDir(clusterDir, "ccoctl-creds");
+        var outputDir = TaskFiles.resolveDir(clusterDir, "ccoctl-output");
         checkCommands(clusterProfile);
         preCreate(clusterName, clusterDir, credsDir, outputDir, clusterProfile);
         createCluster(clusterName, clusterDir);
         var kubeconfigdir = clusterDir.resolve("auth");
         export("KUBECONFIG", kubeconfigdir);
-        var home = FSUtils.getHomePath();
-        var defaultkubedir = FSUtils.resolveDir(home,".kube");
-        FSUtils.copyDirWithBackup(kubeconfigdir, defaultkubedir);
+        var home = TaskFiles.homePath();
+        var defaultkubedir = TaskFiles.resolveDir(home,".kube");
+        TaskFiles.copyDirWithBackup(kubeconfigdir, defaultkubedir);
         var newkubeconfig = defaultkubedir.resolve("kubeconfig");
         var newconfig = defaultkubedir.resolve("config");
-        FSUtils.copyFileWithBackup(newkubeconfig, newconfig);
+        TaskFiles.copyFileWithBackup(newkubeconfig, newconfig);
         debug("ocp-create-cluster done");
     }
 
@@ -66,7 +66,7 @@ public class OpenshiftCreateClusterTask extends BaseTask {
     }
 
     private void export(String varName, Path varValue) {
-        FSUtils.writeEnv(varName, varValue);
+        TaskFiles.writeEnv(varName, varValue);
     }
 
     protected void checkCommands(ClusterProfile profile) {
@@ -81,7 +81,7 @@ public class OpenshiftCreateClusterTask extends BaseTask {
     private void createCluster(String clusterName, Path clusterDir) {
         var tip = "tail -f " + clusterDir.resolve(".openshift_install.log").toAbsolutePath();
         debug(tip);
-        expectCapability(Capabilities.CLOUD_CREATE_INSTANCES);
+        checkCapability(Capabilities.CLOUD_CREATE_INSTANCES);
         var cmdArgs = new String[]{
                 "openshift-install",
                 "create",
@@ -114,13 +114,13 @@ public class OpenshiftCreateClusterTask extends BaseTask {
         var output = render(profileName, "install-config.quote.yaml", "install-config.yaml");
         var installConfigPath = clusterDir.resolve("install-config.yaml");
         var backupConfigPath = clusterDir.resolve("install-config.bak.yaml");
-        FSUtils.copyFileWithBackup(installConfigPath, backupConfigPath);
+        TaskFiles.copyFileWithBackup(installConfigPath, backupConfigPath);
         debug("Wrote [{}] install-config.yaml to {}", profile, installConfigPath);
     }
 
 
     private Path getClusterDir(String clusterName) {
-        var clusterDir = FSUtils.dataDir("openshift-cluster", clusterName);
+        var clusterDir = TaskFiles.dataDir("openshift-cluster", clusterName);
         debug("Creating cluster using dir {} ", clusterDir);
         return clusterDir;
     }

@@ -6,7 +6,7 @@ import cj.Tasks;
 import cj.aws.AWSWrite;
 import cj.aws.s3.AWSGetBucketTask;
 import cj.aws.s3.PutObjectsTask;
-import cj.fs.FSUtils;
+import cj.fs.TaskFiles;
 import cj.spi.Task;
 import software.amazon.awssdk.services.iam.IamClient;
 import software.amazon.awssdk.services.iam.model.*;
@@ -17,7 +17,6 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
@@ -202,7 +201,7 @@ public class AWSTranslateTask extends AWSWrite {
                               String fromLang,
                               String toLang,
                               TranslateClient translate) {
-        try (var lines = Files.lines(path)) {
+        try (var lines = java.nio.file.Files.lines(path)) {
             StringBuilder content = new StringBuilder();
             lines.forEach(line -> {
                 boolean bypass = line.isBlank() || startsWithNumber(line);
@@ -221,10 +220,10 @@ public class AWSTranslateTask extends AWSWrite {
                 content.append("\n");
             });
             Path dir = path.getParent();
-            String basename = FSUtils.basename(path);
+            String basename = TaskFiles.basename(path);
             String filename = String.format("%s.%s.srt", basename, toLang);
             Path file = dir.resolve(filename);
-            FSUtils.writeFile(file, content.toString());
+            TaskFiles.writeFile(file, content.toString());
         } catch (IOException e) {
            throw fail("Failed to translate SRT", e);
         }

@@ -3,7 +3,7 @@ package cj.qute;
 import cj.*;
 import cj.aws.AWSClientsManager;
 import cj.aws.AWSIdentity;
-import cj.fs.FSUtils;
+import cj.fs.TaskFiles;
 import cj.spi.Task;
 import io.quarkus.qute.Engine;
 import io.quarkus.qute.Template;
@@ -69,7 +69,7 @@ public class Templates implements Logging {
         );
         var content = render(task, location, Map.of());
         debug("Rendering template {} to [{}] {}", template, content.length(), outputFile);
-        FSUtils.writeFile(outputFile, content);
+        TaskFiles.writeFile(outputFile, content);
         return outputFile;
     }
 

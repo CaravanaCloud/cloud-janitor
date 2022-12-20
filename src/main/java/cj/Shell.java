@@ -1,6 +1,6 @@
 package cj;
 
-import cj.fs.FSUtils;
+import cj.fs.TaskFiles;
 import cj.shell.*;
 import cj.spi.Task;
 
@@ -8,7 +8,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +59,7 @@ public class Shell {
         if (timeoutMins == null) {
             timeoutMins = config.execTimeout();
         }
-        var shellTask = shellTask(isDryRun, cmdArgs)
+        var shellTask = shellTask(cmdArgs)
                 .withInput(ShellInput.timeout, timeoutMins);
         tasks.submitTask(shellTask);
         @SuppressWarnings("all")
@@ -73,23 +72,14 @@ public class Shell {
         return new ExecResult(exitCode.get(), stdout.get(), stderr.get());
     }
 
-    public ShellTask shellTask(List<String> cmdsList) {
-        String[] cmdArgs = cmdsList.toArray(String[]::new);
-        return shellTask(false, cmdArgs);
-    }
-
-    public ShellTask shellTask(String... cmdArgs) {
-        return shellTask(false, cmdArgs);
-    }
-
-    public ShellTask shellTask(Boolean isDryRun, String... cmdArgs) {
-        var cmdList = Arrays.asList(cmdArgs);
+    public ShellTask shellTask(List<String> prompt) {
         var shellTask = shellInstance.get();
-        if (isDryRun != null) {
-            shellTask.withInput(ShellInput.dryRun, isDryRun);
-        }
-        shellTask.withInput(ShellInput.cmds, cmdList);
+        shellTask.withInput(ShellInput.prompt, prompt);
         return shellTask;
+    }
+
+    public ShellTask shellTask(String... prompt) {
+        return shellTask(List.of(prompt));
     }
 
     @Inject
@@ -97,7 +87,7 @@ public class Shell {
 
     @SuppressWarnings("UnusedReturnValue")
     public Task checkCmd(String executable, Map<OS, String[]> fixMap) {
-        var checkTask = checkCmd.get().withInput(ShellInput.cmd, executable);
+        var checkTask = checkCmd.get().withInput(ShellInput.executable, executable);
         var installTask = shellTask(OS.get(fixMap));
         return retry(checkTask, installTask);
     }
@@ -121,6 +111,6 @@ public class Shell {
     }
 
     public Path taskFile(String taskName, String fileName) {
-        return FSUtils.taskDir(taskName).resolve(fileName);
+        return TaskFiles.taskDir(taskName).resolve(fileName);
     }
 }

@@ -4,18 +4,19 @@ import cj.spi.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.sql.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
-public class FSUtils {
-    private static final Logger log = LoggerFactory.getLogger(FSUtils.class);
+@ApplicationScoped
+public class TaskFiles {
+    private static final Logger log = LoggerFactory.getLogger(TaskFiles.class);
 
     public static Path getLocalConfigDir() {
         return applicationDir().resolve("config");
@@ -29,15 +30,15 @@ public class FSUtils {
 
     public static void writeFile(Path path, String content) {
         try {
-            Files.writeString(path, content);
+            java.nio.file.Files.writeString(path, content);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static boolean isEmptyDir(Path path) {
-        if (Files.isDirectory(path)) {
-            try (Stream<Path> entries = Files.list(path)) {
+        if (java.nio.file.Files.isDirectory(path)) {
+            try (Stream<Path> entries = java.nio.file.Files.list(path)) {
                 return entries.findFirst().isEmpty();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -62,7 +63,7 @@ public class FSUtils {
         var envFile = currentDir().resolve(".env");
         if (! envFile.toFile().exists()) {
             try {
-                Files.createFile(envFile);
+                java.nio.file.Files.createFile(envFile);
             } catch (IOException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
@@ -70,7 +71,7 @@ public class FSUtils {
         }
         var content = "\n%s=%s".formatted(varName, varValue);
         try {
-            Files.write(envFile,
+            java.nio.file.Files.write(envFile,
                     content.getBytes(),
                     StandardOpenOption.APPEND);
         } catch (IOException e) {
@@ -82,7 +83,7 @@ public class FSUtils {
     public static void copyDirWithBackup(Path src, Path dst) {
         var visitor = new CopyWithBackup(src, dst);
         try{
-            Files.walkFileTree(src, visitor);
+            java.nio.file.Files.walkFileTree(src, visitor);
         }catch (IOException e){
             log.error(e.getMessage(), e);
             throw new RuntimeException(e);
@@ -94,14 +95,14 @@ public class FSUtils {
             var newFileName = newconfig.getFileName() + "." + System.currentTimeMillis() + ".bak";
             var backup = newconfig.getParent().resolve(newFileName);
             try {
-                Files.copy(newconfig, backup, StandardCopyOption.REPLACE_EXISTING);
+                java.nio.file.Files.copy(newconfig, backup, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
                 throw new RuntimeException(e);
             }
         }
         try {
-            Files.copy(newkubeconfig, newconfig, StandardCopyOption.REPLACE_EXISTING);
+            java.nio.file.Files.copy(newkubeconfig, newconfig, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(e);
@@ -110,6 +111,29 @@ public class FSUtils {
 
     public static String format(LocalDateTime createTime) {
         return formatter.format(createTime);
+    }
+
+    public Path packageDir() {
+        return resolveDir(applicationDir(), "pkg");
+    }
+
+    public Path firstPathInHome() {
+        var home = homePath();
+        var homePath = home.toString();
+        var path = System.getenv("PATH");
+        var paths = path.split(":");
+        var pathList = Arrays.asList(paths);
+        var found = pathList.stream()
+                .sorted(Comparator.comparingInt(String::length))
+                .filter(p -> p.startsWith(homePath))
+                .findFirst()
+                .map(Path::of)
+                .orElse(null);
+        return found;
+    }
+
+    private boolean isDescendant(String path, Path home) {
+        return path.startsWith(home.toAbsolutePath().toString());
     }
 
 
@@ -134,7 +158,7 @@ public class FSUtils {
 
         private void copy(Path path, Path dstPath) {
             try {
-                Files.copy(path, dstPath, StandardCopyOption.REPLACE_EXISTING);
+                java.nio.file.Files.copy(path, dstPath, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 log.error(e.getMessage(), e);
                 throw new RuntimeException(e);
@@ -149,15 +173,13 @@ public class FSUtils {
                 var backupPath = dstPath.resolveSibling(dstPath.getFileName() +  backupstamp);
                 log.trace("Backing up file: {}", dstPath);
                 try {
-                    Files.move(dstPath, backupPath, StandardCopyOption.REPLACE_EXISTING);
+                    java.nio.file.Files.move(dstPath, backupPath, StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
                     log.error(e.getMessage(), e);
                     throw new RuntimeException(e);
                 }
             }
         }
-
-
     }
 
 
@@ -197,7 +219,7 @@ public class FSUtils {
             log.debug("Looking for files on {}", dir);
             var visitor = new FindFiles(extension);
             try{
-                Files.walkFileTree(dir, visitor);
+                java.nio.file.Files.walkFileTree(dir, visitor);
             }catch (IOException e){
                 log.error(e.getMessage(), e);
             }
@@ -224,7 +246,7 @@ public class FSUtils {
     }
 
     public static Path applicationDir() {
-        Path homePath = getHomePath();
+        Path homePath = homePath();
         var configPath = homePath.resolve(".config");
         var appPath = resolveDir(configPath, "cloud-janitor");
         return appPath;
@@ -271,16 +293,15 @@ public class FSUtils {
     }
 
     public static Path getVideosDir() {
-        Path homePath = getHomePath();
+        Path homePath = homePath();
         var path = homePath.resolve("Videos");
         return path;
     }
 
 
-    public static Path getHomePath() {
+    public static Path homePath() {
         var home = System.getProperty("user.home");
         var homePath = Path.of(home);
         return homePath;
     }
-
 }

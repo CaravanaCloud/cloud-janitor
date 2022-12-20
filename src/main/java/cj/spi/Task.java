@@ -4,7 +4,7 @@ import cj.Errors;
 import cj.Input;
 import cj.Output;
 import cj.TaskOutput;
-import cj.fs.FSUtils;
+import cj.fs.TaskFiles;
 
 import javax.inject.Named;
 import java.time.Duration;
@@ -177,7 +177,7 @@ public interface Task {
     }
 
     default String getPathName(){
-        var createTime = FSUtils.format(getCreateTime());
+        var createTime = TaskFiles.format(getCreateTime());
         var dirname = String.format("%s-%s", createTime, getName());
         var safeName = dirname.toLowerCase().replaceAll("[^a-zA-Z0-9]", "_");
         return safeName;

@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="aws-nuke" type="Application" factoryName="Application" folderName="aws-nuke">
+  <configuration default="false" name="aws-nuke version" type="Application" factoryName="Application" folderName="aws-nuke">
     <option name="MAIN_CLASS_NAME" value="cj.Main" />
     <module name="cloud-janitor" />
-    <option name="PROGRAM_PARAMETERS" value="aws-nuke" />
+    <option name="PROGRAM_PARAMETERS" value="aws-nuke version" />
     <extension name="com.fapiko.jetbrains.plugins.better_direnv.runconfigs.IdeaRunConfigurationExtension">
       <option name="DIRENV_ENABLED" value="true" />
       <option name="DIRENV_TRUSTED" value="true" />

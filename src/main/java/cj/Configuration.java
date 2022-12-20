@@ -17,22 +17,16 @@ import static cj.StringUtils.join;
 
 @ApplicationScoped
 public class Configuration {
-    @Inject
-    Logger log;
-
-    @Inject
-    CJConfiguration config;
-
-    @Inject
-    Objects objects;
-
-    @Inject
-    Shell shell;
-
-
     private final Multimap<String, Input> bypassMap = ArrayListMultimap.create();
     private final Set<Capabilities> capabilities = new HashSet<>();
-
+    @Inject
+    Logger log;
+    @Inject
+    CJConfiguration config;
+    @Inject
+    Objects objects;
+    @Inject
+    Shell shell;
     private String executionId;
 
 
@@ -49,14 +43,16 @@ public class Configuration {
     }
 
 
-
-
     public List<TaskConfiguration> taskConfigs() {
         return objects.allTaskConfigurations();
     }
 
+    public Optional<TaskConfiguration> taskConfigForQuery(List<String> query) {
+        return taskConfigForQuery(query.toArray(new String[0]));
+    }
+
     public Optional<TaskConfiguration> taskConfigForQuery(String... query) {
-        if(query == null || query.length == 0) return Optional.empty();
+        if (query == null || query.length == 0) return Optional.empty();
         var taskCfgs = taskConfigs();
         if (taskCfgs.isEmpty()) return Optional.empty();
         var taskName = query[0];
@@ -80,7 +76,7 @@ public class Configuration {
     }
 
     private List<String> enrich(String... args) {
-        if (args == null  || args.length == 0) return List.of();
+        if (args == null || args.length == 0) return List.of();
         var taskCfg = taskConfigForQuery(args);
         if (taskCfg.isEmpty()) return List.of(args);
         var taskName = taskCfg.get().name();
@@ -97,24 +93,25 @@ public class Configuration {
 
     private Stream<String> bypassValues(String value, String... query) {
         //TODO: Parse qute expressions
-        if("{args}".equals(value)){
+        if ("{args}".equals(value)) {
             return Stream.of(query);
         }
         return Stream.of(value);
     }
+
     public void enrichBypass(String taskName, Input... input) {
         bypassMap.putAll(taskName, Arrays.asList(input));
     }
 
     @Override
     public String toString() {
-        String buf = "Configuration{" +
-                "bypassMap=" + bypassMap +
-                ", capabilities=" + capabilities +
-                ", executionId='" + executionId + '\'' +
-                ", paralel=" + config.parallel() +
-                '}';
-        return buf;
+        return Map.of(
+                "executionId", getExecutionId(),
+                "os", OS.of(),
+                "arch", Arch.of(),
+                "capabilities", capabilities,
+                "parallel", config.parallel()
+        ).toString();
     }
 
     public Set<Capabilities> getCapabilities() {
@@ -206,8 +203,9 @@ public class Configuration {
     public String composeName(String... tokens) {
         return compose(namingSeparator(), altSeparator(), tokens);
     }
+
     public String composeNameAlt(String... tokens) {
-        return compose(altSeparator(), namingSeparator(),  tokens);
+        return compose(altSeparator(), namingSeparator(), tokens);
     }
 
 
@@ -223,7 +221,9 @@ public class Configuration {
         return config.task();
     }
 
-    public CJConfiguration raw(){
+    public CJConfiguration raw() {
         return config;
     }
+
+
 }

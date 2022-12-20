@@ -21,4 +21,6 @@ public interface TaskConfiguration {
     Optional<List<String>> bypass();
 
     Optional<TaskRepeat> repeat();
+
+    Optional<InstallConfig> install();
 }

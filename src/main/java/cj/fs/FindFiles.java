@@ -10,9 +10,9 @@ public class FindFiles extends BaseTask {
 
     @Override
     public void apply() {
-        var path = FSUtils.getLookupPath();
+        var path = TaskFiles.getLookupPath();
         inputString(FSInput.extension).ifPresent( extension -> {
-            var files = FSUtils.findByExtension(path, extension);
+            var files = TaskFiles.findByExtension(path, extension);
             success(FilesMatch, files);
         });
     }

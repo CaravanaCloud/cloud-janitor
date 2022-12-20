@@ -13,7 +13,7 @@ import java.util.List;
 
 import static cj.fs.FSInput.glob;
 import static cj.fs.FSInput.globPath;
-import static cj.fs.FSUtils.cwd;
+import static cj.fs.TaskFiles.cwd;
 
 /**
  *

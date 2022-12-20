@@ -10,7 +10,7 @@ cj:
 
     - name: "aws-nuke-bypass"
       bypass:
-        - "aws-nuke-bypass"
+        - "aws-nuke"
         - "--force"
         - "{dryRunFlag}"
         - "--config"
@@ -24,3 +24,19 @@ cj:
         - "aws"
         - "sts"
         - "get-caller-identity"
+
+    - name: "aws-nuke"
+      description: "Delete resources in an AWS account"
+      repeat: "each_identity"
+      install:
+        check: "aws-nuke version"
+        packages:
+          executables:
+            - path: "aws-nuke-v2.21.2-linux-amd64"
+              link: "aws-nuke"
+          darwin_amd64: "https://github.com/rebuy-de/aws-nuke/releases/download/v2.21.2/aws-nuke-v2.21.2-darwin-amd64.tar.gz"
+          darwin_arm64: "https://github.com/rebuy-de/aws-nuke/releases/download/v2.21.2/aws-nuke-v2.21.2-darwin-arm64.tar.gz"
+          linux_amd64: "https://github.com/rebuy-de/aws-nuke/releases/download/v2.21.2/aws-nuke-v2.21.2-linux-amd64.tar.gz"
+          linux_arm64: "https://github.com/rebuy-de/aws-nuke/releases/download/v2.21.2/aws-nuke-v2.21.2-linux-arm64.tar.gz"
+          linux_arm7: "https://github.com/rebuy-de/aws-nuke/releases/download/v2.21.2/aws-nuke-v2.21.2-linux-arm7.tar.gz"
+          windows_amd64: "https://github.com/rebuy-de/aws-nuke/releases/download/v2.21.2/aws-nuke-v2.21.2-windows-amd64.zip"

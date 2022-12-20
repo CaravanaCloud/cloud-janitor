@@ -66,7 +66,7 @@ public class Tasks {
     }
 
     private void init() {
-        log.trace("Configuration: {}", config);
+        log.debug("Configuration: {}", config);
     }
 
     private void repeat(String... args) {
