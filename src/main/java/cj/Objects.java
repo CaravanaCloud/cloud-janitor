@@ -42,8 +42,11 @@ public class Objects {
     @Inject
     Instance<ShellTask> shellInstance;
 
-    public List<TaskConfiguration> allTaskConfigurations() {
-        //TODO: Unified Java + Config task configurations
+    private List<TaskConfiguration> taskConfigs;
+
+    public synchronized List<TaskConfiguration> allTaskConfigurations() {
+        if (this.taskConfigs != null)
+            return this.taskConfigs;
         var taskBeans = bm.getBeans(Task.class);
         var taskConfigsJava = taskBeans
                 .stream()
@@ -60,9 +63,11 @@ public class Objects {
                 .filter(java.util.Objects::nonNull)
                 .sorted(Comparator.comparing(TaskConfiguration::name))
                 .toList();
-        return sorted;
+        this.taskConfigs = sorted;
+        return this.taskConfigs;
     }
 
+    //TODO: Consider deprecating java annotations in favor of config file
     private Optional<TaskConfiguration> getJavaTaskConfig(Bean<?> bean) {
         var name = bean.getName();
         var description = getAnnotationString(bean, TaskDescription.class);
@@ -71,6 +76,8 @@ public class Objects {
         //TODO: Build annotations for input config and bypass
         var inputs = inputsMap.getInputsForTask(name);
         var bypass = (List<String>) null;
+        //TODO: consider passing to TemplateConfig.
+        var template = getAnnotation(bean, TaskTemplate.class);
         var taskConfig = TaskConfigurationRecord.of(name,
                 description,
                 maturity,

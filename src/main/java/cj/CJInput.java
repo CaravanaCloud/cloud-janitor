@@ -4,7 +4,7 @@ public enum CJInput implements Input {
     task,
     tasks,
     fixTask,
-    regionTask, identityTask, query, dryRun
+    regionTask, identityTask, query, prompt, dryRun
 
 
 }

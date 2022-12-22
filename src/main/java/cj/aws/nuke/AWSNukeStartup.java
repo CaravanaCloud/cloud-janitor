@@ -15,6 +15,7 @@ public class AWSNukeStartup extends StartupObserver {
     @Override
     public void onStart() {
         log().trace("AWS Nuke Startup");
+
         shell().mapInstall("aws-nuke", Map.of(OS.linux, INSTALL_LINUX));
         describeInput(forceFlag,
                 "aws-nuke force setting",
@@ -31,16 +32,17 @@ public class AWSNukeStartup extends StartupObserver {
                 "Dry run unless CLOUD_DELETE_RESOURCES capability is set",
                 null,
                 true);
-        describeInput(configFlag,
+        describeInput(awsNukeConfigFile,
                 "aws-nuke config file setting",
                 "not available",
                 null,
-                () -> "--config=" + shell().taskFile(TASK_NAME, "ccsandbox.yaml").toString(),
+                () -> "--config=" + shell().taskFile(TASK_NAME, "aws-nuke.yaml").toString(),
                 "Dry run unless CLOUD_DELETE_RESOURCES capability is set",
                 null,
                 true);
 
-        //TODO: Create metadata maps for
+
+        //TODO: Create configuration mappings for
         //@TaskTemplate(value="aws-nuke.qute.yaml", output="ccsandbox.yaml")
         //@TaskMaturity(experimental)
         //@TaskDescription("Runs aws-nuke for a single account")

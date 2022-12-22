@@ -283,6 +283,12 @@ public class BaseTask
         trace("Task success(): {}", this);
     }
 
+    protected RuntimeException fail(Throwable cause, String message) {
+        var msg = fmt(message);
+        error(msg, cause);
+        getErrors().put(Message, msg);
+        return new TaskFailedException(msg);
+    }
 
     protected RuntimeException fail(String message, Object... args) {
         var msg = fmt(message);
@@ -425,5 +431,9 @@ public class BaseTask
 
     public Path taskFile(String taskName, String fileName) {
         return TaskFiles.taskDir(taskName).resolve(fileName);
+    }
+
+    public InputsMap inputsMap() {
+        return inputsMap;
     }
 }

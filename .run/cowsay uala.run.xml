@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="cowsay hello" type="Application" factoryName="Application" folderName="shell">
+  <configuration default="false" name="cowsay uala" type="Application" factoryName="Application" folderName="shell">
     <option name="MAIN_CLASS_NAME" value="cj.Main" />
     <module name="cloud-janitor" />
-    <option name="PROGRAM_PARAMETERS" value="cowsay hello" />
+    <option name="PROGRAM_PARAMETERS" value="cowsay uala" />
     <extension name="com.fapiko.jetbrains.plugins.better_direnv.runconfigs.IdeaRunConfigurationExtension">
       <option name="DIRENV_ENABLED" value="true" />
       <option name="DIRENV_TRUSTED" value="true" />

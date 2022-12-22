@@ -16,11 +16,16 @@ public interface TaskConfiguration {
 
     Optional<String> maturity();
 
+    //TODO: Check if Optional is needed here
     Optional<List<InputConfiguration>> inputs();
 
+    //TODO: Check if Optional is needed here
+    //TODO: Consider multiple bypasses (create cluster, destroy cluster, ...)
     Optional<List<String>> bypass();
 
     Optional<TaskRepeat> repeat();
 
     Optional<InstallConfig> install();
+
+    List<TemplateConfig> templates();
 }

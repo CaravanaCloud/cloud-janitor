@@ -5,5 +5,5 @@ import cj.Input;
 public enum AWSNukeInput implements Input {
     forceFlag,
     dryRunFlag,
-    configFlag
+    awsNukeConfigFile
 }

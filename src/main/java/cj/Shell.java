@@ -30,7 +30,8 @@ public class Shell {
 
     Map<String, Map<OS, String[]>> installMap = new HashMap<>();
 
-
+    @Deprecated
+    //Use configuration packages instead
     public void mapInstall(String binary, Map<OS, String[]> commands) {
         installMap.put(binary, commands);
     }

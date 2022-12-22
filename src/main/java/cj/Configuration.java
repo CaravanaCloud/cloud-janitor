@@ -1,5 +1,7 @@
 package cj;
 
+import cj.aws.bypass.BypassTask;
+import cj.qute.Templates;
 import cj.spi.Task;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -8,6 +10,7 @@ import org.slf4j.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -28,17 +31,23 @@ public class Configuration {
     @Inject
     Shell shell;
     private String executionId;
+    @Inject
+    InputsMap inputsMap;
+    @Inject
+    Instance<BypassTask> bypassInstance;
 
 
-    public List<? extends Task> lookupTasks(String... args) {
-        if (args == null || args.length == 0)
+    public List<? extends Task> lookupTasks(String... prompt) {
+        if (prompt == null || prompt.length == 0)
             return List.of();
-        var taskName = args[0];
+        var taskName = prompt[0];
         var tasks = objects.createTasksByName(taskName);
         if (!tasks.isEmpty())
             return tasks;
         if (config.bypass())
-            return bypass(args);
+            return List.of(bypassInstance
+                    .get()
+                    .withInput(CJInput.prompt, Arrays.asList(prompt)));
         return List.of();
     }
 
@@ -61,46 +70,6 @@ public class Configuration {
                 .filter(t -> t.name().equals(taskName))
                 .findFirst();
         return taskCfg;
-    }
-
-    private List<? extends Task> bypass(String... args) {
-        var enriched = enrich(args);
-        if (enriched.isEmpty()) {
-            log.debug("Empty bypass");
-            return List.of();
-        }
-        log.debug("Bypassing `{}` as `{}`", join(args), join(enriched));
-        var enrichedArr = enriched.toArray(new String[0]);
-        var result = List.of(shell.shellTask(enrichedArr));
-        return result;
-    }
-
-    private List<String> enrich(String... args) {
-        if (args == null || args.length == 0) return List.of();
-        var taskCfg = taskConfigForQuery(args);
-        if (taskCfg.isEmpty()) return List.of(args);
-        var taskName = taskCfg.get().name();
-        var taskArgs = Arrays.copyOfRange(args, 1, args.length);
-        var bypass = taskCfg.flatMap(TaskConfiguration::bypass);
-        if (bypass.isEmpty()) return List.of(args);
-        var bypassList = bypass.get()
-                .stream()
-                .flatMap(expr -> bypassValues(expr, taskArgs))
-                .toList();
-        var result = bypassList;
-        return result;
-    }
-
-    private Stream<String> bypassValues(String value, String... query) {
-        //TODO: Parse qute expressions
-        if ("{args}".equals(value)) {
-            return Stream.of(query);
-        }
-        return Stream.of(value);
-    }
-
-    public void enrichBypass(String taskName, Input... input) {
-        bypassMap.putAll(taskName, Arrays.asList(input));
     }
 
     @Override
@@ -226,4 +195,9 @@ public class Configuration {
     }
 
 
+    public Optional<TaskConfiguration> taskConfigForTask(Task task) {
+        var taskName = task.getName();
+        var taskCfg = taskConfigForQuery(taskName);
+        return taskCfg;
+    }
 }

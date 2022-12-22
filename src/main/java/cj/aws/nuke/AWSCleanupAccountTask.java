@@ -29,11 +29,7 @@ public class AWSCleanupAccountTask extends AWSTask {
         var dryRun = getInputString(AWSNukeInput.dryRunFlag);
         //TODO: Add these replacements to bypass
         var cmd = new String[]{
-                "aws-nuke"
-                , dryRun
-                ,"--force"
-                ,"--config"
-                , taskFile("aws-nuke.yaml").toString()
+
         };
         checkpoint("Executing aws-nuke: {}",
                 String.join(" ", cmd));

@@ -113,15 +113,19 @@ public class Tasks {
     @SuppressWarnings("all")
     public Task submitNow(Task task) {
         runDependencies(task);
+        //TODO: convert bypass to task so that it render templates
         renderTemplates(task);
         runSingle(task);
         return task;
     }
 
     private void renderTemplates(Task task) {
-        var template = objects.getAnnotation(task, TaskTemplate.class);
-        if (template != null)
-            templates.render(task, template.value(), template.output());
+        var taskConfig = config.taskConfigForTask(task);
+        var templatesCfgs = taskConfig.map(c -> c.templates())
+                .orElse(List.of());
+        templatesCfgs.forEach(t -> {
+            templates.render(task, t.template(), t.output());
+        });
     }
 
     private void runDependencies(Task task) {

@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -29,6 +30,9 @@ public class InputsMap {
 
     @Inject
     Objects beans;
+
+
+    private Map<String, Object> bypassInputs;
 
     @PostConstruct
     @SuppressWarnings("unused")
@@ -102,7 +106,6 @@ public class InputsMap {
 
     public Object valueOf(Input input) {
         Object value = getFromConfig(input);
-
         if (value == null) {
             value = getFromDefault(input);
         }
@@ -117,5 +120,21 @@ public class InputsMap {
 
     public Optional<?> fromConfig(Input input) {
         return Optional.ofNullable(getFromConfig(input));
+    }
+
+    public synchronized Map<String, Object> bypassInputs() {
+        if (this.bypassInputs == null){
+            this.bypassInputs = inputConfigs
+                .entrySet()
+                .stream()
+                .filter(e -> e.getValue().enrichBypass())
+                .collect(
+                        Collectors.toMap(
+                                e -> e.getKey().toString(),
+                                e -> valueOf(e.getKey())
+                        )
+                );
+        }
+        return this.bypassInputs;
     }
 }
