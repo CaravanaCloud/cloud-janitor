@@ -30,7 +30,6 @@ cj:
 
     - name: "aws-subtitles"
       description: "Transcribe and translate videos"
-      repeat: "once"
       steps:
         - run: "aws-transcribe"
         - run: "aws-translate"

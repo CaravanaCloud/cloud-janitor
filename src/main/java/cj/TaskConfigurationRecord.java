@@ -1,5 +1,6 @@
 package cj;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,5 +34,21 @@ public record TaskConfigurationRecord(
                 Optional.empty(),
                 List.of(),
                 List.of());
+    }
+
+    public static TaskConfigurationRecord of(String taskName){
+        return of(taskName,
+                null,
+                null,
+                null,
+                null,
+                null);
+    }
+
+    public static Optional<TaskConfiguration> of(String[] prompt) {
+        if (prompt == null || prompt.length == 0)
+            return Optional.empty();
+        var taskName = prompt[0];
+        return Optional.of(of(taskName));
     }
 }

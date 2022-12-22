@@ -1,11 +1,9 @@
 package cj;
 
 import cj.aws.bypass.BypassTask;
-import cj.qute.Templates;
 import cj.spi.Task;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import io.quarkus.runtime.Quarkus;
 import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
 
@@ -15,7 +13,6 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Stream;
 
 import static cj.StringUtils.join;
 
@@ -38,31 +35,47 @@ public class Configuration {
     Instance<BypassTask> bypassInstance;
 
 
-    public List<? extends Task> lookupTasks(String... prompt) {
-        //TODO: un-nest
-        //TODO: Consider splitting 1-strings
+    public List<? extends Task> lookupTasks(final String... prompt) {
         if (prompt == null || prompt.length == 0)
             return List.of();
-        var taskName = prompt[0];
-        var tasks = objects.createTasksByName(taskName);
-        if (!tasks.isEmpty())
-            return tasks;
-        //TODO: Load config into java tasks
-        var cfg = taskConfigForQuery(prompt);
-        var steps = cfg.map(TaskConfiguration::steps)
-                .orElse(List.of());
-        if (!steps.isEmpty()) {
-            var ts = new ArrayList<Task>();
-            for (var step : steps) {
-                var runStep = step.run();
-                if (runStep.isPresent()){
-                    var run = runStep.get();
-                    var stepTasks = lookupTasks(run);
-                    ts.addAll(stepTasks);
-                }
+        if (prompt.length == 1 && prompt[0].contains(" "))
+            return lookupTasks(prompt[0].split(" "));
+
+        var cfg = taskConfigForQuery(prompt)
+                .or(() -> TaskConfigurationRecord.of(prompt));
+        if (cfg.isEmpty())
+            log.warn("No task found for prompt: {}", prompt);
+        var taskCfg = cfg.get();
+        if (taskCfg.bypass().isPresent()) {
+            return lookupBypass(prompt, taskCfg);
+        }else if (! taskCfg.steps().isEmpty()) {
+            return lookupSteps(prompt, taskCfg);
+        }else {
+            return lookupByName(prompt, taskCfg);
+        }
+    }
+
+    private List<? extends Task> lookupByName(String[] prompt, TaskConfiguration taskCfg) {
+        var tasks = objects.createTasksByName(taskCfg.name());
+        return tasks;
+    }
+
+    private List<? extends Task> lookupSteps(String[] prompt, TaskConfiguration taskCfg) {
+        var steps = taskCfg.steps();
+        var ts = new ArrayList<Task>();
+        for (var step : steps) {
+            var runStep = step.run();
+            if (runStep.isPresent()){
+                var run = runStep.get();
+                var stepTasks = lookupTasks(run);
+                ts.addAll(stepTasks);
             }
-            return ts;
-        } else if (config.bypass())
+        }
+        return ts;
+    }
+
+    private List<? extends Task> lookupBypass(String[] prompt, TaskConfiguration taskCfg) {
+        if (config.bypass())
             return List.of(bypassInstance
                     .get()
                     .withInput(CJInput.prompt, Arrays.asList(prompt)));
