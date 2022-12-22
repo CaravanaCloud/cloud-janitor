@@ -28,4 +28,6 @@ public interface TaskConfiguration {
     Optional<InstallConfig> install();
 
     List<TemplateConfig> templates();
+
+    List<StepConfig> steps();
 }

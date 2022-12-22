@@ -5,6 +5,7 @@ import cj.qute.Templates;
 import cj.spi.Task;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import io.quarkus.runtime.Quarkus;
 import io.quarkus.runtime.StartupEvent;
 import org.slf4j.Logger;
 
@@ -38,13 +39,30 @@ public class Configuration {
 
 
     public List<? extends Task> lookupTasks(String... prompt) {
+        //TODO: un-nest
+        //TODO: Consider splitting 1-strings
         if (prompt == null || prompt.length == 0)
             return List.of();
         var taskName = prompt[0];
         var tasks = objects.createTasksByName(taskName);
         if (!tasks.isEmpty())
             return tasks;
-        if (config.bypass())
+        //TODO: Load config into java tasks
+        var cfg = taskConfigForQuery(prompt);
+        var steps = cfg.map(TaskConfiguration::steps)
+                .orElse(List.of());
+        if (!steps.isEmpty()) {
+            var ts = new ArrayList<Task>();
+            for (var step : steps) {
+                var runStep = step.run();
+                if (runStep.isPresent()){
+                    var run = runStep.get();
+                    var stepTasks = lookupTasks(run);
+                    ts.addAll(stepTasks);
+                }
+            }
+            return ts;
+        } else if (config.bypass())
             return List.of(bypassInstance
                     .get()
                     .withInput(CJInput.prompt, Arrays.asList(prompt)));

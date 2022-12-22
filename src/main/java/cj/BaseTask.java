@@ -366,8 +366,12 @@ public class BaseTask
     protected void checkpoint(Capabilities capability,
                               String message,
                               Object... args){
-        info("Checkpoint: "+message, args);
-        checkCapability(capability);
+        var capabilityStr = capability==null
+                ? " "
+                : "["+capability+"] ";
+        info("Checkpoint" + capabilityStr + message, args);
+        if (capability != null)
+            checkCapability(capability);
         var sleep = config.checkpointSleep();
         if (sleep > 0){
             debug("Waiting {}s in checkpoint", sleep);

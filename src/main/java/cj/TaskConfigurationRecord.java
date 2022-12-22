@@ -11,7 +11,8 @@ public record TaskConfigurationRecord(
         Optional<List<String>> bypass,
         Optional<TaskRepeat> repeat,
         Optional<InstallConfig> install,
-        List<TemplateConfig> templates)
+        List<TemplateConfig> templates,
+        List<StepConfig> steps)
             implements TaskConfiguration {
 
     public static TaskConfigurationRecord of(String taskName,
@@ -30,6 +31,7 @@ public record TaskConfigurationRecord(
                 Optional.empty(),
                 Optional.ofNullable(repeat),
                 Optional.empty(),
+                List.of(),
                 List.of());
     }
 }
