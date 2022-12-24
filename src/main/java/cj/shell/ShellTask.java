@@ -62,7 +62,10 @@ public class ShellTask extends BaseTask {
         var check = install
                 .flatMap(InstallConfig::check);
         check.ifPresent( c -> checkInstall(install.get(), c));
-        return exec(prompt);
+        var execPrompt = prompt.stream()
+                .filter(s -> ! s.isBlank())
+                .toList();
+        return exec(execPrompt);
     }
 
     private void checkInstall(InstallConfig installConfig, String checkPrompt) {

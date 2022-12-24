@@ -4,21 +4,24 @@ import cj.BaseTask;
 import cj.CJInput;
 import cj.Input;
 import cj.TaskConfiguration;
+import cj.aws.AWSClientsManager;
+import cj.aws.AWSIdentity;
+import cj.aws.AWSInput;
 import cj.qute.Templates;
 import cj.spi.Task;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static cj.StringUtils.join;
 
 @Dependent
 public class BypassTask extends BaseTask {
+    //TODO: Create global identity manager and its interfaces
+    @Inject
+    AWSClientsManager awsManager;
 
     @Override
     public void apply() {
@@ -28,14 +31,18 @@ public class BypassTask extends BaseTask {
     }
 
     private Optional<Task> bypass(String... args) {
+        if (args.length == 0) {
+            debug("Empty bypass");
+            return Optional.empty();
+        }
+        renderTemplates(args);
         var enriched = enrich(args);
         if (enriched.isEmpty()) {
-            debug("Empty bypass");
+            debug("Bypass emptied");
             return Optional.empty();
         }
         debug("Bypassing `{}` as `{}`", join(args), join(enriched));
         var enrichedArr = enriched.toArray(new String[0]);
-        renderTemplates(args);
         var result = shell().shellTask(enrichedArr);
         return Optional.ofNullable(result);
     }
@@ -49,8 +56,18 @@ public class BypassTask extends BaseTask {
             //TODO: Change repeaters to pass identity and region inputs to tasks
             //TODO: Pass identity and region info to bypass template
             //TODO: Export identity and region environment variables to child shell tasks
+            var data = new HashMap<String,String>();
+            var identity = inputAs(AWSInput.identity, AWSIdentity.class);
+            if (identity.isPresent()) {
+                var id = identity.get();
+                var accountId = awsManager.getInfo(id).accountId();
+                data.put("accountId", accountId);
+            }
             templatesCfgs.forEach(t -> {
-                templates.render(taskName, t.template(), t.output());
+                templates.render(taskName,
+                        t.template(),
+                        t.output(),
+                        data);
             });
         }catch(Exception e){
             throw fail("Failed to render templates for task", e);
@@ -81,7 +98,10 @@ public class BypassTask extends BaseTask {
                                         String... prompt) {
         //TODO: Parse qute expressions
         var args = String.join(" ", prompt);
-        Map<String,Object> data =  Map.of("args", args);
+        var templatepaths = templates.templatePaths();
+        Map<String,Object> data =  Map.of(
+                "args", args,
+                "templates", templatepaths);
         var value = templates.fmt(expr, data);
         return Stream.of(value);
     }

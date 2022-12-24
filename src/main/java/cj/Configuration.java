@@ -46,13 +46,21 @@ public class Configuration {
         if (cfg.isEmpty())
             log.warn("No task found for prompt: {}", prompt);
         var taskCfg = cfg.get();
+        List<? extends Task> result =  List.of();
         if (taskCfg.bypass().isPresent()) {
-            return lookupBypass(prompt, taskCfg);
+            result = lookupBypass(prompt);
         }else if (! taskCfg.steps().isEmpty()) {
-            return lookupSteps(prompt, taskCfg);
+            result = lookupSteps(prompt, taskCfg);
         }else {
-            return lookupByName(prompt, taskCfg);
+            result = lookupByName(prompt, taskCfg);
         }
+        if (result.isEmpty() && config.bypass()){
+            result = lookupBypass(prompt);
+        }
+        if(result.isEmpty()){
+            log.warn("No task found for prompt: {}", prompt);
+        }
+        return result;
     }
 
     private List<? extends Task> lookupByName(String[] prompt, TaskConfiguration taskCfg) {
@@ -74,7 +82,7 @@ public class Configuration {
         return ts;
     }
 
-    private List<? extends Task> lookupBypass(String[] prompt, TaskConfiguration taskCfg) {
+    private List<? extends Task> lookupBypass(String[] prompt) {
         if (config.bypass())
             return List.of(bypassInstance
                     .get()
@@ -160,8 +168,13 @@ public class Configuration {
 
     @SuppressWarnings("unused")
     public void loadCapabilities(@Observes StartupEvent ev) {
-        config.capabilities().ifPresent(this::addAll);
+        config.capabilities().ifPresentOrElse(this::addAll,
+                this::addDefaultCapabilities);
         log.debug("Loaded {} capabilities: {}", capabilities.size(), capabilities);
+    }
+
+    private void addDefaultCapabilities() {
+        capabilities.add(Capabilities.LOCAL_SHELL);
     }
 
     public boolean reportEnabled() {

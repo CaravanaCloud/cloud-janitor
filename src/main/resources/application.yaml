@@ -53,7 +53,7 @@ cj:
           linux_arm7: "https://github.com/rebuy-de/aws-nuke/releases/download/v2.21.2/aws-nuke-v2.21.2-linux-arm7.tar.gz"
           windows_amd64: "https://github.com/rebuy-de/aws-nuke/releases/download/v2.21.2/aws-nuke-v2.21.2-windows-amd64.zip"
       bypass:
-          - "echo"
+          # - "echo"
           - "aws-nuke"
           - "--force"
           - "{dryRunFlag}"
