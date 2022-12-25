@@ -23,7 +23,7 @@
     <skipTests>true</skipTests>
     <!-- library versions -->
     <quarkus.platform.version>2.14.2.Final</quarkus.platform.version>
-    <awssdk.version>2.18.21</awssdk.version>
+    <awssdk.version>2.18.29</awssdk.version>
     <jackson.version>2.14.0</jackson.version>
     <guava.version>31.1-jre</guava.version>
     <reflections.version>0.10.2</reflections.version>
