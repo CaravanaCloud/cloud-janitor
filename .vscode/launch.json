@@ -3,6 +3,14 @@
   "configurations": [
     {
       "type": "java",
+      "name": "[Demo]",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "-cj:version"
+    },
+    {
+      "type": "java",
       "name": "version",
       "request": "launch",
       "mainClass": "cj.Main",
@@ -11,65 +19,38 @@
     },
     {
       "type": "java",
-      "name": "help",
+      "name": "echo hello world",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
-      "args": "-cj:help"
+      "args": "echo hello world"
     },
     {
       "type": "java",
-      "name": "hello world",
-      "request": "launch",
-      "mainClass": "cj.Main",
-      "projectName": "cloud-janitor",
-      "args": "hello"
-    },
-    {
-      "type": "java",
-      "name": "hola mundo",
+      "name": "java hello world",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
       "args": "hello",
       "env": {
-        "CJ_HELLO_MESSAGE": "hola mundo!!!"
+        "CJ_HELLO_MESSAGE": "What a wonderful world!"
       }
     },
     {
       "type": "java",
-      "name": "ls -liah",
+      "name": "cowsay hello world",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
-      "args": "ls -liah"
+      "args": "cowsay hello word",
     },
     {
       "type": "java",
-      "name": "find . [env]",
+      "name": "cowsay something nasty",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
-      "args": "",
-      "env": {
-        "QUARKUS_ARGS": "find ."
-      }
-    },
-    {
-      "type": "java",
-      "name": "cowsay hello",
-      "request": "launch",
-      "mainClass": "cj.Main",
-      "projectName": "cloud-janitor",
-      "args": "cowsay hello"
-    },
-    {
-      "type": "java",
-      "name": "ls -liah",
-      "request": "launch",
-      "mainClass": "cj.Main",
-      "projectName": "cloud-janitor",
-      "args": "cowsay fuck the fucking fuckers"
+      "args": "cowsay my password is SetecAstronomy1992",
     },
     {
       "type": "java",
@@ -84,11 +65,14 @@
     },
     {
       "type": "java",
-      "name": "aws-get-data-bucket",
+      "name": "aws-ping",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
-      "args": "aws-get-data-bucket"
+      "args": "aws-ping",
+      "env": {
+        "QUARKUS_CONFIG_LOCATIONS":"./config/aws/aws-ping.yaml"
+      }
     },
     {
       "type": "java",
@@ -97,9 +81,6 @@
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
       "args": "aws-transcribe",
-      "env": {
-        "CJ_CAPABILITIES": "all"
-      }
     },
     {
       "type": "java",
@@ -108,21 +89,26 @@
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
       "args": "aws-translate",
-      "env": {
-        "CJ_CAPABILITIES": "all"
-      }
     },
     {
       "type": "java",
-      "name": "aws-attribution-provision",
+      "name": "aws-subtitles",
       "request": "launch",
       "mainClass": "cj.Main",
-      "projectName": "cloud-janitor",
-      "args": "aws-attribution-provision"
+      "projectName": "aws-subtitles",
+      "args": "aws-translate",
     },
     {
       "type": "java",
       "name": "aws-nuke",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "nuke",
+    },
+    {
+      "type": "java",
+      "name": "aws-nuke-env",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
@@ -139,6 +125,22 @@
     },
     {
       "type": "java",
+      "name": "[Work In Progress]",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "-cj:version"
+    },
+    {
+      "type": "java",
+      "name": "aws-attribution-provision",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "aws-attribution-provision"
+    },
+    {
+      "type": "java",
       "name": "openshift-create-cluster",
       "request": "launch",
       "mainClass": "cj.Main",
@@ -147,11 +149,27 @@
     },
     {
       "type": "java",
-      "name": "[help] openshift-create-cluster",
+      "name": "help openshift-create-cluster",
       "request": "launch",
       "mainClass": "cj.Main",
       "projectName": "cloud-janitor",
       "args": "-cj:help openshift-create-cluster"
+    },
+    {
+      "type": "java",
+      "name": "[Utilities]",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "-cj:version"
+    },
+    {
+      "type": "java",
+      "name": "aws-get-data-bucket",
+      "request": "launch",
+      "mainClass": "cj.Main",
+      "projectName": "cloud-janitor",
+      "args": "aws-get-data-bucket"
     },
     {
       "type": "java",
