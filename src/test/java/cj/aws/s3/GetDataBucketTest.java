@@ -3,6 +3,7 @@ package cj.aws.s3;
 
 import cj.TaskTest;
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import software.amazon.awssdk.services.s3.model.Bucket;
 
@@ -12,6 +13,7 @@ import static cj.aws.AWSOutput.S3Bucket;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
+@Disabled
 class GetDataBucketTest extends TaskTest {
 
     @Inject

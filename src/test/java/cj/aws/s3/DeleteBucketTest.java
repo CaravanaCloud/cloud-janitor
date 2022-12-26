@@ -1,8 +1,10 @@
 package cj.aws.s3;
 
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Disabled;
 
 @QuarkusTest
+@Disabled
 public class DeleteBucketTest {
     /*
     @Inject

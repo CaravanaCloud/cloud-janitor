@@ -6,6 +6,7 @@ import cj.aws.ec2.cleanup.CleanupVPCs;
 import cj.aws.ec2.create.CreateVPC;
 import cj.aws.ec2.filter.FilterVPCs;
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Disabled
 public class DeleteEmptyVPCTest extends TaskTest {
     @Inject
     Logger log;
