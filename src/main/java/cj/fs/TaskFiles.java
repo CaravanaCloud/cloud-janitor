@@ -8,7 +8,6 @@ import javax.enterprise.context.ApplicationScoped;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.sql.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -122,25 +121,22 @@ public class TaskFiles {
         var homePath = home.toString();
         var path = System.getenv("PATH");
         var paths = path.split(":");
-        var pathStream = Arrays.asList(paths)
+        var existing = Arrays.asList(paths)
                 .stream()
                 .map(Path::of)
-                .filter(p -> p.toFile().exists());
-        var found = pathStream
+                .filter(p -> p.toFile().exists())
+                .toList();
+        var found = existing.stream()
                 .filter(p -> p.endsWith("/.local/bin"))
                 .findFirst();
         if (found.isEmpty()) {
-            found = pathStream
+            found = existing.stream()
                     .sorted(Comparator.comparingInt(p -> p.toAbsolutePath().toString().length()))
                     .filter(p -> p.toAbsolutePath().toString()
                             .startsWith(homePath))
                     .findFirst();
         }
         return found.orElse(null);
-    }
-
-    private boolean isDescendant(String path, Path home) {
-        return path.startsWith(home.toAbsolutePath().toString());
     }
 
 
