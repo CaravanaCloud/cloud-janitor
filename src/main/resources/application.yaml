@@ -7,8 +7,6 @@ cj:
         - "cowsay"
         - "-s"
         - "{args}"
-        - "{dryRunFlag}"
-        - "{mapa.get('uala')}"
         - ":)"
 
     - name: "aws-nuke-bypass"
