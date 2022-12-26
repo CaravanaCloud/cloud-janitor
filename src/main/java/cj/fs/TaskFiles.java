@@ -122,14 +122,21 @@ public class TaskFiles {
         var homePath = home.toString();
         var path = System.getenv("PATH");
         var paths = path.split(":");
-        var pathList = Arrays.asList(paths);
-        var found = pathList.stream()
-                .sorted(Comparator.comparingInt(String::length))
-                .filter(p -> p.startsWith(homePath))
-                .findFirst()
+        var pathStream = Arrays.asList(paths)
+                .stream()
                 .map(Path::of)
-                .orElse(null);
-        return found;
+                .filter(p -> p.toFile().exists());
+        var found = pathStream
+                .filter(p -> p.endsWith("/.local/bin"))
+                .findFirst();
+        if (found.isEmpty()) {
+            found = pathStream
+                    .sorted(Comparator.comparingInt(p -> p.toAbsolutePath().toString().length()))
+                    .filter(p -> p.toAbsolutePath().toString()
+                            .startsWith(homePath))
+                    .findFirst();
+        }
+        return found.orElse(null);
     }
 
     private boolean isDescendant(String path, Path home) {

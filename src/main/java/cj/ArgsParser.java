@@ -32,10 +32,14 @@ public class ArgsParser {
             var tokens = s.split(":");
             var flag = tokens[1];
             var kv = flag.split("=");
-            var option = Options.of(kv[0]);
-            var value = kv.length > 1 ? kv[1]:null;
-            option.parse(value);
-            return Optional.empty();
+            try {
+                var option = Options.of(kv[0]);
+                var value = kv.length > 1 ? kv[1]:null;
+                option.parse(value);
+                return Optional.empty();
+            }catch (IllegalArgumentException e){
+                System.out.println("Unknown option: "+ flag);
+            }
         }
         return Optional.of(s);
     }
