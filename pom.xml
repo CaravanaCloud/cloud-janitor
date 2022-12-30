@@ -14,7 +14,7 @@
   <properties>
     <maven.compiler.release>17</maven.compiler.release>
     <app.main.class>cj.Main</app.main.class>
-    <awssdk.version>2.18.30</awssdk.version>
+    <awssdk.version>2.18.33</awssdk.version>
     <guava.version>31.1-jre</guava.version>
     <jackson.version>2.14.0</jackson.version>
     <jreleaser.git.root.search>true</jreleaser.git.root.search>
