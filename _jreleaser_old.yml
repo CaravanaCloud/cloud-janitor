@@ -1,6 +1,5 @@
 project:
   name: cloud-janitor
-  version: 1.8.0
   description: Cloud Janitor
   longDescription: Automating cleanup, maintenance and troubleshooting tasks in Cloud Computing
   links:
@@ -19,4 +18,3 @@ release:
   github:
     owner: CaravanaCloud
     overwrite: true
-

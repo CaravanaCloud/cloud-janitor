@@ -11,6 +11,7 @@ import software.amazon.awssdk.services.elasticloadbalancing.ElasticLoadBalancing
 import software.amazon.awssdk.services.elasticloadbalancingv2.ElasticLoadBalancingV2Client;
 import software.amazon.awssdk.services.iam.IamClient;
 import software.amazon.awssdk.services.route53.Route53Client;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.sts.StsClient;
 import software.amazon.awssdk.services.transcribe.TranscribeClient;
@@ -81,13 +82,18 @@ public class AWSClients {
         @SuppressWarnings("redundant")
         var tx = S3TransferManager
                 .builder()
-                .s3ClientConfiguration(c -> {
-                    c.region(region());
-                    c.credentialsProvider(getCredentialsProvider());
-                })
+                .s3Client(s3async())
                 .build();
         return tx;
     }
+
+    private S3AsyncClient s3async() {
+        return S3AsyncClient.builder()
+                .region(region())
+                .credentialsProvider(getCredentialsProvider())
+                .build();
+    }
+
     public S3Client s3(){
         return s3(region());
     }

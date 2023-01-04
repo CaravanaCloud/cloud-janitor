@@ -4,7 +4,7 @@ import cj.aws.AWSWrite;
 import cj.fs.FSInput;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.transfer.s3.S3TransferManager;
-import software.amazon.awssdk.transfer.s3.UploadFileRequest;
+import software.amazon.awssdk.transfer.s3.model.UploadFileRequest;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
@@ -21,10 +21,11 @@ public class PutObjectsTask extends AWSWrite {
         var bucketName = expectInputString(targetBucketName);
         var paths = inputList(FSInput.paths, Path.class);
         var prefix = inputString(s3Prefix).orElse("");
-        var s3tm = aws().s3tm();
-        debug("Putting {} files to {}/{}", paths.size(), bucketName, prefix);
-        paths.forEach(path -> upload(s3tm,bucketName,prefix, path));
-        debug("Put objects finished");
+        try(var s3tm = aws().s3tm()) {
+            debug("Putting {} files to {}/{}", paths.size(), bucketName, prefix);
+            paths.forEach(path -> upload(s3tm, bucketName, prefix, path));
+            debug("Put objects finished");
+        }
     }
 
     private void upload(S3TransferManager s3tm, String bucket,String prefix, Path path) {

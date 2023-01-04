@@ -13,7 +13,8 @@ import javax.inject.Inject;
 
 @ApplicationScoped
 public class CloudJanitor implements QuarkusApplication {
-    public static final String VERSION = "1.8.0";
+    @Inject @Version
+    String version;
     @Inject
     Logger log;
 
@@ -49,7 +50,7 @@ public class CloudJanitor implements QuarkusApplication {
     }
 
     private void showVersion() {
-        log.info(CloudJanitor.VERSION);
+        log.info(version);
     }
 
     private void showHelp() {
@@ -59,7 +60,7 @@ public class CloudJanitor implements QuarkusApplication {
     @SuppressWarnings("unused")
     void onStart(@Observes StartupEvent ev) {
         var execId = tasks.getExecutionId();
-        log.info("Thank you for running cloud-janitor.");
+        log.info("Thank you for running cloud-janitor v{}", version);
         log.debug("This execution id is {}", execId);
         log.debug("Quarkus launch mode: {}", launchMode);
         log.trace("Startup Event {}", ev);

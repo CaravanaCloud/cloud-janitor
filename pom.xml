@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>caravanacloud</groupId>
   <artifactId>cloud-janitor</artifactId>
-  <version>1.8.0</version>
+  <version>1.13.0</version>
   <description>Automating cleanup, maintenance and troubleshooting tasks in Cloud Computing</description>
   <url>https://github.com/CaravanaCloud/cloud-janitor</url>
   <organization>
@@ -13,19 +13,18 @@
   </organization>
   <properties>
     <maven.compiler.release>17</maven.compiler.release>
-    <app.main.class>cj.Main</app.main.class>
-    <awssdk.version>2.18.30</awssdk.version>
+    <awssdk.version>2.19.8</awssdk.version>
+    <quarkus.platform.version>2.15.1.Final</quarkus.platform.version>
     <guava.version>31.1-jre</guava.version>
     <jackson.version>2.14.0</jackson.version>
+    <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
     <jreleaser.git.root.search>true</jreleaser.git.root.search>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-    <quarkus.platform.version>2.14.2.Final</quarkus.platform.version>
-    <reflections.version>0.10.2</reflections.version>
     <skipTests>true</skipTests>
-    <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
+    <app.main.class>cj.Main</app.main.class>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -111,7 +110,7 @@
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>s3-transfer-manager</artifactId>
-      <version>${awssdk.version}-PREVIEW</version>
+      <version>${awssdk.version}</version>
       <exclusions>
         <exclusion>
           <groupId>software.amazon.awssdk</groupId>
@@ -177,6 +176,7 @@
       </plugins>
     </pluginManagement>
     <plugins>
+
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.10.1</version>
@@ -186,6 +186,7 @@
           </compilerArgs>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>${quarkus.platform.group-id}</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
@@ -198,6 +199,26 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-help-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <id>generate-version-file</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>evaluate</goal>
+            </goals>
+            <configuration>
+              <expression>project.version</expression>
+              <output>${project.build.directory}/../src/main/resources/version.txt</output>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${surefire-plugin.version}</version>
@@ -207,6 +228,7 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
@@ -222,6 +244,7 @@
           <mainClass>${app.main.class}</mainClass>
         </configuration>
       </plugin>
+
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
         <version>3.2.0</version>
@@ -243,6 +266,7 @@
           </filesets>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.panteleyev</groupId>
         <artifactId>jpackage-maven-plugin</artifactId>
@@ -270,6 +294,7 @@
           <type>APP_IMAGE</type>
         </configuration>
       </plugin>
+
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.4.2</version>
@@ -289,10 +314,11 @@
           </descriptors>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.jreleaser</groupId>
         <artifactId>jreleaser-maven-plugin</artifactId>
-        <version>1.3.1</version>
+        <version>1.4.0</version>
         <executions>
           <execution>
             <id>make-assembly</id>
