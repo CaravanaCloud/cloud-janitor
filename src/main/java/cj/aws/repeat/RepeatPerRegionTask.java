@@ -12,8 +12,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 
-import static cj.aws.AWSInput.identity;
-import static cj.aws.AWSInput.regions;
+import static cj.aws.AWSInput.*;
 
 @Dependent
 public class RepeatPerRegionTask extends BaseTask {
@@ -32,15 +31,15 @@ public class RepeatPerRegionTask extends BaseTask {
                 .outputList(AWSOutput.RegionMatches, Region.class);
         for (var id: ids){
             for (var region: regions){
-                debug("Repeating [{}] as [{}]@[{}]", query, id, region);
-                submitQuery(query, List.of(region), id);
+                debug("Repeating {} as [{}]@[{}]", query, id, region);
+                submitQuery(query, region, id);
             }
         }
     }
 
-    private void submitQuery(List<String> query, List<Region> regionList, AWSIdentity id) {
+    private void submitQuery(List<String> query, Region region, AWSIdentity id) {
         tasks().submitQuery(query, Map.of(
-                regions, regionList,
+                targetRegion, region,
                 identity, id
         ));
     }

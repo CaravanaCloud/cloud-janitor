@@ -1,9 +1,7 @@
 package cj.aws;
 
 import cj.BaseTask;
-import cj.CJInput;
 import cj.aws.sts.AWSLoadIdentitiesTask;
-import cj.spi.Task;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ec2.model.Filter;
 
@@ -17,7 +15,6 @@ import java.util.concurrent.Callable;
 import static cj.aws.AWSInput.identity;
 import static cj.aws.AWSOutput.Identities;
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.awaitility.Awaitility.await;
 
 public abstract class AWSTask
@@ -152,21 +149,6 @@ public abstract class AWSTask
     protected String accountId(){
         var info = identityInfo();
         return info != null ? info.accountId() : "";
-    }
-
-
-    @Inject
-    Instance<AWSRepeaterTask> iteratorInstance;
-
-    protected <T extends Task> void forEachRegion(Instance<T> taskInstance) {
-        checkArgument(taskInstance.isResolvable(), "Task instance is not resolvable");
-        submitInstance(iteratorInstance, CJInput.regionTask, taskInstance);
-    }
-
-    protected <T extends Task> void forEachIdentity(Instance<T> taskInstance) {
-        checkNotNull(taskInstance);
-        checkArgument(taskInstance.isResolvable(), "Task instance is not resolvable");
-        submitInstance(iteratorInstance, CJInput.identityTask, taskInstance);
     }
 
     @Override
