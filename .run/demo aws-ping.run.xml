@@ -12,7 +12,7 @@
     </extension>
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="cj.*" />
+        <option name="PATTERN" value="cj.aws.cr.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

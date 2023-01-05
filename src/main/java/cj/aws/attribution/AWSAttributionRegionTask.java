@@ -2,13 +2,13 @@ package cj.aws.attribution;
 
 import cj.TaskDescription;
 import cj.TaskMaturity;
-import cj.TaskRepeat;
 import cj.TaskRepeater;
 import cj.aws.AWSIdentity;
 import cj.aws.AWSOutput;
 import cj.aws.AWSTask;
 import cj.aws.s3.AWSGetBucketTask;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.athena.AthenaClient;
 import software.amazon.awssdk.services.athena.model.QueryExecutionContext;
 import software.amazon.awssdk.services.athena.model.ResultConfiguration;
 import software.amazon.awssdk.services.athena.model.StartQueryExecutionRequest;
@@ -21,6 +21,10 @@ import software.amazon.awssdk.services.s3.model.Bucket;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import static cj.TaskMaturity.Level.*;
 import static cj.TaskRepeat.*;
@@ -216,6 +220,25 @@ TBLPROPERTIES ('classification'='cloudtrail');
             checkpoint("Creating athena attribution table");
             athena.startQueryExecution(req);
             debug("Athena table created for trail {}", trailName);
+            if (isValid(athena, tableName)){
+                debug("Athena table is valid");
+            }else {
+                warn("Athena table is NOT valid");
+            }
         }
+    }
+
+    private boolean isValid(AthenaClient athena, String tableName) {
+        try(var conn = getConnection()){
+            return conn.isValid(60);
+        } catch (SQLException e) {
+            fail(e);
+            return false;
+        }
+    }
+
+    private Connection getConnection() throws SQLException {
+        var url = "jdbc:awsathena://AwsRegion=" + regionName();
+        return DriverManager.getConnection(url);
     }
 }

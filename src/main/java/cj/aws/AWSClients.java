@@ -174,8 +174,9 @@ public class AWSClients {
 
 
     public CloudTrailClient cloudtrail() {
+        var _region = region();
         return CloudTrailClient.builder()
-                .region(region)
+                .region(_region)
                 .credentialsProvider(getCredentialsProvider())
                 .build();
     }
@@ -188,4 +189,7 @@ public class AWSClients {
         this.credentialsProvider = creds;
     }
 
+    public void setRegion(Region region) {
+        this.region = region;
+    }
 }

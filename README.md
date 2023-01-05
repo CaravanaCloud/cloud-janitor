@@ -61,7 +61,7 @@ Besides that, contributing to cloud janitor is a great way to learn Java and AWS
 
 We are glad to help you get started and build upon this repository as you'd like.
 
-If you´d like to get in touch directly, besides here on github, you can find us on twitter.com/caravanacloud.
+If you´d like to get in touch directly, besides here on github, you can find us on twitter.com/cj.
 
 ## Executing Cloud Janitor
 
@@ -72,7 +72,7 @@ All mentioned binaries can be found in the [project releases page](https://githu
 ### Homebrew (todo)
 Install it:
 ```
-brew tap caravanacloud/homebrew-tap
+brew tap cj/homebrew-tap
 brew install cloud-janitor
 ```
 Run it:
@@ -98,7 +98,7 @@ java -jar java -jar cloud-janitor.jar
 
 ### Docker Container
 ```bash
-docker run --pull=always caravanacloud/cloud-janitor 
+docker run --pull=always cj/cloud-janitor 
 ```
 
 ### Github Action

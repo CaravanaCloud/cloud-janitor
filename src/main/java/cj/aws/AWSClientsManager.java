@@ -43,6 +43,7 @@ public class AWSClientsManager {
 
     public AWSClients of(AWSIdentity identity, Region region) {
         if (region == null){
+            log.warn("Requested AWS clients without region. Using default region");
             region = defaultRegion(config.aws());
         }
         var key = AWSClientIdentity.of(identity, region);
@@ -50,6 +51,8 @@ public class AWSClientsManager {
         if (clients == null ){
             log.trace("Creating new AWSClients for {} - {}", identity, region);
             clients = clientsInstance.get();
+            //TODO: Check repeat identity poassing clients.setCredentialsProvider(identity.toCredentialsProvider(sts));
+            clients.setRegion(region);
             clientsById.put(key, clients);
         }else {
             log.trace("Using cached AWSClients for {} - {}", identity, region);
@@ -68,7 +71,8 @@ public class AWSClientsManager {
     }
 
     public Region defaultRegion() {
-        return defaultRegion(config.aws());
+        Region region = defaultRegion(config.aws());
+        return region;
     }
     protected Region defaultRegion(AWSConfiguration config){
         var defaultRegion = config.defaultRegion();

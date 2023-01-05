@@ -1,0 +1,1 @@
+aws sam deploy -g

@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Config Rules for Cloud Janitor
+Globals:
+  Function:
+    MemorySize: 256
+    Timeout: 15
+
+
+Resources:
+  JanitorRuleFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: io.quarkus.amazon.lambda.runtime.QuarkusStreamHandler::handleRequest
+      Runtime: java11
+      CodeUri: target/function.zip
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSConfigRulesExecutionRole
+
+  ConfigPermissionToCallLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:
+        Fn::GetAtt:
+          - JanitorRuleFunction
+          - Arn
+      Action: "lambda:InvokeFunction"
+      Principal: "config.amazonaws.com"
+      SourceAccount: !Ref 'AWS::AccountId'
+
+  JanitorConfigRule:
+    Type: AWS::Config::ConfigRule
+    Properties:
+      ConfigRuleName: "LookupAttributionTags"
+      Scope:
+        ComplianceResourceTypes:
+          - "AWS::EC2::VPC"
+      Source:
+        Owner: "CUSTOM_LAMBDA"
+        SourceDetails:
+          -
+            EventSource: "aws.config"
+            MessageType: "ScheduledNotification"
+        SourceIdentifier:
+          Fn::GetAtt:
+            - JanitorRuleFunction
+            - Arn
+    DependsOn: ConfigPermissionToCallLambda

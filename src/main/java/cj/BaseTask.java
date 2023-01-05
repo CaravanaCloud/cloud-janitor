@@ -440,4 +440,8 @@ public class BaseTask
     public InputsMap inputsMap() {
         return inputsMap;
     }
+
+    public <T> T output(Class<T> type) {
+        return (T) outputAs(TaskOutput.main, type).orElse(null);
+    }
 }
