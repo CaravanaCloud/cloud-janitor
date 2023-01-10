@@ -189,10 +189,9 @@
         <inherited>false</inherited>
         <executions>
           <execution>
-            <id>install1</id>
-            <phase>validate</phase>
+            <phase>initialize</phase>
             <goals>
-              <goal>install-file</goal>
+              <goal>initialize</goal>
             </goals>
             <configuration>
               <groupId>com.syncron.amazonaws</groupId>
