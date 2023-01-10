@@ -199,7 +199,7 @@
               <artifactId>simba-athena-jdbc-driver</artifactId>
               <version>${athena-driver.version}</version>
               <packaging>jar</packaging>
-              <file>${basedir}/lib/AthenaJDBC42-2.0.35.1000.jar</file>
+              <file>${project.basedir}/lib/AthenaJDBC42-2.0.35.1000.jar</file>
             </configuration>
           </execution>
         </executions>
