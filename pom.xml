@@ -183,6 +183,7 @@
     </pluginManagement>
     <plugins>
 
+      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-install-plugin</artifactId>
@@ -191,7 +192,7 @@
           <execution>
             <phase>initialize</phase>
             <goals>
-              <goal>initialize</goal>
+              <goal>install-file</goal>
             </goals>
             <configuration>
               <groupId>com.syncron.amazonaws</groupId>
@@ -203,16 +204,7 @@
           </execution>
         </executions>
       </plugin>
-
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
-        <configuration>
-          <compilerArgs>
-            <arg>-Xlint:unchecked</arg>
-          </compilerArgs>
-        </configuration>
-      </plugin>
+      -->
 
       <plugin>
         <groupId>${quarkus.platform.group-id}</groupId>
@@ -392,12 +384,14 @@
           </jreleaser>
         </configuration>
       </plugin>
+
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
         <configuration>
-          <source>15</source>
-          <target>15</target>
+          <compilerArgs>
+            <arg>-Xlint:unchecked</arg>
+          </compilerArgs>
         </configuration>
       </plugin>
 
