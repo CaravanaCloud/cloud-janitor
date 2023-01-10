@@ -36,12 +36,18 @@ Resources:
       Scope:
         ComplianceResourceTypes:
           - "AWS::EC2::VPC"
+          - "AWS::EC2::NatGateway"
+          - "AWS::EC2::Instance"
       Source:
         Owner: "CUSTOM_LAMBDA"
         SourceDetails:
-          -
-            EventSource: "aws.config"
+          - EventSource: "aws.config"
             MessageType: "ScheduledNotification"
+            MaximumExecutionFrequency: "Twelve_Hours"
+          - EventSource: "aws.config"
+            MessageType: "ConfigurationItemChangeNotification"
+          - EventSource: "aws.config"
+            MessageType: "OversizedConfigurationItemChangeNotification"
         SourceIdentifier:
           Fn::GetAtt:
             - JanitorRuleFunction

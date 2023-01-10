@@ -13,18 +13,24 @@ import software.amazon.awssdk.services.config.model.PutEvaluationsRequest;
 @Named("LookupAttributionTagsLambda")
 public class LookupAttributionTagsLambda
         implements RequestHandler<ConfigEvent, Void> {
-
     @Override
     public Void handleRequest(ConfigEvent event, Context context) {
         var log = context.getLogger();
-        log.log("Looking up attribution tags for resource.");
+        log.log("== Looking up attribution tags for resource. ==");
+        log.log("Event class: "+ event.getClass().getName());
+        log.log("Invoking event: " + event.getInvokingEvent());
+        log.log("Event data: ");
         log.log(event.toString());
+/*
         var evaluation = Evaluation.builder()
                 .complianceType(ComplianceType.COMPLIANT)
+                .complianceResourceId(event.getInvokingEvent())
                 .build();
         try (var config = configClient()){
             doPutEvaluations(config, event, evaluation);
         }
+
+ */
         return null;
     }
 

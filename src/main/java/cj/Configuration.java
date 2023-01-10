@@ -202,6 +202,7 @@ public class Configuration {
     private String compose(String separator, String altSeparator, String[] context) {
         var name = composeNameSep(separator, context);
         name = name.replaceAll(altSeparator, separator);
+        name = name.toLowerCase();
         return name;
     }
 

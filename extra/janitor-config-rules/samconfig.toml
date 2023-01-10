@@ -3,7 +3,7 @@ version = 0.1
 [default.deploy]
 [default.deploy.parameters]
 stack_name = "janitor-config-rules"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1l7hkls1wbdn7"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-hvh04ym9v9rn"
 s3_prefix = "janitor-config-rules"
 region = "us-west-2"
 confirm_changeset = true

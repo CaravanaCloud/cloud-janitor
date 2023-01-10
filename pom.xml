@@ -163,6 +163,11 @@
       <artifactId>commons-compress</artifactId>
       <version>1.22</version>
     </dependency>
+    <dependency>
+      <groupId>com.syncron.amazonaws</groupId>
+      <artifactId>simba-athena-jdbc-driver</artifactId>
+      <version>${athena-driver.version}</version>
+    </dependency>
   </dependencies>
   <build>
     <defaultGoal>clean compile quarkus:dev</defaultGoal>
@@ -386,6 +391,14 @@
               </brew>
             </packagers>
           </jreleaser>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>15</source>
+          <target>15</target>
         </configuration>
       </plugin>
 

@@ -25,23 +25,26 @@ import javax.inject.Named;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import static cj.TaskMaturity.Level.*;
 import static cj.TaskRepeat.*;
 import static cj.aws.AWSInput.bucketPolicy;
 import static cj.aws.AWSInput.targetBucketName;
 
+//TODO: Auto sign-up to aws config
 @Dependent
 @Named("aws-attribution-provision")
 @TaskDescription("Provisions attribution resources (bucket, trail and table)")
 @TaskMaturity(experimental)
 @TaskRepeater(each_identity_region)
-public class AWSAttributionRegionTask extends AWSTask {
+public class AWSAttributionProvisionTask extends AWSTask {
     @Inject
     AWSGetBucketTask getBucketTask;
 
     @Override
     public void applyIdentity(AWSIdentity id){
+        debug("Provisioning resources for AWS Attribution on region {}", region());
         var trailName = composeName(accountId(), regionName());
         try (var cloudtrail = aws().cloudtrail()){
             getTrailForRegion(cloudtrail, region(), trailName);
@@ -49,10 +52,10 @@ public class AWSAttributionRegionTask extends AWSTask {
     }
 
     private String getTrailForRegion(CloudTrailClient cloudtrail, Region region, String trailName) {
+        debug("Looking for trail {} in region {}", trailName, region);
         var req = GetTrailRequest.builder()
                 .name(trailName)
                 .build();
-        debug("Looking for trail {} in region {}", trailName, region);
         try {
             var trail = cloudtrail.getTrail(req).trail();
             var arn = trail.trailARN();
@@ -89,7 +92,7 @@ public class AWSAttributionRegionTask extends AWSTask {
         }
     ]
 }
-                """;
+""";
         var accountId = identityInfo().accountId();
         var bucketName = composeName("attribution", accountId, region.toString());
         var keyPrefix = "attribution";
@@ -200,7 +203,9 @@ OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
 LOCATION 's3://$BUCKET_NAME/$BUCKET_PREFIX/AWSLogs/$ACCOUNT_ID/CloudTrail/'
 TBLPROPERTIES ('classification'='cloudtrail');
 """;
-        var tableName = composeNameAlt("attribution", accountId() , regionName());
+        var tableName = composeNameAlt("attribution",
+                accountId() ,
+                regionName());
         var ddl = ddlTemplate.replace("$TABLE_NAME", tableName)
                 .replace("$BUCKET_NAME", bucketName)
                 .replace("$BUCKET_PREFIX", bucketPrefix)
@@ -237,8 +242,13 @@ TBLPROPERTIES ('classification'='cloudtrail');
         }
     }
 
+    //TODO: Support multiple identities, consider 7using the profile credentials provider
+    // (Pg. 30) https://s3.amazonaws.com/athena-downloads/drivers/JDBC/SimbaAthenaJDBC-2.0.35.1000/docs/Simba+Amazon+Athena+JDBC+Connector+Install+and+Configuration+Guide.pdf
     private Connection getConnection() throws SQLException {
+        var props = new Properties();
+        props.put("AwsCredentialsProviderClass",
+                "com.simba.athena.amazonaws.auth.DefaultAWSCredentialsProviderChain");
         var url = "jdbc:awsathena://AwsRegion=" + regionName();
-        return DriverManager.getConnection(url);
+        return DriverManager.getConnection(url, props);
     }
 }
