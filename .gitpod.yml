@@ -4,9 +4,10 @@ image:
 
 tasks:
   - name: Build cloud-janitor
-    init: mvn clean verify -DskipTests
-    command: |
+    init: |
       mvn install:install-file -Dfile=lib/AthenaJDBC42-2.0.35.1000.jar -DgroupId=com.syncron.amazonaws -DartifactId=simba-athena-jdbc-driver -Dversion=2.0.35.1000 -Dpackaging=jar &&
+      mvn clean verify -DskipTests
+    command: |
       sudo ln -s /workspace/cloud-janitor/target/jpackage/app_image/cloud-janitor/bin/cloud-janitor /usr/local/bin/cloud-janitor &&
       cloud-janitor -cj:version
 
