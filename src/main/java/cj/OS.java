@@ -30,4 +30,8 @@ public enum OS {
     public static <T> T get(Map<OS, T> taskMap) {
         return taskMap.get(of());
     }
+
+    public static String username() {
+        return System.getProperty("user.name");
+    }
 }
