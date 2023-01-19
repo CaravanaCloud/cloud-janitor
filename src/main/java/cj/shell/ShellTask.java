@@ -264,9 +264,9 @@ public class ShellTask extends BaseTask {
     }
 
     private void printAndAppend(StringBuffer output, String s) {
-        s = redact(s);
         output.append(s);
         output.append("\n");
+        s = redact(s);
         log(s);
     }
 

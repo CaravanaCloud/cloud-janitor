@@ -38,13 +38,15 @@ public class AWSClientsManager {
 
     List<AWSIdentity> awsIdentities = null;
     private AWSIdentity defaultIdentity;
+
+    private Region defaultRegion;
     private final Map<AWSIdentity, AWSIdentityInfo> infoMap = new HashMap<>();
 
 
     public AWSClients of(AWSIdentity identity, Region region) {
         if (region == null){
-            log.warn("Requested AWS clients without region. Using default region");
             region = defaultRegion(config.aws());
+            log.warn("Requested AWS clients without region. Using default region {}", region);
         }
         var key = AWSClientIdentity.of(identity, region);
         var clients= clientsById.get(key);
@@ -74,20 +76,26 @@ public class AWSClientsManager {
         Region region = defaultRegion(config.aws());
         return region;
     }
-    protected Region defaultRegion(AWSConfiguration config){
-        var defaultRegion = config.defaultRegion();
-        if (defaultRegion != null){
-            return Region.of(defaultRegion);
+    protected synchronized Region defaultRegion(AWSConfiguration config){
+        if (defaultRegion != null)
+            return defaultRegion;
+        var configRegion = config.defaultRegion();
+        if (configRegion != null){
+            defaultRegion = Region.of(configRegion);
+            return defaultRegion;
         }
         var envRegion = System.getenv("AWS_REGION");
         if (envRegion != null){
-            return Region.of(envRegion);
+            defaultRegion = Region.of(envRegion);
+            return defaultRegion;
         }
         var cliRegion = awsCLIRegion();
         if (cliRegion != null){
-            return cliRegion;
+            defaultRegion = cliRegion;
+            return defaultRegion;
         }
-        return Region.US_EAST_1;
+        defaultRegion =  Region.US_EAST_1;
+        return defaultRegion;
     }
 
     public synchronized AWSIdentity defaultIdentity() {

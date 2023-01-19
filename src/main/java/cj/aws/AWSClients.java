@@ -13,6 +13,7 @@ import software.amazon.awssdk.services.iam.IamClient;
 import software.amazon.awssdk.services.route53.Route53Client;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.ssm.SsmClient;
 import software.amazon.awssdk.services.sts.StsClient;
 import software.amazon.awssdk.services.transcribe.TranscribeClient;
 import software.amazon.awssdk.services.translate.TranslateClient;
@@ -164,6 +165,14 @@ public class AWSClients {
         return athena;
     }
 
+    public SsmClient ssm() {
+        var ssm = SsmClient.builder()
+                .region(region())
+                .credentialsProvider(getCredentialsProvider())
+                .build();
+        return ssm;
+    }
+
     public AWSConfiguration config(){
         return cfg;
     }
@@ -192,4 +201,6 @@ public class AWSClients {
     public void setRegion(Region region) {
         this.region = region;
     }
+
+
 }

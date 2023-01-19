@@ -2,6 +2,7 @@ package cj;
 
 import cj.aws.bypass.BypassTask;
 import cj.spi.Task;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import io.quarkus.runtime.StartupEvent;
@@ -113,13 +114,13 @@ public class Configuration {
 
     @Override
     public String toString() {
-        return Map.of(
-                "executionId", getExecutionId(),
-                "os", OS.of(),
-                "arch", Arch.of(),
-                "capabilities", capabilities,
-                "parallel", config.parallel()
-        ).toString();
+        return MoreObjects.toStringHelper(this)
+                .add("executionId", getExecutionId())
+                .add("os", OS.of())
+                .add("arch", Arch.of())
+                .add("capabilities", capabilities)
+                .add("parallel", parallel())
+                .toString();
     }
 
     public Set<Capabilities> getCapabilities() {
@@ -168,9 +169,11 @@ public class Configuration {
 
     @SuppressWarnings("unused")
     public void loadCapabilities(@Observes StartupEvent ev) {
-        config.capabilities().ifPresentOrElse(this::addAll,
-                this::addDefaultCapabilities);
-        log.debug("Loaded {} capabilities: {}", capabilities.size(), capabilities);
+        config.capabilities()
+                .ifPresentOrElse(
+                    this::addAll,
+                    this::addDefaultCapabilities);
+        log.trace("Loaded {} capabilities: {}", capabilities.size(), capabilities);
     }
 
     private void addDefaultCapabilities() {

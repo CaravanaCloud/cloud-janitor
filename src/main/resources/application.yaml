@@ -10,6 +10,7 @@ cj:
         - ":)"
 
     - name: "aws-nuke-bypass"
+      #TODO: Test single-line bypass
       bypass:
         - "aws-nuke"
         - "--force"
@@ -57,3 +58,17 @@ cj:
           - "{dryRunFlag}"
           - "--config"
           - "{templatePath.get('aws-nuke.yaml')}"
+
+    - name: "aliyun"
+      description: "Alibaba CLI"
+      install:
+        check: "aliyun version"
+        packages:
+          executables:
+            - path: "aliyun"
+              link: "aliyun"
+          darwin_amd64: "https://github.com/aliyun/aliyun-cli/releases/download/v3.0.141/aliyun-cli-macosx-3.0.141-amd64.tgz"
+          darwin_arm64: "https://github.com/aliyun/aliyun-cli/releases/download/v3.0.141/aliyun-cli-macosx-3.0.141-arm64.tgz"
+          linux_amd64: "https://github.com/aliyun/aliyun-cli/releases/download/v3.0.141/aliyun-cli-linux-3.0.141-amd64.tgz"
+          linux_arm64: "https://github.com/aliyun/aliyun-cli/releases/download/v3.0.141/aliyun-cli-linux-3.0.141-arm64.tgz"
+          windows_amd64: "https://github.com/aliyun/aliyun-cli/releases/download/v3.0.141/aliyun-cli-windows-3.0.141-amd64.zip"

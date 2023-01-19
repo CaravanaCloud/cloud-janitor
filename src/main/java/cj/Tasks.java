@@ -66,11 +66,12 @@ public class Tasks {
     }
 
     private void init() {
-        log.debug("Configuration: {}", config);
+        log.debug("{}", config);
     }
 
     private void repeat(String... args) {
         var query = queryFrom(args);
+        var queryList = List.of(query);
         var repeater = repeat.forQuery(query);
         submitTask(repeater);
     }
@@ -92,6 +93,8 @@ public class Tasks {
     public void submitQuery(List<String> query, Map<Input, Object> inputs) {
         var arr = query.toArray(new String[0]);
         var tasks = config.lookupTasks(arr);
+        inputs = new HashMap<>(inputs);
+        inputs.put(CJInput.query, query);
         submitAll(tasks, inputs);
     }
     private void submitAll(List<? extends Task> tasks, Map<Input, Object> inputs) {
