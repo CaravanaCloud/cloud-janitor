@@ -47,3 +47,4 @@ config/application.yaml
 nohup.out
 
 
+/.envrc

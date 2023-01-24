@@ -2,7 +2,7 @@ package cj.env;
 
 import cj.BaseTask;
 import cj.CJInput;
-import cj.secrets.ssm.PutParametersTask;
+import cj.secrets.ssm.SecretsExportTask;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -10,13 +10,11 @@ import javax.inject.Named;
 import java.util.HashMap;
 import java.util.Map;
 
-import static cj.CJInput.*;
-
 @Dependent
 @Named("export")
 public class ExportTask extends BaseTask {
     @Inject
-    PutParametersTask putParametersTask;
+    SecretsExportTask putParametersTask;
 
     @Override
     public void apply() {

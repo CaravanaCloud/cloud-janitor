@@ -11,6 +11,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @ApplicationScoped
@@ -112,6 +114,49 @@ public class TaskFiles {
         return formatter.format(createTime);
     }
 
+    public static Map<String, String> loadEnvrc() {
+        var cwd = cwd();
+        var cwdPath = Path.of(cwd);
+        var envrcPath = cwdPath.resolve(".envrc");
+        var envrcExists = envrcPath.toFile().exists();
+        if (!envrcExists) return Map.of();
+        var envrcLines =  readLines(envrcPath);
+        var envrc = parseExports(envrcLines);
+        return envrc;
+    }
+
+    static Map<String, String> parseExports(List<String> lines) {
+        return lines.stream()
+                .filter(line -> line.startsWith("export"))
+                .collect(Collectors.toMap(
+                        TaskFiles::exportName,
+                        TaskFiles::exportValue));
+    }
+
+    private static String exportValue(String line) {
+        var  matcher = EXPORT_VALUE.matcher(line);
+        if (! matcher.find())
+            return "";
+        return matcher.group(1);
+    }
+
+    static final Pattern EXPORT_NAME = Pattern.compile("export\\s(\\w+)");
+    static final Pattern EXPORT_VALUE = Pattern.compile("export\\s\\w+=\\s*(\\w+)");
+
+    private static String exportName(String line) {
+        var  matcher = EXPORT_NAME.matcher(line);
+        if (! matcher.find())
+            return null;
+        return matcher.group(1);
+    }
+
+    private static List<String> readLines(Path file) {
+        try {
+            return java.nio.file.Files.readAllLines(file);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
     public Path packageDir() {
         return resolveDir(applicationDir(), "pkg");
     }
