@@ -133,15 +133,10 @@ public class TaskFiles {
                         TaskFiles::exportValue));
     }
 
-    private static String exportValue(String line) {
-        var  matcher = EXPORT_VALUE.matcher(line);
-        if (! matcher.find())
-            return "";
-        return matcher.group(1);
-    }
+
 
     static final Pattern EXPORT_NAME = Pattern.compile("export\\s(\\w+)");
-    static final Pattern EXPORT_VALUE = Pattern.compile("export\\s\\w+=\\s*(\\w+)");
+    static final Pattern EXPORT_VALUE = Pattern.compile("export\\s(\\w+)=(.*)");
 
     private static String exportName(String line) {
         var  matcher = EXPORT_NAME.matcher(line);
@@ -150,9 +145,27 @@ public class TaskFiles {
         return matcher.group(1);
     }
 
+    public static String exportValue(String line) {
+        var  matcher = EXPORT_VALUE.matcher(line);
+        if (! matcher.find())
+            return "";
+        var value = matcher.group(2);
+        value = unquote(value);
+        return value;
+    }
+
+    private static String unquote(String value) {
+        if (value.startsWith("\"") && value.endsWith("\""))
+            return value.substring(1, value.length() - 1);
+        if (value.startsWith("'") && value.endsWith("'"))
+            return value.substring(1, value.length() - 1);
+        return value;
+    }
+
     private static List<String> readLines(Path file) {
         try {
-            return java.nio.file.Files.readAllLines(file);
+            var lines = Files.readAllLines(file);
+            return lines;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

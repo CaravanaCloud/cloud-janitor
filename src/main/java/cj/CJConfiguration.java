@@ -53,7 +53,7 @@ public interface CJConfiguration {
     boolean parallel();
 
     @WithName("checkpointSleep")
-    @WithDefault("15")
+    @WithDefault("3")
     long checkpointSleep();
 
     @WithName("showVersion")
