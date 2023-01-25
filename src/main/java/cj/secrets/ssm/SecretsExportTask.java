@@ -7,9 +7,7 @@ import cj.TaskDomain;
 import cj.aws.AWSTask;
 import cj.fs.TaskFiles;
 import software.amazon.awssdk.services.ssm.SsmClient;
-import software.amazon.awssdk.services.ssm.model.ParameterType;
-import software.amazon.awssdk.services.ssm.model.PutParameterRequest;
-import software.amazon.awssdk.services.ssm.model.Tag;
+import software.amazon.awssdk.services.ssm.model.*;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
@@ -21,7 +19,7 @@ import java.util.Map;
 @TaskAction("export")
 @Named("secrets-export")
 @Dependent
-public class SecretsExportTask extends AWSTask {
+public class SecretsExportTask extends SecretsTask {
 
     @Override
     public void apply() {
@@ -54,34 +52,26 @@ public class SecretsExportTask extends AWSTask {
         }
         var paramKey = paramKeyName(username, scope, key);
         info("Putting secure string: {} := [{}]",  paramKey, value.length());
-        var usernameTag = Tag.builder().key("cj-secrets-username").value(username).build();
-        var scopeTag = Tag.builder().key("cj-secrets-scope").value(scope).build();
-        var tags = List.of(usernameTag, scopeTag);
+        var usernameTag = Tag.builder().key(usernameTagName()).value(username).build();
+        var scopeTag = Tag.builder().key(scopeTagName()).value(scope).build();
+        var nameTag = Tag.builder().key(nameTagName()).value(key).build();
+        var tags = List.of(nameTag, usernameTag, scopeTag);
         var req = PutParameterRequest.builder()
                 .name(paramKey)
                 .value(value)
-                .type(ParameterType.SECURE_STRING)
-                .tags(tags)
+                .type(ParameterType.STRING)
+                .overwrite(true)
                 .build();
         var resp = ssm.putParameter(req);
         debug("Put parameter response: {}", resp);
+        var treq = AddTagsToResourceRequest.builder()
+                .tags(tags)
+                .resourceType(ResourceTypeForTagging.PARAMETER)
+                .resourceId(paramKey)
+                .build();
+        var tres = ssm.addTagsToResource(treq);
+        debug("Put parameter tags ok");
     }
 
-    private String paramKeyName(String username, String scope, String key) {
-        var separator = separator();
-        var fqkn = username + separator + scope + separator + key;
-        fqkn = fqkn.toUpperCase();
-        fqkn = fqkn.replaceAll("\\W", "_");
-        return fqkn;
-    }
-
-    private String separator() {
-        return "__";
-    }
-
-    private String scope() {
-        return inputString(CJInput.scope)
-                .orElse("default");
-    }
 
 }

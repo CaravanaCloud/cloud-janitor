@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.elasticloadbalancing.ElasticLoadBalancingClient;
 import software.amazon.awssdk.services.elasticloadbalancingv2.ElasticLoadBalancingV2Client;
 import software.amazon.awssdk.services.iam.IamClient;
+import software.amazon.awssdk.services.resourcegroupstaggingapi.ResourceGroupsTaggingApiClient;
 import software.amazon.awssdk.services.route53.Route53Client;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -203,4 +204,11 @@ public class AWSClients {
     }
 
 
+    public ResourceGroupsTaggingApiClient tagging() {
+        var tagging = ResourceGroupsTaggingApiClient.builder()
+                .region(region())
+                .credentialsProvider(getCredentialsProvider())
+                .build();
+        return tagging;
+    }
 }
