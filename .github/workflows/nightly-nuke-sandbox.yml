@@ -44,12 +44,12 @@ jobs:
       - name: Move aws-nuke to path
         run: sudo mv /tmp/aws-nuke/aws-nuke-v2.21.2-linux-amd64 /usr/local/bin/aws-nuke
 
-      - name: List resource types
-        run: aws-nuke resource-types | tee aws-nuke.log
+#      - name: List resource types
+#        run: aws-nuke resource-types | tee aws-nuke.log
 
-#      - name: Try aws-nuke
-#        run: aws-nuke -c ./config/aws-nuke/ccsandbox.yaml --no-dry-run --force --force-sleep 3 | tee aws-nuke.log
-#        continue-on-error: true
+      - name: Try aws-nuke
+        run: aws-nuke -c ./config/aws-nuke/ccsandbox.yaml --no-dry-run --force --force-sleep 3 | tee aws-nuke.log
+        continue-on-error: true
 
       - name: Preserve log
         uses: actions/upload-artifact@v3
