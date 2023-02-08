@@ -1,0 +1,33 @@
+We want cloud-janitor to be easy to use, and not re-create the complexity and variety of command line tools that already exist. From now we'll be using the following mnemonic system:
+
+$ cloud-janitor <domain> <action> <object> <profile>
+
+Domain: The task domain, e.g. "aws", "gcp", "cloud", "logs", "translate" and so on.
+
+Action: The action to perform, e.g. "list", "delete", "create", "update" and so on.
+
+Object: The object to perform the action on, e.g. "cluster", "instances", "config", "users" and so on.
+
+Profile: The set of configuration variables to use ("cluster name=mycluster", "instance type=t3.nano", "ssh_key=..." )
+
+For backwards compatibility, tasks by name, we'll also support the following:
+
+$ cloud-janitor domain-action-object-profile
+
+"domain-action-object-profile" being the new standard for task names
+
+<domain> is required. If it is not set or not found, bypass mode will execute the provided command line, with the configured templates and packages , if any.
+<action> <object> <profile> are all optional and can be committed if there are only one of each.
+
+Examples:
+$ cloud-janitor openshift create cluster prod
+$ cloud-janitor openshift create cluster
+$ cloud-janitor eks create cluster
+$ cloud-janitor logs put
+$ cloud-janitor translate
+$ cloud-janitor transcribe
+
+
+Tasks will be refactored as they are maintained, another ADR will be added when all tasks adhere to this standard, hopefully marking release 2.0.0.
+
+

@@ -197,6 +197,18 @@ public class TaskFiles {
         return found.orElse(null);
     }
 
+    public List findLogFiles() {
+        var files = findByExtension(cwdPath(), "log")
+                .stream()
+                .map(Path::toFile)
+                .toList();
+        return files;
+    }
+
+    private Path cwdPath() {
+        return Path.of(cwd());
+    }
+
 
     static class CopyWithBackup extends SimpleFileVisitor<Path>{
         private final Path src;

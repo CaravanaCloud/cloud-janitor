@@ -6,6 +6,7 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.athena.AthenaClient;
 import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
 import software.amazon.awssdk.services.cloudtrail.CloudTrailClient;
+import software.amazon.awssdk.services.cloudwatch.CloudWatchClient;
 import software.amazon.awssdk.services.ec2.Ec2Client;
 import software.amazon.awssdk.services.elasticloadbalancing.ElasticLoadBalancingClient;
 import software.amazon.awssdk.services.elasticloadbalancingv2.ElasticLoadBalancingV2Client;
@@ -210,5 +211,13 @@ public class AWSClients {
                 .credentialsProvider(getCredentialsProvider())
                 .build();
         return tagging;
+    }
+
+    public CloudWatchClient cloudwatch() {
+        var cw = CloudWatchClient.builder()
+                .region(region())
+                .credentialsProvider(getCredentialsProvider())
+                .build();
+        return cw;
     }
 }
