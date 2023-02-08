@@ -1,0 +1,22 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  creationTimestamp: null
+  labels:
+    machineconfiguration.openshift.io/role: master
+  name: 99-master-ssh
+spec:
+  config:
+    ignition:
+      version: 3.2.0
+    passwd:
+      users:
+      - name: core
+        sshAuthorizedKeys:
+        - |
+          ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDTm54TjfUEO29XhjQ763aUNUboC9FesT/xlsfXrgGN0oqa8gCY5rYOOEG/eKgYPx8aUeQdj0Dmq56llmEG/wey87rTQa4YQAX36FzQYTNJDBZ3JVbaNBmAJGOhBqaFHptbHMjqViUG+aB74RxiHtbltAR1YcHFNIV+J5P0TgOhmd3alIHb5u2gINWfI4hDIMcPAIAq8ZloxSbXWyCPKuiaYCYcPCkvA05ARpy+taTfC6S1P0LDJ/zRwGtx/a3TjYO+9HcYaugrzBokOEpZF+FBu6/Z8hrLDYrkB0M4Oj33QcZlVk+rriaKNw7HCE2JCuxpz4pwqZrqKCCiZ6ZUZFWYKUJJriWynR66aWdYYux3Vd7Rp7p7y9nD1PleJe/GvTfOmsrEI3/a2TZ7XR4W2eWWqi1wxt/WtRM3V+W1ix7moNJaIh2MCyzHuoXS6Bivmx15RKI+mKyBv4FMcR6XXsh/HhUZA86AyXtVMfbSWWHqkcguKbhv/fh4Uk12z4Z4HyOYO7h87B0Gv9xjAGImHMR04NzXs+AqRawf6eP55zG3UWRoqeCK9q9gN/1uIKUOJjJMz99kqgXUngdPtpj45s9PV0vZctnSl+PUWCWgVkC4OacQKWuA+t6vCA5jBc1pORuhmxqCL3cQnKlGtZf+TkDBaHu39in6ML92gmX7F9RbgQ== faermanj@fedora
+  extensions: null
+  fips: false
+  kernelArguments: null
+  kernelType: ""
+  osImageURL: ""

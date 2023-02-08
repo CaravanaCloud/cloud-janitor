@@ -1,0 +1,125 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: bootstrap-kube-apiserver
+  # Use the same namespace for the bootstrap apiserver as the post-bootstrap
+  # apiserver for compatibility with a single-node (SNO) cluster.
+  namespace: openshift-kube-apiserver
+  labels:
+    openshift.io/control-plane: "true"
+    openshift.io/component: "api"
+  annotations:
+    openshift.io/run-level: "0"
+    kubectl.kubernetes.io/default-logs-container: kube-apiserver
+    target.workload.openshift.io/management: '{"effect": "PreferredDuringScheduling"}'
+spec:
+  restartPolicy: Always
+  hostNetwork: true
+  initContainers:
+  - name: setup
+    terminationMessagePolicy: FallbackToLogsOnError
+    image: 'quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:662c00a50b8327cc39963577d3e11aa71458b3888ce06223a4501679a28fecd1'
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+    - mountPath: /var/log/kube-apiserver
+      name: audit-dir
+    command: ['/bin/bash', '-ec']
+    args:
+    - |
+      echo -n "Fixing audit permissions."
+      chmod 0700 /var/log/kube-apiserver && touch /var/log/kube-apiserver/audit.log && chmod 0600 /var/log/kube-apiserver/*
+    securityContext:
+      privileged: true
+    resources:
+      requests:
+        memory: 50Mi
+        cpu: 5m
+  containers:
+  - name: kube-apiserver
+    image: 'quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:662c00a50b8327cc39963577d3e11aa71458b3888ce06223a4501679a28fecd1'
+    imagePullPolicy: 'IfNotPresent'
+    terminationMessagePolicy: FallbackToLogsOnError
+    command: [ "/bin/bash", "-ec" ]
+    args:
+    - >
+      hyperkube kube-apiserver
+      --openshift-config=/etc/kubernetes/config/kube-apiserver-config.yaml
+      --logtostderr=false
+      --alsologtostderr
+      --v=2
+      --log-file=/var/log/bootstrap-control-plane/kube-apiserver.log
+      --advertise-address=${HOST_IP}
+    resources:
+      requests:
+        memory: 1Gi
+        cpu: 265m
+    volumeMounts:
+    - mountPath: /etc/ssl/certs
+      name: ssl-certs-host
+      readOnly: true
+    - mountPath: /etc/kubernetes/secrets
+      name: secrets
+      readOnly: true
+    - mountPath: /etc/kubernetes/cloud
+      name: etc-kubernetes-cloud
+      readOnly: true
+    - mountPath: /etc/kubernetes/config
+      name: config
+      readOnly: true
+    - mountPath: /var/log/bootstrap-control-plane
+      name: logs
+    - mountPath: /var/log/kube-apiserver
+      name: audit-dir
+    livenessProbe:
+      httpGet:
+        scheme: HTTPS
+        port: 6443
+        path: livez
+      initialDelaySeconds: 45
+      timeoutSeconds: 10
+    readinessProbe:
+      httpGet:
+        scheme: HTTPS
+        port: 6443
+        path: readyz
+      initialDelaySeconds: 10
+      timeoutSeconds: 10
+    env:
+    - name: HOST_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.hostIP
+  - name: kube-apiserver-insecure-readyz
+    image: 'quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:9ed61d19216d71cc5692c22402961b0f865ed8629f5d64f1687aa47af601c018'
+    imagePullPolicy: IfNotPresent
+    terminationMessagePolicy: FallbackToLogsOnError
+    command: ["cluster-kube-apiserver-operator", "insecure-readyz"]
+    args:
+    - --insecure-port=6080
+    - --delegate-url=https://localhost:6443/readyz
+    ports:
+    - containerPort: 6080
+    resources:
+      requests:
+        memory: 50Mi
+        cpu: 5m
+  terminationGracePeriodSeconds: +135
+  volumes:
+  - hostPath:
+      path: '/etc/kubernetes/bootstrap-secrets'
+    name: secrets
+  - hostPath:
+      path: '/etc/kubernetes/cloud'
+    name: etc-kubernetes-cloud
+  - hostPath:
+      path: '/etc/kubernetes/bootstrap-configs'
+    name: config
+  - hostPath:
+      path: /etc/ssl/certs
+    name: ssl-certs-host
+  - hostPath:
+      path: /var/log/bootstrap-control-plane
+    name: logs
+  - hostPath:
+      path: /var/log/kube-apiserver
+    name: audit-dir

@@ -1,0 +1,570 @@
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      -                   
+tcp        0      0 127.0.0.1:40799         0.0.0.0:*               LISTEN      -                   
+tcp        0      0 0.0.0.0:37509           0.0.0.0:*               LISTEN      -                   
+tcp        0      0 127.0.0.1:10248         0.0.0.0:*               LISTEN      -                   
+tcp        0      0 0.0.0.0:111             0.0.0.0:*               LISTEN      -                   
+tcp        0      0 127.0.0.1:39958         127.0.0.1:2379          ESTABLISHED -                   
+tcp        0      0 127.0.0.1:57774         127.0.0.1:10257         TIME_WAIT   -                   
+tcp        0      0 10.0.105.247:48566      44.199.160.73:443       ESTABLISHED -                   
+tcp        0     84 10.0.105.247:22         5.152.173.91:50319      ESTABLISHED -                   
+tcp        0      0 10.0.105.247:33182      44.209.252.60:443       ESTABLISHED -                   
+tcp6       0      0 :::10259                :::*                    LISTEN      -                   
+tcp6       0      0 :::10357                :::*                    LISTEN      -                   
+tcp6       0      0 :::22                   :::*                    LISTEN      -                   
+tcp6       0      0 :::9978                 :::*                    LISTEN      -                   
+tcp6       0      0 :::22623                :::*                    LISTEN      -                   
+tcp6       0      0 :::37151                :::*                    LISTEN      -                   
+tcp6       0      0 :::6080                 :::*                    LISTEN      -                   
+tcp6       0      0 :::22624                :::*                    LISTEN      -                   
+tcp6       0      0 :::9537                 :::*                    LISTEN      -                   
+tcp6       0      0 :::10250                :::*                    LISTEN      -                   
+tcp6       0      0 :::6443                 :::*                    LISTEN      -                   
+tcp6       0      0 :::2379                 :::*                    LISTEN      -                   
+tcp6       0      0 :::19531                :::*                    LISTEN      -                   
+tcp6       0      0 :::2380                 :::*                    LISTEN      -                   
+tcp6       0      0 :::10255                :::*                    LISTEN      -                   
+tcp6       0      0 :::111                  :::*                    LISTEN      -                   
+tcp6       0      0 :::10257                :::*                    LISTEN      -                   
+tcp6       0      0 ::1:42506               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36380               ESTABLISHED -                   
+tcp6       0      0 127.0.0.1:2379          127.0.0.1:39958         ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36510               ESTABLISHED -                   
+tcp6       0      0 ::1:33880               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36074               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42322               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33956               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42130               ESTABLISHED -                   
+tcp6       0      0 ::1:49910               ::1:6443                ESTABLISHED -                   
+tcp6       0      0 ::1:36466               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36242               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42592               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36570               ESTABLISHED -                   
+tcp6       0      0 ::1:42662               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36198               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:33942               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36252               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33926               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42086               ESTABLISHED -                   
+tcp6       0      0 ::1:36226               ::1:2379                ESTABLISHED -                   
+tcp6       0     46 ::1:2379                ::1:42148               ESTABLISHED -                   
+tcp6       0      0 ::1:36556               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42102               ESTABLISHED -                   
+tcp6       0      0 ::1:42416               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42320               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42306               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36398               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36368               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33800               ESTABLISHED -                   
+tcp6       0      0 ::1:36588               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:33920               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42534               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42568               ESTABLISHED -                   
+tcp6       0      0 ::1:42190               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:33778               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36198               ESTABLISHED -                   
+tcp6       0      0 ::1:6443                ::1:50286               ESTABLISHED -                   
+tcp6       0      0 ::1:33906               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:49724               ::1:6443                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36138               ESTABLISHED -                   
+tcp6       0      0 ::1:36582               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:49738               ::1:6443                ESTABLISHED -                   
+tcp6       0      0 ::1:42114               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36174               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42012               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36312               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33880               ESTABLISHED -                   
+tcp6       0      0 ::1:49904               ::1:6443                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36436               ESTABLISHED -                   
+tcp6       0      0 ::1:49792               ::1:6443                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36336               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33790               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42306               ESTABLISHED -                   
+tcp6       0      0 ::1:36524               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42568               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36312               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33810               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36492               ESTABLISHED -                   
+tcp6       0      0 ::1:42060               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36284               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36348               ESTABLISHED -                   
+tcp6       0      0 ::1:36096               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36602               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42558               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33950               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36266               ESTABLISHED -                   
+tcp6       0      0 ::1:42234               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:33790               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42326               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36330               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42282               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42602               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36066               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42142               ESTABLISHED -                   
+tcp6       0      0 ::1:36334               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36084               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33830               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36364               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36482               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36446               ESTABLISHED -                   
+tcp6       0      0 ::1:36562               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36160               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42526               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42210               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:6443                ::1:49738               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36108               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42030               ESTABLISHED -                   
+tcp6       0      0 ::1:36366               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42218               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36268               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33852               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36174               ESTABLISHED -                   
+tcp6       0      0 ::1:42432               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36090               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36300               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36370               ESTABLISHED -                   
+tcp6       0      0 ::1:33810               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42264               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36140               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36364               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36556               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36126               ESTABLISHED -                   
+tcp6       0      0 ::1:42062               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36116               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:50182               ::1:6443                ESTABLISHED -                   
+tcp6       0      0 ::1:36246               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36096               ESTABLISHED -                   
+tcp6       0      0 ::1:42500               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42628               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42446               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42060               ESTABLISHED -                   
+tcp6       0      0 ::1:36066               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36300               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42666               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:33852               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42470               ESTABLISHED -                   
+tcp6       0      0 ::1:42546               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36160               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42198               ESTABLISHED -                   
+tcp6       0      0 ::1:36266               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36604               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42484               ESTABLISHED -                   
+tcp6       0      0 ::1:36410               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42086               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42506               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42068               ESTABLISHED -                   
+tcp6       0      0 ::1:36446               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42190               ESTABLISHED -                   
+tcp6       0      0 ::1:42068               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36178               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42640               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:33950               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36268               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42320               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42114               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42084               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36602               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36074               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42062               ESTABLISHED -                   
+tcp6       0      0 ::1:36392               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36370               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33816               ESTABLISHED -                   
+tcp6       0      0 ::1:42590               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:41996               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33836               ESTABLISHED -                   
+tcp6       0      0 ::1:33830               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36226               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33954               ESTABLISHED -                   
+tcp6       0      0 ::1:49780               ::1:6443                ESTABLISHED -                   
+tcp6       0      0 ::1:36184               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42218               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42038               ESTABLISHED -                   
+tcp6       0      0 ::1:33800               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36492               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33900               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42386               ESTABLISHED -                   
+tcp6       0      0 ::1:36534               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42640               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42340               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36210               ESTABLISHED -                   
+tcp6       0      0 ::1:42534               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36524               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33860               ESTABLISHED -                   
+tcp6       0      0 ::1:42358               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42678               ESTABLISHED -                   
+tcp6       0      0 ::1:33982               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42456               ESTABLISHED -                   
+tcp6       0      0 ::1:42050               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36126               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:33900               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:6443                ::1:49792               ESTABLISHED -                   
+tcp6       0      0 ::1:42592               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42356               ESTABLISHED -                   
+tcp6       0      0 ::1:36252               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42512               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42102               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42198               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42612               ESTABLISHED -                   
+tcp6       0      0 ::1:54090               ::1:6443                ESTABLISHED -                   
+tcp6       0      0 ::1:42646               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36138               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42142               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:6443                ::1:50312               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36328               ESTABLISHED -                   
+tcp6       0      0 ::1:36424               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36392               ESTABLISHED -                   
+tcp6       0      0 ::1:36242               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42166               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42582               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36534               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36372               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42666               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42326               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42174               ESTABLISHED -                   
+tcp6       0      0 ::1:6443                ::1:50182               ESTABLISHED -                   
+tcp6       0      0 ::1:36526               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36116               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42294               ESTABLISHED -                   
+tcp6       0      0 ::1:36284               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33968               ESTABLISHED -                   
+tcp6       0      0 ::1:42224               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42148               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42210               ESTABLISHED -                   
+tcp6       0      0 ::1:42612               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42374               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36210               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36204               ESTABLISHED -                   
+tcp6       0      0 ::1:42456               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36562               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42546               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42526               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42166               ESTABLISHED -                   
+tcp6       0      0 ::1:42130               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33866               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33902               ESTABLISHED -                   
+tcp6       0      0 ::1:42340               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33876               ESTABLISHED -                   
+tcp6       0      0 ::1:42282               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42246               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42470               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:6443                ::1:50298               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42252               ESTABLISHED -                   
+tcp6       0      0 ::1:36434               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42356               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42628               ESTABLISHED -                   
+tcp6       0      0 ::1:36060               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42662               ESTABLISHED -                   
+tcp6       0      0 ::1:36318               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42154               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42224               ESTABLISHED -                   
+tcp6       0      0 ::1:36348               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42174               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36460               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33982               ESTABLISHED -                   
+tcp6       0      0 ::1:42602               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42446               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:33806               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36108               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:33956               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42570               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:33836               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36366               ESTABLISHED -                   
+tcp6       0      0 ::1:36436               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42266               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:33902               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:33896               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:33866               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36398               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36406               ESTABLISHED -                   
+tcp6       0      0 ::1:36090               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:6443                ::1:49780               ESTABLISHED -                   
+tcp6       0      0 ::1:36204               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42050               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36494               ESTABLISHED -                   
+tcp6       0      0 ::1:50286               ::1:6443                ESTABLISHED -                   
+tcp6       0      0 ::1:33968               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:33860               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36582               ESTABLISHED -                   
+tcp6       0      0 ::1:33876               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36368               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42582               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42416               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36452               ESTABLISHED -                   
+tcp6       0      0 ::1:36374               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36482               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42558               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36498               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36460               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42404               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36604               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36084               ESTABLISHED -                   
+tcp6       0      0 ::1:50298               ::1:6443                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42358               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36424               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:41996               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42246               ESTABLISHED -                   
+tcp6       0      0 ::1:36336               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33778               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42264               ESTABLISHED -                   
+tcp6       0      0 ::1:36542               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:6443                ::1:49910               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33920               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36318               ESTABLISHED -                   
+tcp6       0      0 ::1:36452               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36570               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36178               ESTABLISHED -                   
+tcp6       0      0 ::1:36304               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36154               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36434               ESTABLISHED -                   
+tcp6       0      0 ::1:36372               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42400               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36588               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42374               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36542               ESTABLISHED -                   
+tcp6       0      0 ::1:42012               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:36406               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42038               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:6443                ::1:54090               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42266               ESTABLISHED -                   
+tcp6       0      0 ::1:33954               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36246               ESTABLISHED -                   
+tcp6       0      0 ::1:42404               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36140               ESTABLISHED -                   
+tcp6       0      0 ::1:36494               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42678               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36466               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33896               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42570               ESTABLISHED -                   
+tcp6       0      0 10.0.105.247:6443       5.152.173.91:53469      ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36330               ESTABLISHED -                   
+tcp6       0      0 ::1:42030               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42626               ESTABLISHED -                   
+tcp6       0      0 ::1:33926               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36334               ESTABLISHED -                   
+tcp6       0      0 ::1:42084               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42432               ESTABLISHED -                   
+tcp6       0      0 ::1:50312               ::1:6443                ESTABLISHED -                   
+tcp6       0      0 ::1:6443                ::1:49904               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36304               ESTABLISHED -                   
+tcp6       0      0 ::1:42484               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42626               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42646               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42512               ESTABLISHED -                   
+tcp6       0      0 ::1:42386               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33942               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36374               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42500               ESTABLISHED -                   
+tcp6       0      0 ::1:36380               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33806               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42590               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36410               ESTABLISHED -                   
+tcp6       0      0 ::1:42154               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42234               ESTABLISHED -                   
+tcp6       0      0 ::1:36510               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:33816               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:42322               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36154               ESTABLISHED -                   
+tcp6       0      0 ::1:6443                ::1:49724               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36526               ESTABLISHED -                   
+tcp6       0      0 ::1:36328               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:33906               ESTABLISHED -                   
+tcp6       0      0 ::1:42294               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:42400               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36184               ESTABLISHED -                   
+tcp6       0      0 ::1:42252               ::1:2379                ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36498               ESTABLISHED -                   
+tcp6       0      0 ::1:2379                ::1:36060               ESTABLISHED -                   
+udp        0      0 10.0.105.247:68         10.0.127.253:67         ESTABLISHED -                   
+udp        0      0 0.0.0.0:111             0.0.0.0:*                           -                   
+udp        0      0 127.0.0.1:323           0.0.0.0:*                           -                   
+udp        0      0 127.0.0.1:837           0.0.0.0:*                           -                   
+udp        0      0 0.0.0.0:51218           0.0.0.0:*                           -                   
+udp6       0      0 :::54911                :::*                                -                   
+udp6       0      0 :::111                  :::*                                -                   
+udp6       0      0 ::1:323                 :::*                                -                   
+raw6       0      0 :::58                   :::*                    7           -                   
+Active UNIX domain sockets (servers and established)
+Proto RefCnt Flags       Type       State         I-Node   PID/Program name     Path
+unix  2      [ ACC ]     STREAM     LISTENING     79622    -                    /tmp/ssh-q37L952a9u/agent.9580
+unix  2      [ ]         DGRAM                    71770    -                    @000a7
+unix  2      [ ]         DGRAM                    72975    -                    @000a8
+unix  2      [ ]         DGRAM                    73943    -                    @000a9
+unix  2      [ ACC ]     STREAM     LISTENING     24333    -                    /run/systemd/private
+unix  2      [ ]         DGRAM                    77584    9565/systemd         /run/user/1000/systemd/notify
+unix  2      [ ACC ]     STREAM     LISTENING     77588    9565/systemd         /run/user/1000/systemd/private
+unix  2      [ ACC ]     STREAM     LISTENING     24345    -                    /run/rpcbind.sock
+unix  2      [ ACC ]     SEQPACKET  LISTENING     71959    -                    /proc/self/fd/12/attach
+unix  2      [ ACC ]     SEQPACKET  LISTENING     72476    -                    /proc/self/fd/12/attach
+unix  2      [ ACC ]     STREAM     LISTENING     29605    -                    @irqbalance1790.sock
+unix  2      [ ACC ]     STREAM     LISTENING     34332    -                    /var/lib/kubelet/pod-resources/3619027674
+unix  2      [ ACC ]     SEQPACKET  LISTENING     24364    -                    /run/udev/control
+unix  2      [ ACC ]     SEQPACKET  LISTENING     71778    -                    /proc/self/fd/12/attach
+unix  2      [ ACC ]     STREAM     LISTENING     24368    -                    /run/lvm/lvmpolld.socket
+unix  2      [ ACC ]     SEQPACKET  LISTENING     25915    -                    /run/systemd/coredump
+unix  2      [ ACC ]     STREAM     LISTENING     35971    -                    /var/lib/kubelet/device-plugins/kubelet.sock
+unix  2      [ ]         DGRAM                    74948    -                    @000aa
+unix  2      [ ]         DGRAM                    75345    -                    @000ab
+unix  2      [ ]         DGRAM                    75381    -                    @000ac
+unix  2      [ ACC ]     SEQPACKET  LISTENING     74845    -                    /proc/self/fd/12/attach
+unix  2      [ ACC ]     STREAM     LISTENING     79457    9565/systemd         /run/user/1000/bus
+unix  2      [ ACC ]     STREAM     LISTENING     79459    9565/systemd         /run/user/1000/gnupg/S.dirmngr
+unix  2      [ ACC ]     SEQPACKET  LISTENING     42593    -                    /proc/self/fd/12/attach
+unix  2      [ ACC ]     STREAM     LISTENING     79462    9565/systemd         /run/user/1000/gnupg/S.gpg-agent.extra
+unix  2      [ ACC ]     STREAM     LISTENING     79464    9565/systemd         /run/user/1000/gnupg/S.gpg-agent
+unix  2      [ ACC ]     SEQPACKET  LISTENING     72294    -                    /proc/self/fd/12/attach
+unix  2      [ ACC ]     STREAM     LISTENING     79466    9565/systemd         /run/user/1000/podman/podman.sock
+unix  2      [ ACC ]     STREAM     LISTENING     79471    9565/systemd         /run/user/1000/gnupg/S.gpg-agent.browser
+unix  2      [ ACC ]     STREAM     LISTENING     79473    9565/systemd         /run/user/1000/gnupg/S.gpg-agent.ssh
+unix  2      [ ACC ]     STREAM     LISTENING     30785    -                    /var/lib/sss/pipes/nss
+unix  2      [ ACC ]     STREAM     LISTENING     30771    -                    /var/lib/sss/pipes/private/sbus-monitor
+unix  2      [ ACC ]     STREAM     LISTENING     31791    -                    /var/lib/sss/pipes/private/sbus-dp_implicit_files.1832
+unix  2      [ ACC ]     SEQPACKET  LISTENING     44942    -                    /proc/self/fd/12/attach
+unix  2      [ ACC ]     SEQPACKET  LISTENING     29076    -                    /run/bootupd.sock
+unix  2      [ ACC ]     STREAM     LISTENING     29081    -                    /run/dbus/system_bus_socket
+unix  2      [ ACC ]     SEQPACKET  LISTENING     43434    -                    /proc/self/fd/12/attach
+unix  2      [ ]         DGRAM                    27580    -                    /run/chrony/chronyd.sock
+unix  2      [ ACC ]     SEQPACKET  LISTENING     72382    -                    /proc/self/fd/12/attach
+unix  2      [ ACC ]     SEQPACKET  LISTENING     71624    -                    /proc/self/fd/12/attach
+unix  3      [ ]         DGRAM                    1228     -                    /run/systemd/notify
+unix  2      [ ]         DGRAM                    1230     -                    /run/systemd/cgroups-agent
+unix  8      [ ]         DGRAM                    1240     -                    /run/systemd/journal/dev-log
+unix  2      [ ACC ]     STREAM     LISTENING     1250     -                    /run/systemd/journal/stdout
+unix  6      [ ]         DGRAM                    1253     -                    /run/systemd/journal/socket
+unix  2      [ ACC ]     STREAM     LISTENING     34029    -                    /var/run/crio/crio.sock
+unix  2      [ ]         DGRAM                    43520    -                    @00055
+unix  2      [ ]         DGRAM                    33739    -                    @00024
+unix  2      [ ]         DGRAM                    29643    -                    
+unix  2      [ ]         DGRAM                    77569    -                    
+unix  2      [ ]         STREAM     CONNECTED     41701    -                    
+unix  3      [ ]         STREAM     CONNECTED     30309    -                    
+unix  2      [ ]         STREAM     CONNECTED     72462    -                    
+unix  3      [ ]         STREAM     CONNECTED     29237    -                    
+unix  3      [ ]         STREAM     CONNECTED     31840    -                    /run/dbus/system_bus_socket
+unix  3      [ ]         STREAM     CONNECTED     29993    -                    
+unix  3      [ ]         STREAM     CONNECTED     30790    -                    /var/lib/sss/pipes/private/sbus-monitor
+unix  2      [ ]         SEQPACKET  CONNECTED     70492    -                    
+unix  3      [ ]         STREAM     CONNECTED     34411    -                    
+unix  3      [ ]         STREAM     CONNECTED     29782    -                    
+unix  3      [ ]         STREAM     CONNECTED     30310    -                    /run/systemd/journal/stdout
+unix  2      [ ]         DGRAM                    30870    -                    
+unix  3      [ ]         STREAM     CONNECTED     30735    -                    /run/dbus/system_bus_socket
+unix  3      [ ]         STREAM     CONNECTED     32048    -                    
+unix  2      [ ]         DGRAM                    19385    -                    
+unix  3      [ ]         STREAM     CONNECTED     30734    -                    
+unix  3      [ ]         STREAM     CONNECTED     30626    -                    
+unix  2      [ ]         STREAM     CONNECTED     71586    -                    
+unix  3      [ ]         STREAM     CONNECTED     32822    -                    /var/lib/sss/pipes/nss
+unix  2      [ ]         DGRAM                    30730    -                    
+unix  2      [ ]         STREAM     CONNECTED     46560    -                    
+unix  3      [ ]         STREAM     CONNECTED     32821    -                    
+unix  3      [ ]         STREAM     CONNECTED     77745    -                    /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     30866    -                    
+unix  3      [ ]         STREAM     CONNECTED     34450    -                    
+unix  2      [ ]         STREAM     CONNECTED     43483    -                    
+unix  3      [ ]         STREAM     CONNECTED     40913    -                    /run/dbus/system_bus_socket
+unix  3      [ ]         STREAM     CONNECTED     30728    -                    /run/dbus/system_bus_socket
+unix  3      [ ]         STREAM     CONNECTED     80021    9672/dbus-daemon     /run/user/1000/bus
+unix  3      [ ]         STREAM     CONNECTED     31145    -                    /var/lib/sss/pipes/nss
+unix  2      [ ]         DGRAM                    26048    -                    
+unix  3      [ ]         STREAM     CONNECTED     77568    -                    
+unix  3      [ ]         SEQPACKET  CONNECTED     71503    -                    /proc/self/fd/12/attach
+unix  3      [ ]         STREAM     CONNECTED     33475    -                    /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     29370    -                    
+unix  3      [ ]         STREAM     CONNECTED     33742    -                    
+unix  3      [ ]         STREAM     CONNECTED     32493    -                    /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     27839    -                    /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     31839    -                    
+unix  3      [ ]         STREAM     CONNECTED     30140    -                    
+unix  3      [ ]         STREAM     CONNECTED     65573    -                    
+unix  3      [ ]         STREAM     CONNECTED     34850    -                    /run/systemd/journal/stdout
+unix  2      [ ]         STREAM     CONNECTED     33707    -                    
+unix  3      [ ]         STREAM     CONNECTED     26617    -                    /run/systemd/journal/stdout
+unix  3      [ ]         DGRAM                    77586    9565/systemd         
+unix  3      [ ]         STREAM     CONNECTED     32509    -                    
+unix  3      [ ]         STREAM     CONNECTED     63870    -                    /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     40912    -                    
+unix  3      [ ]         STREAM     CONNECTED     40911    -                    /run/dbus/system_bus_socket
+unix  3      [ ]         STREAM     CONNECTED     34329    -                    /var/run/crio/crio.sock
+unix  3      [ ]         STREAM     CONNECTED     26604    -                    /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     30726    -                    
+unix  3      [ ]         STREAM     CONNECTED     30525    -                    
+unix  3      [ ]         STREAM     CONNECTED     26458    -                    
+unix  3      [ ]         STREAM     CONNECTED     31793    -                    /var/lib/sss/pipes/private/sbus-dp_implicit_files.1832
+unix  3      [ ]         STREAM     CONNECTED     29596    -                    /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     79443    9565/systemd         
+unix  3      [ ]         STREAM     CONNECTED     30784    -                    /var/lib/sss/pipes/private/sbus-dp_implicit_files.1832
+unix  3      [ ]         DGRAM                    1233     -                    
+unix  3      [ ]         SEQPACKET  CONNECTED     70515    -                    
+unix  3      [ ]         STREAM     CONNECTED     80019    9672/dbus-daemon     
+unix  3      [ ]         STREAM     CONNECTED     41706    -                    
+unix  3      [ ]         STREAM     CONNECTED     78367    -                    /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     31857    -                    /run/dbus/system_bus_socket
+unix  2      [ ]         DGRAM                    19354    -                    
+unix  2      [ ]         STREAM     CONNECTED     70604    -                    
+unix  2      [ ]         STREAM     CONNECTED     32398    -                    
+unix  3      [ ]         STREAM     CONNECTED     30185    -                    
+unix  3      [ ]         STREAM     CONNECTED     79260    -                    
+unix  3      [ ]         STREAM     CONNECTED     34852    -                    /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     30783    -                    
+unix  2      [ ]         STREAM     CONNECTED     74831    -                    
+unix  3      [ ]         STREAM     CONNECTED     26605    -                    /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     35952    -                    
+unix  3      [ ]         STREAM     CONNECTED     34011    -                    
+unix  3      [ ]         STREAM     CONNECTED     30725    -                    
+unix  3      [ ]         STREAM     CONNECTED     35966    -                    
+unix  3      [ ]         STREAM     CONNECTED     26042    -                    
+unix  3      [ ]         DGRAM                    77587    9565/systemd         
+unix  3      [ ]         STREAM     CONNECTED     30494    -                    /run/systemd/journal/stdout
+unix  3      [ ]         DGRAM                    26070    -                    
+unix  2      [ ]         STREAM     CONNECTED     63874    -                    
+unix  2      [ ]         STREAM     CONNECTED     76665    -                    
+unix  3      [ ]         STREAM     CONNECTED     77549    -                    /var/lib/sss/pipes/nss
+unix  3      [ ]         STREAM     CONNECTED     31792    -                    
+unix  2      [ ]         DGRAM                    76758    -                    
+unix  3      [ ]         STREAM     CONNECTED     26457    -                    
+unix  2      [ ]         STREAM     CONNECTED     72276    -                    
+unix  2      [ ]         STREAM     CONNECTED     60213    -                    
+unix  3      [ ]         STREAM     CONNECTED     29442    -                    /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     34835    -                    /var/run/crio/crio.sock
+unix  2      [ ]         DGRAM                    30782    -                    
+unix  2      [ ]         DGRAM                    77572    9565/systemd         
+unix  2      [ ]         DGRAM                    29166    -                    
+unix  3      [ ]         STREAM     CONNECTED     33362    -                    /var/lib/sss/pipes/nss
+unix  3      [ ]         STREAM     CONNECTED     29579    -                    
+unix  3      [ ]         STREAM     CONNECTED     79451    -                    /var/lib/sss/pipes/nss
+unix  3      [ ]         STREAM     CONNECTED     80018    9672/dbus-daemon     
+unix  3      [ ]         STREAM     CONNECTED     30789    -                    
+unix  3      [ ]         STREAM     CONNECTED     34451    -                    /run/dbus/system_bus_socket
+unix  3      [ ]         DGRAM                    1232     -                    
+unix  2      [ ]         STREAM     CONNECTED     72368    -                    
+unix  3      [ ]         STREAM     CONNECTED     30773    -                    /var/lib/sss/pipes/private/sbus-monitor
+unix  3      [ ]         STREAM     CONNECTED     76762    -                    
+unix  2      [ ]         DGRAM                    31790    -                    
+unix  2      [ ]         DGRAM                    26456    -                    
+unix  2      [ ]         STREAM     CONNECTED     71769    -                    
+unix  2      [ ]         STREAM     CONNECTED     34417    -                    
+unix  3      [ ]         STREAM     CONNECTED     29441    -                    
+unix  3      [ ]         STREAM     CONNECTED     30772    -                    
+unix  3      [ ]         STREAM     CONNECTED     29580    -                    /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     77546    -                    /var/lib/sss/pipes/nss
+unix  3      [ ]         STREAM     CONNECTED     29238    -                    
+unix  3      [ ]         STREAM     CONNECTED     78391    -                    /run/dbus/system_bus_socket
+unix  3      [ ]         STREAM     CONNECTED     31832    -                    /run/systemd/journal/stdout
+unix  3      [ ]         DGRAM                    26069    -                    
+unix  3      [ ]         STREAM     CONNECTED     30778    -                    /var/lib/sss/pipes/private/sbus-monitor
+unix  3      [ ]         STREAM     CONNECTED     76761    -                    
+unix  3      [ ]         STREAM     CONNECTED     79967    9565/systemd         
+unix  3      [ ]         STREAM     CONNECTED     34452    -                    /run/dbus/system_bus_socket
+unix  2      [ ]         STREAM     CONNECTED     34416    -                    
+unix  3      [ ]         STREAM     CONNECTED     80003    9672/dbus-daemon     
+unix  2      [ ]         DGRAM                    30733    -                    
+unix  3      [ ]         STREAM     CONNECTED     77590    9565/systemd         
+unix  3      [ ]         STREAM     CONNECTED     33704    -                    
+unix  2      [ ]         DGRAM                    30515    -                    
+unix  3      [ ]         STREAM     CONNECTED     76660    -                    
+Active Bluetooth connections (servers and established)
+Proto  Destination       Source            State         PSM DCID   SCID      IMTU    OMTU Security
+Proto  Destination       Source            State     Channel

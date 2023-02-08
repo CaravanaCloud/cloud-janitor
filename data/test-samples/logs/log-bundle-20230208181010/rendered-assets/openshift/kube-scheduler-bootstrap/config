@@ -1,0 +1,11 @@
+apiVersion: kubescheduler.config.k8s.io/v1beta3
+clientConnection:
+  kubeconfig: /etc/kubernetes/static-pod-resources/configmaps/scheduler-kubeconfig/kubeconfig
+kind: KubeSchedulerConfiguration
+leaderElection:
+  leaderElect: true
+  leaseDuration: 137s
+  renewDeadline: 107s
+  resourceLock: configmapsleases
+  resourceNamespace: openshift-kube-scheduler
+  retryPeriod: 26s

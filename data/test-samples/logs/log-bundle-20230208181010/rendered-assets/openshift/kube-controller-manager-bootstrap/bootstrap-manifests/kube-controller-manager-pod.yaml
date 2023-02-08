@@ -1,0 +1,174 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: bootstrap-kube-controller-manager
+  namespace: kube-system
+  labels:
+    openshift.io/control-plane: "true"
+    openshift.io/component: "controller-manager"
+  annotations:
+    openshift.io/run-level: "0"
+    target.workload.openshift.io/management: '{"effect": "PreferredDuringScheduling"}'
+spec:
+  restartPolicy: Always
+  hostNetwork: true
+  containers:
+  - name: kube-controller-manager
+    image: 'quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:662c00a50b8327cc39963577d3e11aa71458b3888ce06223a4501679a28fecd1'
+    imagePullPolicy: 'IfNotPresent'
+    ports:
+      - containerPort: 10257
+    command: ["hyperkube", "kube-controller-manager"]
+    args:
+    - --openshift-config=/etc/kubernetes/config/kube-controller-manager-config.yaml
+    - --kubeconfig=/etc/kubernetes/secrets/kubeconfig
+    - --logtostderr=false
+    - --alsologtostderr
+    - --v=2
+    - --log-file=/var/log/bootstrap-control-plane/kube-controller-manager.log
+    - --allocate-node-cidrs=false
+    - --authentication-kubeconfig=/etc/kubernetes/secrets/kubeconfig
+    - --authorization-kubeconfig=/etc/kubernetes/secrets/kubeconfig
+    - --cert-dir=/var/run/kubernetes
+    - --cluster-cidr=10.128.0.0/14
+    - --cluster-signing-cert-file=/etc/kubernetes/secrets/kubelet-signer.crt
+    - --cluster-signing-duration=720h
+    - --cluster-signing-key-file=/etc/kubernetes/secrets/kubelet-signer.key
+    - --configure-cloud-routes=false
+    - --controllers=*
+    - --controllers=-bootstrapsigner
+    - --controllers=-tokencleaner
+    - --controllers=-ttl
+    - --enable-dynamic-provisioning=true
+    - --flex-volume-plugin-dir=/etc/kubernetes/kubelet-plugins/volume/exec
+    - --kube-api-burst=300
+    - --kube-api-qps=150
+    - --leader-elect-resource-lock=configmapsleases
+    - --leader-elect-retry-period=3s
+    - --leader-elect=true
+    - --pv-recycler-pod-template-filepath-hostpath=
+    - --pv-recycler-pod-template-filepath-nfs=
+    - --root-ca-file=/etc/kubernetes/secrets/kube-apiserver-complete-server-ca-bundle.crt
+    - --secure-port=10257
+    - --service-account-private-key-file=/etc/kubernetes/secrets/service-account.key
+    - --service-cluster-ip-range=172.30.0.0/16
+    - --use-service-account-credentials=true
+    resources:
+      requests:
+        memory: 200Mi
+        cpu: 60m
+    volumeMounts:
+    - mountPath: /etc/ssl/certs
+      name: ssl-certs-host
+      readOnly: true
+    - mountPath: /etc/kubernetes/secrets
+      name: secrets
+      readOnly: true
+    - mountPath: /etc/kubernetes/cloud
+      name: etc-kubernetes-cloud
+      readOnly: true
+    - mountPath: /etc/kubernetes/config
+      name: config
+      readOnly: true
+    - mountPath: /var/log/bootstrap-control-plane
+      name: logs
+    startupProbe:
+      httpGet:
+        scheme: HTTPS
+        port: 10257
+        path: healthz
+      initialDelaySeconds: 0
+      timeoutSeconds: 3
+    readinessProbe:
+      httpGet:
+        scheme: HTTPS
+        port: 10257
+        path: healthz
+      initialDelaySeconds: 10
+      timeoutSeconds: 10
+    livenessProbe:
+      httpGet:
+        scheme: HTTPS
+        port: 10257
+        path: healthz
+      initialDelaySeconds: 45
+      timeoutSeconds: 10
+  - name: cluster-policy-controller
+    env:
+      - name: POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+    image: 'quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:b9cf69b5d2fd7ddcfead1a23901c0b2b4d04aebad77094f1aeb150e1ad77bb52'
+    imagePullPolicy: 'IfNotPresent'
+    command: ["cluster-policy-controller", "start"]
+    args:
+    - --config=/etc/kubernetes/config/cluster-policy-controller-config.yaml
+    - --kubeconfig=/etc/kubernetes/secrets/kubeconfig
+    - --namespace=$(POD_NAMESPACE)
+    - --logtostderr=false
+    - --alsologtostderr
+    - --v=2
+    - --log-file=/var/log/bootstrap-control-plane/cluster-policy-controller.log
+    resources:
+      requests:
+        memory: 200Mi
+        cpu: 10m
+    ports:
+      - containerPort: 10357
+    volumeMounts:
+    - mountPath: /etc/ssl/certs
+      name: ssl-certs-host
+      readOnly: true
+    - mountPath: /etc/kubernetes/secrets
+      name: secrets
+      readOnly: true
+    - mountPath: /etc/kubernetes/cloud
+      name: etc-kubernetes-cloud
+      readOnly: true
+    - mountPath: /etc/kubernetes/config
+      name: config
+      readOnly: true
+    - mountPath: /var/log/bootstrap-control-plane
+      name: logs
+    startupProbe:
+      httpGet:
+        scheme: HTTPS
+        port: 10357
+        path: healthz
+      initialDelaySeconds: 0
+      timeoutSeconds: 3
+    livenessProbe:
+      httpGet:
+        scheme: HTTPS
+        port: 10357
+        path: healthz
+      initialDelaySeconds: 45
+      timeoutSeconds: 10
+    readinessProbe:
+      httpGet:
+        scheme: HTTPS
+        port: 10357
+        path: healthz
+      initialDelaySeconds: 10
+      timeoutSeconds: 10
+  volumes:
+  - hostPath:
+      path: '/etc/kubernetes/bootstrap-secrets'
+    name: secrets
+  - hostPath:
+      path: '/etc/kubernetes/cloud'
+    name: etc-kubernetes-cloud
+  - hostPath:
+      path: '/etc/kubernetes/bootstrap-configs'
+    name: config
+  - hostPath:
+      path: /etc/ssl/certs
+    name: ssl-certs-host
+  - hostPath:
+      path: /var/log/bootstrap-control-plane
+    name: logs

@@ -1,0 +1,18 @@
+# this is written by the kcm-o, but we initialize here to cleanly handle the adoption case
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sa-token-signing-certs
+  namespace: openshift-config-managed
+data:
+  service-account-001.pub: |
+    -----BEGIN RSA PUBLIC KEY-----
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtUg5HyzBhJ61DzhhMQUJ
+    vW3XXpcJi/dR8bYKIEq5w3p7RIKjcahrB34DopUa0Vey4SK7by5g+xTrLM9SCA0x
+    PXAv/GP4EXWRxMKfNiFenNRhUj23W3jZbpZgsMotMmO9mquyQbczfzrO0f2UZ1Ak
+    xR9x+9VxYOeLybGTI9LrvHBtnNTkzT1nbzL+7zR2iUJnJo9mCWGS/cN+8Q5QXyKb
+    KD+gafzlkMw4g3jhIFQA+bqpJNqwZQF7xc13vpTC3+0JdZEsW0jIukYn8X/xY0Ye
+    mIfD8FR9ajUbgWAwviPY8NIAfMvPU0sj7fRWlnKKQtaXE9Lodt+NGbyFjjdHQFNY
+    4QIDAQAB
+    -----END RSA PUBLIC KEY-----
+    

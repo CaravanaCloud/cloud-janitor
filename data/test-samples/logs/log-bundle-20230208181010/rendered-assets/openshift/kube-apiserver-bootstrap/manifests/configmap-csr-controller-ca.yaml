@@ -1,0 +1,29 @@
+# this is written by the kcm-o, but we initialize here to cleanly handle the adoption case
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: csr-controller-ca
+  namespace: openshift-config-managed
+data:
+  ca-bundle.crt: |
+    -----BEGIN CERTIFICATE-----
+    MIIDHjCCAgagAwIBAgIIIZ2MrDGHSA4wDQYJKoZIhvcNAQELBQAwLTESMBAGA1UE
+    CxMJb3BlbnNoaWZ0MRcwFQYDVQQDEw5rdWJlbGV0LXNpZ25lcjAeFw0yMzAyMDgx
+    NjM0MjhaFw0yMzAyMDkxNjM0MjhaMC0xEjAQBgNVBAsTCW9wZW5zaGlmdDEXMBUG
+    A1UEAxMOa3ViZWxldC1zaWduZXIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+    AoIBAQCf+w0QtbOuo6j7h8lsD7SY4qAMyNf2Yv9ze1qJyrJNfxxCTNfqVVYrt8U6
+    YHu4dWycMCl0D3qE1ZaIv0d3L+hNYwEYIJMDCeq492vPTp9zIB+bSZTb3E8mu9Z5
+    OUPMEptiDvgUqlwIuqkmgzDJL0GJYQmXJImHhD5NwqyGd/PX9PJtGGrJx7WDiOl6
+    DSLGwu17p3HHM+bUlKyjc3kXukKx900LkeukaWJu3qYC+invAFT73rBKJ1gfFwsm
+    hGciYu1BjvStFn++YtGzLOblYpGzhmPXb4E1bQ4FDq1Gt0FazKqG8v3HAfDH5a0W
+    qIeYaStDHhCjWDVhgVVaqQVhoZFzAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwICpDAP
+    BgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQL93GVuvvpD1ILCBcq3V6t/m6wbTAN
+    BgkqhkiG9w0BAQsFAAOCAQEAjDhc0PfXgXwUy8Fbux0DYsvaiqajX5+CvS9qluZh
+    NGQiwmW9f0k2KgM0BbR3JDy65OYlFxs8aE9TdLPnYZ4kU2Puu52NY4L+YYYHjRdC
+    +Gm5XN1ibhGWKgjPpi7DPiGm3mAN3d+wQ4Ll9HhGVJJNdlzNW8if8H1PFegaxwkg
+    bZWTxzwmwydOr/z7kTyixH2lEyGDzoUiGK9kRo3bGVzhDKchnNst0UYmr4fbEQ02
+    YRrqM4gX6/Hvu9V63QiBjkdFpAB/g2jPdKsLoytYUvsNrGxz0VejLbTNd8f8L6Tq
+    +Znk58D9v0xWBGLBfExeqoyuRAoT9zA+d9D1m8vZGHLHpQ==
+    -----END CERTIFICATE-----
+    
+

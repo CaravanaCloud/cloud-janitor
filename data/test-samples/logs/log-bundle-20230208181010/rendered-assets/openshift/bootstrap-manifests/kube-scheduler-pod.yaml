@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bootstrap-kube-scheduler
+  namespace: kube-system
+  labels:
+    openshift.io/control-plane: "true"
+    openshift.io/component: "scheduler"
+  annotations:
+    openshift.io/run-level: "0"
+    target.workload.openshift.io/management: '{"effect": "PreferredDuringScheduling"}'
+spec:
+  containers:
+  - name: kube-scheduler
+    image: 'quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:662c00a50b8327cc39963577d3e11aa71458b3888ce06223a4501679a28fecd1'
+    imagePullPolicy: 'IfNotPresent'
+    command: ["hyperkube", "kube-scheduler"]
+    args:
+    - --kubeconfig=/etc/kubernetes/secrets/kubeconfig
+    - --leader-elect=true
+    - --cert-dir=/var/run/kubernetes
+    - --authentication-kubeconfig=/etc/kubernetes/secrets/kubeconfig
+    - --authorization-kubeconfig=/etc/kubernetes/secrets/kubeconfig
+    - --logtostderr=false
+    - --alsologtostderr
+    - --v=2
+    - --log-file=/var/log/bootstrap-control-plane/kube-scheduler.log
+    resources:
+      requests:
+        memory: 50Mi
+        cpu: 15m
+    volumeMounts:
+    - mountPath: /etc/kubernetes/secrets
+      name: secrets
+      readOnly: true
+    - mountPath: /var/log/bootstrap-control-plane
+      name: logs
+  hostNetwork: true
+  volumes:
+  - hostPath:
+      path: '/etc/kubernetes/bootstrap-secrets'
+    name: secrets
+  - hostPath:
+      path: /var/log/bootstrap-control-plane
+    name: logs

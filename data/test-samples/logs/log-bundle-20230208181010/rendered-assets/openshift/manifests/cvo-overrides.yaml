@@ -1,0 +1,84 @@
+apiVersion: config.openshift.io/v1
+kind: ClusterVersion
+metadata:
+  name: version
+  namespace: openshift-cluster-version
+spec:
+  channel: stable-4.12
+  clusterID: 590b6d8e-8801-44d1-ba46-6bf7f1a15b82
+  overrides:
+  - group: ""
+    kind: ConfigMap
+    name: cloud-provider-config
+    namespace: openshift-config
+    unmanaged: true
+  - group: ""
+    kind: ConfigMap
+    name: cluster-config-v1
+    namespace: kube-system
+    unmanaged: true
+  - group: config.openshift.io
+    kind: DNS
+    name: cluster
+    namespace: ""
+    unmanaged: true
+  - group: config.openshift.io
+    kind: Infrastructure
+    name: cluster
+    namespace: ""
+    unmanaged: true
+  - group: config.openshift.io
+    kind: Ingress
+    name: cluster
+    namespace: ""
+    unmanaged: true
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+    name: networks.config.openshift.io
+    namespace: ""
+    unmanaged: true
+  - group: config.openshift.io
+    kind: Network
+    name: cluster
+    namespace: ""
+    unmanaged: true
+  - group: config.openshift.io
+    kind: Proxy
+    name: cluster
+    namespace: ""
+    unmanaged: true
+  - group: config.openshift.io
+    kind: Scheduler
+    name: cluster
+    namespace: ""
+    unmanaged: true
+  - group: ""
+    kind: Secret
+    name: kube-cloud-cfg
+    namespace: kube-system
+    unmanaged: true
+  - group: ""
+    kind: ConfigMap
+    name: root-ca
+    namespace: kube-system
+    unmanaged: true
+  - group: ""
+    kind: Secret
+    name: machine-config-server-tls
+    namespace: openshift-machine-config-operator
+    unmanaged: true
+  - group: ""
+    kind: Secret
+    name: pull-secret
+    namespace: openshift-config
+    unmanaged: true
+  - group: ""
+    kind: Secret
+    name: kubeadmin
+    namespace: kube-system
+    unmanaged: true
+  - group: ""
+    kind: ConfigMap
+    name: openshift-install-manifests
+    namespace: openshift-config
+    unmanaged: true

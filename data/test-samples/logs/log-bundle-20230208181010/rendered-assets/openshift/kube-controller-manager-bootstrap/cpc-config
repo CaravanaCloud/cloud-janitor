@@ -1,0 +1,8 @@
+apiVersion: openshiftcontrolplane.config.openshift.io/v1
+kind: OpenShiftControllerManagerConfig
+servingInfo:
+  bindAddress: 0.0.0.0:10357
+  bindNetwork: tcp
+  certFile: /etc/kubernetes/secrets/kube-control-plane-kube-controller-manager-client.crt
+  clientCA: /etc/kubernetes/secrets/kube-control-plane-ca-bundle.crt
+  keyFile: /etc/kubernetes/secrets/kube-control-plane-kube-controller-manager-client.key

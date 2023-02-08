@@ -1,0 +1,16 @@
+apiVersion: config.openshift.io/v1
+kind: DNS
+metadata:
+  creationTimestamp: null
+  name: cluster
+spec:
+  baseDomain: jufaerma0208.alicloud-dev.devcluster.openshift.com
+  privateZone:
+    id: jufaerma0208.alicloud-dev.devcluster.openshift.com
+    tags:
+      type: private
+  publicZone:
+    id: alicloud-dev.devcluster.openshift.com
+    tags:
+      type: public
+status: {}

@@ -1,0 +1,114 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: etcd-bootstrap-member
+  namespace: openshift-etcd
+  labels:
+    k8s-app: etcd
+spec:
+  containers:
+  - name: etcdctl
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:24d9b9d9d7fadacbc505c849a1e4b390b2f0fcd452ad851b7cce21e8cfec2020
+    imagePullPolicy: IfNotPresent
+    command:
+      - "/bin/bash"
+      - "-c"
+      - "trap TERM INT; sleep infinity & wait"
+    resources:
+      requests:
+        memory: 60Mi
+        cpu: 10m
+    terminationMessagePolicy: FallbackToLogsOnError
+    securityContext:
+      privileged: true
+    volumeMounts:
+      - name: certs
+        mountPath: /etc/ssl/etcd/
+    env:
+      - name: "ETCDCTL_KEY"
+        value: "/etc/ssl/etcd/etcd-all-certs/etcd-serving-jufaerma0208-qjxkp-bootstrap.key"
+      - name: "ETCDCTL_CERT"
+        value: "/etc/ssl/etcd/etcd-all-certs/etcd-serving-jufaerma0208-qjxkp-bootstrap.crt"
+      - name: "ETCDCTL_CACERT"
+        value: "/etc/ssl/etcd/ca.crt"
+      - name: "ETCDCTL_ENDPOINTS"
+        value: "https://localhost:2379"
+  - name: etcd
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:24d9b9d9d7fadacbc505c849a1e4b390b2f0fcd452ad851b7cce21e8cfec2020
+    command:
+    - /bin/sh
+    - -c
+    - |
+      #!/bin/sh
+      set -euo pipefail
+
+      exec etcd \
+        --logger=zap \
+        --experimental-initial-corrupt-check=true \
+        --initial-advertise-peer-urls=https://10.0.105.247:2380 \
+        --cert-file=/etc/ssl/etcd/etcd-all-certs/etcd-serving-jufaerma0208-qjxkp-bootstrap.crt \
+        --key-file=/etc/ssl/etcd/etcd-all-certs/etcd-serving-jufaerma0208-qjxkp-bootstrap.key \
+        --trusted-ca-file=/etc/ssl/etcd/ca.crt \
+        --client-cert-auth=true \
+        --peer-cert-file=/etc/ssl/etcd/etcd-all-certs/etcd-peer-jufaerma0208-qjxkp-bootstrap.crt \
+        --peer-key-file=/etc/ssl/etcd/etcd-all-certs/etcd-peer-jufaerma0208-qjxkp-bootstrap.key \
+        --peer-trusted-ca-file=/etc/ssl/etcd/ca.crt \
+        --peer-client-cert-auth=true \
+        --advertise-client-urls=https://10.0.105.247:2379 \
+        --listen-client-urls=https://0.0.0.0:2379 \
+        --listen-peer-urls=https://0.0.0.0:2380 \
+        --listen-metrics-urls=https://0.0.0.0:9978 \
+    resources:
+      requests:
+        memory: 600Mi
+        cpu: 245m
+    terminationMessagePolicy: FallbackToLogsOnError
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: certs
+      mountPath: /etc/ssl/etcd/
+    - name: data-dir
+      mountPath: /var/lib/etcd/
+    env:
+    - name: "ETCD_CIPHER_SUITES"
+      value: "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256"
+    - name: "ETCD_DATA_DIR"
+      value: "/var/lib/etcd"
+    - name: "ETCD_ELECTION_TIMEOUT"
+      value: "1000"
+    - name: "ETCD_ENABLE_PPROF"
+      value: "true"
+    - name: "ETCD_EXPERIMENTAL_MAX_LEARNERS"
+      value: "3"
+    - name: "ETCD_EXPERIMENTAL_WARNING_APPLY_DURATION"
+      value: "200ms"
+    - name: "ETCD_EXPERIMENTAL_WATCH_PROGRESS_NOTIFY_INTERVAL"
+      value: "5s"
+    - name: "ETCD_HEARTBEAT_INTERVAL"
+      value: "100"
+    - name: "ETCD_NAME"
+      value: "etcd-bootstrap"
+    - name: "ETCD_QUOTA_BACKEND_BYTES"
+      value: "8589934592"
+    - name: "ETCD_SOCKET_REUSE_ADDRESS"
+      value: "true"
+    ports:
+    - name: peer
+      containerPort: 2380
+      protocol: TCP
+    - name: server
+      containerPort: 2379
+      protocol: TCP
+  hostNetwork: true
+  priorityClassName: system-node-critical
+  tolerations:
+  - operator: "Exists"
+  restartPolicy: Always
+  volumes:
+  - name: certs
+    hostPath:
+      path: /etc/kubernetes/static-pod-resources/etcd-member
+  - name: data-dir
+    hostPath:
+      path: /var/lib/etcd

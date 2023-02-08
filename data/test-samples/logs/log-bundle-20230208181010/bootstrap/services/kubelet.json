@@ -1,0 +1,17 @@
+[
+  {
+    "timestamp": "2023-02-08T16:37:55Z",
+    "preCommand": "kubelet-pause-image",
+    "phase": "pre-command start"
+  },
+  {
+    "timestamp": "2023-02-08T16:37:55Z",
+    "preCommand": "kubelet-pause-image",
+    "phase": "pre-command end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T16:37:55Z",
+    "phase": "service start"
+  }
+]

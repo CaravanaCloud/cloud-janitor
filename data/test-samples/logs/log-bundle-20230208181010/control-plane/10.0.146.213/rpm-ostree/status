@@ -1,0 +1,6 @@
+State: busy
+Transaction: rebase --experimental 'ostree-unverified-registry:quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:6db665511f305ef230a2c752d836fe073e80550dc21cede3c55cf44db01db365' 
+  Initiator: client(id:cli dbus:1.37 unit:machine-config-daemon-firstboot.service uid:0)
+Deployments:
+* a80d851eac7716e90ea927f5b67f0d7972630c67f0ec4eed275f61a2536aabd0
+                  Version: 412.86.202212081411-0 (2022-12-08T14:14:37Z)

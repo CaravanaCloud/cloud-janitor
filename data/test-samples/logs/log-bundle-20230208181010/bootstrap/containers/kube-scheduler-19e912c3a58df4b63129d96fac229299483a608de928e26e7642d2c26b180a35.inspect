@@ -1,0 +1,424 @@
+{
+  "status": {
+    "id": "19e912c3a58df4b63129d96fac229299483a608de928e26e7642d2c26b180a35",
+    "metadata": {
+      "attempt": 0,
+      "name": "kube-scheduler"
+    },
+    "state": "CONTAINER_RUNNING",
+    "createdAt": "2023-02-08T17:01:03.203384847Z",
+    "startedAt": "2023-02-08T17:01:03.244983267Z",
+    "finishedAt": "0001-01-01T00:00:00Z",
+    "exitCode": 0,
+    "image": {
+      "annotations": {},
+      "image": "quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:662c00a50b8327cc39963577d3e11aa71458b3888ce06223a4501679a28fecd1"
+    },
+    "imageRef": "quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:662c00a50b8327cc39963577d3e11aa71458b3888ce06223a4501679a28fecd1",
+    "reason": "",
+    "message": "",
+    "labels": {
+      "io.kubernetes.container.name": "kube-scheduler",
+      "io.kubernetes.pod.name": "bootstrap-kube-scheduler-jufaerma0208-qjxkp-bootstrap",
+      "io.kubernetes.pod.namespace": "kube-system",
+      "io.kubernetes.pod.uid": "1d57e973443b425441cd4d8ca6b366b5"
+    },
+    "annotations": {
+      "io.kubernetes.container.hash": "ed5ca530",
+      "io.kubernetes.container.restartCount": "0",
+      "io.kubernetes.container.terminationMessagePath": "/dev/termination-log",
+      "io.kubernetes.container.terminationMessagePolicy": "File",
+      "io.kubernetes.pod.terminationGracePeriod": "30"
+    },
+    "mounts": [
+      {
+        "containerPath": "/dev/termination-log",
+        "hostPath": "/var/lib/kubelet/pods/1d57e973443b425441cd4d8ca6b366b5/containers/kube-scheduler/f2eea5e1",
+        "propagation": "PROPAGATION_PRIVATE",
+        "readonly": false,
+        "selinuxRelabel": true
+      },
+      {
+        "containerPath": "/etc/kubernetes/secrets",
+        "hostPath": "/etc/kubernetes/bootstrap-secrets",
+        "propagation": "PROPAGATION_PRIVATE",
+        "readonly": true,
+        "selinuxRelabel": false
+      },
+      {
+        "containerPath": "/var/log/bootstrap-control-plane",
+        "hostPath": "/var/log/bootstrap-control-plane",
+        "propagation": "PROPAGATION_PRIVATE",
+        "readonly": false,
+        "selinuxRelabel": false
+      }
+    ],
+    "logPath": "/var/log/pods/kube-system_bootstrap-kube-scheduler-jufaerma0208-qjxkp-bootstrap_1d57e973443b425441cd4d8ca6b366b5/kube-scheduler/0.log",
+    "resources": null
+  },
+  "info": {
+    "sandboxID": "51918c53aa5bd89a0259ccf1432b410d7c165acb30c37a3750eb8dadbbb452f5",
+    "pid": 8784,
+    "runtimeSpec": {
+      "ociVersion": "1.0.2-dev",
+      "process": {
+        "user": {
+          "uid": 0,
+          "gid": 0,
+          "additionalGids": [
+            0
+          ]
+        },
+        "args": [
+          "hyperkube",
+          "kube-scheduler",
+          "--kubeconfig=/etc/kubernetes/secrets/kubeconfig",
+          "--leader-elect=true",
+          "--cert-dir=/var/run/kubernetes",
+          "--authentication-kubeconfig=/etc/kubernetes/secrets/kubeconfig",
+          "--authorization-kubeconfig=/etc/kubernetes/secrets/kubeconfig",
+          "--logtostderr=false",
+          "--alsologtostderr",
+          "--v=2",
+          "--log-file=/var/log/bootstrap-control-plane/kube-scheduler.log"
+        ],
+        "env": [
+          "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "TERM=xterm",
+          "HOSTNAME=jufaerma0208-qjxkp-bootstrap",
+          "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "container=oci",
+          "GODEBUG=x509ignoreCN=0,madvdontneed=1",
+          "__doozer=merge",
+          "BUILD_RELEASE=202301042354.p0.g77bec7a.assembly.stream",
+          "BUILD_VERSION=v4.12.0",
+          "OS_GIT_MAJOR=4",
+          "OS_GIT_MINOR=12",
+          "OS_GIT_PATCH=0",
+          "OS_GIT_TREE_STATE=clean",
+          "OS_GIT_VERSION=4.12.0-202301042354.p0.g77bec7a.assembly.stream-77bec7a",
+          "SOURCE_GIT_TREE_STATE=clean",
+          "KUBE_GIT_COMMIT=b6d1f054747e9886f61dd85316deac3415e2726f",
+          "KUBE_GIT_MAJOR=1",
+          "KUBE_GIT_MINOR=25+",
+          "KUBE_GIT_TREE_STATE=clean",
+          "KUBE_GIT_VERSION=v1.25.4+77bec7a",
+          "OS_GIT_COMMIT=77bec7a",
+          "SOURCE_DATE_EPOCH=1671049122",
+          "SOURCE_GIT_COMMIT=77bec7ab3573494f228fbaa4967c76e3d2df0fb3",
+          "SOURCE_GIT_TAG=v1.25.0-2650-g77bec7ab357",
+          "SOURCE_GIT_URL=https://github.com/openshift/kubernetes"
+        ],
+        "cwd": "/",
+        "capabilities": {
+          "bounding": [
+            "CAP_CHOWN",
+            "CAP_DAC_OVERRIDE",
+            "CAP_FSETID",
+            "CAP_FOWNER",
+            "CAP_SETGID",
+            "CAP_SETUID",
+            "CAP_SETPCAP",
+            "CAP_NET_BIND_SERVICE",
+            "CAP_KILL"
+          ],
+          "effective": [
+            "CAP_CHOWN",
+            "CAP_DAC_OVERRIDE",
+            "CAP_FSETID",
+            "CAP_FOWNER",
+            "CAP_SETGID",
+            "CAP_SETUID",
+            "CAP_SETPCAP",
+            "CAP_NET_BIND_SERVICE",
+            "CAP_KILL"
+          ],
+          "permitted": [
+            "CAP_CHOWN",
+            "CAP_DAC_OVERRIDE",
+            "CAP_FSETID",
+            "CAP_FOWNER",
+            "CAP_SETGID",
+            "CAP_SETUID",
+            "CAP_SETPCAP",
+            "CAP_NET_BIND_SERVICE",
+            "CAP_KILL"
+          ]
+        },
+        "oomScoreAdj": 997
+      },
+      "root": {
+        "path": "/var/lib/containers/storage/overlay/d136e4ffa2eba6cd27ac128fbb314a278cfe6ff2b49082a642050b35e8298917/merged"
+      },
+      "hostname": "jufaerma0208-qjxkp-bootstrap",
+      "mounts": [
+        {
+          "destination": "/proc",
+          "type": "proc",
+          "source": "proc",
+          "options": [
+            "nosuid",
+            "noexec",
+            "nodev"
+          ]
+        },
+        {
+          "destination": "/dev",
+          "type": "tmpfs",
+          "source": "tmpfs",
+          "options": [
+            "nosuid",
+            "noexec",
+            "strictatime",
+            "mode=755",
+            "size=65536k"
+          ]
+        },
+        {
+          "destination": "/dev/pts",
+          "type": "devpts",
+          "source": "devpts",
+          "options": [
+            "nosuid",
+            "noexec",
+            "newinstance",
+            "ptmxmode=0666",
+            "mode=0620",
+            "gid=5"
+          ]
+        },
+        {
+          "destination": "/dev/mqueue",
+          "type": "mqueue",
+          "source": "mqueue",
+          "options": [
+            "nosuid",
+            "noexec",
+            "nodev"
+          ]
+        },
+        {
+          "destination": "/sys",
+          "type": "sysfs",
+          "source": "sysfs",
+          "options": [
+            "nosuid",
+            "noexec",
+            "nodev",
+            "ro"
+          ]
+        },
+        {
+          "destination": "/sys/fs/cgroup",
+          "type": "cgroup",
+          "source": "cgroup",
+          "options": [
+            "nosuid",
+            "noexec",
+            "nodev",
+            "relatime",
+            "ro"
+          ]
+        },
+        {
+          "destination": "/dev/shm",
+          "type": "bind",
+          "source": "/run/containers/storage/overlay-containers/51918c53aa5bd89a0259ccf1432b410d7c165acb30c37a3750eb8dadbbb452f5/userdata/shm",
+          "options": [
+            "rw",
+            "bind"
+          ]
+        },
+        {
+          "destination": "/etc/resolv.conf",
+          "type": "bind",
+          "source": "/run/containers/storage/overlay-containers/51918c53aa5bd89a0259ccf1432b410d7c165acb30c37a3750eb8dadbbb452f5/userdata/resolv.conf",
+          "options": [
+            "rw",
+            "bind",
+            "nodev",
+            "nosuid",
+            "noexec"
+          ]
+        },
+        {
+          "destination": "/etc/hostname",
+          "type": "bind",
+          "source": "/run/containers/storage/overlay-containers/51918c53aa5bd89a0259ccf1432b410d7c165acb30c37a3750eb8dadbbb452f5/userdata/hostname",
+          "options": [
+            "rw",
+            "bind"
+          ]
+        },
+        {
+          "destination": "/run/.containerenv",
+          "type": "bind",
+          "source": "/run/containers/storage/overlay-containers/51918c53aa5bd89a0259ccf1432b410d7c165acb30c37a3750eb8dadbbb452f5/userdata/.containerenv",
+          "options": [
+            "rw",
+            "bind"
+          ]
+        },
+        {
+          "destination": "/etc/hosts",
+          "type": "bind",
+          "source": "/etc/hosts",
+          "options": [
+            "rw",
+            "bind"
+          ]
+        },
+        {
+          "destination": "/dev/termination-log",
+          "type": "bind",
+          "source": "/var/lib/kubelet/pods/1d57e973443b425441cd4d8ca6b366b5/containers/kube-scheduler/f2eea5e1",
+          "options": [
+            "rw",
+            "rbind",
+            "rprivate",
+            "bind"
+          ]
+        },
+        {
+          "destination": "/run/secrets",
+          "type": "bind",
+          "source": "/run/containers/storage/overlay-containers/19e912c3a58df4b63129d96fac229299483a608de928e26e7642d2c26b180a35/userdata/run/secrets",
+          "options": [
+            "bind",
+            "rprivate",
+            "bind"
+          ]
+        },
+        {
+          "destination": "/etc/kubernetes/secrets",
+          "type": "bind",
+          "source": "/etc/kubernetes/bootstrap-secrets",
+          "options": [
+            "ro",
+            "rbind",
+            "rprivate",
+            "bind"
+          ]
+        },
+        {
+          "destination": "/var/log/bootstrap-control-plane",
+          "type": "bind",
+          "source": "/var/log/bootstrap-control-plane",
+          "options": [
+            "rw",
+            "rbind",
+            "rprivate",
+            "bind"
+          ]
+        }
+      ],
+      "annotations": {
+        "io.kubernetes.cri-o.ContainerID": "19e912c3a58df4b63129d96fac229299483a608de928e26e7642d2c26b180a35",
+        "io.kubernetes.cri-o.ResolvPath": "/run/containers/storage/overlay-containers/51918c53aa5bd89a0259ccf1432b410d7c165acb30c37a3750eb8dadbbb452f5/userdata/resolv.conf",
+        "io.kubernetes.container.restartCount": "0",
+        "io.kubernetes.pod.name": "bootstrap-kube-scheduler-jufaerma0208-qjxkp-bootstrap",
+        "io.kubernetes.container.name": "kube-scheduler",
+        "openshift.io/run-level": "0",
+        "io.kubernetes.cri-o.Image": "3dbfc7bb68771178c98466c575b946fc79e7dc4b682503d068c6eee99ef4f90f",
+        "io.kubernetes.cri-o.ImageRef": "3dbfc7bb68771178c98466c575b946fc79e7dc4b682503d068c6eee99ef4f90f",
+        "io.kubernetes.cri-o.TTY": "false",
+        "io.kubernetes.cri-o.Metadata": "{\"name\":\"kube-scheduler\"}",
+        "io.kubernetes.container.terminationMessagePolicy": "File",
+        "io.kubernetes.container.terminationMessagePath": "/dev/termination-log",
+        "org.systemd.property.DefaultDependencies": "true",
+        "org.systemd.property.After": "['crio.service']",
+        "kubernetes.io/config.seen": "2023-02-08T17:01:02.608254673Z",
+        "kubernetes.io/config.hash": "1d57e973443b425441cd4d8ca6b366b5",
+        "target.workload.openshift.io/management": "{\"effect\": \"PreferredDuringScheduling\"}",
+        "io.kubernetes.cri-o.LogPath": "/var/log/pods/kube-system_bootstrap-kube-scheduler-jufaerma0208-qjxkp-bootstrap_1d57e973443b425441cd4d8ca6b366b5/kube-scheduler/0.log",
+        "io.kubernetes.pod.terminationGracePeriod": "30",
+        "io.kubernetes.container.hash": "ed5ca530",
+        "io.kubernetes.cri-o.Stdin": "false",
+        "io.kubernetes.cri-o.ContainerType": "container",
+        "io.kubernetes.cri-o.Volumes": "[{\"container_path\":\"/dev/termination-log\",\"host_path\":\"/var/lib/kubelet/pods/1d57e973443b425441cd4d8ca6b366b5/containers/kube-scheduler/f2eea5e1\",\"readonly\":false,\"propagation\":0,\"selinux_relabel\":true},{\"container_path\":\"/etc/kubernetes/secrets\",\"host_path\":\"/etc/kubernetes/bootstrap-secrets\",\"readonly\":true,\"propagation\":0,\"selinux_relabel\":false},{\"container_path\":\"/var/log/bootstrap-control-plane\",\"host_path\":\"/var/log/bootstrap-control-plane\",\"readonly\":false,\"propagation\":0,\"selinux_relabel\":false}]",
+        "org.systemd.property.TimeoutStopUSec": "uint64 30000000",
+        "org.systemd.property.CollectMode": "'inactive-or-failed'",
+        "kubernetes.io/config.source": "file",
+        "io.kubernetes.cri-o.ImageName": "quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:662c00a50b8327cc39963577d3e11aa71458b3888ce06223a4501679a28fecd1",
+        "io.kubernetes.cri-o.SandboxID": "51918c53aa5bd89a0259ccf1432b410d7c165acb30c37a3750eb8dadbbb452f5",
+        "io.kubernetes.cri-o.Created": "2023-02-08T17:01:03.005605821Z",
+        "io.kubernetes.cri-o.Name": "k8s_kube-scheduler_bootstrap-kube-scheduler-jufaerma0208-qjxkp-bootstrap_kube-system_1d57e973443b425441cd4d8ca6b366b5_0",
+        "io.kubernetes.cri-o.SandboxName": "k8s_bootstrap-kube-scheduler-jufaerma0208-qjxkp-bootstrap_kube-system_1d57e973443b425441cd4d8ca6b366b5_0",
+        "io.kubernetes.cri-o.StdinOnce": "false",
+        "io.kubernetes.cri-o.MountPoint": "/var/lib/containers/storage/overlay/d136e4ffa2eba6cd27ac128fbb314a278cfe6ff2b49082a642050b35e8298917/merged",
+        "io.kubernetes.cri-o.Annotations": "{\"io.kubernetes.container.hash\":\"ed5ca530\",\"io.kubernetes.container.restartCount\":\"0\",\"io.kubernetes.container.terminationMessagePath\":\"/dev/termination-log\",\"io.kubernetes.container.terminationMessagePolicy\":\"File\",\"io.kubernetes.pod.terminationGracePeriod\":\"30\"}",
+        "io.kubernetes.pod.namespace": "kube-system",
+        "io.container.manager": "cri-o",
+        "io.kubernetes.cri-o.SeccompProfilePath": "",
+        "io.kubernetes.cri-o.Labels": "{\"io.kubernetes.container.name\":\"kube-scheduler\",\"io.kubernetes.pod.name\":\"bootstrap-kube-scheduler-jufaerma0208-qjxkp-bootstrap\",\"io.kubernetes.pod.namespace\":\"kube-system\",\"io.kubernetes.pod.uid\":\"1d57e973443b425441cd4d8ca6b366b5\"}",
+        "io.kubernetes.pod.uid": "1d57e973443b425441cd4d8ca6b366b5"
+      },
+      "linux": {
+        "resources": {
+          "devices": [
+            {
+              "allow": false,
+              "access": "rwm"
+            }
+          ],
+          "cpu": {
+            "shares": 15,
+            "quota": 0,
+            "period": 100000
+          },
+          "pids": {
+            "limit": 0
+          },
+          "hugepageLimits": [
+            {
+              "pageSize": "2MB",
+              "limit": 0
+            },
+            {
+              "pageSize": "1GB",
+              "limit": 0
+            }
+          ]
+        },
+        "cgroupsPath": "kubepods-burstable-pod1d57e973443b425441cd4d8ca6b366b5.slice:crio:19e912c3a58df4b63129d96fac229299483a608de928e26e7642d2c26b180a35",
+        "namespaces": [
+          {
+            "type": "pid"
+          },
+          {
+            "type": "ipc",
+            "path": "/var/run/ipcns/b8c2631b-43a9-4a7d-b787-6c6f461b06a9"
+          },
+          {
+            "type": "uts",
+            "path": "/var/run/utsns/b8c2631b-43a9-4a7d-b787-6c6f461b06a9"
+          },
+          {
+            "type": "mount"
+          }
+        ],
+        "maskedPaths": [
+          "/proc/acpi",
+          "/proc/kcore",
+          "/proc/keys",
+          "/proc/latency_stats",
+          "/proc/timer_list",
+          "/proc/timer_stats",
+          "/proc/sched_debug",
+          "/proc/scsi",
+          "/sys/firmware"
+        ],
+        "readonlyPaths": [
+          "/proc/asound",
+          "/proc/bus",
+          "/proc/fs",
+          "/proc/irq",
+          "/proc/sys",
+          "/proc/sysrq-trigger"
+        ],
+        "mountLabel": "system_u:object_r:container_file_t:s0:c92,c709"
+      }
+    },
+    "privileged": false
+  }
+}

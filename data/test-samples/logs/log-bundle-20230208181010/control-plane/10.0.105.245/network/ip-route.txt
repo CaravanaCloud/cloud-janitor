@@ -1,0 +1,2 @@
+default via 10.0.127.253 dev ens5 proto dhcp src 10.0.105.245 metric 100 
+10.0.64.0/18 dev ens5 proto kernel scope link src 10.0.105.245 metric 100 

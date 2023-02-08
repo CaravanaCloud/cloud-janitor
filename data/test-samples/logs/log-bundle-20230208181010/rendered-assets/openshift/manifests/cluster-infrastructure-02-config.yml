@@ -1,0 +1,23 @@
+apiVersion: config.openshift.io/v1
+kind: Infrastructure
+metadata:
+  creationTimestamp: null
+  name: cluster
+spec:
+  cloudConfig:
+    key: config
+    name: cloud-provider-config
+  platformSpec:
+    type: AlibabaCloud
+status:
+  apiServerInternalURI: https://api-int.jufaerma0208.alicloud-dev.devcluster.openshift.com:6443
+  apiServerURL: https://api.jufaerma0208.alicloud-dev.devcluster.openshift.com:6443
+  controlPlaneTopology: HighlyAvailable
+  etcdDiscoveryDomain: ""
+  infrastructureName: jufaerma0208-qjxkp
+  infrastructureTopology: HighlyAvailable
+  platform: AlibabaCloud
+  platformStatus:
+    alibabaCloud:
+      region: eu-west-1
+    type: AlibabaCloud

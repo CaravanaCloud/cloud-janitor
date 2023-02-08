@@ -1,0 +1,163 @@
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 0.0.0.0:44347           0.0.0.0:*               LISTEN      2034/rpc.statd      
+tcp        0      0 0.0.0.0:111             0.0.0.0:*               LISTEN      1/systemd           
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1912/sshd           
+tcp        0      0 10.0.105.245:37634      18.244.155.29:443       ESTABLISHED 2336/oc             
+tcp        0      0 10.0.105.245:22         10.0.105.247:32822      ESTABLISHED 2430/sshd: core [pr 
+tcp6       0      0 :::37895                :::*                    LISTEN      2034/rpc.statd      
+tcp6       0      0 :::111                  :::*                    LISTEN      1/systemd           
+tcp6       0      0 :::22                   :::*                    LISTEN      1912/sshd           
+udp        0      0 10.0.105.245:68         10.0.127.253:67         ESTABLISHED 1908/NetworkManager 
+udp        0      0 0.0.0.0:111             0.0.0.0:*                           1/systemd           
+udp        0      0 127.0.0.1:323           0.0.0.0:*                           1683/chronyd        
+udp        0      0 127.0.0.1:938           0.0.0.0:*                           2034/rpc.statd      
+udp        0      0 10.0.105.245:42672      81.21.65.169:123        ESTABLISHED 1683/chronyd        
+udp        0      0 0.0.0.0:59306           0.0.0.0:*                           2034/rpc.statd      
+udp6       0      0 :::111                  :::*                                1/systemd           
+udp6       0      0 ::1:323                 :::*                                1683/chronyd        
+udp6       0      0 :::60388                :::*                                2034/rpc.statd      
+raw6       0      0 :::58                   :::*                    7           1908/NetworkManager 
+Active UNIX domain sockets (servers and established)
+Proto RefCnt Flags       Type       State         I-Node   PID/Program name     Path
+unix  2      [ ACC ]     SEQPACKET  LISTENING     28166    1/systemd            /run/bootupd.sock
+unix  2      [ ACC ]     STREAM     LISTENING     28169    1/systemd            /run/dbus/system_bus_socket
+unix  2      [ ACC ]     STREAM     LISTENING     29961    1648/irqbalance      @irqbalance1648.sock
+unix  2      [ ACC ]     STREAM     LISTENING     31036    1794/ovsdb-server    /var/run/openvswitch/db.sock
+unix  2      [ ACC ]     STREAM     LISTENING     31038    1794/ovsdb-server    /var/run/openvswitch/ovsdb-server.1794.ctl
+unix  3      [ ]         DGRAM                    14669    1/systemd            /run/systemd/notify
+unix  2      [ ]         DGRAM                    14671    1/systemd            /run/systemd/cgroups-agent
+unix  2      [ ACC ]     STREAM     LISTENING     19291    1/systemd            /run/systemd/private
+unix  2      [ ACC ]     STREAM     LISTENING     14683    1/systemd            /run/systemd/journal/stdout
+unix  6      [ ]         DGRAM                    14687    1/systemd            /run/systemd/journal/socket
+unix  2      [ ACC ]     SEQPACKET  LISTENING     19319    1/systemd            /run/udev/control
+unix  2      [ ACC ]     SEQPACKET  LISTENING     19321    1/systemd            /run/systemd/coredump
+unix  2      [ ACC ]     STREAM     LISTENING     30469    1649/sssd            /var/lib/sss/pipes/private/sbus-monitor
+unix  2      [ ACC ]     STREAM     LISTENING     30489    1731/sssd_be         /var/lib/sss/pipes/private/sbus-dp_implicit_files.1731
+unix  2      [ ACC ]     STREAM     LISTENING     31365    1896/ovs-vswitchd    /var/run/openvswitch/ovs-vswitchd.1896.ctl
+unix  2      [ ACC ]     STREAM     LISTENING     30515    1765/sssd_nss        /var/lib/sss/pipes/nss
+unix  2      [ ]         DGRAM                    59787    2356/systemd         /run/user/1000/systemd/notify
+unix  2      [ ACC ]     STREAM     LISTENING     26762    1/systemd            /run/lvm/lvmpolld.socket
+unix  2      [ ACC ]     STREAM     LISTENING     59791    2356/systemd         /run/user/1000/systemd/private
+unix  2      [ ACC ]     STREAM     LISTENING     26771    1/systemd            /run/rpcbind.sock
+unix  2      [ ACC ]     STREAM     LISTENING     59799    2356/systemd         /run/user/1000/gnupg/S.gpg-agent.ssh
+unix  2      [ ACC ]     STREAM     LISTENING     59802    2356/systemd         /run/user/1000/gnupg/S.dirmngr
+unix  2      [ ACC ]     STREAM     LISTENING     59805    2356/systemd         /run/user/1000/gnupg/S.gpg-agent
+unix  12     [ ]         DGRAM                    14750    1/systemd            /run/systemd/journal/dev-log
+unix  2      [ ACC ]     STREAM     LISTENING     59807    2356/systemd         /run/user/1000/gnupg/S.gpg-agent.browser
+unix  2      [ ACC ]     STREAM     LISTENING     59810    2356/systemd         /run/user/1000/bus
+unix  2      [ ACC ]     STREAM     LISTENING     59813    2356/systemd         /run/user/1000/gnupg/S.gpg-agent.extra
+unix  2      [ ACC ]     STREAM     LISTENING     59816    2356/systemd         /run/user/1000/podman/podman.sock
+unix  2      [ ]         DGRAM                    28388    1683/chronyd         /run/chrony/chronyd.sock
+unix  3      [ ]         STREAM     CONNECTED     28438    1794/ovsdb-server    
+unix  3      [ ]         STREAM     CONNECTED     29335    1649/sssd            /var/lib/sss/pipes/private/sbus-monitor
+unix  3      [ ]         DGRAM                    14673    1/systemd            
+unix  3      [ ]         STREAM     CONNECTED     31362    1765/sssd_nss        /var/lib/sss/pipes/nss
+unix  3      [ ]         STREAM     CONNECTED     29154    1/systemd            /run/systemd/journal/stdout
+unix  2      [ ]         DGRAM                    31495    1908/NetworkManager  
+unix  3      [ ]         STREAM     CONNECTED     61417    2509/sudo            
+unix  3      [ ]         STREAM     CONNECTED     28132    1605/auditd          
+unix  3      [ ]         STREAM     CONNECTED     30500    1731/sssd_be         
+unix  3      [ ]         STREAM     CONNECTED     28954    1649/sssd            
+unix  3      [ ]         STREAM     CONNECTED     57745    2360/(sd-pam)        
+unix  2      [ ]         DGRAM                    30983    1771/systemd-logind  
+unix  3      [ ]         STREAM     CONNECTED     59894    2430/sshd: core [pr  
+unix  3      [ ]         STREAM     CONNECTED     31942    1908/NetworkManager  
+unix  3      [ ]         STREAM     CONNECTED     59249    1765/sssd_nss        /var/lib/sss/pipes/nss
+unix  3      [ ]         STREAM     CONNECTED     28258    1647/dbus-daemon     
+unix  3      [ ]         STREAM     CONNECTED     29149    1672/qemu-ga         
+unix  3      [ ]         STREAM     CONNECTED     59793    2356/systemd         
+unix  3      [ ]         STREAM     CONNECTED     36267    2249/polkitd         
+unix  3      [ ]         STREAM     CONNECTED     28173    1/systemd            /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     59783    2356/systemd         
+unix  3      [ ]         STREAM     CONNECTED     59068    1765/sssd_nss        /var/lib/sss/pipes/nss
+unix  3      [ ]         STREAM     CONNECTED     32935    1765/sssd_nss        /var/lib/sss/pipes/nss
+unix  3      [ ]         STREAM     CONNECTED     32435    1/systemd            /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     31832    1794/ovsdb-server    /var/run/openvswitch/db.sock
+unix  3      [ ]         STREAM     CONNECTED     29148    1672/qemu-ga         
+unix  3      [ ]         STREAM     CONNECTED     30516    1765/sssd_nss        
+unix  2      [ ]         DGRAM                    28411    1649/sssd            
+unix  3      [ ]         STREAM     CONNECTED     61398    2430/sshd: core [pr  
+unix  3      [ ]         STREAM     CONNECTED     31518    1908/NetworkManager  
+unix  3      [ ]         STREAM     CONNECTED     57957    2485/dbus-daemon     
+unix  2      [ ]         DGRAM                    57746    2360/(sd-pam)        
+unix  3      [ ]         STREAM     CONNECTED     59991    2485/dbus-daemon     
+unix  3      [ ]         STREAM     CONNECTED     31859    1/systemd            /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     30491    1731/sssd_be         /var/lib/sss/pipes/private/sbus-dp_implicit_files.1731
+unix  2      [ ]         DGRAM                    28435    1794/ovsdb-server    
+unix  2      [ ]         DGRAM                    29320    1765/sssd_nss        
+unix  3      [ ]         STREAM     CONNECTED     35324    1647/dbus-daemon     /run/dbus/system_bus_socket
+unix  3      [ ]         STREAM     CONNECTED     31496    1908/NetworkManager  
+unix  3      [ ]         STREAM     CONNECTED     59074    1647/dbus-daemon     /run/dbus/system_bus_socket
+unix  2      [ ]         DGRAM                    61427    2509/sudo            
+unix  2      [ ]         STREAM     CONNECTED     43754    2249/polkitd         
+unix  2      [ ]         DGRAM                    33200    2034/rpc.statd       
+unix  3      [ ]         STREAM     CONNECTED     26910    1535/systemd-udevd   
+unix  3      [ ]         STREAM     CONNECTED     59769    1605/auditd          
+unix  3      [ ]         STREAM     CONNECTED     29155    1/systemd            /run/systemd/journal/stdout
+unix  2      [ ]         DGRAM                    36269    2249/polkitd         
+unix  3      [ ]         STREAM     CONNECTED     31557    1908/NetworkManager  
+unix  2      [ ]         DGRAM                    29165    1683/chronyd         
+unix  2      [ ]         DGRAM                    25142    1500/systemd-journa  
+unix  3      [ ]         STREAM     CONNECTED     30994    1771/systemd-logind  
+unix  3      [ ]         STREAM     CONNECTED     33851    1/systemd            /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     28133    1605/auditd          
+unix  2      [ ]         DGRAM                    57749    2356/systemd         
+unix  2      [ ]         STREAM     CONNECTED     43802    2336/oc              
+unix  2      [ ]         STREAM     CONNECTED     33285    2060/agetty          
+unix  3      [ ]         STREAM     CONNECTED     19427    1/systemd            /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     61355    1/systemd            /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     30526    1/systemd            /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     31486    1908/NetworkManager  
+unix  3      [ ]         STREAM     CONNECTED     57960    2485/dbus-daemon     /run/user/1000/bus
+unix  3      [ ]         STREAM     CONNECTED     32955    1647/dbus-daemon     /run/dbus/system_bus_socket
+unix  3      [ ]         STREAM     CONNECTED     27506    1/systemd            /run/systemd/journal/stdout
+unix  3      [ ]         DGRAM                    26938    1535/systemd-udevd   
+unix  3      [ ]         STREAM     CONNECTED     58069    1765/sssd_nss        /var/lib/sss/pipes/nss
+unix  3      [ ]         STREAM     CONNECTED     33203    2034/rpc.statd       
+unix  3      [ ]         DGRAM                    59789    2356/systemd         
+unix  3      [ ]         STREAM     CONNECTED     33850    1912/sshd            
+unix  3      [ ]         STREAM     CONNECTED     30471    1649/sssd            /var/lib/sss/pipes/private/sbus-monitor
+unix  3      [ ]         STREAM     CONNECTED     61397    2508/sshd: core@not  
+unix  3      [ ]         STREAM     CONNECTED     32942    1912/sshd            
+unix  2      [ ]         DGRAM                    26790    1/systemd            
+unix  3      [ ]         STREAM     CONNECTED     31827    1896/ovs-vswitchd    
+unix  3      [ ]         STREAM     CONNECTED     29321    1765/sssd_nss        
+unix  3      [ ]         STREAM     CONNECTED     34119    1794/ovsdb-server    /var/run/openvswitch/db.sock
+unix  3      [ ]         STREAM     CONNECTED     36977    2190/machine-config  
+unix  3      [ ]         DGRAM                    14674    1/systemd            
+unix  3      [ ]         STREAM     CONNECTED     30501    1649/sssd            /var/lib/sss/pipes/private/sbus-monitor
+unix  2      [ ]         DGRAM                    31824    1896/ovs-vswitchd    
+unix  3      [ ]         DGRAM                    26937    1535/systemd-udevd   
+unix  2      [ ]         DGRAM                    30483    1731/sssd_be         
+unix  3      [ ]         STREAM     CONNECTED     28892    1/systemd            
+unix  3      [ ]         STREAM     CONNECTED     57639    1765/sssd_nss        /var/lib/sss/pipes/nss
+unix  3      [ ]         STREAM     CONNECTED     33976    1765/sssd_nss        /var/lib/sss/pipes/nss
+unix  3      [ ]         STREAM     CONNECTED     30514    1731/sssd_be         /var/lib/sss/pipes/private/sbus-dp_implicit_files.1731
+unix  3      [ ]         STREAM     CONNECTED     30470    1649/sssd            
+unix  2      [ ]         DGRAM                    26916    1535/systemd-udevd   
+unix  3      [ ]         STREAM     CONNECTED     34496    2019/rpcbind         
+unix  3      [ ]         STREAM     CONNECTED     57958    2485/dbus-daemon     
+unix  3      [ ]         DGRAM                    59790    2356/systemd         
+unix  2      [ ]         DGRAM                    28131    1605/auditd          
+unix  3      [ ]         STREAM     CONNECTED     30490    1731/sssd_be         
+unix  2      [ ]         DGRAM                    29196    1647/dbus-daemon     
+unix  3      [ ]         STREAM     CONNECTED     29959    1648/irqbalance      
+unix  3      [ ]         STREAM     CONNECTED     28260    1647/dbus-daemon     /run/dbus/system_bus_socket
+unix  3      [ ]         STREAM     CONNECTED     31368    1896/ovs-vswitchd    
+unix  3      [ ]         STREAM     CONNECTED     59062    1/systemd            /run/systemd/journal/stdout
+unix  2      [ ]         STREAM     CONNECTED     59900    2430/sshd: core [pr  
+unix  3      [ ]         STREAM     CONNECTED     27504    1647/dbus-daemon     
+unix  3      [ ]         STREAM     CONNECTED     57950    2356/systemd         
+unix  2      [ ]         DGRAM                    61394    2430/sshd: core [pr  
+unix  3      [ ]         STREAM     CONNECTED     31029    1765/sssd_nss        /var/lib/sss/pipes/nss
+unix  3      [ ]         STREAM     CONNECTED     28895    1/systemd            /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     32930    1647/dbus-daemon     /run/dbus/system_bus_socket
+unix  3      [ ]         STREAM     CONNECTED     28259    1647/dbus-daemon     
+unix  3      [ ]         STREAM     CONNECTED     32454    1765/sssd_nss        /var/lib/sss/pipes/nss
+unix  3      [ ]         STREAM     CONNECTED     29409    1771/systemd-logind  
+unix  3      [ ]         STREAM     CONNECTED     36152    1/systemd            /run/systemd/journal/stdout
+unix  3      [ ]         STREAM     CONNECTED     30995    1647/dbus-daemon     /run/dbus/system_bus_socket
+Active Bluetooth connections (servers and established)
+Proto  Destination       Source            State         PSM DCID   SCID      IMTU    OMTU Security
+Proto  Destination       Source            State     Channel

@@ -1,0 +1,47 @@
+apiVersion: v1
+data:
+  install-config: |
+    additionalTrustBundlePolicy: Proxyonly
+    apiVersion: v1
+    baseDomain: alicloud-dev.devcluster.openshift.com
+    compute:
+    - architecture: amd64
+      hyperthreading: Enabled
+      name: worker
+      platform: {}
+      replicas: 3
+    controlPlane:
+      architecture: amd64
+      hyperthreading: Enabled
+      name: master
+      platform: {}
+      replicas: 3
+    credentialsMode: Manual
+    metadata:
+      creationTimestamp: null
+      name: jufaerma0208
+    networking:
+      clusterNetwork:
+      - cidr: 10.128.0.0/14
+        hostPrefix: 23
+      machineNetwork:
+      - cidr: 10.0.0.0/16
+      networkType: OVNKubernetes
+      serviceNetwork:
+      - 172.30.0.0/16
+    platform:
+      alibabacloud:
+        region: eu-west-1
+    publish: External
+    pullSecret: ""
+    sshKey: |
+      ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDTm54TjfUEO29XhjQ763aUNUboC9FesT/xlsfXrgGN0oqa8gCY5rYOOEG/eKgYPx8aUeQdj0Dmq56llmEG/wey87rTQa4YQAX36FzQYTNJDBZ3JVbaNBmAJGOhBqaFHptbHMjqViUG+aB74RxiHtbltAR1YcHFNIV+J5P0TgOhmd3alIHb5u2gINWfI4hDIMcPAIAq8ZloxSbXWyCPKuiaYCYcPCkvA05ARpy+taTfC6S1P0LDJ/zRwGtx/a3TjYO+9HcYaugrzBokOEpZF+FBu6/Z8hrLDYrkB0M4Oj33QcZlVk+rriaKNw7HCE2JCuxpz4pwqZrqKCCiZ6ZUZFWYKUJJriWynR66aWdYYux3Vd7Rp7p7y9nD1PleJe/GvTfOmsrEI3/a2TZ7XR4W2eWWqi1wxt/WtRM3V+W1ix7moNJaIh2MCyzHuoXS6Bivmx15RKI+mKyBv4FMcR6XXsh/HhUZA86AyXtVMfbSWWHqkcguKbhv/fh4Uk12z4Z4HyOYO7h87B0Gv9xjAGImHMR04NzXs+AqRawf6eP55zG3UWRoqeCK9q9gN/1uIKUOJjJMz99kqgXUngdPtpj45s9PV0vZctnSl+PUWCWgVkC4OacQKWuA+t6vCA5jBc1pORuhmxqCL3cQnKlGtZf+TkDBaHu39in6ML92gmX7F9RbgQ== faermanj@fedora
+kind: ConfigMap
+metadata:
+  annotations:
+    kubernetes.io/description: The install-config content used to create the cluster.  The
+      cluster configuration may have evolved since installation, so check cluster
+      configuration resources directly if you are interested in the current cluster
+      state.
+  name: cluster-config-v1
+  namespace: kube-system

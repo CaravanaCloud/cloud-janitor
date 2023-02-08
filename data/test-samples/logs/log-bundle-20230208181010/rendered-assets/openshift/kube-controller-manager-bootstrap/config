@@ -1,0 +1,54 @@
+apiVersion: kubecontrolplane.config.openshift.io/v1
+extendedArguments:
+  allocate-node-cidrs:
+  - "false"
+  authentication-kubeconfig:
+  - /etc/kubernetes/secrets/kubeconfig
+  authorization-kubeconfig:
+  - /etc/kubernetes/secrets/kubeconfig
+  cert-dir:
+  - /var/run/kubernetes
+  cluster-cidr:
+  - 10.128.0.0/14
+  cluster-signing-cert-file:
+  - /etc/kubernetes/secrets/kubelet-signer.crt
+  cluster-signing-duration:
+  - 720h
+  cluster-signing-key-file:
+  - /etc/kubernetes/secrets/kubelet-signer.key
+  configure-cloud-routes:
+  - "false"
+  controllers:
+  - '*'
+  - -ttl
+  - -bootstrapsigner
+  - -tokencleaner
+  enable-dynamic-provisioning:
+  - "true"
+  flex-volume-plugin-dir:
+  - /etc/kubernetes/kubelet-plugins/volume/exec
+  kube-api-burst:
+  - "300"
+  kube-api-qps:
+  - "150"
+  leader-elect:
+  - "true"
+  leader-elect-resource-lock:
+  - configmapsleases
+  leader-elect-retry-period:
+  - 3s
+  pv-recycler-pod-template-filepath-hostpath:
+  - ""
+  pv-recycler-pod-template-filepath-nfs:
+  - ""
+  root-ca-file:
+  - /etc/kubernetes/secrets/kube-apiserver-complete-server-ca-bundle.crt
+  secure-port:
+  - "10257"
+  service-account-private-key-file:
+  - /etc/kubernetes/secrets/service-account.key
+  service-cluster-ip-range:
+  - 172.30.0.0/16
+  use-service-account-credentials:
+  - "true"
+kind: KubeControllerManagerConfig

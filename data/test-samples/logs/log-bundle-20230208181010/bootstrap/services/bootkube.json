@@ -1,0 +1,271 @@
+[
+  {
+    "timestamp": "2023-02-08T16:37:56Z",
+    "phase": "service start"
+  },
+  {
+    "timestamp": "2023-02-08T16:37:57Z",
+    "phase": "service start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:07Z",
+    "stage": "openshift-manifests",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:07Z",
+    "stage": "openshift-manifests",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:07Z",
+    "stage": "cvo-bootstrap",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:07Z",
+    "stage": "cvo-bootstrap",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:07Z",
+    "stage": "etcd-bootstrap",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:13Z",
+    "stage": "etcd-bootstrap",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:13Z",
+    "stage": "config-bootstrap",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:18Z",
+    "stage": "config-bootstrap",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:18Z",
+    "stage": "kube-apiserver-bootstrap",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:26Z",
+    "stage": "kube-apiserver-bootstrap",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:26Z",
+    "stage": "kube-controller-manager-bootstrap",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:31Z",
+    "stage": "kube-controller-manager-bootstrap",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:31Z",
+    "stage": "kube-scheduler-bootstrap",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:35Z",
+    "stage": "kube-scheduler-bootstrap",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:35Z",
+    "stage": "ingress-operator-bootstrap",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:40Z",
+    "stage": "ingress-operator-bootstrap",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:40Z",
+    "stage": "mco-bootstrap",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:48Z",
+    "stage": "mco-bootstrap",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:48Z",
+    "stage": "check-api-url",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:48Z",
+    "stage": "check-api-url",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:48Z",
+    "stage": "check-api-url",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:48Z",
+    "stage": "check-api-url",
+    "phase": "stage end",
+    "result": "failure",
+    "errorLine": "80 check_url /usr/local/bin/bootstrap-verify-api-server-urls.sh",
+    "errorMessage": "Successfully resolved API_URL api.jufaerma0208.alicloud-dev.devcluster.openshift.com\nUnable to reach API_URL's https endpoint at https://10.0.105.244:6443/version\nIt might be too early for the https://10.0.105.244:6443/version to be available."
+  },
+  {
+    "timestamp": "2023-02-08T16:38:48Z",
+    "stage": "check-api-int-url",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:48Z",
+    "stage": "check-api-int-url",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:48Z",
+    "stage": "check-api-int-url",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:48Z",
+    "stage": "check-api-int-url",
+    "phase": "stage end",
+    "result": "failure",
+    "errorLine": "80 check_url /usr/local/bin/bootstrap-verify-api-server-urls.sh",
+    "errorMessage": "Successfully resolved API_INT_URL api-int.jufaerma0208.alicloud-dev.devcluster.openshift.com\nUnable to reach API_INT_URL's https endpoint at https://10.0.105.244:6443/version\nIt might be too early for the https://10.0.105.244:6443/version to be available."
+  },
+  {
+    "timestamp": "2023-02-08T16:38:48Z",
+    "stage": "cco-bootstrap",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:56Z",
+    "stage": "cco-bootstrap",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:56Z",
+    "stage": "wait-for-etcd",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:57Z",
+    "stage": "wait-for-etcd",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T16:38:57Z",
+    "stage": "cb-bootstrap",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:59:41Z",
+    "stage": "cb-bootstrap",
+    "phase": "stage end",
+    "result": "failure",
+    "errorLine": "1 cluster_bootstrap_gather /usr/local/bin/bootstrap-cluster-gather.sh",
+    "errorMessage": "pam_unix(sudo:session): session opened for user root by (uid=0)\n    root : TTY=unknown ; PWD=/var/opt/openshift ; USER=root ; ENV=KUBECONFIG=/opt/openshift/auth/kubeconfig ; COMMAND=/bin/oc --request-timeout=5s get roles --all-namespaces -o json\n    root : TTY=unknown ; PWD=/var/opt/openshift ; USER=root ; ENV=KUBECONFIG=/opt/openshift/auth/kubeconfig ; COMMAND=/bin/oc --request-timeout=5s get rolebindings --all-namespaces -o json"
+  },
+  {
+    "timestamp": "2023-02-08T16:59:41Z",
+    "phase": "service end",
+    "result": "failure",
+    "errorLine": "1 cluster_bootstrap_gather /usr/local/bin/bootstrap-cluster-gather.sh",
+    "errorMessage": "pam_unix(sudo:session): session opened for user root by (uid=0)\n    root : TTY=unknown ; PWD=/var/opt/openshift ; USER=root ; ENV=KUBECONFIG=/opt/openshift/auth/kubeconfig ; COMMAND=/bin/oc --request-timeout=5s get roles --all-namespaces -o json\n    root : TTY=unknown ; PWD=/var/opt/openshift ; USER=root ; ENV=KUBECONFIG=/opt/openshift/auth/kubeconfig ; COMMAND=/bin/oc --request-timeout=5s get rolebindings --all-namespaces -o json"
+  },
+  {
+    "timestamp": "2023-02-08T16:59:47Z",
+    "phase": "service start"
+  },
+  {
+    "timestamp": "2023-02-08T16:59:47Z",
+    "phase": "service start"
+  },
+  {
+    "timestamp": "2023-02-08T16:59:57Z",
+    "stage": "check-api-url",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T16:59:57Z",
+    "stage": "check-api-url",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T16:59:57Z",
+    "stage": "check-api-url",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T17:01:01Z",
+    "stage": "check-api-url",
+    "phase": "stage end",
+    "result": "failure",
+    "errorLine": "80 check_url /usr/local/bin/bootstrap-verify-api-server-urls.sh",
+    "errorMessage": "The connection to the server api-int.jufaerma0208.alicloud-dev.devcluster.openshift.com:6443 was refused - did you specify the right host or port?\nUnable to reach API_URL's https endpoint at https://10.0.105.244:6443/version\nIt might be too early for the https://10.0.105.244:6443/version to be available."
+  },
+  {
+    "timestamp": "2023-02-08T17:01:01Z",
+    "stage": "check-api-int-url",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T17:01:01Z",
+    "stage": "check-api-int-url",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T17:01:01Z",
+    "stage": "check-api-int-url",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T17:01:01Z",
+    "stage": "check-api-int-url",
+    "phase": "stage end",
+    "result": "failure",
+    "errorLine": "80 check_url /usr/local/bin/bootstrap-verify-api-server-urls.sh",
+    "errorMessage": "Successfully resolved API_INT_URL api-int.jufaerma0208.alicloud-dev.devcluster.openshift.com\nUnable to reach API_INT_URL's https endpoint at https://10.0.105.244:6443/version\nIt might be too early for the https://10.0.105.244:6443/version to be available."
+  },
+  {
+    "timestamp": "2023-02-08T17:01:01Z",
+    "stage": "wait-for-etcd",
+    "phase": "stage start"
+  },
+  {
+    "timestamp": "2023-02-08T17:01:02Z",
+    "stage": "wait-for-etcd",
+    "phase": "stage end",
+    "result": "success"
+  },
+  {
+    "timestamp": "2023-02-08T17:01:02Z",
+    "stage": "cb-bootstrap",
+    "phase": "stage start"
+  }
+]

@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bootstrap-machine-config-operator
+  namespace: 
+  annotations:
+    target.workload.openshift.io/management: '{"effect": "PreferredDuringScheduling"}'
+spec:
+  initContainers:
+  - name: machine-config-controller
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:e6f9b6fdba34485dfdec1d31ca0a04a85eff54174688dc402692f78f46743ef4
+    command: ["/usr/bin/machine-config-controller"]
+    args:
+    - "bootstrap"
+    - "--manifest-dir=/etc/mcc/bootstrap"
+    - "--dest-dir=/etc/mcs/bootstrap"
+    - "--pull-secret=/etc/mcc/bootstrap/machineconfigcontroller-pull-secret"
+    resources:
+      limits:
+        memory: 50Mi
+      requests:
+        cpu: 20m
+        memory: 50Mi
+    securityContext:
+      privileged: true
+    terminationMessagePolicy: FallbackToLogsOnError
+    volumeMounts:
+    - name: bootstrap-manifests
+      mountPath: /etc/mcc/bootstrap
+    - name: server-basedir
+      mountPath: /etc/mcs/bootstrap
+  containers:
+  - name: machine-config-server
+    image: quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:e6f9b6fdba34485dfdec1d31ca0a04a85eff54174688dc402692f78f46743ef4
+    command: ["/usr/bin/machine-config-server"]
+    args:
+      - "bootstrap"
+    terminationMessagePolicy: FallbackToLogsOnError
+    volumeMounts:
+    - name: server-certs
+      mountPath: /etc/ssl/mcs
+    - name: bootstrap-kubeconfig
+      mountPath: /etc/kubernetes/kubeconfig
+    - name: server-basedir
+      mountPath: /etc/mcs/bootstrap
+    securityContext:
+      privileged: true
+  hostNetwork: true
+  tolerations:
+    - key: node-role.kubernetes.io/master
+      operator: Exists
+      effect: NoSchedule
+  restartPolicy: Always
+  volumes:
+  - name: server-certs
+    hostPath:
+      path: /etc/ssl/mcs
+  - name: bootstrap-kubeconfig
+    hostPath:
+      path: /etc/mcs/kubeconfig
+  - name: server-basedir
+    hostPath:
+      path: /etc/mcs/bootstrap
+  - name: bootstrap-manifests
+    hostPath:
+      path: /etc/mcc/bootstrap
