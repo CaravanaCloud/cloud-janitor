@@ -162,7 +162,7 @@ public class TaskFiles {
         return value;
     }
 
-    private static List<String> readLines(Path file) {
+    public static List<String> readLines(Path file) {
         try {
             var lines = Files.readAllLines(file);
             return lines;
@@ -197,15 +197,14 @@ public class TaskFiles {
         return found.orElse(null);
     }
 
-    public List findLogFiles() {
+    public List<Path> findLogFiles() {
         var files = findByExtension(cwdPath(), "log")
                 .stream()
-                .map(Path::toFile)
                 .toList();
         return files;
     }
 
-    private Path cwdPath() {
+    private static Path cwdPath() {
         return Path.of(cwd());
     }
 
@@ -342,7 +341,13 @@ public class TaskFiles {
     }
 
     public static Path dataDir(){
-        return resolveDir(applicationDir(), "data");
+        var dataDir = applicationDir().resolve("data");
+        if (dataDir.toFile().exists() && dataDir.toFile().isDirectory()){
+            return dataDir;
+        }
+        dataDir = cwdPath();
+        log.debug("Using [$dataDir] as data directory");
+        return dataDir;
     }
 
     public static Path dataDir(String... context) {
