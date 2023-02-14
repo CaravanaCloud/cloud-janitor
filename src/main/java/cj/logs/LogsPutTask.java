@@ -1,10 +1,9 @@
 package cj.logs;
 
 import cj.OS;
+import cj.TimeUtils;
 import cj.aws.AWSTask;
 import cj.fs.TaskFiles;
-import cj.hello.HelloConfiguration;
-import software.amazon.awssdk.services.cloudwatch.CloudWatchClient;
 import software.amazon.awssdk.services.cloudwatchlogs.CloudWatchLogsClient;
 import software.amazon.awssdk.services.cloudwatchlogs.model.*;
 
@@ -12,6 +11,12 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
 
 @Dependent
 @Named("logs-put")
@@ -25,10 +30,11 @@ public class LogsPutTask extends AWSTask {
         info("Putting logs");
         var username = OS.username();
         var dataDir = files.dataDir();
-        debug("Collecting logs from [{}]", dataDir);
         var dataDirName = dataDir.getFileName().toString();
         var logGroup = "/%s/%s".formatted(username, dataDirName);
         var logs =  files.findLogFiles();
+        debug("Collected [{}] log files from [{}]", logs.size(), dataDirName);
+
         try (var cw = aws().cloudwatchlogs()) {
             checkLogGroup(cw, logGroup);
             logs.forEach(log -> putLog(cw, logGroup, dataDir, log));
@@ -62,10 +68,13 @@ public class LogsPutTask extends AWSTask {
 
     private void putLog(CloudWatchLogsClient cw, String logGroup, Path dataDir, Path logFile) {
         try {
+            var baseDay = TimeUtils.parseLocalDateTime(logFile.toAbsolutePath().toString())
+                    .orElse(LocalDateTime.now())
+                    .toLocalDate();
             var logStream = dataDir.relativize(logFile).toString();
             checkLogStream(cw, logGroup, logStream);
-            debug("Putting log [{}] to group [{}]", logStream, logGroup);
-            cloudwatchPutLog(cw, logGroup, logStream, logFile);
+            debug("Putting log [{}] to group [{}] with baseDay [{}]", logStream, logGroup, baseDay);
+            cloudwatchPutLog(cw, logGroup, logStream, logFile, baseDay);
         }catch (Exception e){
             error("Failed to put log [{}] to group [{}]", logFile, logGroup);
             error(e.getMessage());
@@ -102,8 +111,9 @@ public class LogsPutTask extends AWSTask {
         return result;
     }
 
-    private void cloudwatchPutLog(CloudWatchLogsClient cw, String logGroup, String logStream, Path logFile) {
-        var events = eventsFromFile(logFile);
+    private void cloudwatchPutLog(CloudWatchLogsClient cw, String logGroup, String logStream, Path logFile, LocalDate baseDay) {
+        var lines = linesOf(logFile);
+        var events = eventsFromFile(logFile, baseDay);
         if (events.length > 0){
             var request = PutLogEventsRequest.builder()
                     .logGroupName(logGroup)
@@ -118,35 +128,69 @@ public class LogsPutTask extends AWSTask {
 
     }
 
-    //TODO: set correct timestamp for untimed log messages instead of filtering out
-    private InputLogEvent[] eventsFromFile(Path logFile) {
+    private List<String> linesOf(Path logFile) {
         var lines = files.readLines(logFile);
-        var events = lines.stream()
-                .map(line -> eventOf(line, logFile))
-                .filter(event -> event != null)
-                .toArray(InputLogEvent[]::new);
-        return events;
+        debug("Read [{}] lines from [{}]", lines.size(), logFile);
+        return lines;
     }
 
-    private InputLogEvent eventOf(String line, Path logFile) {
-        var time = timestampOf(line, logFile.getFileName());
-        if (line.length() > CWLOGS_MAX_LINE_LENGTH){
-            warn("Log line truncated: [{}]", line);
-            line = line.substring(0, CWLOGS_MAX_LINE_LENGTH);
+    //TODO: set correct timestamp for untimed log messages instead of filtering out
+    private InputLogEvent[] eventsFromFile(Path logFile, LocalDate baseDay) {
+        var lines = files.readLines(logFile);
+        var events = new LinkedList<InputLogEvent>();
+        var time = TimeUtils.toTimestamp(TimeUtils.atStartOfDay(baseDay));
+        for (String line : lines) {
+            if (line == null || line.isBlank()) continue;
+            if (line.length() >= CWLOGS_MAX_LINE_LENGTH)
+                line = line.substring(0, CWLOGS_MAX_LINE_LENGTH - 1);
+            var timestamp = timestampOf(line, logFile, baseDay);
+            if (timestamp != null){
+                time = timestamp;
+            } else {
+                timestamp = time;
+            }
+            var event = createEvent(timestamp, line);
+            events.add(event);
         }
-        if (time != null) {
-            return InputLogEvent.builder()
-                    //TODO: Set correct timestamp
-                    .timestamp(time)
-                    .message(line)
-                    .build();
+        var ascendingOrder = checkAscendingTimeOrder(events);
+        if (! ascendingOrder){
+            warn("Events are not in ascending order. Resorting...");
+            warn("File: [{}]", logFile);
+            warn("Events: [{}]", events.size());
+            events.sort(Comparator.comparing(InputLogEvent::timestamp));
+            ascendingOrder = checkAscendingTimeOrder(events);
+            if (! ascendingOrder){
+                error("Events are still not in ascending order. Skipping...");
+                return new InputLogEvent[0];
+            }
         }
-        return null;
+        var result = events.toArray(InputLogEvent[]::new);
+        return result;
     }
 
-    private Long timestampOf(String line, Path fileName) {
-        //TODO: Map file names to timestamps
-        return System.currentTimeMillis();
+    private boolean checkAscendingTimeOrder(LinkedList<InputLogEvent> events) {
+        var last = Long.MIN_VALUE;
+        for (InputLogEvent event : events) {
+            if (event.timestamp() < last){
+                return false;
+            }
+            last = event.timestamp();
+        }
+        return true;
+    }
+
+
+    private InputLogEvent createEvent(Long time, String line) {
+        return InputLogEvent.builder()
+                .timestamp(time)
+                .message(line)
+                .build();
+    }
+
+    private Long timestampOf(String line, Path fileName, LocalDate baseDay) {
+        var ldt = TimeUtils.parseLocalDateTime(line, baseDay);
+        var timestamp = ldt.map(TimeUtils::toTimestamp).orElse(null);
+        return timestamp;
     }
 
 }
