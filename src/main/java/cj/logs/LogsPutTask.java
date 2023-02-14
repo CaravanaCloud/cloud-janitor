@@ -16,6 +16,7 @@ import java.nio.file.Path;
 @Dependent
 @Named("logs-put")
 public class LogsPutTask extends AWSTask {
+    private static final int CWLOGS_MAX_LINE_LENGTH = 10000;
     @Inject
     TaskFiles files;
 
@@ -68,6 +69,7 @@ public class LogsPutTask extends AWSTask {
         }catch (Exception e){
             error("Failed to put log [{}] to group [{}]", logFile, logGroup);
             error(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -128,6 +130,10 @@ public class LogsPutTask extends AWSTask {
 
     private InputLogEvent eventOf(String line, Path logFile) {
         var time = timestampOf(line, logFile.getFileName());
+        if (line.length() > CWLOGS_MAX_LINE_LENGTH){
+            warn("Log line truncated: [{}]", line);
+            line = line.substring(0, CWLOGS_MAX_LINE_LENGTH);
+        }
         if (time != null) {
             return InputLogEvent.builder()
                     //TODO: Set correct timestamp
