@@ -15,7 +15,7 @@
     <properties>
         <!-- Versions -->
         <maven.compiler.release>17</maven.compiler.release>
-        <awssdk.version>2.19.21</awssdk.version>
+        <awssdk.version>2.20.46</awssdk.version>
         <quarkus.platform.version>2.15.3.Final</quarkus.platform.version>
         <guava.version>31.1-jre</guava.version>
         <jackson.version>2.14.0</jackson.version>
